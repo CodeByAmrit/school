@@ -1,0 +1,97 @@
+<div class="p-4 sm:ml-64">
+    <div class="w-full h-full mt-20 overflow-auto">
+
+        <form action="/update-student" method="POST" class="bg-white p-6 shadow-md rounded  flex flex-wrap md:gap-8">
+            
+            <div class="flex items-center justify-center w-full">
+                <div>
+                    <img class="rounded w-36 h-36" src="/image/bell.png" alt="Extra large avatar">
+                    
+                </div>
+                <label for="dropzone-file"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
+                                upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG</p>
+                    </div>
+                    <input id="dropzone-file" type="file" class="hidden" />
+                </label>
+            </div>
+
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="name" name="name" value="<%= student.name %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="father_name" class="block text-sm font-medium text-gray-700">Father's Name</label>
+                <input type="text" id="father_name" name="father_name" value="<%= student.father_name %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="mother_name" class="block text-sm font-medium text-gray-700">Mother's Name</label>
+                <input type="text" id="mother_name" name="mother_name" value="<%= student.mother_name %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="srn_no" class="block text-sm font-medium text-gray-700">SRN No</label>
+                <input type="text" id="srn_no" name="srn_no" value="<%= student.srn_no %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="pen_no" class="block text-sm font-medium text-gray-700">PEN No</label>
+                <input type="text" id="pen_no" name="pen_no" value="<%= student.pen_no %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="admission_no" class="block text-sm font-medium text-gray-700">Admission No</label>
+                <input type="text" id="admission_no" name="admission_no" value="<%= student.admission_no %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="class" class="block text-sm font-medium text-gray-700">Class</label>
+                <input type="text" id="class" name="class" value="<%= student.class %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="session" class="block text-sm font-medium text-gray-700">Session</label>
+                <input type="text" id="session" name="session" value="<%= student.session %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="roll" class="block text-sm font-medium text-gray-700">Roll</label>
+                <input type="text" id="roll" name="roll" value="<%= student.roll %>"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
+            </div>
+        </form>
+
+    </div>
+</div>

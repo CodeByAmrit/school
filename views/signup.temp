@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Sign Up</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="signup.css">
+</head>
+
+<body>
+    <div class="d-flex justify-content-center " style="font-family: Calibri;">
+        <div class=" leftLogin d-flex flex-column p-3">
+            <div class="d-flex justify-content-between">
+                <div class="fs-4">Student Tracker</div>
+                <div></div>
+            </div>
+            <div style="height: 100vh;" class="d-flex flex-column justify-content-center align-items-center p-3">
+                <img src="/image/session-teacher-2.svg" alt="teacher" width="250px">
+                <div class="fs-4"><b>Prepare Your Students for Their Future </b></div class="fs-4">
+                <div>Manage, track, and report on student progress quickly and easily. StudentTracker is completely
+                    FREE!</div>
+            </div>
+
+        </div>
+        <div class="container rightLogin d-flex flex-column m-5 align-items-center"
+            style="font-family: calibri; padding: 45px 0 0 0 !important; height:fit-content !important;">
+            <nav class="navbar fixed-top bg-body-tertiary py-2" id="customNav"
+                style="background: linear-gradient(0deg, #4fb0ff, 35%, #67c5ff 100%);">
+                <div class="container">
+                    <a class="navbar-brand" href="#">
+
+                        <span class="menuWhite" style=" font-weight: bold; font-size:25px;color:white !important; ">
+                            Student Tracker
+                        </span>
+                    </a>
+                </div>
+            </nav>
+            <div class="fs-2"><b>Sign Up as Teacher </b></div>
+            <div class="fs-6 mb-4 ">Already have an account? <a href="/login">Log in here </a></div>
+            <div style="width: 100%; ">
+                <form action="/signup" method="post">
+                    <div class="input-group mb-3 col">
+                        <div class="form-group mb-3 col-6">
+                            <label for="exampleInputName">First Name</label>
+                            <input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp"
+                                placeholder="" name="firstName">
+                        </div>
+                        <div class="form-group mb-3 col-6 ps-4">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp"
+                                placeholder="" name="lastName">
+                        </div>
+
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="exampleInputEmail1">Email Id *</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            placeholder="" name="email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder=""
+                            name="password">
+                    </div>
+
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                        <button class="btn btn-primary me-md-2 fs-5" type="submit"
+                            style="width: 110px; height:50px;">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forget Password -->
+    <form action="#">
+        <div class="modal fade " id="forgetPassword" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Forgot Your Login Info?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please enter your email below and password change instructions will be sent to you.</p>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Send Password Reset Email</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

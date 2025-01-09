@@ -1,0 +1,68 @@
+<div class="p-4 sm:ml-64">
+    <div class="w-full h-full mt-10 ">
+        <p class="pt-5 text-2xl">Students Details</p>
+        
+        <form action="/search_certificate" method="get">
+        <%- include('./search.ejs') %>
+
+        <p class=" my-3 text-xl">Generate Certificate</p>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            SRN No
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Class
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Session
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="overflow-y-auto">
+                    <% if (studentlist.length> 0) { %>
+                        <% studentlist.forEach((student)=> { %>
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <%= student.srn_no %>
+                                </th>
+                                <td class="px-6 py-4">
+                                    <%= student.name %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= student.class %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= student.session %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="/generate/<%= student.srn_no %>" target="_blank"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Generate</a>
+                                    <span>|</span>
+                                    <a href="/preview/<%= student.srn_no %>"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Preview</a>
+                                </td>
+                            </tr>
+                            <% });%>
+                                <% } else{ %>
+                                    <td colspan="5" class="border px-4 py-2 text-center text-gray-500">No students
+                                        available.</td>
+                                    </td>
+                                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
