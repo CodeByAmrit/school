@@ -4,6 +4,7 @@
   "description": "Generate Certificate for students",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "nodemon app"
   },
   "author": "Amrit",

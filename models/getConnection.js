@@ -22,7 +22,7 @@ const dbConfig = {
 async function getConnection() {
   try {
     const connection = await mysql.createConnection(dbConfig);
-    // console.log('Database connected successfully!');
+    console.log('Database connected successfully!');
     return connection;
   } catch (error) {
     console.error('Error connecting to the database:', error);

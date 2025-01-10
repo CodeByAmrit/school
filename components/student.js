@@ -255,7 +255,221 @@ async function insertPDF(req, res) {
     }
 }
 
+async function getMarks(req, res) {
+    const srn_no = req.params.id;
+    let connection;
+    try {
+        connection = await getConnection();
+        const [[rows1]] = await connection.execute('SELECT * FROM marks1 where id = ?', [srn_no]);
+        const [[rows2]] = await connection.execute('SELECT * FROM marks2 where id = ?', [srn_no]);
+        const [[rows3]] = await connection.execute('SELECT * FROM marks3 where id = ?', [srn_no]);
+        return { rows1, rows2, rows3 };
+    } catch (error) {
+        console.log(error);
+        res.json({ status: error.sqlMessage });
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+async function inputMarks(table, marks, srn_no) {
+    if (table == "marks1") {
+        const {
+            english1,
+            hindi1,
+            mathematics1,
+            social_science1,
+            science1,
+            computer1,
+            drawing1,
+            gn1,
+            grandTotal1,
+            percentage1,
+            rank1,
+        } = marks;
+
+        const query = `
+        INSERT INTO ${table} 
+        (id, english1, hindi1, mathematics1, social_science1, science1, computer1, drawing1, gn1, grandTotal1, percentage1, rank1)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            english1 = VALUES(english1),
+            hindi1 = VALUES(hindi1),
+            mathematics1 = VALUES(mathematics1),
+            social_science1 = VALUES(social_science1),
+            science1 = VALUES(science1),
+            computer1 = VALUES(computer1),
+            drawing1 = VALUES(drawing1),
+            gn1 = VALUES(gn1),
+            grandTotal1 = VALUES(grandTotal1),
+            percentage1 = VALUES(percentage1),
+            rank1 = VALUES(rank1)
+    `;
+
+        const values = [
+            srn_no,
+            english1,
+            hindi1,
+            mathematics1,
+            social_science1,
+            science1,
+            computer1,
+            drawing1,
+            gn1,
+            grandTotal1,
+            percentage1,
+            rank1,
+        ];
+
+        let connection;
+        try {
+            connection = await getConnection();
+            const [rows] = await connection.execute(query, values);
+
+            return { rows };
+
+        } catch (error) {
+            console.log(error);
+            return { status: error.sqlMessage };
+        } finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+    }
+    else if (table == "marks2") {
+        const {
+            english2,
+            hindi2,
+            mathematics2,
+            social_science2,
+            science2,
+            computer2,
+            drawing2,
+            gn2,
+            grandTotal2,
+            percentage2,
+            rank2,
+        } = marks;
+        const query = `
+        INSERT INTO ${table} 
+        (id, english2, hindi2, mathematics2, social_science2, science2, computer2, drawing2, gn2, grandTotal2, percentage2, rank2)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            english2 = VALUES(english2),
+            hindi2 = VALUES(hindi2),
+            mathematics2 = VALUES(mathematics2),
+            social_science2 = VALUES(social_science2),
+            science2 = VALUES(science2),
+            computer2 = VALUES(computer2),
+            drawing2 = VALUES(drawing2),
+            gn2 = VALUES(gn2),
+            grandTotal2 = VALUES(grandTotal2),
+            percentage2 = VALUES(percentage2),
+            rank2 = VALUES(rank2)
+    `;
+
+        const values = [
+            srn_no,
+            english2,
+            hindi2,
+            mathematics2,
+            social_science2,
+            science2,
+            computer2,
+            drawing2,
+            gn2,
+            grandTotal2,
+            percentage2,
+            rank2,
+        ];
+
+        let connection;
+        try {
+            connection = await getConnection();
+            const [rows] = await connection.execute(query, values);
+
+            return { rows };
+
+        } catch (error) {
+            console.log(error);
+            return { status: error.sqlMessage };
+        } finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+    }
+    else if (table == "marks3") {
+        const {
+            english3,
+            hindi3,
+            mathematics3,
+            social_science3,
+            science3,
+            computer3,
+            drawing3,
+            gn3,
+            grandTotal3,
+            percentage3,
+            rank3,
+        } = marks;
+        const query = `
+        INSERT INTO ${table} 
+        (id, english3, hindi3, mathematics3, social_science3, science3, computer3, drawing3, gn3, grandTotal3, percentage3, rank3)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            english3 = VALUES(english3),
+            hindi3 = VALUES(hindi3),
+            mathematics3 = VALUES(mathematics3),
+            social_science3 = VALUES(social_science3),
+            science3 = VALUES(science3),
+            computer3 = VALUES(computer3),
+            drawing3 = VALUES(drawing3),
+            gn3 = VALUES(gn3),
+            grandTotal3 = VALUES(grandTotal3),
+            percentage3 = VALUES(percentage3),
+            rank3 = VALUES(rank3)
+    `;
+
+        const values = [
+            srn_no,
+            english3,
+            hindi3,
+            mathematics3,
+            social_science3,
+            science3,
+            computer3,
+            drawing3,
+            gn3,
+            grandTotal3,
+            percentage3,
+            rank3,
+        ];
+
+        let connection;
+        try {
+            connection = await getConnection();
+            const [rows] = await connection.execute(query, values);
+
+            return { rows };
+
+        } catch (error) {
+            console.log(error);
+            return { status: error.sqlMessage };
+        } finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+    }
+
+
+
+}
+
 
 module.exports = {
-    getAllStudent, teacherLogin, getStudentDetails, deleteStudent, getOneStudent, insertPDF
+    getAllStudent, teacherLogin, getStudentDetails, deleteStudent, getOneStudent, insertPDF, getMarks, inputMarks
 }

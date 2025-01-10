@@ -1,6 +1,6 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent } = require('../components/student');
+const { getAllStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks } = require('../components/student');
 const { generate, preview } = require("../components/create_certificate");
 
 const router = express.Router();
@@ -42,7 +42,7 @@ router.get('/students', checkAuth, async (req, res) => {
 
 // route to search for students
 router.get('/search', checkAuth, async (req, res) => {
-  
+
   try {
     const user = req.user;
     const studentlist = await getStudentDetails(req, res);
@@ -55,7 +55,7 @@ router.get('/search', checkAuth, async (req, res) => {
 
 // route to edit for students
 router.get('/student/edit/:id', checkAuth, async (req, res) => {
-  
+
   try {
     const user = req.user;
     const student = await getOneStudent(req, res);
@@ -69,7 +69,7 @@ router.get('/student/edit/:id', checkAuth, async (req, res) => {
 
 // route to search for students_ certificate
 router.get('/search_certificate', checkAuth, async (req, res) => {
-  
+
   try {
     const user = req.user;
     const studentlist = await getStudentDetails(req, res);
@@ -135,6 +135,65 @@ router.get('/preview/:srn_no', checkAuth, async (req, res) => {
     res.status(500).send('Error previewing certificate');
   }
 });
+
+// Marks certificate routes
+router.get('/student/marks/:id', checkAuth, async (req, res) => {
+  try {
+    const { rows1, rows2, rows3 } = await getMarks(req, res);
+    const students = await getOneStudent(req, res);
+    const student = students[0];
+    const user = req.user;
+    res.render('marks', { user, student, rows1, rows2, rows3 });
+
+  } catch (error) {
+    console.error('Error generating certificate:', error);
+    res.status(500).send('Error generating certificate');
+  }
+});
+
+// enter marks1
+router.post("/student/marks1/:id", checkAuth, async (req, res) => {
+  const id = req.params.id;
+  const marks = req.body;
+  const result = await inputMarks("marks1", marks, id);
+  console.log(result);
+  if (result.affectedRows > 0) {
+    res.json({ ok: "added" });
+  } else if (result.changedRows > 0) {
+    res.json({ ok: "changed" });
+  } else {
+    res.json({ message: "error" });
+  }
+})
+// enter marks2
+router.post("/student/marks2/:id", checkAuth, async (req, res) => {
+  const id = req.params.id;
+  const marks = req.body;
+  const result = await inputMarks("marks2", marks, id);
+  console.log(result);
+  if (result.affectedRows > 0) {
+    res.json({ ok: "added" });
+  } else if (result.changedRows > 0) {
+    res.json({ ok: "changed" });
+  } else {
+    res.json({ message: "error" });
+  }
+})
+
+// enter marks3
+router.post("/student/marks3/:id", checkAuth, async (req, res) => {
+  const id = req.params.id;
+  const marks = req.body;
+  const result = await inputMarks("marks3", marks, id);
+  console.log(result);
+  if (result.affectedRows > 0) {
+    res.json({ ok: "added" });
+  } else if (result.changedRows > 0) {
+    res.json({ ok: "changed" });
+  } else {
+    res.json({ message: "error" });
+  }
+})
 
 // Logout route - Clears token and redirects to login
 router.get("/logout", (req, res) => {
