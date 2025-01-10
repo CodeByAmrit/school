@@ -96,8 +96,8 @@ async function generate(req, res) {
 
         // Save the certificate
         const pdfBytes = await pdfDoc.save();
-        const outputPath = path.join(__dirname, "../output", `${srnNo}_certificate.pdf`);
-        fs.writeFileSync(outputPath, pdfBytes);
+        // const outputPath = path.join(__dirname, "../output", `${srnNo}_certificate.pdf`);
+        // fs.writeFileSync(outputPath, pdfBytes);
 
         // Set headers to display the PDF in a new tab
         res.setHeader("Content-Type", "application/pdf");
@@ -113,6 +113,104 @@ async function generate(req, res) {
     }
 
 };
+
+// under development 
+async function generateAll(req, res) {
+    let connection;
+
+    try {
+        connection = await getConnection();
+
+        // Fetch all students with their photos
+        const [students] = await connection.execute(
+            "SELECT s.*, p.image FROM students s LEFT JOIN photo p ON s.srn_no = p.id"
+        );
+
+        if (!students.length) {
+            return res.status(404).send("No students found.");
+        }
+
+        // Load the certificate template
+        const templatePath = path.join(__dirname, "../template/certificate_template.pdf");
+        const templateBytes = fs.readFileSync(templatePath);
+        const pdfDoc = await PDFDocument.load(templateBytes);
+
+        for (const student of students) {
+            // Create a new page for each student
+            const page = pdfDoc.addPage();
+
+            // Add student details to the page
+            page.drawText(student.name, { x: 232, y: 2725, size: 30, color: rgb(0, 0, 0) });
+            page.drawText(student.class, { x: 1021, y: 2725, size: 30, color: rgb(0, 0, 0) });
+            page.drawText(student.father_name, { x: 232, y: 2586, size: 30, color: rgb(0, 0, 0) });
+            page.drawText(student.mother_name, { x: 1021, y: 2586, size: 30, color: rgb(0, 0, 0) });
+            page.drawText(student.roll, { x: 232, y: 2444, size: 30, color: rgb(0, 0, 0) });
+            page.drawText(student.session, { x: 1021, y: 2444, size: 30, color: rgb(0, 0, 0) });
+
+            // Fetch marks for the student
+            const [marks1] = await connection.execute(
+                "SELECT * FROM marks1 WHERE id = ?",
+                [student.srn_no]
+            );
+            const [marks2] = await connection.execute(
+                "SELECT * FROM marks2 WHERE id = ?",
+                [student.srn_no]
+            );
+            const [marks3] = await connection.execute(
+                "SELECT * FROM marks3 WHERE id = ?",
+                [student.srn_no]
+            );
+
+            // Add marks to the page
+            function addMarks(marks, x, y) {
+                if (marks.length) {
+                    delete marks[0].id;
+                    for (const value of Object.values(marks[0])) {
+                        page.drawText(`${value}`, { x, y, size: 30, color: rgb(0, 0, 0) });
+                        y -= 81;
+                    }
+                }
+            }
+            addMarks(marks1, 1293, 2192);
+            addMarks(marks2, 1695, 2192);
+            addMarks(marks3, 2087, 2192);
+
+            // Handle photo
+            if (student.image) {
+                try {
+                    const pngBuffer = await sharp(Buffer.from(student.image))
+                        .resize(300, 380)
+                        .png()
+                        .toBuffer();
+                    const embeddedImage = await pdfDoc.embedPng(pngBuffer);
+                    const imageDims = embeddedImage.scale(1.2);
+                    page.drawImage(embeddedImage, {
+                        x: 1913,
+                        y: 2386,
+                        width: imageDims.width,
+                        height: imageDims.height,
+                    });
+                } catch (imageError) {
+                    console.error("Error processing image for student:", student.srn_no, imageError);
+                }
+            }
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline; filename=all_certificates.pdf");
+        res.send(Buffer.from(pdfBytes));
+    } catch (error) {
+        console.error("Error generating certificates:", error);
+        res.status(500).send("Error generating certificates.");
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+
+
 
 
 async function preview(req, res) {
@@ -133,5 +231,5 @@ async function preview(req, res) {
 }
 
 module.exports = {
-    generate, preview
+    generate, preview, generateAll
 };

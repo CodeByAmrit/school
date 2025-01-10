@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "nodemon app"
+    "test": "nodemon app",
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch"
   },
   "author": "Amrit",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "mysql2": "^3.12.0",
     "nodemon": "^3.1.9",
     "pdf-lib": "^1.17.1",
+    "serve-favicon": "^2.5.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {

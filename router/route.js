@@ -1,7 +1,7 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks } = require('../components/student');
-const { generate, preview } = require("../components/create_certificate");
+const { getAllStudent, insertOrUpdateStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto } = require('../components/student');
+const { generate, preview, generateAll } = require("../components/create_certificate");
 
 const router = express.Router();
 
@@ -55,17 +55,34 @@ router.get('/search', checkAuth, async (req, res) => {
 
 // route to edit for students
 router.get('/student/edit/:id', checkAuth, async (req, res) => {
-
   try {
-    const user = req.user;
-    const student = await getOneStudent(req, res);
-    console.log('student:', student);
-    res.render('profile', { student, user });
+      const user = req.user;
+      
+      // Fetch the student record
+      const [student] = await getOneStudent(req, res);
+      
+      // Fetch the photo using getPhoto
+      const photo = await getPhoto(req, res);
+
+      let photoDataUrl = "/image/user.png"; // Default photo if none exists
+      
+      if (photo) {
+          const photoBase64 = photo.toString('base64');
+          photoDataUrl = `data:image/png;base64,${photoBase64}`; // Convert to base64 and prepare data URL
+      }
+
+      // Render the profile page with the data
+      res.render('profile', { student, user, photo: photoDataUrl });
   } catch (error) {
-    console.error('Error fetching students:', error);
-    res.status(500).send('Internal Server Error');
+      console.error('Error fetching student or photo:', error);
+      res.status(500).send('Internal Server Error');
   }
 });
+
+
+// router.get("/user-image/:id", checkAuth,  async (req, res) => {
+//   await getPhoto(req, res);
+// })
 
 // route to search for students_ certificate
 router.get('/search_certificate', checkAuth, async (req, res) => {
@@ -127,6 +144,16 @@ router.get('/generate/:srn_no', checkAuth, async (req, res) => {
   }
 });
 
+// Generate and Preview certificate routes
+router.get('/student/certificate/all', checkAuth, async (req, res) => {
+  try {
+    await generateAll(req, res);
+  } catch (error) {
+    console.error('Error generating certificate:', error);
+    res.status(500).send('Error generating certificate');
+  }
+});
+
 router.get('/preview/:srn_no', checkAuth, async (req, res) => {
   try {
     await preview(req, res);
@@ -152,11 +179,33 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
 });
 
 // enter marks1
+router.post("/update-student/:id", checkAuth, async (req, res) => {
+  try {
+    const studentData = req.body;
+    const srn_no = req.params.id; // Get SRN number from URL parameter
+    
+    // If a photo is provided, process the base64 string
+    let photo = null;
+    if (studentData.photo) {
+      photo = Buffer.from(studentData.photo, 'base64'); // Convert base64 to binary
+    }
+
+    // Insert or update student in the database
+    const [result] = await insertOrUpdateStudent(srn_no, studentData, photo);
+    console.log(result);
+    res.json(result); // Respond with the result from the database
+  } catch (error) {
+    console.error('Error updating student:', error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// enter marks1
 router.post("/student/marks1/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
   const result = await inputMarks("marks1", marks, id);
-  console.log(result);
+  // console.log(result);
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
   } else if (result.changedRows > 0) {
@@ -185,7 +234,7 @@ router.post("/student/marks3/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
   const result = await inputMarks("marks3", marks, id);
-  console.log(result);
+  // console.log(result);
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
   } else if (result.changedRows > 0) {

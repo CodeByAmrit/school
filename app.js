@@ -3,8 +3,12 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const router = require("./router/route");
+const favicon = require('serve-favicon');
 
 const app = express();
+
+// Serve favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // Middleware
 app.use(cookieParser());
@@ -13,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
+app.use('/flowbite', express.static(path.join(__dirname, 'node_modules/flowbite/dist')));
 app.use("/output", express.static(path.join(__dirname, "output"))); // Expose the output directory
 
 // View Engine
