@@ -70,15 +70,11 @@ async function generate(req, res) {
         if (student.image) {
             try {
                 // Convert raw bytes to PNG using sharp
-                const pngBuffer = await sharp(Buffer.from(student.image), {
-                    raw: {
-                        width: 300, // Set the width of the original image
-                        height: 380, // Set the height of the original image
-                        channels: 3, // Number of color channels (RGB)
-                    },
-                })
-                    .toFormat("png")
-                    .toBuffer();
+               const pngBuffer = await sharp(Buffer.from(student.image))
+                               .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
+                               .toFormat('png') // Convert to PNG format
+                               .toBuffer(); // Get the processed image as a buffer
+               
 
                 const embeddedImage = await pdfDoc.embedPng(pngBuffer);
 

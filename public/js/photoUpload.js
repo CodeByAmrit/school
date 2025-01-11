@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (result !== null) {
                     alert("Data submitted successfully!");
+                    window.location.reload();
                 } else {
                     alert("Error: " + result.message);
                 }

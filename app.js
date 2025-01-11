@@ -7,6 +7,14 @@ const favicon = require('serve-favicon');
 
 const app = express();
 
+// Increase payload limit
+app.use(express.json({ limit: '10mb' })); // Increase for JSON payloads
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // Increase for URL-encoded payloads
+
+// Alternatively, if using body-parser:
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
 // Serve favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
