@@ -73,36 +73,7 @@ async function getPhoto(req, res) {
 async function insertOrUpdateStudent(srn_no, studentData, photo) {
     const student = studentData;
     let connection;
-
-    if (photo !== null) {
-        try {
-            // Dynamically process the uploaded photo
-            const processedPhoto = await sharp(photo)
-                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
-                .toFormat('png') // Convert to PNG format
-                .toBuffer(); // Get the processed image as a buffer
-
-            connection = await getConnection();
-
-            const query = `
-                INSERT INTO photo (id, image)
-                VALUES (?, ?)
-                ON DUPLICATE KEY UPDATE 
-                    image = VALUES(image);
-            `;
-
-            const values = [
-                srn_no,            // Student ID
-                processedPhoto,    // Processed image buffer
-            ];
-
-            const result = await connection.query(query, values);
-
-            // console.log("Photo successfully stored:", result);
-        } catch (error) {
-            console.error("Error storing photo:", error);
-        }
-    }
+    let result = 0;
 
     try {
         if (!connection) {
@@ -136,18 +107,46 @@ async function insertOrUpdateStudent(srn_no, studentData, photo) {
         ];
         // console.log(values);
 
-        const result = await connection.query(query, values);
+        result = await connection.query(query, values);
         // console.log(result);
-        return result;
+        
 
     } catch (error) {
         console.log(error);
         res.json({ status: error.sqlMessage });
-    } finally {
-        if (connection) {
-            await connection.end();
+    } 
+
+    if (photo !== null) {
+        try {
+            // Dynamically process the uploaded photo
+            const processedPhoto = await sharp(photo)
+                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
+                .toFormat('png') // Convert to PNG format
+                .toBuffer(); // Get the processed image as a buffer
+
+            connection = await getConnection();
+
+            const query = `
+                INSERT INTO photo (id, image)
+                VALUES (?, ?)
+                ON DUPLICATE KEY UPDATE 
+                    image = VALUES(image);
+            `;
+
+            const values = [
+                srn_no,            // Student ID
+                processedPhoto,    // Processed image buffer
+            ];
+
+            const photoResult = await connection.query(query, values);
+
+            // console.log("Photo successfully stored:", result);
+        } catch (error) {
+            console.error("Error storing photo:", error);
         }
     }
+    connection.end();
+    return result;
 }
 
 

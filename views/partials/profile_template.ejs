@@ -1,8 +1,10 @@
-<div class="p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900">
-    <div class="w-full h-full mt-20 overflow-auto bg-gray-50 dark:bg-gray-900">
-
+<div class="p-4 sm:ml-64 dark:bg-gray-900">
+    <div class="w-full h-full mt-20 overflow-auto dark:bg-gray-900">
+        <% if (student == null){ %>
+        <h1 class="dark:text-white text-center text-3xl">Register New Student</h1>
+        <% } %>
         <form id="student_form"
-            class="p-6 shadow-md rounded  flex  justify-center gap-5 gap-x-8 md:gap-8 bg-white dark:bg-gray-900">
+            class="p-6 mt-8 shadow-md rounded  flex  justify-center gap-5 gap-x-8 md:gap-8 bg-white dark:bg-gray-900">
 
             <div class="flex items-center justify-center w-full">
                 <label for="dropzone-file"
@@ -25,7 +27,7 @@
                 <div class="relative mb-3 ">
                     <input type="text" id="name" name="name"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.name %>" />
+                        placeholder=" " value="<%= student && student.name ? student.name : '' %>" />
                     <label for="name"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Name</label>
                 </div>
@@ -34,7 +36,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="father_name" name="father_name"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.father_name %>" />
+                        placeholder=" " value="<%= student && student.father_name ? student.father_name : '' %>" />
                     <label for="father_name"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Father
                         Name</label>
@@ -44,7 +46,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="mother_name" name="mother_name"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.mother_name %>" />
+                        placeholder=" " value="<%= student && student.mother_name ? student.mother_name : '' %>" />
                     <label for="mother_name"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Mother
                         Name</label>
@@ -54,7 +56,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="srn_no" name="srn_no"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.srn_no %>" disabled />
+                        placeholder=" " value="<%= student && student.srn_no ? student.srn_no : '' %>" <%= student && student.srn_no ? 'disabled' : '' %> />
                     <label for="srn_no"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">SRN
                         Number</label>
@@ -64,7 +66,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="admission_no" name="admission_no"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.admission_no %>" />
+                        placeholder=" " value="<%= student && student.admission_no ? student.admission_no : '' %>" />
                     <label for="admission_no"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Admission
                         No</label>
@@ -74,7 +76,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="pen_no" name="pen_no"
                         class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.pen_no %>" />
+                        placeholder=" " value="<%= student && student.pen_no ? student.pen_no : '' %>" />
                     <label for="pen_no"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">PEN
                         No</label>
@@ -84,7 +86,7 @@
                 <div class="relative mb-3">
                     <input type="text" id="roll_no" name="roll_no"
                         class="appearance-none block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="<%= student.roll %>" />
+                        placeholder=" " value="<%= student && student.roll_no ? student.roll_no : '' %>" />
                     <label for="rollno"
                         class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Roll
                         Number</label>
@@ -94,8 +96,8 @@
                 <div class="relative min-w-44">
                     <select id="class" name="class"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="<%= student.class %>" selected>
-                            <%= student.class %>
+                        <option value="<%= student && student.class ? student.class : '' %>" selected>
+                            <%= student && student.class ? student.class : '' %>
                         </option>
                         <option value="NURSERY">NURSERY</option>
                         <option value="KG">KG</option>
@@ -121,8 +123,8 @@
                     <select id="session" name="session"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
-                        <option value="<%= student.session %>" selected>
-                            <%= student.session %>
+                        <option value="<%= student && student.session ? student.session : '' %>" selected>
+                            <%= student && student.session ? student.session : '' %>
                         </option>
                         <option value="2018-2019">2018-2019</option>
                         <option value="2019-2020">2019-2020</option>

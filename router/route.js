@@ -2,6 +2,9 @@ const express = require('express');
 const checkAuth = require('../services/checkauth');
 const { getAllStudent, insertOrUpdateStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
+const multer = require('multer');
+// Configure multer
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
@@ -73,6 +76,19 @@ router.get('/student/edit/:id', checkAuth, async (req, res) => {
 
       // Render the profile page with the data
       res.render('profile', { student, user, photo: photoDataUrl });
+  } catch (error) {
+      console.error('Error fetching student or photo:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+// Add new student (register)
+router.get('/student/new', checkAuth, async (req, res) => {
+  try {
+      const student = null;
+      const user = req.user;
+      let photoDataUrl = "/image/user.png"; // Default photo if none exists
+      res.render('register', { student, user, photo: photoDataUrl });
   } catch (error) {
       console.error('Error fetching student or photo:', error);
       res.status(500).send('Internal Server Error');
@@ -179,15 +195,15 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
 });
 
 // enter marks1
-router.post("/update-student/:id", checkAuth, async (req, res) => {
+router.post("/update-student/:id", checkAuth, upload.single('photo'), async (req, res) => {
   try {
     const studentData = req.body;
     const srn_no = req.params.id; // Get SRN number from URL parameter
-    
-    // If a photo is provided, process the base64 string
+
+    // Process the photo file if provided
     let photo = null;
-    if (studentData.photo) {
-      photo = Buffer.from(studentData.photo, 'base64'); // Convert base64 to binary
+    if (req.file) {
+      photo = req.file.buffer; // Multer stores the file buffer in req.file.buffer
     }
 
     // Insert or update student in the database
