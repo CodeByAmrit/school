@@ -1,87 +1,227 @@
--- Create the database
-CREATE DATABASE IF NOT EXISTS studenttracker;
+CREATE DATABASE bvm;
 
--- Use the database
-USE studenttracker;
+USE bvm;
 
--- Create the teacher table
 CREATE TABLE IF NOT EXISTS teacher (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-) AUTO_INCREMENT = 1000;
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    password VARCHAR(255)
+);
 
--- Create the students table
 CREATE TABLE IF NOT EXISTS students (
-    student_id INT UNSIGNED AUTO_INCREMENT,
-    teacher_id INT UNSIGNED NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
-    father_name VARCHAR(100) NOT NULL,
-    mother_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    phone_no VARCHAR(15) NOT NULL,
-    house_no VARCHAR(100) NOT NULL,
-    state VARCHAR(50) NOT NULL,
-    district VARCHAR(50) NOT NULL,
-    zip VARCHAR(10) NOT NULL,
-    gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    srn_no VARCHAR(50) NOT NULL UNIQUE,
-    pen_no VARCHAR(50) NOT NULL UNIQUE,
-    admission_no VARCHAR(50) NOT NULL UNIQUE,
-    class VARCHAR(20) NOT NULL,
-    section CHAR(1) NOT NULL,
-    photo BLOB,
-    PRIMARY KEY (student_id),
-    FOREIGN KEY (teacher_id) REFERENCES teacher(id)
+    school_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(40),
+    father_name VARCHAR(40),
+    mother_name VARCHAR(40),
+    srn_no VARCHAR(255),
+    pen_no VARCHAR(40),
+    admission_no VARCHAR(40),
+    class VARCHAR(40),
+    session VARCHAR(40),
+    roll VARCHAR(40),
+    section VARCHAR(40) DEFAULT 'A',
+    teacher_id INT,
+    permanent_address VARCHAR(255),
+    corresponding_address VARCHAR(255),
+    mobile_no VARCHAR(20),
+    paste_file_no VARCHAR(40),
+    family_id VARCHAR(40),
+    dob VARCHAR(10),
+    profile_status VARCHAR(255),
+    apaar_id VARCHAR(40),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
 
--- Create the studentDocument table
-CREATE TABLE IF NOT EXISTS studenttracker.studentDocument (
-    student_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    document MEDIUMBLOB NOT NULL,
-    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (student_id) REFERENCES students(student_id)
+CREATE TABLE IF NOT EXISTS student_files (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_id INT,
+    file_data MEDIUMBLOB,
+    FOREIGN KEY (school_id) REFERENCES students (school_id)
 );
 
-CREATE TABLE IF NOT EXISTS marks(
-    student_id INT UNSIGNED AUTO_INCREMENT,
-    english INTEGER NOT NULL,
-    hindi INTEGER NOT NULL,
-    mathematics INTEGER NOT NULL,
-    social_science INTEGER NOT NULL,
-    science INTEGER NOT NULL,
-    computer INTEGER NOT NULL,
-    drawing VARCHAR(50) NOT NULL,
-    gn INTEGER NOT NULL,
-    grandTotal INTEGER ,
-    percentage DECIMAL(10, 2),
-    rank VARCHAR(50),
-
-    PRIMARY KEY(student_id),
-    
-    FOREIGN KEY(student_id) REFERENCES students(student_id)
+CREATE TABLE IF NOT EXISTS photo (
+    id INT PRIMARY KEY,
+    image MEDIUMBLOB,
+    student_sign MEDIUMBLOB,
+    FOREIGN KEY (id) REFERENCES students (school_id)
 );
 
+CREATE TABLE IF NOT EXISTS marks1 (
+    id INT PRIMARY KEY,
+    english1 INTEGER NOT NULL,
+    hindi1 INTEGER NOT NULL,
+    mathematics1 INTEGER NOT NULL,
+    social_science1 INTEGER NOT NULL,
+    science1 INTEGER NOT NULL,
+    computer1 INTEGER NOT NULL,
+    gn1 INTEGER NOT NULL,
+    drawing1 VARCHAR(50) NOT NULL,
+    grandTotal1 INTEGER,
+    percentage1 DECIMAL(10, 2),
+    rank1 VARCHAR(50),
+    remarks1 VARCHAR(200),
+    FOREIGN KEY (id) REFERENCES students (school_id)
+);
 
+CREATE TABLE IF NOT EXISTS marks2 (
+    id INT PRIMARY KEY,
+    english2 INTEGER NOT NULL,
+    hindi2 INTEGER NOT NULL,
+    mathematics2 INTEGER NOT NULL,
+    social_science2 INTEGER NOT NULL,
+    science2 INTEGER NOT NULL,
+    computer2 INTEGER NOT NULL,
+    gn2 INTEGER NOT NULL,
+    drawing2 VARCHAR(50) NOT NULL,
+    grandTotal2 INTEGER NOT NULL,
+    percentage2 DECIMAL(10, 2),
+    rank2 VARCHAR(50),
+    remarks2 VARCHAR(200),
+    FOREIGN KEY (id) REFERENCES students (school_id)
+);
 
+CREATE TABLE IF NOT EXISTS marks3 (
+    id INT PRIMARY KEY,
+    english3 INTEGER NOT NULL,
+    hindi3 INTEGER NOT NULL,
+    mathematics3 INTEGER NOT NULL,
+    social_science3 INTEGER NOT NULL,
+    science3 INTEGER NOT NULL,
+    computer3 INTEGER NOT NULL,
+    gn3 INTEGER NOT NULL,
+    drawing3 VARCHAR(50) NOT NULL,
+    grandTotal3 INTEGER NOT NULL,
+    percentage3 DECIMAL(10, 2),
+    rank3 VARCHAR(50),
+    remarks3 VARCHAR(200),
+    FOREIGN KEY (id) REFERENCES students (school_id)
+);
 
-CREATE USER 'web'@'%' IDENTIFIED BY 'Amrit123';
-grant select, insert, delete, update on studenttracker.* to 'web'@'%' ;
-flush privileges;
+CREATE TABLE IF NOT EXISTS maximum_marks (
+    id INT PRIMARY KEY,
+    maxEng INTEGER NOT NULL,
+    maxHindi INTEGER NOT NULL,
+    maxMaths INTEGER NOT NULL,
+    maxSst INTEGER NOT NULL,
+    maxScience INTEGER NOT NULL,
+    maxComp INTEGER NOT NULL,
+    maxGn VARCHAR(50) NOT NULL,
+    maxDrawing VARCHAR(50) NOT NULL,
+    maxGrandTotal INTEGER NOT NULL,
+    attendance VARCHAR(50),
+    maxRank VARCHAR(50),
+    FOREIGN KEY (id) REFERENCES students (school_id)
+);
 
--- Insert fake data into the teacher table
-INSERT INTO teacher (first_name, last_name, email, password)
-VALUES 
-('Naresh', 'Gill', 'naresh@gmail.om', '1234');
+-- fake
+INSERT INTO
+    students (
+        name,
+        father_name,
+        mother_name,
+        srn_no,
+        pen_no,
+        admission_no,
+        class,
+        session,
+        roll,
+        section,
+        teacher_id
+    )
+VALUES (
+        'Riya Malhotra',
+        'Arjun Malhotra',
+        'Meena Malhotra',
+        'SRN010',
+        'PEN010',
+        'ADM010',
+        '12',
+        '2024-2025',
+        '10',
+        'B',
+        2
+    );
 
--- Insert fake data into the students table
-INSERT INTO students (teacher_id, full_name, father_name, mother_name, email, password, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section)
-VALUES 
-(1001, 'Alice Johnson', 'Michael Johnson', 'Sarah Johnson', 'alice.johnson@example.com', 'password111', '1234567890', '101', 'California', 'Los Angeles', '90001', 'Female', 'SRN10001', 'PEN10001', 'ADM10001', '10', 'A'),
-(1001, 'David Wilson', 'James Wilson', 'Laura Wilson', 'david.wilson@example.com', 'password222', '2345678901', '102', 'California', 'Los Angeles', '90002', 'Male', 'SRN10002', 'PEN10002', 'ADM10002', '11', 'B'),
-(1001, 'Sophia Martinez', 'Carlos Martinez', 'Maria Martinez', 'sophia.martinez@example.com', 'password333', '3456789012', '201', 'Texas', 'Houston', '77001', 'Female', 'SRN10003', 'PEN10003', 'ADM10003', '9', 'A'),
-(1001, 'Jacob Anderson', 'Robert Anderson', 'Linda Anderson', 'jacob.anderson@example.com', 'password444', '4567890123', '301', 'New York', 'New York', '10001', 'Male', 'SRN10004', 'PEN10004', 'ADM10004', '12', 'C'),
-(1001, 'Olivia Thomas', 'Thomas Thomas', 'Patricia Thomas', 'olivia.thomas@example.com', 'password555', '5678901234', '401', 'Florida', 'Miami', '33101', 'Female', 'SRN10005', 'PEN10005', 'ADM10005', '8', 'B');
+INSERT INTO
+    students (
+        name,
+        father_name,
+        mother_name,
+        srn_no,
+        pen_no,
+        admission_no,
+        class,
+        session,
+        roll,
+        section,
+        teacher_id
+    )
+VALUES (
+        'Aryan Sharma',
+        'Rajesh Sharma',
+        'Anita Sharma',
+        'SRN001',
+        'PEN001',
+        'ADM001',
+        '10',
+        '2024-2025',
+        '01',
+        'A',
+        1
+    ),
+    (
+        'Sneha Verma',
+        'Manoj Verma',
+        'Sunita Verma',
+        'SRN002',
+        'PEN002',
+        'ADM002',
+        '10',
+        '2024-2025',
+        '02',
+        'A',
+        1
+    ),
+    (
+        'Rahul Gupta',
+        'Suresh Gupta',
+        'Geeta Gupta',
+        'SRN003',
+        'PEN003',
+        'ADM003',
+        '10',
+        '2024-2025',
+        '03',
+        'A',
+        1
+    ),
+    (
+        'Priya Singh',
+        'Amit Singh',
+        'Kavita Singh',
+        'SRN004',
+        'PEN004',
+        'ADM004',
+        '10',
+        '2024-2025',
+        '04',
+        'A',
+        1
+    ),
+    (
+        'Vikram Kumar',
+        'Mahesh Kumar',
+        'Naina Kumar',
+        'SRN005',
+        'PEN005',
+        'ADM005',
+        '10',
+        '2024-2025',
+        '05',
+        'A',
+        1
+    );
+
+`

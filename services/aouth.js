@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config()
 const chabi = process.env.jwt_token
 
-function setUser (user) {
+function setUser(user) {
   return jwt.sign(
     {
       _id: user.id,
@@ -16,7 +16,7 @@ function setUser (user) {
   )
 }
 
-function getUser (token) {
+function getUser(token) {
   if (!token) return null
   try {
     return jwt.verify(token, chabi)
@@ -25,8 +25,7 @@ function getUser (token) {
   }
 }
 
-function logoutUser (id) {
-  console.log(id)
+function logoutUser(id) {
   sessionIdToUserMap.delete(id)
 }
 

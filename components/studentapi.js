@@ -112,8 +112,6 @@ async function generateCertificate(req, res, next) {
 
 
   try {
-    // console.log(student);
-    // Load your PDF template
     const templateBytes = fs.readFileSync('certificate_template.pdf');
     const pdfDoc = await PDFDocument.load(templateBytes);
 
@@ -219,8 +217,6 @@ async function getStudentById_render(req, res, next) {
       }
       return student;
     });
-
-    // console.log({data:students});
 
 
     req.onestudent = { data: students }
@@ -404,7 +400,6 @@ async function updateStudentDetails(req, res) {
   const sanitize = value => value === undefined ? null : value;
   let connection;
   let studentId = req.params.id;
-  // console.log(studentId);
 
   const {
     full_name,
@@ -423,8 +418,6 @@ async function updateStudentDetails(req, res) {
     studentClass,
     section
   } = req.body;
-
-  // console.log("body", req.body);
 
   const studentPhoto = req.file ? req.file.buffer : null;
 

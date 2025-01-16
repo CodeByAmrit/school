@@ -1,8 +1,9 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, insertOrUpdateStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto } = require('../components/student');
+const { getAllStudent, insertOrUpdateStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
+const { sign } = require('crypto');
 // Configure multer
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -59,39 +60,42 @@ router.get('/search', checkAuth, async (req, res) => {
 // route to edit for students
 router.get('/student/edit/:id', checkAuth, async (req, res) => {
   try {
-      const user = req.user;
-      
-      // Fetch the student record
-      const [student] = await getOneStudent(req, res);
-      
-      // Fetch the photo using getPhoto
-      const photo = await getPhoto(req, res);
+    const user = req.user;
+    const [student] = await getOneStudent(req, res)
+    const photo = await getPhoto(req, res);
+    const sign = await getSign(req, res);
 
-      let photoDataUrl = "/image/user.png"; // Default photo if none exists
-      
-      if (photo) {
-          const photoBase64 = photo.toString('base64');
-          photoDataUrl = `data:image/png;base64,${photoBase64}`; // Convert to base64 and prepare data URL
-      }
+    let photoDataUrl = "/image/user.png"; // Default photo if none exists
+    let signDataUrl = "/image/sign.png"; // Default sign photo if none exists
 
-      // Render the profile page with the data
-      res.render('profile', { student, user, photo: photoDataUrl });
+    if (photo) {
+      const photoBase64 = photo.toString('base64');
+      photoDataUrl = `data:image/png;base64,${photoBase64}`; // Convert to base64 and prepare data URL
+    }
+    if (sign) {
+      const sign64 = sign.toString('base64');
+      signDataUrl = `data:image/png;base64,${sign64}`; // Convert to base64 and prepare data URL
+    }
+
+    // Render the profile page with the data
+    res.render('profile', { student, user, photo: photoDataUrl, sign: signDataUrl, });
   } catch (error) {
-      console.error('Error fetching student or photo:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching student or photo:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
 // Add new student (register)
 router.get('/student/new', checkAuth, async (req, res) => {
   try {
-      const student = null;
-      const user = req.user;
-      let photoDataUrl = "/image/user.png"; // Default photo if none exists
-      res.render('register', { student, user, photo: photoDataUrl });
+    const student = null;
+    const user = req.user;
+    let photoDataUrl = "/image/user.png"; // Default photo if none exists
+    let sign = "/image/sign.png"; // Default photo if none exists
+    res.render('register', { student, user, photo: photoDataUrl, sign: sign });
   } catch (error) {
-      console.error('Error fetching student or photo:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching student or photo:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -145,6 +149,13 @@ router.get("/login", (req, res) => {
   }
 });
 
+// Signup page - Redirect if already authenticated
+router.get("/signup", (req, res) => {
+
+  res.render("signup");
+
+});
+
 router.get('/profile', checkAuth, async (req, res, next) => {
   const studentlist = await getAllStudent(req, res);
   res.render('index', { studentlist });
@@ -194,22 +205,37 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
   }
 });
 
-// enter marks1
-router.post("/update-student/:id", checkAuth, upload.single('photo'), async (req, res) => {
+router.post("/update-student/new", checkAuth, upload.fields([{ name: 'photo' }, { name: 'sign' }]), async (req, res) => {
   try {
     const studentData = req.body;
-    const srn_no = req.params.id; // Get SRN number from URL parameter
+    const teacher_id = req.user._id;
 
-    // Process the photo file if provided
-    let photo = null;
-    if (req.file) {
-      photo = req.file.buffer; // Multer stores the file buffer in req.file.buffer
-    }
+    const photoFileBuffer = req.files['photo'] ? req.files['photo'][0].buffer : null;
+    const signFileBuffer = req.files['sign'] ? req.files['sign'][0].buffer : null;
 
-    // Insert or update student in the database
-    const [result] = await insertOrUpdateStudent(srn_no, studentData, photo);
-    console.log(result);
-    res.json(result); // Respond with the result from the database
+
+    // No school_id for new records
+    const school_id = await insertOrUpdateStudent(studentData, photoFileBuffer, signFileBuffer, teacher_id);
+    res.json({ school_id, message: "Student created successfully!" });
+
+  } catch (error) {
+    console.error('Error creating student:', error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// update details 
+router.post("/update-student/:id", checkAuth, upload.fields([{ name: 'photo' }, { name: 'sign' }]), async (req, res) => {
+  try {
+    const studentData = req.body;
+    studentData.school_id = req.params.id;
+    const teacher_id = req.user._id;
+
+    const photoFileBuffer = req.files['photo'] ? req.files['photo'][0].buffer : null;
+    const signFileBuffer = req.files['sign'] ? req.files['sign'][0].buffer : null;
+
+    const [result] = await insertOrUpdateStudent(studentData, photoFileBuffer, signFileBuffer, teacher_id);
+    res.json(result);
   } catch (error) {
     console.error('Error updating student:', error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -221,7 +247,6 @@ router.post("/student/marks1/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
   const result = await inputMarks("marks1", marks, id);
-  // console.log(result);
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
   } else if (result.changedRows > 0) {
@@ -235,7 +260,6 @@ router.post("/student/marks2/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
   const result = await inputMarks("marks2", marks, id);
-  console.log(result);
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
   } else if (result.changedRows > 0) {
@@ -250,7 +274,21 @@ router.post("/student/marks3/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
   const result = await inputMarks("marks3", marks, id);
-  // console.log(result);
+
+  if (result.affectedRows > 0) {
+    res.json({ ok: "added" });
+  } else if (result.changedRows > 0) {
+    res.json({ ok: "changed" });
+  } else {
+    res.json({ message: "error" });
+  }
+})
+//  QUESTION PAPER
+router.post("/question-paper", checkAuth, async (req, res) => {
+  const id = req.params.id;
+  const marks = req.body;
+  const result = await inputMarks("marks3", marks, id);
+
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
   } else if (result.changedRows > 0) {
@@ -265,10 +303,6 @@ router.get("/logout", (req, res) => {
   res.clearCookie("token").redirect("/login");
 });
 
-// Signup page - Renders signup form
-// router.get("/signup", (req, res) => {
-//   res.render("signup");
-// });
 
 // Account page - Renders account management page
 router.get("/account", checkAuth, (req, res) => {

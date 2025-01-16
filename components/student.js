@@ -7,10 +7,11 @@ const sharp = require("sharp");
 saltRounds = 10;
 
 async function getAllStudent(req, res) {
+    const teacher_id = req.user._id;
     let connection;
     try {
         connection = await getConnection();
-        const [rows] = await connection.execute('SELECT * FROM students');
+        const [rows] = await connection.execute('SELECT * FROM students WHERE teacher_id = ?', [teacher_id]);
         return rows;
     } catch (error) {
         console.log(error);
@@ -23,11 +24,12 @@ async function getAllStudent(req, res) {
 }
 
 async function getOneStudent(req, res) {
-    const srn_no = req.params.id;
+    const teacher_id = req.user._id;
+    const school_id = req.params.id;
     let connection;
     try {
         connection = await getConnection();
-        const [rows] = await connection.execute('SELECT * FROM students where srn_no = ?', [srn_no]);
+        const [rows] = await connection.execute('SELECT * FROM students where school_id = ? AND teacher_id = ?', [school_id, teacher_id]);
         return rows;
     } catch (error) {
         console.log(error);
@@ -40,12 +42,13 @@ async function getOneStudent(req, res) {
 }
 
 async function getPhoto(req, res) {
-    const srn_no = req.params.id;
+    const school_id = req.params.id;
+    const teacher_id = req.user._id;
     let connection;
 
     try {
         connection = await getConnection();
-        const [[result]] = await connection.execute('SELECT image FROM photo WHERE id = ?', [srn_no]);
+        const [[result]] = await connection.execute('SELECT image FROM photo WHERE id = ?', [school_id]);
 
         if (result && result.image) {
             // Dynamically process the image
@@ -69,85 +72,199 @@ async function getPhoto(req, res) {
         }
     }
 }
+async function getSign(req, res) {
+    const school_id = req.params.id;
+    const teacher_id = req.user._id;
+    let connection;
 
-async function insertOrUpdateStudent(srn_no, studentData, photo) {
+    try {
+        connection = await getConnection();
+        const [[result]] = await connection.execute('SELECT student_sign FROM photo WHERE id = ?', [school_id]);
+
+        if (result && result.student_sign) {
+            // Dynamically process the image
+            const pngBuffer = await sharp(result.student_sign) // Pass the binary data directly
+                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop
+                .toFormat("png") // Convert to PNG format
+                .toBuffer(); // Get the processed buffer
+
+            // Set the response content type and send the image buffer
+
+            return (pngBuffer);
+        } else {
+            return null
+        }
+    } catch (error) {
+        console.error("Error processing image:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+
+async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     const student = studentData;
     let connection;
     let result = 0;
 
     try {
         if (!connection) {
-
             connection = await getConnection();
         }
-        const query = `
-      INSERT INTO students (name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE 
-        name = VALUES(name),
-        father_name = VALUES(father_name),
-        mother_name = VALUES(mother_name),
-        pen_no = VALUES(pen_no),
-        admission_no = VALUES(admission_no),
-        class = VALUES(class),
-        session = VALUES(session),
-        roll = VALUES(roll);
-    `;
 
-        const values = [
-            student.name,
-            student.father_name,
-            student.mother_name,
-            student.srn_no,
-            student.pen_no,
-            student.admission_no,
-            student.class,
-            student.session,
-            student.roll_no,
-        ];
-        // console.log(values);
+        const isNewRecord = !student.school_id;
+
+        let query;
+        let values;
+
+        if (isNewRecord) {
+            // Insert new record without school_id
+            query = `
+                INSERT INTO students (teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+
+            values = [
+                teacher_id,
+                student.name,
+                student.father_name,
+                student.mother_name,
+                student.srn_no,
+                student.pen_no,
+                student.admission_no,
+                student.class,
+                student.session,
+                student.roll_no,
+                student.permanent_address,
+                student.corresponding_address,
+                student.mobile_no,
+                student.paste_file_no,
+                student.family_id,
+                student.dob,
+                student.profile_status,
+                student.apaar_id
+            ];
+        } else {
+            // Insert or update existing record with school_id
+            query = `
+                INSERT INTO students (school_id, teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    teacher_id = VALUES(teacher_id),
+                    name = VALUES(name),
+                    father_name = VALUES(father_name),
+                    mother_name = VALUES(mother_name),
+                    srn_no = VALUES(srn_no),
+                    pen_no = VALUES(pen_no),
+                    admission_no = VALUES(admission_no),
+                    class = VALUES(class),
+                    session = VALUES(session),
+                    roll = VALUES(roll),
+                    permanent_address = VALUES(permanent_address),
+                    corresponding_address = VALUES(corresponding_address),
+                    mobile_no = VALUES(mobile_no),
+                    paste_file_no = VALUES(paste_file_no),
+                    family_id = VALUES(family_id),
+                    dob = VALUES(dob),
+                    profile_status = VALUES(profile_status),
+                    apaar_id = VALUES(apaar_id)
+            `;
+
+            values = [
+                student.school_id,
+                teacher_id,
+                student.name,
+                student.father_name,
+                student.mother_name,
+                student.srn_no,
+                student.pen_no,
+                student.admission_no,
+                student.class,
+                student.session,
+                student.roll_no,
+                student.permanent_address,
+                student.corresponding_address,
+                student.mobile_no,
+                student.paste_file_no,
+                student.family_id,
+                student.dob,
+                student.profile_status,
+                student.apaar_id
+            ];
+        }
 
         result = await connection.query(query, values);
-        // console.log(result);
-        
+
+        if (isNewRecord) {
+            // Retrieve the auto-incremented school_id
+            const [rows] = await connection.query(`SELECT LAST_INSERT_ID() as school_id`);
+            studentData.school_id = rows[0].school_id;
+        }
 
     } catch (error) {
         console.log(error);
-        res.json({ status: error.sqlMessage });
-    } 
+        throw new Error(error.sqlMessage || "Database error");
+    } finally {
+        if (connection) connection.end();
+    }
 
-    if (photo !== null) {
+    // Handle photo upload
+    if (photo) {
         try {
-            // Dynamically process the uploaded photo
             const processedPhoto = await sharp(photo)
-                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
-                .toFormat('png') // Convert to PNG format
-                .toBuffer(); // Get the processed image as a buffer
+                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center })
+                .toFormat('png')
+                .toBuffer();
 
             connection = await getConnection();
-
-            const query = `
+            const photoQuery = `
                 INSERT INTO photo (id, image)
                 VALUES (?, ?)
                 ON DUPLICATE KEY UPDATE 
                     image = VALUES(image);
             `;
 
-            const values = [
-                srn_no,            // Student ID
-                processedPhoto,    // Processed image buffer
-            ];
+            const photoValues = [student.school_id, processedPhoto]; // Use the generated or provided school_id
+            await connection.query(photoQuery, photoValues);
 
-            const photoResult = await connection.query(query, values);
-
-            // console.log("Photo successfully stored:", result);
         } catch (error) {
             console.error("Error storing photo:", error);
+        } finally {
+            if (connection) connection.end();
         }
     }
-    connection.end();
+    if (sign) {
+        try {
+            const processedPhoto = await sharp(sign)
+                .resize(150, 150, { fit: sharp.fit.cover, position: sharp.gravity.center })
+                .toFormat('png')
+                .toBuffer();
+
+            connection = await getConnection();
+            const photoQuery = `
+                INSERT INTO photo (id, student_sign)
+                VALUES (?, ?)
+                ON DUPLICATE KEY UPDATE 
+                    student_sign = VALUES(student_sign);
+            `;
+
+            const photoValues = [student.school_id, processedPhoto];
+            await connection.query(photoQuery, photoValues);
+
+        } catch (error) {
+            console.error("Error storing photo:", error);
+        } finally {
+            if (connection) connection.end();
+        }
+    }
+
     return result;
 }
+
 
 
 async function getStudentDetails(req, res) {
@@ -265,11 +382,9 @@ async function teacherSignup(req, res) {
 }
 
 async function deleteStudent(req, res) {
-    // Check if req.user.id is available
-    const studentId = req.params.id;
-    // console.log(studentId);
+    const school_id = req.params.id;
 
-    if (!studentId) {
+    if (!school_id) {
         return res.status(400).json({ message: 'Student ID required' });
     }
 
@@ -278,45 +393,45 @@ async function deleteStudent(req, res) {
         connection = await getConnection();
 
         try {
-            await connection.execute(`DELETE from marks1 where id = ?`, [studentId,]);
+            await connection.execute(`DELETE from marks1 where id = ?`, [school_id,]);
         } catch (error) {
             console.log("studentDocument", error);
         }
         try {
-            await connection.execute(`DELETE from marks2 where id = ?`, [studentId,]);
+            await connection.execute(`DELETE from marks2 where id = ?`, [school_id,]);
         } catch (error) {
             console.log("studentDocument", error);
         }
         try {
-            await connection.execute(`DELETE from marks3 where id = ?`, [studentId,]);
+            await connection.execute(`DELETE from marks3 where id = ?`, [school_id,]);
         } catch (error) {
             console.log("studentDocument", error);
         }
 
         try {
-            await connection.execute(`DELETE from pdf_files where srn_no = ?`, [studentId,]);
+            await connection.execute(`DELETE from student_files where school_id = ?`, [school_id,]);
         } catch (error) {
             console.log("studentDocument", error);
         }
         try {
-            await connection.execute(`DELETE from photo where id = ?`, [studentId,]);
+            await connection.execute(`DELETE from photo where id = ?`, [school_id,]);
         } catch (error) {
             console.log("studentDocument", error);
         }
 
-        const [result] = await connection.execute(`DELETE from students where srn_no = ?`, [studentId,]);
+        const [result] = await connection.execute(`DELETE from students where school_id = ?`, [school_id,]);
         const user = req.user;
         if (result.affectedRows === 0) {
             const studentlist = await getAllStudent(req, res);
-            const error_message = `No Student found with SRN NO - ${studentId} to delete.`;
+            const error_message = `No Student found with School ID - ${school_id} to delete.`;
             return res.status(400).render("students", { studentlist, user, error_message });
         }
         if (result.affectedRows > 0) {
             const studentlist = await getAllStudent(req, res);
-            const message = `Student with SRN No. ${studentId} has been deleted successfully.`;
+            const message = `Student with School Id. ${school_id} has been deleted successfully.`;
             return res.status(200).render("students", { studentlist, user, message });
         }
-        // res.status(200).render({ message: 'Student Deleted successfully', studentId: result });
+        // res.status(200).render({ message: 'Student Deleted successfully', school_id: result });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.sqlMessage });
@@ -368,13 +483,13 @@ async function insertPDF(req, res) {
 }
 
 async function getMarks(req, res) {
-    const srn_no = req.params.id;
+    const school_id = req.params.id;
     let connection;
     try {
         connection = await getConnection();
-        const [[rows1]] = await connection.execute('SELECT * FROM marks1 where id = ?', [srn_no]);
-        const [[rows2]] = await connection.execute('SELECT * FROM marks2 where id = ?', [srn_no]);
-        const [[rows3]] = await connection.execute('SELECT * FROM marks3 where id = ?', [srn_no]);
+        const [[rows1]] = await connection.execute('SELECT * FROM marks1 where id = ?', [school_id]);
+        const [[rows2]] = await connection.execute('SELECT * FROM marks2 where id = ?', [school_id]);
+        const [[rows3]] = await connection.execute('SELECT * FROM marks3 where id = ?', [school_id]);
         return { rows1, rows2, rows3 };
     } catch (error) {
         console.log(error);
@@ -385,7 +500,7 @@ async function getMarks(req, res) {
         }
     }
 }
-async function inputMarks(table, marks, srn_no) {
+async function inputMarks(table, marks, school_id) {
     if (table == "marks1") {
         const {
             english1,
@@ -399,12 +514,13 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal1,
             percentage1,
             rank1,
+            remarks1,
         } = marks;
 
         const query = `
         INSERT INTO ${table} 
-        (id, english1, hindi1, mathematics1, social_science1, science1, computer1, drawing1, gn1, grandTotal1, percentage1, rank1)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (id, english1, hindi1, mathematics1, social_science1, science1, computer1, drawing1, gn1, grandTotal1, percentage1, rank1, remarks1)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             english1 = VALUES(english1),
             hindi1 = VALUES(hindi1),
@@ -417,10 +533,11 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal1 = VALUES(grandTotal1),
             percentage1 = VALUES(percentage1),
             rank1 = VALUES(rank1)
+            remarks1 = VALUES(remarks1)
     `;
 
         const values = [
-            srn_no,
+            school_id,
             english1,
             hindi1,
             mathematics1,
@@ -432,6 +549,7 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal1,
             percentage1,
             rank1,
+            remarks1,
         ];
 
         let connection;
@@ -463,11 +581,12 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal2,
             percentage2,
             rank2,
+            remarks2,
         } = marks;
         const query = `
         INSERT INTO ${table} 
-        (id, english2, hindi2, mathematics2, social_science2, science2, computer2, drawing2, gn2, grandTotal2, percentage2, rank2)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (id, english2, hindi2, mathematics2, social_science2, science2, computer2, drawing2, gn2, grandTotal2, percentage2, rank2, remarks2)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             english2 = VALUES(english2),
             hindi2 = VALUES(hindi2),
@@ -479,11 +598,12 @@ async function inputMarks(table, marks, srn_no) {
             gn2 = VALUES(gn2),
             grandTotal2 = VALUES(grandTotal2),
             percentage2 = VALUES(percentage2),
-            rank2 = VALUES(rank2)
+            rank2 = VALUES(rank2),
+            remarks2 = VALUES(remarks2),
     `;
 
         const values = [
-            srn_no,
+            school_id,
             english2,
             hindi2,
             mathematics2,
@@ -495,6 +615,7 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal2,
             percentage2,
             rank2,
+            remarks2,
         ];
 
         let connection;
@@ -526,11 +647,12 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal3,
             percentage3,
             rank3,
+            remarks3,
         } = marks;
         const query = `
         INSERT INTO ${table} 
-        (id, english3, hindi3, mathematics3, social_science3, science3, computer3, drawing3, gn3, grandTotal3, percentage3, rank3)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (id, english3, hindi3, mathematics3, social_science3, science3, computer3, drawing3, gn3, grandTotal3, percentage3, rank3, remarks3)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             english3 = VALUES(english3),
             hindi3 = VALUES(hindi3),
@@ -542,11 +664,12 @@ async function inputMarks(table, marks, srn_no) {
             gn3 = VALUES(gn3),
             grandTotal3 = VALUES(grandTotal3),
             percentage3 = VALUES(percentage3),
-            rank3 = VALUES(rank3)
+            rank3 = VALUES(rank3),
+            remarks3 = VALUES(remarks3),
     `;
 
         const values = [
-            srn_no,
+            school_id,
             english3,
             hindi3,
             mathematics3,
@@ -558,6 +681,7 @@ async function inputMarks(table, marks, srn_no) {
             grandTotal3,
             percentage3,
             rank3,
+            remarks3,
         ];
 
         let connection;
@@ -577,13 +701,11 @@ async function inputMarks(table, marks, srn_no) {
         }
     }
 
-
-
 }
 
 
 module.exports = {
     getAllStudent, teacherLogin,
-    getStudentDetails, deleteStudent,
-    getOneStudent, insertPDF, getMarks, inputMarks, getPhoto, insertOrUpdateStudent
+    getStudentDetails, deleteStudent, teacherSignup,
+    getOneStudent, insertPDF, getMarks, inputMarks, getPhoto, getSign, insertOrUpdateStudent
 }
