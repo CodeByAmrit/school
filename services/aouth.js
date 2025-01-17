@@ -10,7 +10,10 @@ function setUser(user) {
       _id: user.id,
       email: user.email,
       first_name: user.first_name,
-      last_name: user.last_name
+      last_name: user.last_name,
+      school_address: user.school_address,
+      school_name: user.school_name,
+      school_phone: user.school_phone
     },
     chabi
   )

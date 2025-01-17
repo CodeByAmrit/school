@@ -1,6 +1,6 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, insertOrUpdateStudent, teacherLogin, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
+const { getAllStudent, insertOrUpdateStudent, teacherLogin, get_school_logo, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
 const { sign } = require('crypto');
@@ -10,9 +10,18 @@ const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
 // Student route - Displays all students with authentication
-router.get('/', checkAuth, async (req, res) => {
+router.get('/dashboard', checkAuth, async (req, res) => {
   try {
-    const user = req.user;
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    // console.log(school_logo);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
     const studentlist = await getAllStudent(req, res);
     res.render('index', { studentlist, user });
   } catch (error) {
@@ -24,7 +33,17 @@ router.get('/', checkAuth, async (req, res) => {
 
 router.get('/certificates', checkAuth, async (req, res) => {
   try {
-    const user = req.user;
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    // console.log(school_logo);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
+
     const studentlist = await getAllStudent(req, res);
     res.render('certificates', { studentlist, user });
   } catch (error) {
@@ -35,7 +54,17 @@ router.get('/certificates', checkAuth, async (req, res) => {
 
 router.get('/students', checkAuth, async (req, res) => {
   try {
-    const user = req.user;
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    // console.log(school_logo);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
+
     const studentlist = await getAllStudent(req, res);
     res.render('students', { studentlist, user });
   } catch (error) {
@@ -48,6 +77,7 @@ router.get('/students', checkAuth, async (req, res) => {
 router.get('/search', checkAuth, async (req, res) => {
 
   try {
+    req.user.school_logo = get_school_logo(req, res);
     const user = req.user;
     const studentlist = await getStudentDetails(req, res);
     res.render('students', { studentlist, user });
@@ -60,12 +90,12 @@ router.get('/search', checkAuth, async (req, res) => {
 // route to edit for students
 router.get('/student/edit/:id', checkAuth, async (req, res) => {
   try {
-    const user = req.user;
+
     const [student] = await getOneStudent(req, res)
     const photo = await getPhoto(req, res);
     const sign = await getSign(req, res);
 
-    let photoDataUrl = "/image/user.png"; // Default photo if none exists
+    let photoDataUrl = "/image/graduated.png"; // Default photo if none exists
     let signDataUrl = "/image/sign.png"; // Default sign photo if none exists
 
     if (photo) {
@@ -77,6 +107,15 @@ router.get('/student/edit/:id', checkAuth, async (req, res) => {
       signDataUrl = `data:image/png;base64,${sign64}`; // Convert to base64 and prepare data URL
     }
 
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
     // Render the profile page with the data
     res.render('profile', { student, user, photo: photoDataUrl, sign: signDataUrl, });
   } catch (error) {
@@ -89,8 +128,17 @@ router.get('/student/edit/:id', checkAuth, async (req, res) => {
 router.get('/student/new', checkAuth, async (req, res) => {
   try {
     const student = null;
-    const user = req.user;
-    let photoDataUrl = "/image/user.png"; // Default photo if none exists
+    let school_logo_url = "/image/user.png";
+    const school_logo = await get_school_logo(req, res);
+    // console.log(school_logo);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
+    let photoDataUrl = "/image/graduated.png"; // Default photo if none exists
     let sign = "/image/sign.png"; // Default photo if none exists
     res.render('register', { student, user, photo: photoDataUrl, sign: sign });
   } catch (error) {
@@ -108,6 +156,7 @@ router.get('/student/new', checkAuth, async (req, res) => {
 router.get('/search_certificate', checkAuth, async (req, res) => {
 
   try {
+    req.user.school_logo = get_school_logo(req, res);
     const user = req.user;
     const studentlist = await getStudentDetails(req, res);
     res.render('certificates', { studentlist, user });
@@ -118,10 +167,10 @@ router.get('/search_certificate', checkAuth, async (req, res) => {
 });
 
 // Teacher authentication routes
-router.post('/signup', async (req, res) => {
+router.post('/signup', upload.single("school_logo"), async (req, res) => {
   try {
     await teacherSignup(req, res);
-    res.redirect('/login'); // Redirect to login page after signup
+
   } catch (error) {
     console.error('Error signing up teacher:', error);
     res.status(400).send('Signup Failed');
@@ -140,10 +189,11 @@ router.post('/login', async (req, res) => {
 });
 
 // Login page - Redirect if already authenticated
-router.get("/login", (req, res) => {
+router.get("/login", async (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
-    res.redirect("/");
+
+    res.redirect("/dashboard");
   } else {
     res.render("login");
   }
@@ -196,7 +246,16 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
     const { rows1, rows2, rows3 } = await getMarks(req, res);
     const students = await getOneStudent(req, res);
     const student = students[0];
-    const user = req.user;
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    // console.log(school_logo);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
     res.render('marks', { user, student, rows1, rows2, rows3 });
 
   } catch (error) {

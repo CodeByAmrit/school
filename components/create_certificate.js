@@ -6,15 +6,15 @@ const path = require("path");
 
 // Query the database
 async function generate(req, res) {
-    const srnNo = req.params.srn_no;
+    const school_id = req.params.srn_no;
     let connection;
 
     try {
         connection = await getConnection();
         // Fetch student details
         const studentResults = await connection.execute(
-            "SELECT s.*, p.image FROM students s LEFT JOIN photo p ON s.srn_no = p.id WHERE s.srn_no = ?",
-            [srnNo]
+            "SELECT s.*, p.image FROM students s LEFT JOIN photo p ON s.school_id = p.id WHERE s.school_id = ?",
+            [school_id]
         );
 
 
@@ -22,9 +22,9 @@ async function generate(req, res) {
             return res.status(404).send("Student not found.");
         }
 
-        const marks1result = await connection.execute("SELECT * FROM marks1 WHERE id = ?", [srnNo]);
-        const marks2result = await connection.execute("SELECT * FROM marks2 WHERE id = ?", [srnNo]);
-        const marks3result = await connection.execute("SELECT * FROM marks3 WHERE id = ?", [srnNo]);
+        const marks1result = await connection.execute("SELECT * FROM marks1 WHERE id = ?", [school_id]);
+        const marks2result = await connection.execute("SELECT * FROM marks2 WHERE id = ?", [school_id]);
+        const marks3result = await connection.execute("SELECT * FROM marks3 WHERE id = ?", [school_id]);
 
 
         const student = studentResults[0][0];
@@ -70,11 +70,11 @@ async function generate(req, res) {
         if (student.image) {
             try {
                 // Convert raw bytes to PNG using sharp
-               const pngBuffer = await sharp(Buffer.from(student.image))
-                               .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
-                               .toFormat('png') // Convert to PNG format
-                               .toBuffer(); // Get the processed image as a buffer
-               
+                const pngBuffer = await sharp(Buffer.from(student.image))
+                    .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop dynamically
+                    .toFormat('png') // Convert to PNG format
+                    .toBuffer(); // Get the processed image as a buffer
+
 
                 const embeddedImage = await pdfDoc.embedPng(pngBuffer);
 

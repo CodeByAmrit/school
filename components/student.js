@@ -316,6 +316,22 @@ async function getStudentDetails(req, res) {
     }
 }
 
+async function get_school_logo(req, res) {
+    const email = req.user.email;
+    // console.log(email);
+    let connection;
+    try {
+        connection = await getConnection();
+
+        const [[result]] = await connection.execute("select school_logo from teacher where email = ?", [email,]);
+        // console.log(result);
+        return (result);
+    } catch (error) {
+        return null;
+    }
+
+}
+
 async function teacherLogin(req, res) {
     let { email, password } = req.body;
     let connection;
@@ -340,6 +356,9 @@ async function teacherLogin(req, res) {
             first_name: teacher.first_name,
             last_name: teacher.last_name,
             email: teacher.email,
+            school_address: teacher.school_address,
+            school_name: teacher.school_name,
+            school_phone: teacher.school_phone
         }; // Return the logged-in teacher's details
 
         const token = setUser(payload);
@@ -348,7 +367,7 @@ async function teacherLogin(req, res) {
             secure: true, // Set to true if using https
             sameSite: 'Strict'
         });
-        res.redirect("/")
+        res.redirect("/dashboard",)
 
 
     } catch (error) {
@@ -361,25 +380,40 @@ async function teacherLogin(req, res) {
 }
 
 async function teacherSignup(req, res) {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, school_name, school_address, school_phone } = req.body;
+    let school_logo = null;
+    if (req.file) {
+        console.log("Photo uploaded");
+        school_logo = await sharp(req.file.buffer)
+            .resize(300, 300, { fit: sharp.fit.cover, position: sharp.gravity.center })
+            .toFormat('png')
+            .toBuffer();
+    }
+
     let connection;
     try {
         connection = await getConnection();
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Ensure school_logo is included in the query values
         const [result] = await connection.execute(
-            'INSERT INTO teacher (first_name, last_name, email, password) VALUES (?, ?, ?, ?)',
-            [firstName, lastName, email, hashedPassword]
+            `INSERT INTO teacher 
+             (first_name, last_name, email, password, school_name, school_address, school_phone, school_logo) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [firstName, lastName, email, hashedPassword, school_name, school_address, school_phone, school_logo]
         );
-        res.redirect("/login"); // Return the new teacher's ID
+
+        return res.render("show", { result }); // Show the result after successful insert
     } catch (error) {
-        // console.error(error);
-        res.json({ status: error.sqlMessage });
+        console.error(error); // Log the actual error for debugging
+        res.json({ status: error.sqlMessage || "An error occurred" });
     } finally {
         if (connection) {
             await connection.end();
         }
     }
 }
+
 
 async function deleteStudent(req, res) {
     const school_id = req.params.id;
@@ -706,6 +740,6 @@ async function inputMarks(table, marks, school_id) {
 
 module.exports = {
     getAllStudent, teacherLogin,
-    getStudentDetails, deleteStudent, teacherSignup,
+    getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
     getOneStudent, insertPDF, getMarks, inputMarks, getPhoto, getSign, insertOrUpdateStudent
 }

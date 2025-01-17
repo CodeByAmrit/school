@@ -7,7 +7,11 @@ CREATE TABLE IF NOT EXISTS teacher (
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email VARCHAR(100),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    school_name VARCHAR(200),
+    school_address VARCHAR(200),
+    school_phone VARCHAR(200),
+    school_logo MEDIUMBLOB    
 );
 
 CREATE TABLE IF NOT EXISTS students (
@@ -32,6 +36,14 @@ CREATE TABLE IF NOT EXISTS students (
     profile_status VARCHAR(255),
     apaar_id VARCHAR(40),
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+CREATE TABLE IF NOT EXISTS student_credentials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255) DEFAULT '1234',
+    FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
 CREATE TABLE IF NOT EXISTS student_files (

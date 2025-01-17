@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Tracker</title>
+</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" type="image" href="/favicon.ico">
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Mukta:wght@200;300;400;500;600;700;800&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+
+<body>
+    <div class="mainLanding" id="picGroup">
+        <nav class="navbar fixed-top bg-body-tertiary py-2" id="customNav">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+
+                    <span class="menuWhite" style=" font-weight: bold; font-size:25px;">
+                        Student Tracker
+                    </span>
+                </a>
+                <div>
+                    <a href="/login">
+                        <div class="btn" style="color:white;">Login</div>
+                    </a>
+
+                    <a href="/signup" class="btn btn-outline-light">Sign Up</a>
+
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="d-flex flex-row custom-responsive" style="padding-top: 7rem;">
+                <div class="contentLeft pw-4 ">
+                    <h1
+                        style="text-shadow: 2px 2px 5px #0072b97e;     font-weight: 700; font-size: 2.25rem;line-height: 2.5rem;">
+                        Track and Manage Student Data Seamlessly</h1>
+                    <h6><img src="/image/blue-bullet.svg" alt="verified" width="18rem"
+                            style="mix-blend-mode: multiply; margin-right:10px;">Aligned with Educational Standards
+                    </h6>
+                    <h6><img src="/image/blue-bullet.svg" alt="verified" width="18rem"
+                            style="mix-blend-mode: multiply; margin-right:10px;">Empowers Teachers with Comprehensive
+                        Insights</h6>
+                    <h6><img src="/image/blue-bullet.svg" alt="verified" width="18rem"
+                            style="mix-blend-mode: multiply; margin-right:10px;">Optimized for Efficient Classroom
+                        Management</h6>
+                </div>
+                <div class="d-flex contentRight">
+
+                    <div class="card mx-2 resCard"
+                        style="background-color: #4299e100; border:0; align-items: center; height:fit-content">
+                        <img src="/image/student.svg" alt="student" width="220px" class="landingImage">
+                        <div class="card card-body shadow pb-5">
+                            <p class="card-text"><b>Track Your Progress with Ease</b></p>
+                            <p class="card-text">Join thousands of students and manage your learning journey with
+                                personalized tools assessments.</p>
+                        </div>
+                        <a href="/login" class="btn btn-warning customBtnColor"
+                            style="margin-top: -20px; z-index: 3000;">Login as Student</a>
+                    </div>
+
+                    <div class="card mx-2 resCard"
+                        style="background-color: #4299e100; border:0; align-items: center; height:fit-content">
+                        <img src="/image/teacher.svg" alt="student" width="220px" class="landingImage">
+                        <div class="card card-body shadow pb-5">
+                            <p class="card-text"><b>For Instructors and Admins</b></p>
+                            <p class="card-text">Easily Manage Class and Student Settings
+                                with Timed Assessments, Customized Lessons,
+                                Automated Reports, and More.</p>
+                        </div>
+                        <a href="/login" class="btn btn-warning customBtnColor"
+                            style="margin-top: -20px; z-index: 3000;">Login as Teacher</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <img src="/image/white_triangle.svg" alt="white" id="triangle" width="100%">
+    </div>
+
+    <div class="container" style="height: fit-content;">
+        <div class="secondPage">
+            <div style="display: flex; align-items:center; width:100%; justify-content:center;" class="my-4">
+                <p
+                    style="font-weight: 700; color:rgb(49,130,206); font-size: 30px;line-height: 2rem; text-align: center; max-width:900px;">
+                    More Than Management: Records, Tracking, & Parent Communication
+                </p>
+            </div>
+            <div class="goBeyond">
+                <div>
+                    <img src="/animate/database.gif" alt="database" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Comprehensive Data Management</p>
+                </div>
+                <div>
+                    <img src="/animate/checklist.gif" alt="checklist" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Student Profiles & Academic Insights</p>
+                </div>
+                <div>
+                    <img src="/animate/encryption.gif" alt="encryption" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Secure Data Handling & Privacy</p>
+                </div>
+                <div>
+                    <img src="/animate/calendar.gif" alt="calendar" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Attendance & Grading Systems</p>
+                </div>
+                <div>
+                    <img src="/animate/family.gif" alt="family" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Parental Engagement & Reporting</p>
+                </div>
+
+            </div>
+            <div style="display: flex; align-items:center; width:100%; justify-content:center;" class="my-4">
+                <p
+                    style="font-weight: 700; color:rgb(49,130,206); font-size: 30px;line-height: 2rem; text-align: center; max-width:900px;">
+                    Free Student Management for Educators
+                </p>
+            </div>
+            <div class="goBeyond">
+                <div>
+                    <img src="/animate/report.gif" alt="report" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Detailed Performance Reports</p>
+                </div>
+                <div>
+                    <img src="/animate/school.gif" alt="school" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Comprehensive School & District Management Features</p>
+                </div>
+                <div>
+                    <img src="/animate/share-link.gif" alt="link" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">SSO Integration with Clever, ClassLink, & Google</p>
+                </div>
+                <div>
+                    <img src="/animate/setting.gif" alt="setting" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Customizable Learning Modules</p>
+                </div>
+                <div>
+                    <img src="/animate/test.gif" alt="etst" width="80px" class="mb-3">
+                    <p style="max-width: 150px; font-size:14px;">Preparation for Standardized Testing</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="future d-flex flex-column justify-content-center align-items-center mb-5 text-white">
+        <p style="text-align: center; font-family:Calibri;" class="pt-4">
+            <b> Students for the Future
+                Preparing
+            </b>
+        </p>
+
+        <div>
+            <button class="btn btn-light">38,916,000+ students</button>
+            <button class="btn btn-success">677,000+ teachers</button>
+
+        </div>
+
+
+        <p style="font-size: 1.5rem;">Tens of thousands of schools rely on us every year.</p>
+    </div>
+
+    <div class="container">
+
+        <!-- third page -->
+        <div class="secondPage">
+            <div style="display: flex; align-items:center; width:100%; justify-content:center;" class="my-4">
+                <p
+                    style="font-weight: 700; color:rgb(32, 34, 35); font-size: 2.5rem;line-height: 2rem; text-align: center; max-width:900px;">
+                    Why You'll Love Student Tracker
+                </p>
+            </div>
+            <div class="goBeyond">
+
+                <div class="card customCard" style="width: 14rem;">
+                    <img src="/animate/neural-network.gif" class="card-img-top circle2" alt="...">
+                    <div class="card card-body" style="text-align: left;">
+                        <h5 class="card-title"><b>Comprehensive Curriculum</b></h5>
+                        <h6 class="card-text">
+                            Equip students with essential academic skills – crafted by experts for learners at every
+                            level.
+                        </h6>
+                    </div>
+                </div>
+                <div class="card customCard" style="width: 14rem;">
+                    <img src="/animate/graduate.gif" class="card-img-top" alt="...">
+                    <div class="card card-body" style="text-align: left;">
+                        <h5 class="card-title"><b>Interactive Learning</b></h5>
+                        <h6 class="card-text" style="text-align: left;">
+                            Motivate students with engaging activities, personalized lessons, and progress tracking.
+                        </h6>
+                    </div>
+                </div>
+                <div class="card customCard" style="width: 14rem;">
+                    <img src="/animate/online-lesson.gif" class="card-img-top" alt="...">
+                    <div class="card card-body" style="text-align: left;">
+                        <h5 class="card-title"><b>Tailor It to Your Needs</b></h5>
+                        <h6 class="card-text" style="text-align: left;">
+                            Customize the platform by creating your own modules to reinforce cross-disciplinary
+                            learning.
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="card customCard" style="width: 14rem;">
+                    <img src="/animate/score.gif" class="card-img-top" alt="...">
+                    <div class="card card-body" style="text-align: left;">
+                        <h5 class="card-title"><b>Standardized Test Readiness</b></h5>
+                        <h6 class="card-text" style="text-align: left;">
+                            Help your students excel in standardized tests with tailored preparation tools.
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <!-- Left -->
+            <div class="me-5 d-none d-lg-block">
+                <span>Get connected with us on social networks:</span>
+            </div>
+            <!-- Right -->
+            <div>
+
+                <a href="https://www.instagram.com/warrior_amrit/" class="me-4 text-reset" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/CodeByAmrit/" class="me-4 text-reset" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <!-- Right -->
+        </section>
+        <!-- Section: Social media -->
+
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Amrit Sharma
+                        </h6>
+                        <p>
+                            Here you can use rows and columns to organize your footer content. Lorem ipsum
+                            dolor sit amet, consectetur adipisicing elit.
+                        </p>
+                    </div>
+
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i> Sonipat, Haryana, India</p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            me.sharma.amrit@gmail.com
+                        </p>
+                        <p><i class="fas fa-phone me-3"></i> + 91 9817044885</p>
+                        <p><i class="fas fa-print me-3"></i> + 91 8295544885</p>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            © 2024 Copyright:
+            <a class="text-reset fw-bold" href="https://github.com/CodeByAmrit/">CodeByAmrit</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+
+</html>

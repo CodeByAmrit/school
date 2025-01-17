@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             reader.readAsDataURL(file);
         } else {
-            previewImage.src = '/image/user.svg';
+            previewImage.src = '/image/graduated.png';
         }
     });
 

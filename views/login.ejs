@@ -5,135 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Login</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .rightLogin {
-            width: 70%;
-            min-height: 100vh;
-        }
-
-        .leftLogin {
-            width: 30%;
-            min-height: 100vh;
-            background: linear-gradient(0deg, #4fb0ff, 35%, #67c5ff 100%);
-            color: white;
-            display: block !important;
-        }
-
-        @media screen and (max-width: 800px) {
-            .leftLogin {
-                display: none !important;
-            }
-
-            .rightLogin {
-                width: 100%;
-            }
-
-            #customNav {
-                display: block;
-            }
-        }
-
-        @media screen and (min-width: 800px) {
-            #customNav {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/theme.js" defer></script>
 </head>
 
-<body>
-    <div class="d-flex justify-content-center " style="font-family: Calibri;">
-        <div class=" leftLogin d-flex flex-column p-3">
-            <div class="d-flex justify-content-between">
-                <div class="fs-4">Student Tracker</div>
-                <div><a href="index.html"><img src="/image/house-chimney.png" alt="img" width="20px"></a></div>
+<body class="font-sans dark:bg-gray-900 dark:text-gray-100">
+    <div class="flex justify-center">
+        <!-- Left Section -->
+        <div
+            class="hidden lg:flex flex-col w-1/3 bg-gradient-to-b from-blue-500 to-blue-400 text-white p-6 h-screen dark:from-gray-800 dark:to-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="text-lg font-bold">Student Tracker</div>
+                <a href="index.html">
+                    <img src="/image/house-chimney.png" alt="Home" class="w-5">
+                </a>
             </div>
-            <div style="height: 100vh;" class="d-flex flex-column justify-content-center align-items-center p-3">
-                <img src="/image/student.svg" alt="student" width="250px">
-                <div class="fs-4"><b>Empower Your Teaching, FREE!</b></div class="fs-4">
-                <div>Equip your students with essential skills using our all-in-one curriculum, including data
-                    management, digital literacy, and coding!</div>
+            <div class="flex flex-col justify-center items-center h-full">
+                <img src="/image/student.svg" alt="Student" class="w-64 mb-6">
+                <div class="text-xl font-bold mb-2">Empower Your Teaching, FREE!</div>
+                <div class="text-center">Equip your students with essential skills using our all-in-one curriculum,
+                    including data management, digital literacy, and coding!</div>
             </div>
-
         </div>
-        <div class="container rightLogin d-flex flex-column m-5 align-items-center"
-            style="font-family: calibri; padding: 45px 0 0 0 !important;">
-            <nav class="navbar fixed-top bg-body-tertiary py-2" id="customNav"
-                style="background: linear-gradient(0deg, #4fb0ff, 35%, #67c5ff 100%);">
-                <div class="container">
-                    <a class="navbar-brand" href="#">
 
-                        <span class="menuWhite" style=" font-weight: bold; font-size:25px;color:white !important; ">
-                            Student Tracker
-                        </span>
-                    </a>
-                </div>
+        <!-- Right Section -->
+        <button id="theme-toggle" type="button"
+            class="fixed top-8 right-10 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+        <div class="flex flex-col items-center justify-center w-full lg:w-2/3 p-6 lg:py-10">
+            <nav
+                class="lg:hidden bg-gradient-to-b from-blue-500 to-blue-400 w-full py-3 fixed top-0 dark:from-gray-800 dark:to-gray-700">
+                <div class="container mx-auto text-white text-lg font-bold text-center">Student Tracker</div>
             </nav>
-            <div class="fs-2"><b>Login As Teacher </b></div>
-            <div class="fs-6 mb-5">Don't have an account? <a href="/signup">Sign Up Free!</a></div>
-            <div style="width: 100%; ">
-                <form action="/login" method="post">
-                    <div class="form-group mb-3">
-                        <label for="exampleInputEmail1">Email Id *</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                            placeholder="" name="email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder=""
-                            name="password">
-                    </div>
-                    <div class="">
-                        <!-- Button trigger modal -->
-                        <a class="form-check-label" for="exampleCheck1" data-bs-toggle="modal"
-                            data-bs-target="#forgetPassword">Forget Password</a>
 
-                    </div>
+            <div class="text-2xl font-bold my-10 lg:mt-0">Login As Teacher</div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                        <button class="btn btn-primary me-md-2 fs-5" type="submit"
-                            style="width: 110px; height:50px;">Login</button>
-                    </div>
-                </form>
+            <form action="/login" method="post" class="w-full max-w-md">
+                <div class="relative mb-4">
+                    <input type="email" id="email" name="email"
+                        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder="" autocomplete="username">
+                    <label for="email"
+                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ml-2">Email</label>
+                </div>
+
+                <div class="relative mb-4">
+                    <input type="password" id="password" name="password"
+                        class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder="" autocomplete="current-password">
+                    <label for="password"
+                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ml-2">Password</label>
+                </div>
+
+                <div class="text-sm mt-2 mb-6 flex justify-between">
+                    <a href="/signup" class="text-blue-600 dark:text-blue-400 underline">Create Account</a>
+                    <a href="#" class="text-blue-600 dark:text-blue-400 underline">Forget Password</a>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit"
+                        class="bg-blue-500 dark:bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-600 dark:hover:bg-blue-700">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forget Password Modal -->
+    <div id="forgetPassword" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold dark:text-gray-100">Forgot Your Login Info?</h2>
+                <button class="text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                    data-modal-hide="forgetPassword">&times;</button>
+            </div>
+            <p class="mb-4 dark:text-gray-200">Please enter your email below and password change instructions will be
+                sent to you.</p>
+            <div class="mb-4">
+                <label for="resetEmail" class="block text-sm font-medium dark:text-gray-300">Email *</label>
+                <input type="email" id="resetEmail"
+                    class="mt-1 w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="">
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button
+                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600"
+                    data-modal-hide="forgetPassword">Close</button>
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">Send
+                    Password Reset Email</button>
             </div>
         </div>
     </div>
 
-    <!-- Forget Password -->
-    <form action="#">
-        <div class="modal fade " id="forgetPassword" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Forgot Your Login Info?</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Please enter your email below and password change instructions will be sent to you.</p>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Email *</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <div>
-                            <button type="button" class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn btn-primary">Send Password Reset Email</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/flowbite/flowbite.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
