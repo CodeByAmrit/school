@@ -1,4 +1,19 @@
 const id = document.getElementById("school_id").value;
+let max = 0;
+
+const maxSubject = ['maxEng', 'maxHindi', 'maxMaths', 'maxSst', 'maxScience', 'maxComp', 'maxGn', 'maxDrawing'];
+maxSubject.forEach(subject => {
+    try {
+        let value = parseInt(document.getElementById(subject).value);
+        if (!isNaN(value)) {
+            max += value;
+        }
+    } catch (error) {
+        console.log('before', subject);
+    }
+
+})
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("marks1_form");
@@ -39,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
             if (response.ok) {
+                // const maxRes = maxMarks_submit();
                 alert("Data submitted successfully!");
             } else {
                 alert("Error: " + result.message);
@@ -96,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
             if (response.ok) {
+                // const maxRes = maxMarks_submit();
                 alert("Data submitted successfully!");
             } else {
                 alert("Error: " + result.message);
@@ -153,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
             if (response.ok) {
+                // const maxRes = maxMarks_submit();
                 alert("Data submitted successfully!");
             } else {
                 alert("Error: " + result.message);
@@ -171,3 +189,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    const subjects1 = ['english', 'hindi', 'maths', 'sst', 'science', 'computer', 'general', 'drawing'];
+    const subjects2 = ['english2', 'hindi2', 'maths2', 'sst2', 'science2', 'computer2', 'general2', 'drawing2'];
+    const subjects3 = ['english3', 'hindi3', 'maths3', 'sst3', 'science3', 'computer3', 'general3', 'drawing3'];
+
+    subjects1.forEach(subject => {
+        document.getElementById(subject).addEventListener('input', () => updateMarks(subjects1, 'grand_total', 'percentage'));
+    });
+
+    subjects2.forEach(subject => {
+        document.getElementById(subject).addEventListener('input', () => updateMarks(subjects2, 'grand_total2', 'percentage2'));
+    });
+
+    subjects3.forEach(subject => {
+        document.getElementById(subject).addEventListener('input', () => updateMarks(subjects3, 'grand_total3', 'percentage3'));
+    });
+
+    function updateMarks(subjects, grandTotalId, percentageId) {
+        let totalMarks = 0;
+        subjects.forEach(subject => {
+            const marks = parseFloat(document.getElementById(subject).value) || 0;
+            totalMarks += marks;
+        });
+
+        const grandTotal = totalMarks;
+        const percentage = (grandTotal / max) * 100;
+
+        document.getElementById(grandTotalId).value = grandTotal;
+        document.getElementById(percentageId).value = percentage.toFixed(2);
+    }
+});

@@ -26,8 +26,8 @@
                             class="flex flex-col items-center justify-center h-64  border-0 rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                             <div class="flex flex-col items-center justify-center p-5">
                                 <!-- Signature Image -->
-                                <img id="image-preview" class="rounded " src="<%= sign %>" alt="Uploaded Image Preview"
-                                    width="150px">
+                                <img id="signature-preview" class="rounded " src="<%= sign %>"
+                                    alt="Uploaded Image Preview" width="150px">
                                 <p class="m-2 text-sm text-gray-500 dark:text-gray-400"><span
                                         class="font-semibold">Click to
                                         upload Sign</span></p>
@@ -234,7 +234,7 @@
                                 <option value="2021-2022">2021-2022</option>
                                 <option value="2022-2023">2022-2023</option>
                                 <option value="2023-2024">2023-2024</option>
-                                <option value="2024-2025">2024-2025</option>
+                                <option value="2024-2025" selected>2024-2025</option>
                                 <option value="2025-2026">2025-2026</option>
                                 <option value="2026-2027">2026-2027</option>
                                 <option value="2027-2028">2027-2028</option>
@@ -278,8 +278,7 @@
                                 value="<%= student && student.profile_status ? student.profile_status : '' %>" />
                             <label for="profile_status"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Profile
-                                Status
-                                Address</label>
+                                Status</label>
                         </div>
                         <!-- apaar_id  -->
                         <div class="relative mb-3 ">

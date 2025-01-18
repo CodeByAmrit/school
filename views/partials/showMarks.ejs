@@ -115,11 +115,11 @@
                                                 value="<%= rows1 && rows1.mathematics1 !== undefined && rows1.mathematics1 !== null ? rows1.mathematics1 : 0  %>" />
                                         </td>
                                     </tr>
-                                    <!-- SOCIAL SCIENCE/ SST/ EVS -->
+                                    <!-- SOCIAL SCIENCE/ EVS -->
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row"
                                             class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ SST/ EVS
+                                            SOCIAL SCIENCE/ EVS
                                         </th>
                                         <td class="px-6 py-1">
                                             100
@@ -235,7 +235,7 @@
                                             RANK/ GRADE
                                         </th>
                                         <td class="px-6 py-1">
-                                            100
+                                            -
                                         </td>
                                         <td class="px-6 py-1">
                                             <input type="text" id="rank"
@@ -287,7 +287,6 @@
                             </button>
                         </form>
                     </div>
-
                 </div>
             </div>
 
@@ -376,11 +375,11 @@
                                                 value="<%= rows2 && rows2.mathematics2 !== undefined && rows2.mathematics2 !== null ? rows2.mathematics2 : 0  %>" />
                                         </td>
                                     </tr>
-                                    <!-- SOCIAL SCIENCE/ SST/ EVS -->
+                                    <!-- SOCIAL SCIENCE/ EVS -->
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row"
                                             class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ SST/ EVS
+                                            SOCIAL SCIENCE/ EVS
                                         </th>
                                         <td class="px-6 py-1">
                                             100
@@ -636,11 +635,11 @@
                                                 value="<%= rows3 && rows3.mathematics3 !== undefined && rows3.mathematics3 !== null ? rows3.mathematics3 : 0  %>" />
                                         </td>
                                     </tr>
-                                    <!-- SOCIAL SCIENCE/ SST/ EVS -->
+                                    <!-- SOCIAL SCIENCE/ EVS -->
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row"
                                             class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ SST/ EVS
+                                            SOCIAL SCIENCE/ EVS
                                         </th>
                                         <td class="px-6 py-1">
                                             100
@@ -809,10 +808,12 @@
                     </div>
                 </div>
             </div>
+
+            
         </div>
 
     </div>
 </div>
 
 <input type="hidden" id="school_id" value="<%= student.school_id %>">
-<script src="/js/submit_marks.js"></script>
+<script src="/js/submit_marks.js" defer></script>

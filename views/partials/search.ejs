@@ -1,4 +1,4 @@
-<div class="flex gap-3 flex-wrap py-3">
+<div class="flex gap-3 flex-col md:flex-row md:flex-wrap lg:flex-wrap py-3">
     <!-- Name -->
     <div class="relative mb-3 ">
         <input type="text" id="name" name="name"
@@ -139,11 +139,24 @@
             </svg>
             <span class="sr-only">Search</span>
         </button>
+
         <!-- Add New Student  -->
         <a href="/student/new"
-            class="p-2.5  text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            class="p-2.5 block md:hidden lg:hidden xl:hidden text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             + New Student
         </a>
+    </div>
+    <div><button type="button" id="promote-button"
+            class="p-2.5  text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+
+            <span>Promote</span>
+        </button>
+
+        <button type="button" id="demote-button"
+            class="p-2.5  text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+
+            <span>Demote</span>
+        </button>
     </div>
 
 </div>

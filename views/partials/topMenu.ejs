@@ -13,8 +13,8 @@
                         </path>
                     </svg>
                 </button>
-                <a href="https://bvm.codebyamrit.co.in" class="flex ms-2 md:me-24">
-                    <img src="/image/logo.png" class="h-8 me-3" alt="BVM" />
+                <a href="/dashboard" class="flex ms-2 md:me-24">
+                    <img src="<%= user.school_logo %>" class="h-8 me-3" alt="BVM" />
                     <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                         <%= user.school_name.toUpperCase() %>
                     </span>
@@ -23,6 +23,18 @@
             <div class="flex items-center">
                 <div class="flex items-center ms-3">
                     <div class="flex gap-x-5">
+
+                        <!-- Add New Student Button  -->
+                        <a href="/student/new"
+                            class="hidden sm:inline-flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"><svg
+                                aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                    clip-rule="evenodd"></path>
+                            </svg> New Student</a>
+
+
                         <button id="theme-toggle" type="button"
                             class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                             <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor"

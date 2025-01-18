@@ -46,12 +46,10 @@
                                             <%= student.session %>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <a href="/generate/<%= student.srn_no %>" target="_blank"
+                                            <a href="/generate/<%= student.school_id %>" target="_blank"
                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Generate</a>
-                                            <span>|</span>
-                                            <a href="/student/marks/<%= student.school_id %>"
-                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit
-                                                Marks</a>
+                                            
+                                            
                                         </td>
                                     </tr>
                                     <% });%>

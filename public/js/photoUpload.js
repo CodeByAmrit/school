@@ -25,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Signature preview logic
+    signUpload.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const previewSignature = document.getElementById('signature-preview');
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                previewSignature.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            previewSignature.src = '/image/sign.png';
+        }
+    });
+
     // Form submit logic
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
@@ -94,5 +112,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trigger form submission on save button click
     saveButton.addEventListener('click', () => {
         form.dispatchEvent(new Event('submit')); // Trigger the form submission
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const checkbox = document.getElementById("link-checkbox");
+    const correspondingAddress = document.getElementById("corresponding_address");
+    const permanentAddress = document.getElementById("permanent_address");
+
+    checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+            // Copy the corresponding address to the permanent address
+            permanentAddress.value = correspondingAddress.value;
+            // Disable the permanent address input
+            permanentAddress.setAttribute("disabled", "true");
+        } else {
+            // Enable the permanent address input
+            permanentAddress.removeAttribute("disabled");
+            // Clear the permanent address input (optional)
+            permanentAddress.value = "";
+        }
+    });
+
+    // Optional: Update permanent address when corresponding address changes and checkbox is checked
+    correspondingAddress.addEventListener("input", () => {
+        if (checkbox.checked) {
+            permanentAddress.value = correspondingAddress.value;
+        }
     });
 });

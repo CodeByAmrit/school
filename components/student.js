@@ -441,6 +441,11 @@ async function deleteStudent(req, res) {
         } catch (error) {
             console.log("studentDocument", error);
         }
+        try {
+            await connection.execute(`DELETE from maximum_marks where id = ?`, [school_id,]);
+        } catch (error) {
+            console.log("studentDocument", error);
+        }
 
         try {
             await connection.execute(`DELETE from student_files where school_id = ?`, [school_id,]);
@@ -516,6 +521,24 @@ async function insertPDF(req, res) {
     }
 }
 
+async function getMaximumMarks(req, res) {
+    const school_id = req.params.id;
+    let connection;
+    try {
+        connection = await getConnection();
+        const [[marks]] = await connection.execute('SELECT * FROM maximum_marks WHERE id = ?', [school_id]);
+
+        return marks;
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ status: error.sqlMessage });
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+
 async function getMarks(req, res) {
     const school_id = req.params.id;
     let connection;
@@ -534,6 +557,7 @@ async function getMarks(req, res) {
         }
     }
 }
+
 async function inputMarks(table, marks, school_id) {
     if (table == "marks1") {
         const {
@@ -566,7 +590,7 @@ async function inputMarks(table, marks, school_id) {
             gn1 = VALUES(gn1),
             grandTotal1 = VALUES(grandTotal1),
             percentage1 = VALUES(percentage1),
-            rank1 = VALUES(rank1)
+            rank1 = VALUES(rank1),
             remarks1 = VALUES(remarks1)
     `;
 
@@ -633,7 +657,7 @@ async function inputMarks(table, marks, school_id) {
             grandTotal2 = VALUES(grandTotal2),
             percentage2 = VALUES(percentage2),
             rank2 = VALUES(rank2),
-            remarks2 = VALUES(remarks2),
+            remarks2 = VALUES(remarks2)
     `;
 
         const values = [
@@ -681,7 +705,7 @@ async function inputMarks(table, marks, school_id) {
             grandTotal3,
             percentage3,
             rank3,
-            remarks3,
+            remarks3
         } = marks;
         const query = `
         INSERT INTO ${table} 
@@ -699,7 +723,7 @@ async function inputMarks(table, marks, school_id) {
             grandTotal3 = VALUES(grandTotal3),
             percentage3 = VALUES(percentage3),
             rank3 = VALUES(rank3),
-            remarks3 = VALUES(remarks3),
+            remarks3 = VALUES(remarks3)
     `;
 
         const values = [
@@ -734,12 +758,76 @@ async function inputMarks(table, marks, school_id) {
             }
         }
     }
+    else if (table == "max") {
+        const {
+            maxEng,
+            maxHindi,
+            maxMaths,
+            maxSst,
+            maxScience,
+            maxComp,
+            maxGn,
+            maxDrawing,
+            maxGrandTotal,
+            maxPercentage,
+            maxRank
+        } = marks;
+
+        const query = `
+        INSERT INTO ${table} 
+        (id, maxEng, maxHindi, maxMaths, maxSst, maxScience, maxComp, maxGn, maxDrawing, maxGrandTotal, maxPercentage, maxRank)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            maxEng = VALUES(maxEng),
+            maxHindi = VALUES(maxHindi),
+            maxMaths = VALUES(maxMaths),
+            maxSst = VALUES(maxSst),
+            maxScience = VALUES(maxScience),
+            maxComp = VALUES(maxComp),
+            maxGn = VALUES(maxGn),
+            maxDrawing = VALUES(maxDrawing),
+            maxGrandTotal = VALUES(maxGrandTotal),
+            maxPercentage = VALUES(maxPercentage),
+            maxRank = VALUES(maxRank)
+        `;
+
+        const values = [
+            school_id,
+            maxEng,
+            maxHindi,
+            maxMaths,
+            maxSst,
+            maxScience,
+            maxComp,
+            maxGn,
+            maxDrawing,
+            maxGrandTotal,
+
+            maxRank
+        ];
+
+        let connection;
+        try {
+            connection = await getConnection();
+            const [rows] = await connection.execute(query, values);
+
+            return { rows };
+
+        } catch (error) {
+            console.log(error);
+            return { status: error.sqlMessage };
+        } finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+    }
 
 }
 
 
 module.exports = {
-    getAllStudent, teacherLogin,
+    getAllStudent, teacherLogin, getMaximumMarks,
     getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
     getOneStudent, insertPDF, getMarks, inputMarks, getPhoto, getSign, insertOrUpdateStudent
 }

@@ -23,6 +23,11 @@ class App {
         // Security headers
         this.app.use(helmet());
 
+        this.app.use((req, res, next) => {
+            res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg=='`);
+            next();
+        });
+
         // Limit request rate to prevent DoS attacks
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000, // 15 minutes
@@ -78,4 +83,6 @@ class App {
 }
 
 const app = new App();
+
+
 app.startServer();

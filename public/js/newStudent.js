@@ -90,3 +90,31 @@ document.addEventListener("DOMContentLoaded", () => {
         form.dispatchEvent(new Event("submit")); // Trigger form submission
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const checkbox = document.getElementById("link-checkbox");
+    const correspondingAddress = document.getElementById("corresponding_address");
+    const permanentAddress = document.getElementById("permanent_address");
+
+    checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+            // Copy the corresponding address to the permanent address
+            permanentAddress.value = correspondingAddress.value;
+            // Disable the permanent address input
+            permanentAddress.setAttribute("disabled", "true");
+        } else {
+            // Enable the permanent address input
+            permanentAddress.removeAttribute("disabled");
+            // Clear the permanent address input (optional)
+            permanentAddress.value = "";
+        }
+    });
+
+    // Optional: Update permanent address when corresponding address changes and checkbox is checked
+    correspondingAddress.addEventListener("input", () => {
+        if (checkbox.checked) {
+            permanentAddress.value = correspondingAddress.value;
+        }
+    });
+});
+

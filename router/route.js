@@ -1,46 +1,97 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, insertOrUpdateStudent, teacherLogin, get_school_logo, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
+const { getAllStudent, insertOrUpdateStudent, getMaximumMarks, teacherLogin, get_school_logo, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
-const { sign } = require('crypto');
+const crypto = require('crypto');
+const { getConnection } = require('../models/getConnection');
+const pdf = require('pdf-lib'); // Import pdf-lib for PDF conversion
 // Configure multer
 const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
-// Student route - Displays all students with authentication
-router.get('/dashboard', checkAuth, async (req, res) => {
-  try {
-    let school_logo_url = "/image/graduated.png";
-    const school_logo = await get_school_logo(req, res);
-    // console.log(school_logo);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString('base64');
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
+async function getSchoolLogo(req, res) {
+  let school_logo_url = "/image/graduated.png";
+  const school_logo = await get_school_logo(req, res);
+  if (school_logo !== null) {
+    const school_logo_ = school_logo.school_logo.toString('base64');
+    school_logo_url = `data:image/png;base64,${school_logo_}`;
+  }
+  return school_logo_url;
+}
 
-    let user = req.user;
-    user.school_logo = school_logo_url;
-    const studentlist = await getAllStudent(req, res);
-    res.render('index', { studentlist, user });
+
+// Fetch dashboard information
+router.get('/dashboard', checkAuth, async (req, res) => {
+  const school_logo_url = await getSchoolLogo(req, res);
+  let user = req.user;
+  user.school_logo = school_logo_url;
+
+  const teacherId = req.user._id; // Assume teacher_id is passed in the query params
+
+  try {
+    const connection = await getConnection();
+
+    // Fetch teacher details
+    const [teacher] = await connection.execute(
+      'SELECT first_name, last_name, school_name, school_address, school_phone FROM teacher WHERE id = ?',
+      [teacherId]
+    );
+
+    // Fetch total students assigned to the teacher
+    const [studentsCount] = await connection.execute(
+      'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
+      [teacherId]
+    );
+
+    // Fetch student performance summaries
+    const [marksSummary] = await connection.execute(
+      `SELECT 
+        AVG(marks1.percentage1) AS avg_percentage_term1,
+        AVG(marks2.percentage2) AS avg_percentage_term2,
+        AVG(marks3.percentage3) AS avg_percentage_term3
+      FROM students 
+      LEFT JOIN marks1 ON students.school_id = marks1.id
+      LEFT JOIN marks2 ON students.school_id = marks2.id
+      LEFT JOIN marks3 ON students.school_id = marks3.id
+      WHERE students.teacher_id = ?`,
+      [teacherId]
+    );
+
+    // Fetch recent uploads by the teacher's students
+    const [recentFiles] = await connection.execute(
+      `SELECT file_name, upload_date, students.name AS student_name 
+      FROM student_files 
+      INNER JOIN students ON student_files.school_id = students.school_id 
+      WHERE students.teacher_id = ? 
+      ORDER BY upload_date DESC 
+      LIMIT 5`,
+      [teacherId]
+    );
+
+    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+
+    // Render dashboard EJS
+    res.render('index', {
+      nonce,
+      teacher: teacher[0],
+      total_students: studentsCount[0].total_students,
+      marks_summary: marksSummary[0],
+      recent_files: recentFiles,
+      user
+    });
   } catch (error) {
-    console.error('Error fetching students:', error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).send('Server Error');
   }
 });
 
 
+
 router.get('/certificates', checkAuth, async (req, res) => {
   try {
-    let school_logo_url = "/image/graduated.png";
-    const school_logo = await get_school_logo(req, res);
-    // console.log(school_logo);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString('base64');
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
-
+    const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
 
@@ -77,8 +128,9 @@ router.get('/students', checkAuth, async (req, res) => {
 router.get('/search', checkAuth, async (req, res) => {
 
   try {
-    req.user.school_logo = get_school_logo(req, res);
-    const user = req.user;
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
     const studentlist = await getStudentDetails(req, res);
     res.render('students', { studentlist, user });
   } catch (error) {
@@ -212,7 +264,7 @@ router.get('/profile', checkAuth, async (req, res, next) => {
 });
 
 // Generate and Preview certificate routes
-router.get('/generate/:srn_no', checkAuth, async (req, res) => {
+router.get('/generate/:school_id', checkAuth, async (req, res) => {
   try {
     await generate(req, res);
   } catch (error) {
@@ -243,12 +295,13 @@ router.get('/preview/:srn_no', checkAuth, async (req, res) => {
 // Marks certificate routes
 router.get('/student/marks/:id', checkAuth, async (req, res) => {
   try {
+    const maxMarks = await getMaximumMarks(req, res);
     const { rows1, rows2, rows3 } = await getMarks(req, res);
     const students = await getOneStudent(req, res);
     const student = students[0];
     let school_logo_url = "/image/graduated.png";
     const school_logo = await get_school_logo(req, res);
-    // console.log(school_logo);
+    // console.log(maxMarks);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString('base64');
       school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
@@ -256,7 +309,7 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
 
     let user = req.user;
     user.school_logo = school_logo_url;
-    res.render('marks', { user, student, rows1, rows2, rows3 });
+    res.render('marks', { user, student, rows1, rows2, rows3, maxMarks });
 
   } catch (error) {
     console.error('Error generating certificate:', error);
@@ -342,11 +395,12 @@ router.post("/student/marks3/:id", checkAuth, async (req, res) => {
     res.json({ message: "error" });
   }
 })
-//  QUESTION PAPER
-router.post("/question-paper", checkAuth, async (req, res) => {
+
+// enter marks3
+router.post("/student/max_marks/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const marks = req.body;
-  const result = await inputMarks("marks3", marks, id);
+  const result = await inputMarks("max", marks, id);
 
   if (result.affectedRows > 0) {
     res.json({ ok: "added" });
@@ -356,6 +410,168 @@ router.post("/question-paper", checkAuth, async (req, res) => {
     res.json({ message: "error" });
   }
 })
+
+// Route to upload and convert a file to PDF if necessary
+router.post('/upload', upload.single('file'), async (req, res) => {
+  const { school_id, file_name } = req.body;
+  let { buffer, mimetype } = req.file;
+
+  try {
+
+
+    const connection = await getConnection();
+    // Insert the data into the table, including file_name, mimetype (as type), and file_data
+    await connection.execute(
+      'INSERT INTO student_files (school_id, file_data, file_name, type) VALUES (?, ?, ?, ?)',
+      [school_id, buffer, file_name, mimetype]
+    );
+
+    res.redirect(`/files/one/${school_id}`); // Redirect to the file manager page
+
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to fetch all files
+router.get('/files', checkAuth, async (req, res) => {
+  try {
+    const connection = await getConnection();
+    const [files] = await connection.execute(
+      'SELECT id, school_id, LENGTH(file_data) AS size FROM student_files'
+    );
+
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
+
+    res.render('files', { files, user });
+  } catch (error) {
+    console.error('Error fetching files:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to get files for a particular student
+router.get('/files/one/:school_id', checkAuth, async (req, res) => {
+  const { school_id } = req.params;
+
+  const connection = await getConnection();
+  let [files] = await connection.execute(
+    'SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?', [school_id]
+  );
+
+  const school_logo_url = await getSchoolLogo(req, res);
+  let user = req.user;
+  user.school_logo = school_logo_url;
+
+  res.render('studentFiles', { files, user, school_id });
+});
+
+// Route to view a file
+router.get('/files/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const connection = await getConnection();
+    const [file] = await connection.execute(
+      'SELECT file_data FROM student_files WHERE id = ?',
+      [id]
+    );
+
+    if (file.length === 0) {
+      return res.status(404).send('File not found');
+    }
+
+    res.contentType('application/pdf'); // Set the content type
+    res.send(file[0].file_data); // Send the file data
+  } catch (error) {
+    console.error('Error fetching file:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Delete file route
+router.post('/delete-file/:id', async (req, res) => {
+  try {
+    let connection = await getConnection();
+    const fileId = req.params.id;
+
+    // SQL query to delete the file
+    const query = 'DELETE FROM student_files WHERE id = ?';
+
+    const [result] = await connection.execute(query, [fileId]);
+
+    if (result.affectedRows > 0) {
+      res.redirect('/files'); // Redirect back to file manager after deletion
+    } else {
+      res.status(404).send('File not found.');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting file.');
+  }
+});
+
+
+// Helper function to execute stored procedures
+async function executeProcedure(schoolId, action) {
+  let results;
+  try {
+    const connection = await getConnection();
+    const query = 'CALL promote_or_demote_student(?, ?)';
+    [results] = await connection.execute(query, [schoolId, action]);
+
+  } catch (error) {
+    console.log(error);
+  }
+  
+  return results;
+}
+
+// Route for promoting students
+router.post('/promote', checkAuth, async (req, res) => {
+  const studentIds = req.body.studentIds; // Array of student school_id's to be promoted
+  let errors = [];
+  let success = 0;
+
+  for (const studentId of studentIds) {
+    try {
+      console.log(studentId, 'promote');
+
+      await executeProcedure(studentId, 'promote');
+      success = success + 1;
+    } catch (err) {
+      errors.push(`Error promoting student with school_id ${studentId}: ${err.message}`);
+    }
+  }
+  res.status(200).json({ message: `${success} students promoted successfully.` });
+
+
+});
+
+// Route for demoting students (only one definition now)
+router.post('/demote', checkAuth, async (req, res) => {
+  const studentIds = req.body.studentIds; // Array of student school_id's to be demoted
+  let errors = [];
+  let success = 0;
+
+  for (const studentId of studentIds) {
+    try {
+      await executeProcedure(studentId, 'demote');
+      success++;
+    } catch (err) {
+      errors.push(`Error demoting student with school_id ${studentId}: ${err.message}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    res.status(400).json({ message: 'Some students could not be demoted.', errors });
+  } else {
+    res.status(200).json({ message: `${success} students demoted successfully.` });
+  }
+});
 
 // Logout route - Clears token and redirects to login
 router.get("/logout", (req, res) => {

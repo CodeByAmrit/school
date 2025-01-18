@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS student_files (
     id INT AUTO_INCREMENT PRIMARY KEY,
     school_id INT,
     file_data MEDIUMBLOB,
+    file_name VARCHAR(255),
+    type VARCHAR(20) DEFAULT 'PDF',
+    upload_date DATE DEFAULT(CURRENT_DATE),
     FOREIGN KEY (school_id) REFERENCES students (school_id)
 );
 
@@ -127,113 +130,54 @@ CREATE TABLE IF NOT EXISTS maximum_marks (
     FOREIGN KEY (id) REFERENCES students (school_id)
 );
 
--- fake
-INSERT INTO
-    students (
-        name,
-        father_name,
-        mother_name,
-        srn_no,
-        pen_no,
-        admission_no,
-        class,
-        session,
-        roll,
-        section,
-        teacher_id
-    )
-VALUES (
-        'Riya Malhotra',
-        'Arjun Malhotra',
-        'Meena Malhotra',
-        'SRN010',
-        'PEN010',
-        'ADM010',
-        '12',
-        '2024-2025',
-        '10',
-        'B',
-        2
-    );
 
-INSERT INTO
-    students (
-        name,
-        father_name,
-        mother_name,
-        srn_no,
-        pen_no,
-        admission_no,
-        class,
-        session,
-        roll,
-        section,
-        teacher_id
-    )
-VALUES (
-        'Aryan Sharma',
-        'Rajesh Sharma',
-        'Anita Sharma',
-        'SRN001',
-        'PEN001',
-        'ADM001',
-        '10',
-        '2024-2025',
-        '01',
-        'A',
-        1
-    ),
-    (
-        'Sneha Verma',
-        'Manoj Verma',
-        'Sunita Verma',
-        'SRN002',
-        'PEN002',
-        'ADM002',
-        '10',
-        '2024-2025',
-        '02',
-        'A',
-        1
-    ),
-    (
-        'Rahul Gupta',
-        'Suresh Gupta',
-        'Geeta Gupta',
-        'SRN003',
-        'PEN003',
-        'ADM003',
-        '10',
-        '2024-2025',
-        '03',
-        'A',
-        1
-    ),
-    (
-        'Priya Singh',
-        'Amit Singh',
-        'Kavita Singh',
-        'SRN004',
-        'PEN004',
-        'ADM004',
-        '10',
-        '2024-2025',
-        '04',
-        'A',
-        1
-    ),
-    (
-        'Vikram Kumar',
-        'Mahesh Kumar',
-        'Naina Kumar',
-        'SRN005',
-        'PEN005',
-        'ADM005',
-        '10',
-        '2024-2025',
-        '05',
-        'A',
-        1
-    );
 
-`
+
+DELIMITER $$
+
+CREATE PROCEDURE promote_or_demote_student(IN p_school_id INT, IN p_action VARCHAR(10))
+BEGIN
+    DECLARE current_class VARCHAR(40);
+    DECLARE new_class VARCHAR(40);
+    DECLARE class_order VARCHAR(255);
+    DECLARE i INT;
+    
+    -- Define the class order
+    SET class_order = 'NURSERY,KG,1ST,2ND,3RD,4TH,5TH,6TH,7TH,8TH,9TH,10TH,11TH,12TH';
+    
+    -- Get the current class of the student
+    SELECT class INTO current_class
+    FROM students
+    WHERE school_id = p_school_id;
+    
+    -- If student is not found, exit
+    IF current_class IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Student not found';
+    END IF;
+    
+    -- Find the index of the current class in the class_order list
+    SET i = FIND_IN_SET(current_class, class_order);
+    
+    -- Promote or demote based on the action
+    IF p_action = 'promote' THEN
+        -- If it's not the last class, promote to the next class
+        IF i < (LENGTH(class_order) - LENGTH(REPLACE(class_order, ',', '')) + 1) THEN
+            SET new_class = ELT(i + 1, 'NURSERY', 'KG', '1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH', '9TH', '10TH', '11TH', '12TH');
+            UPDATE students SET class = new_class WHERE school_id = p_school_id;
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Student is in the highest class';
+        END IF;
+    ELSEIF p_action = 'demote' THEN
+        -- If it's not the first class, demote to the previous class
+        IF i > 1 THEN
+            SET new_class = ELT(i - 1, 'NURSERY', 'KG', '1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH', '9TH', '10TH', '11TH', '12TH');
+            UPDATE students SET class = new_class WHERE school_id = p_school_id;
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Student is in the lowest class';
+        END IF;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid action. Use "promote" or "demote".';
+    END IF;
+END $$
+
+DELIMITER;
