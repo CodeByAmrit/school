@@ -476,7 +476,7 @@ router.get('/files/:id', async (req, res) => {
   try {
     const connection = await getConnection();
     const [file] = await connection.execute(
-      'SELECT file_data FROM student_files WHERE id = ?',
+      'SELECT file_data, type AS file_type FROM student_files WHERE id = ?',
       [id]
     );
 
@@ -504,7 +504,7 @@ router.post('/delete-file/:id', async (req, res) => {
     const [result] = await connection.execute(query, [fileId]);
 
     if (result.affectedRows > 0) {
-      res.redirect('/files'); // Redirect back to file manager after deletion
+      res.redirect(`/files/one/${fileId}`); // Redirect back to file manager after deletion
     } else {
       res.status(404).send('File not found.');
     }
@@ -526,7 +526,7 @@ async function executeProcedure(schoolId, action) {
   } catch (error) {
     console.log(error);
   }
-  
+
   return results;
 }
 
