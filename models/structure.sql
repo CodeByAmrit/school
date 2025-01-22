@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS student_files (
     FOREIGN KEY (school_id) REFERENCES students (school_id)
 );
 
+-- Table for student photos and signatures
 CREATE TABLE IF NOT EXISTS photo (
     id INT PRIMARY KEY,
     image MEDIUMBLOB,
@@ -63,73 +64,83 @@ CREATE TABLE IF NOT EXISTS photo (
     FOREIGN KEY (id) REFERENCES students (school_id)
 );
 
-CREATE TABLE IF NOT EXISTS marks1 (
-    id INT PRIMARY KEY,
-    english1 INTEGER NOT NULL,
-    hindi1 INTEGER NOT NULL,
-    mathematics1 INTEGER NOT NULL,
-    social_science1 INTEGER NOT NULL,
-    science1 INTEGER NOT NULL,
-    computer1 INTEGER NOT NULL,
-    gn1 INTEGER NOT NULL,
-    drawing1 VARCHAR(50) NOT NULL,
-    grandTotal1 INTEGER,
-    percentage1 DECIMAL(10, 2),
-    rank1 VARCHAR(50),
-    remarks1 VARCHAR(200),
-    FOREIGN KEY (id) REFERENCES students (school_id)
+-- Table for storing student marks by term and subject
+CREATE TABLE IF NOT EXISTS student_marks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    term INT NOT NULL,
+    subject VARCHAR(50) NOT NULL,
+    marks VARCHAR(10),
+    grade VARCHAR(100),
+    remarks VARCHAR(100),
+    FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
-CREATE TABLE IF NOT EXISTS marks2 (
-    id INT PRIMARY KEY,
-    english2 INTEGER NOT NULL,
-    hindi2 INTEGER NOT NULL,
-    mathematics2 INTEGER NOT NULL,
-    social_science2 INTEGER NOT NULL,
-    science2 INTEGER NOT NULL,
-    computer2 INTEGER NOT NULL,
-    gn2 INTEGER NOT NULL,
-    drawing2 VARCHAR(50) NOT NULL,
-    grandTotal2 INTEGER NOT NULL,
-    percentage2 DECIMAL(10, 2),
-    rank2 VARCHAR(50),
-    remarks2 VARCHAR(200),
-    FOREIGN KEY (id) REFERENCES students (school_id)
+CREATE TABLE IF NOT EXISTS student_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    term ENUM('1', '2', '3'),
+    attendance INT,
+    status ENUM('passed', 'promoted', 'fail', 'pending') DEFAULT 'pending',
+    FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
-CREATE TABLE IF NOT EXISTS marks3 (
-    id INT PRIMARY KEY,
-    english3 INTEGER NOT NULL,
-    hindi3 INTEGER NOT NULL,
-    mathematics3 INTEGER NOT NULL,
-    social_science3 INTEGER NOT NULL,
-    science3 INTEGER NOT NULL,
-    computer3 INTEGER NOT NULL,
-    gn3 INTEGER NOT NULL,
-    drawing3 VARCHAR(50) NOT NULL,
-    grandTotal3 INTEGER NOT NULL,
-    percentage3 DECIMAL(10, 2),
-    rank3 VARCHAR(50),
-    remarks3 VARCHAR(200),
-    FOREIGN KEY (id) REFERENCES students (school_id)
-);
+-- Create an index on the `class` column
+CREATE INDEX idx_class ON students (class);
 
+-- Table for storing maximum marks by term and subject
 CREATE TABLE IF NOT EXISTS maximum_marks (
-    id INT PRIMARY KEY,
-    maxEng INTEGER NOT NULL,
-    maxHindi INTEGER NOT NULL,
-    maxMaths INTEGER NOT NULL,
-    maxSst INTEGER NOT NULL,
-    maxScience INTEGER NOT NULL,
-    maxComp INTEGER NOT NULL,
-    maxGn VARCHAR(50) NOT NULL,
-    maxDrawing VARCHAR(50) NOT NULL,
-    maxGrandTotal INTEGER NOT NULL,
-    attendance VARCHAR(50),
-    maxRank VARCHAR(50),
-    FOREIGN KEY (id) REFERENCES students (school_id)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    class VARCHAR(40) NOT NULL,
+    term INT NOT NULL,
+    subject VARCHAR(50) NOT NULL,
+    max_marks VARCHAR(10),
+    FOREIGN KEY (class) REFERENCES students (class)
 );
 
+-- View to calculate grand total and percentage for each term excluding non-numeric marks
+CREATE OR REPLACE VIEW StudentPerformance AS
+SELECT
+    s.school_id,
+    s.name AS student_name,
+    sm.term,
+    SUM(
+        CASE
+            WHEN sm.marks REGEXP '^[0-9]+$' THEN CAST(sm.marks AS UNSIGNED)
+            ELSE 0
+        END
+    ) AS grand_total,
+    SUM(
+        CASE
+            WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+            ELSE 0
+        END
+    ) AS total_max_marks,
+    (
+        SUM(
+            CASE
+                WHEN sm.marks REGEXP '^[0-9]+$' THEN CAST(sm.marks AS UNSIGNED)
+                ELSE 0
+            END
+        ) / SUM(
+            CASE
+                WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+                ELSE 0
+            END
+        ) * 100
+    ) AS percentage
+FROM
+    students s
+    JOIN student_marks sm ON s.school_id = sm.student_id
+    JOIN maximum_marks mm ON s.class = mm.class
+    AND sm.term = mm.term
+    AND sm.subject = mm.subject
+GROUP BY
+    s.school_id,
+    sm.term;
+
+-- Query to fetch student performance
+SELECT * FROM StudentPerformance;
 
 
 

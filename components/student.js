@@ -521,313 +521,141 @@ async function insertPDF(req, res) {
     }
 }
 
-async function getMaximumMarks(req, res) {
-    const school_id = req.params.id;
-    let connection;
+// Function to get marks of a single student by school ID
+async function getStudentMarksBySchoolId(schoolId) {
+    const query = `
+    SELECT 
+      sm.subject, 
+      sm.marks, 
+      sm.term, 
+      mm.max_marks 
+    FROM student_marks sm
+    JOIN maximum_marks mm 
+      ON sm.subject = mm.subject 
+      AND sm.term = mm.term 
+      AND mm.class = (SELECT class FROM students WHERE school_id = ?)
+    WHERE sm.student_id = ?
+    ORDER BY sm.term, sm.subject
+  `;
     try {
-        connection = await getConnection();
-        const [[marks]] = await connection.execute('SELECT * FROM maximum_marks WHERE id = ?', [school_id]);
-
-        return marks;
+        const connection = await getConnection();
+        const [results] = await connection.execute(query, [schoolId, schoolId]);
+        await connection.end();
+        return results;
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ status: error.sqlMessage });
-    } finally {
-        if (connection) {
-            await connection.end();
-        }
+        console.error('Error fetching marks for student:', error);
+        throw error;
     }
 }
 
-async function getMarks(req, res) {
-    const school_id = req.params.id;
-    let connection;
+// Function to get student marks
+async function getStudentMarks(studentId, term) {
+    const query = `
+    SELECT sm.*, mm.max_marks 
+    FROM student_marks sm
+    JOIN maximum_marks mm 
+      ON sm.subject = mm.subject AND sm.term = mm.term AND mm.class = 
+          (SELECT class FROM students WHERE school_id = ?)
+    WHERE sm.student_id = ? AND sm.term = ?
+  `;
     try {
-        connection = await getConnection();
-        const [[rows1]] = await connection.execute('SELECT * FROM marks1 where id = ?', [school_id]);
-        const [[rows2]] = await connection.execute('SELECT * FROM marks2 where id = ?', [school_id]);
-        const [[rows3]] = await connection.execute('SELECT * FROM marks3 where id = ?', [school_id]);
-        return { rows1, rows2, rows3 };
+        const connection = await getConnection();
+        const [results] = await connection.execute(query, [studentId, studentId, term]);
+        await connection.end();
+        return results;
     } catch (error) {
-        console.log(error);
-        res.json({ status: error.sqlMessage });
-    } finally {
-        if (connection) {
-            await connection.end();
-        }
+        console.error('Error fetching student marks:', error);
+        throw error;
     }
 }
 
-async function inputMarks(table, marks, school_id) {
-    if (table == "marks1") {
-        const {
-            english1,
-            hindi1,
-            mathematics1,
-            social_science1,
-            science1,
-            computer1,
-            drawing1,
-            gn1,
-            grandTotal1,
-            percentage1,
-            rank1,
-            remarks1,
-        } = marks;
-
-        const query = `
-        INSERT INTO ${table} 
-        (id, english1, hindi1, mathematics1, social_science1, science1, computer1, drawing1, gn1, grandTotal1, percentage1, rank1, remarks1)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            english1 = VALUES(english1),
-            hindi1 = VALUES(hindi1),
-            mathematics1 = VALUES(mathematics1),
-            social_science1 = VALUES(social_science1),
-            science1 = VALUES(science1),
-            computer1 = VALUES(computer1),
-            drawing1 = VALUES(drawing1),
-            gn1 = VALUES(gn1),
-            grandTotal1 = VALUES(grandTotal1),
-            percentage1 = VALUES(percentage1),
-            rank1 = VALUES(rank1),
-            remarks1 = VALUES(remarks1)
-    `;
-
-        const values = [
-            school_id,
-            english1,
-            hindi1,
-            mathematics1,
-            social_science1,
-            science1,
-            computer1,
-            drawing1,
-            gn1,
-            grandTotal1,
-            percentage1,
-            rank1,
-            remarks1,
-        ];
-
-        let connection;
-        try {
-            connection = await getConnection();
-            const [rows] = await connection.execute(query, values);
-
-            return { rows };
-
-        } catch (error) {
-            console.log(error);
-            return { status: error.sqlMessage };
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
+// Function to store student marks
+async function storeStudentMarks(studentId, term, marksData) {
+    const query = `
+    INSERT INTO student_marks (student_id, term, subject, marks)
+    VALUES (?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE marks = VALUES(marks)
+  `;
+    try {
+        const connection = await getConnection();
+        for (const mark of marksData) {
+            await connection.execute(query, [studentId, term, mark.subject, mark.marks]);
         }
+        await connection.end();
+    } catch (error) {
+        console.error('Error storing student marks:', error);
+        throw error;
     }
-    else if (table == "marks2") {
-        const {
-            english2,
-            hindi2,
-            mathematics2,
-            social_science2,
-            science2,
-            computer2,
-            drawing2,
-            gn2,
-            grandTotal2,
-            percentage2,
-            rank2,
-            remarks2,
-        } = marks;
-        const query = `
-        INSERT INTO ${table} 
-        (id, english2, hindi2, mathematics2, social_science2, science2, computer2, drawing2, gn2, grandTotal2, percentage2, rank2, remarks2)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            english2 = VALUES(english2),
-            hindi2 = VALUES(hindi2),
-            mathematics2 = VALUES(mathematics2),
-            social_science2 = VALUES(social_science2),
-            science2 = VALUES(science2),
-            computer2 = VALUES(computer2),
-            drawing2 = VALUES(drawing2),
-            gn2 = VALUES(gn2),
-            grandTotal2 = VALUES(grandTotal2),
-            percentage2 = VALUES(percentage2),
-            rank2 = VALUES(rank2),
-            remarks2 = VALUES(remarks2)
-    `;
-
-        const values = [
-            school_id,
-            english2,
-            hindi2,
-            mathematics2,
-            social_science2,
-            science2,
-            computer2,
-            drawing2,
-            gn2,
-            grandTotal2,
-            percentage2,
-            rank2,
-            remarks2,
-        ];
-
-        let connection;
-        try {
-            connection = await getConnection();
-            const [rows] = await connection.execute(query, values);
-
-            return { rows };
-
-        } catch (error) {
-            console.log(error);
-            return { status: error.sqlMessage };
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
-        }
-    }
-    else if (table == "marks3") {
-        const {
-            english3,
-            hindi3,
-            mathematics3,
-            social_science3,
-            science3,
-            computer3,
-            drawing3,
-            gn3,
-            grandTotal3,
-            percentage3,
-            rank3,
-            remarks3
-        } = marks;
-        const query = `
-        INSERT INTO ${table} 
-        (id, english3, hindi3, mathematics3, social_science3, science3, computer3, drawing3, gn3, grandTotal3, percentage3, rank3, remarks3)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            english3 = VALUES(english3),
-            hindi3 = VALUES(hindi3),
-            mathematics3 = VALUES(mathematics3),
-            social_science3 = VALUES(social_science3),
-            science3 = VALUES(science3),
-            computer3 = VALUES(computer3),
-            drawing3 = VALUES(drawing3),
-            gn3 = VALUES(gn3),
-            grandTotal3 = VALUES(grandTotal3),
-            percentage3 = VALUES(percentage3),
-            rank3 = VALUES(rank3),
-            remarks3 = VALUES(remarks3)
-    `;
-
-        const values = [
-            school_id,
-            english3,
-            hindi3,
-            mathematics3,
-            social_science3,
-            science3,
-            computer3,
-            drawing3,
-            gn3,
-            grandTotal3,
-            percentage3,
-            rank3,
-            remarks3,
-        ];
-
-        let connection;
-        try {
-            connection = await getConnection();
-            const [rows] = await connection.execute(query, values);
-
-            return { rows };
-
-        } catch (error) {
-            console.log(error);
-            return { status: error.sqlMessage };
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
-        }
-    }
-    else if (table == "max") {
-        const {
-            maxEng,
-            maxHindi,
-            maxMaths,
-            maxSst,
-            maxScience,
-            maxComp,
-            maxGn,
-            maxDrawing,
-            maxGrandTotal,
-            maxPercentage,
-            maxRank
-        } = marks;
-
-        const query = `
-        INSERT INTO ${table} 
-        (id, maxEng, maxHindi, maxMaths, maxSst, maxScience, maxComp, maxGn, maxDrawing, maxGrandTotal, maxPercentage, maxRank)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            maxEng = VALUES(maxEng),
-            maxHindi = VALUES(maxHindi),
-            maxMaths = VALUES(maxMaths),
-            maxSst = VALUES(maxSst),
-            maxScience = VALUES(maxScience),
-            maxComp = VALUES(maxComp),
-            maxGn = VALUES(maxGn),
-            maxDrawing = VALUES(maxDrawing),
-            maxGrandTotal = VALUES(maxGrandTotal),
-            maxPercentage = VALUES(maxPercentage),
-            maxRank = VALUES(maxRank)
-        `;
-
-        const values = [
-            school_id,
-            maxEng,
-            maxHindi,
-            maxMaths,
-            maxSst,
-            maxScience,
-            maxComp,
-            maxGn,
-            maxDrawing,
-            maxGrandTotal,
-
-            maxRank
-        ];
-
-        let connection;
-        try {
-            connection = await getConnection();
-            const [rows] = await connection.execute(query, values);
-
-            return { rows };
-
-        } catch (error) {
-            console.log(error);
-            return { status: error.sqlMessage };
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
-        }
-    }
-
 }
+
+// Fetch marks and maximum marks for a student
+async function getStudentMarksWithMaxMarks(studentId) {
+    const query = `
+    SELECT sm.term, sm.subject, sm.marks, mm.max_marks
+    FROM student_marks sm
+    LEFT JOIN maximum_marks mm
+      ON sm.term = mm.term AND sm.subject = mm.subject AND
+         mm.class = (SELECT class FROM students WHERE school_id = ?)
+    WHERE sm.student_id = ?
+    ORDER BY sm.term, sm.subject;
+  `;
+    try {
+        const connection = await getConnection();
+        const [results] = await connection.execute(query, [studentId, studentId]);
+        await connection.end();
+        return results;
+    } catch (error) {
+        console.error('Error fetching marks with max marks:', error);
+        throw error;
+    }
+}
+
+// Save or update marks for a student
+async function saveStudentMarks(studentId, marks, maxMarks) {
+    const insertMarksQuery = `
+        INSERT INTO student_marks (student_id, term, subject, marks)
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE marks = VALUES(marks);
+    `;
+
+    const insertMaxMarksQuery = `
+        INSERT INTO maximum_marks (class, term, subject, max_marks)
+        VALUES ((SELECT class FROM students WHERE school_id = ?), ?, ?, ?)
+        ON DUPLICATE KEY UPDATE max_marks = VALUES(max_marks);
+    `;
+
+    try {
+        const connection = await getConnection();
+
+        // Loop through the marks and maxMarks for each term
+        for (let term = 0; term < marks.length; term++) {
+            // Process the marks and maxMarks for each subject
+            for (const subject in marks[term]) {
+                const mark = marks[term][subject];
+                const maxMark = maxMarks[term][subject];
+
+                // Insert or update marks
+                await connection.execute(insertMarksQuery, [studentId, term + 1, subject, mark]);
+
+                // Insert or update maximum marks
+                await connection.execute(insertMaxMarksQuery, [studentId, term + 1, subject, maxMark]);
+            }
+        }
+
+        await connection.end();
+    } catch (error) {
+        console.error('Error saving marks:', error);
+        throw error;
+    }
+}
+
+
+
 
 
 module.exports = {
-    getAllStudent, teacherLogin, getMaximumMarks,
+    getAllStudent, teacherLogin, getStudentMarksBySchoolId,
     getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
-    getOneStudent, insertPDF, getMarks, inputMarks, getPhoto, getSign, insertOrUpdateStudent
+    getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
+    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks
 }

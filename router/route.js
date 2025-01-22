@@ -1,6 +1,9 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
-const { getAllStudent, insertOrUpdateStudent, getMaximumMarks, teacherLogin, get_school_logo, teacherSignup, getStudentDetails, deleteStudent, getOneStudent, getMarks, inputMarks, getPhoto, getSign } = require('../components/student');
+const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
+  getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
+  getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
+  getStudentMarksWithMaxMarks, saveStudentMarks } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
 const crypto = require('crypto');
@@ -48,14 +51,16 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     // Fetch student performance summaries
     const [marksSummary] = await connection.execute(
       `SELECT 
-        AVG(marks1.percentage1) AS avg_percentage_term1,
-        AVG(marks2.percentage2) AS avg_percentage_term2,
-        AVG(marks3.percentage3) AS avg_percentage_term3
-      FROM students 
-      LEFT JOIN marks1 ON students.school_id = marks1.id
-      LEFT JOIN marks2 ON students.school_id = marks2.id
-      LEFT JOIN marks3 ON students.school_id = marks3.id
-      WHERE students.teacher_id = ?`,
+        students.school_id,
+        students.name AS student_name,
+        AVG(CASE WHEN sm.term = 1 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term1,
+        AVG(CASE WHEN sm.term = 2 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term2,
+        AVG(CASE WHEN sm.term = 3 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term3
+      FROM students
+      LEFT JOIN student_marks sm ON students.school_id = sm.student_id
+      LEFT JOIN maximum_marks mm ON sm.subject = mm.subject AND students.class = mm.class AND sm.term = mm.term
+      WHERE students.teacher_id = ?
+      GROUP BY students.school_id`,
       [teacherId]
     );
 
@@ -77,7 +82,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
       nonce,
       teacher: teacher[0],
       total_students: studentsCount[0].total_students,
-      marks_summary: marksSummary[0],
+      marks_summary: marksSummary,
       recent_files: recentFiles,
       user
     });
@@ -86,6 +91,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 
 
 
@@ -206,10 +212,18 @@ router.get('/student/new', checkAuth, async (req, res) => {
 
 // route to search for students_ certificate
 router.get('/search_certificate', checkAuth, async (req, res) => {
-
+  
   try {
-    req.user.school_logo = get_school_logo(req, res);
-    const user = req.user;
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+    }
+
+    let user = req.user;
+    user.school_logo = school_logo_url;
+
     const studentlist = await getStudentDetails(req, res);
     res.render('certificates', { studentlist, user });
   } catch (error) {
@@ -354,62 +368,147 @@ router.post("/update-student/:id", checkAuth, upload.fields([{ name: 'photo' }, 
   }
 });
 
-// enter marks1
-router.post("/student/marks1/:id", checkAuth, async (req, res) => {
-  const id = req.params.id;
-  const marks = req.body;
-  const result = await inputMarks("marks1", marks, id);
-  if (result.affectedRows > 0) {
-    res.json({ ok: "added" });
-  } else if (result.changedRows > 0) {
-    res.json({ ok: "changed" });
-  } else {
-    res.json({ message: "error" });
+const subjects = [
+  "ENGLISH",
+  "HINDI",
+  "MATHEMATICS",
+  "SOCIAL SCIENCE/EVS",
+  "SCIENCE",
+  "COMPUTER",
+  "GENERAL KNOWLEDGE",
+  "DRAWING"
+];
+// Route to get marks for a single student by school ID
+router.get('/marks/school/:schoolId', checkAuth, async (req, res) => {
+  const { schoolId } = req.params;
+  try {
+    const marks = await getStudentMarksBySchoolId(schoolId);
+    res.json(marks);
+  } catch (error) {
+    res.status(500).send('Error retrieving marks for student');
   }
-})
-// enter marks2
-router.post("/student/marks2/:id", checkAuth, async (req, res) => {
-  const id = req.params.id;
-  const marks = req.body;
-  const result = await inputMarks("marks2", marks, id);
-  if (result.affectedRows > 0) {
-    res.json({ ok: "added" });
-  } else if (result.changedRows > 0) {
-    res.json({ ok: "changed" });
-  } else {
-    res.json({ message: "error" });
+});
+
+// Route to get marks data
+router.get('/marks/:studentId/:term', checkAuth, async (req, res) => {
+  const { studentId, term } = req.params;
+  try {
+    const marks = await getStudentMarks(studentId, term);
+    res.json(marks);
+  } catch (error) {
+    res.status(500).send('Error retrieving marks data');
   }
-})
+});
 
-// enter marks3
-router.post("/student/marks3/:id", checkAuth, async (req, res) => {
-  const id = req.params.id;
-  const marks = req.body;
-  const result = await inputMarks("marks3", marks, id);
-
-  if (result.affectedRows > 0) {
-    res.json({ ok: "added" });
-  } else if (result.changedRows > 0) {
-    res.json({ ok: "changed" });
-  } else {
-    res.json({ message: "error" });
+// Route to store marks data
+router.post('/marks', checkAuth, async (req, res) => {
+  const { studentId, term, marksData } = req.body;
+  try {
+    await storeStudentMarks(studentId, term, marksData);
+    res.status(201).send('Marks data stored successfully');
+  } catch (error) {
+    res.status(500).send('Error storing marks data');
   }
-})
+});
 
-// enter marks3
-router.post("/student/max_marks/:id", checkAuth, async (req, res) => {
-  const id = req.params.id;
-  const marks = req.body;
-  const result = await inputMarks("max", marks, id);
+// Route to display marks entry/view page
+router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
+  const { studentId } = req.params;
 
-  if (result.affectedRows > 0) {
-    res.json({ ok: "added" });
-  } else if (result.changedRows > 0) {
-    res.json({ ok: "changed" });
-  } else {
-    res.json({ message: "error" });
+  try {
+    const connection = await getConnection();
+
+    // Fetch student details
+    const [studentRows] = await connection.execute(
+      'SELECT * FROM students WHERE school_id = ?',
+      [studentId]
+    );
+
+    if (studentRows.length === 0) {
+      return res.status(404).send('Student not found');
+    }
+
+    const student = studentRows[0];
+
+    // Fetch marks for all terms
+    const [marksRows] = await connection.execute(
+      'SELECT term, subject, marks FROM student_marks WHERE student_id = ?',
+      [studentId]
+    );
+
+    // Organize marks by term
+    const marks = {};
+    marksRows.forEach((row) => {
+      if (!marks[row.term]) {
+        marks[row.term] = {};
+      }
+      marks[row.term][row.subject] = row.marks;
+    });
+
+    // Fetch maximum marks for the student's class
+    const [maxMarksRows] = await connection.execute(
+      'SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?',
+      [student.class]
+    );
+
+    // Organize max marks by term
+    const maxMarks = {};
+    maxMarksRows.forEach((row) => {
+      if (!maxMarks[row.term]) {
+        maxMarks[row.term] = {};
+      }
+      maxMarks[row.term][row.subject] = row.max_marks;
+    });
+
+    // Fetch performance summary
+    const [performanceRows] = await connection.execute(
+      'SELECT * FROM StudentPerformance WHERE school_id = ?',
+      [studentId]
+    );
+
+    console.log(performanceRows);
+
+    // user 
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
+
+    // Render the EJS view
+    res.render('studentMarks', {
+      user,
+      student,
+      subjects,
+      marks,
+      maxMarks,
+      performance: performanceRows
+    });
+  } catch (error) {
+    console.error('Error fetching student marks:', error);
+    res.status(500).send('Internal server error');
   }
-})
+});
+
+router.post('/student/input-marks/:studentId', checkAuth, async (req, res) => {
+  const { studentId } = req.params;
+  const { marks, maxMarks } = req.body;  // Use `marks` and `maxMarks` directly
+
+  // Log the body to inspect its structure and confirm it's correct
+  console.log('Marks:', marks);
+  console.log('Max Marks:', maxMarks);
+
+  try {
+    if (!marks || !maxMarks) {
+      throw new Error('marks or maxMarks are undefined or missing');
+    }
+
+    // Proceed to save marks if data is valid
+    await saveStudentMarks(studentId, marks, maxMarks);
+    res.redirect(`/student/get_marks/${studentId}`);
+  } catch (error) {
+    console.error('Error saving marks:', error);
+    res.status(500).send('Error saving student marks');
+  }
+});
 
 // Route to upload and convert a file to PDF if necessary
 router.post('/upload', upload.single('file'), async (req, res) => {

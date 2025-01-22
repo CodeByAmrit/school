@@ -11,6 +11,7 @@
   "author": "Amrit",
   "license": "ISC",
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "apexcharts": "^4.3.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",

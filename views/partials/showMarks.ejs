@@ -1,819 +1,111 @@
-<div class="p-4 sm:ml-64 dark:bg-gray-800 dark:border-gray-700">
-    <div class="w-full h-full mt-20 ">
+<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-white">
+    <div class="w-full h-full mt-10 dark:bg-gray-900 dark:text-white">
+        <div class="container mx-auto py-8">
+            <h1 class="text-2xl font-bold text-center mb-8">Student Marks Entry</h1>
 
-        <div class="grid gap-2 md:gap-6 mb-0 md:mb-6 grid-cols-2 md:grid-cols-4 mt-5">
-            <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                <input type="text" id="name" aria-label="disabled input"
-                    class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value="<%= student.name %>" disabled>
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4">Student Details</h2>
+
+                <p><strong>Name:</strong>
+                    <input type="text" value="<%= student.name %>" disabled
+                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                </p>
+                <p><strong>Class:</strong>
+                    <input type="text" value="<%= student.class %>" disabled
+                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                </p>
+                <p><strong>Section:</strong>
+                    <input type="text" value="<%= student.section %>" disabled
+                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                </p>
             </div>
-            <div>
-                <label for="srn_no" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SRN No</label>
-                <input type="text" id="srn_no" aria-label="disabled input"
-                    class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value="<%= student.srn_no %>" disabled>
+
+
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4">Marks Entry</h2>
+
+                <form action="/student/input-marks/<%= student.school_id %>" method="POST">
+                    <input type="hidden" name="studentId" value="<%= student.school_id %>">
+
+                    <% for (let term=1; term <=3; term++) { %>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold mb-2">Term <%= term %>
+                            </h3>
+
+                            <table class="table-auto w-full mb-4">
+                                <thead>
+                                    <tr>
+                                        <th class="border px-4 py-2">Subject</th>
+                                        <th class="border px-4 py-2">Marks</th>
+                                        <th class="border px-4 py-2">Maximum Marks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% subjects.forEach(subject=> { %>
+                                        <tr>
+                                            <td class="border px-4 py-2">
+                                                <%= subject %>
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" name="marks[<%= term %>][<%= subject %>]"
+                                                    value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : 0 %>"
+                                                    class="w-full px-2 py-1 border rounded" placeholder="Enter marks">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" name="maxMarks[<%= term %>][<%= subject %>]"
+                                                    value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : 100 %>"
+                                                    class="w-full px-2 py-1 border rounded"
+                                                    placeholder="Enter max marks">
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                                    Save Marks
+                                </button>
+                            </div>
+                </form>
             </div>
-            <div>
-                <label for="class" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Class</label>
-                <input type="text" id="class" aria-label="disabled input"
-                    class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value="<%= student.class %>" disabled>
-            </div>
-            <div>
-                <label for="roll_no"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Session</label>
-                <input type="text" id="roll_no" aria-label="disabled input"
-                    class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value="<%= student.session %>" disabled>
-            </div>
+
+            <% if (performance.length) { %>
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
+                    <h2 class="text-xl font-semibold mb-4">Performance Overview</h2>
+                    <table class="table-auto w-full">
+                        <thead>
+                            <tr>
+                                <th class="border px-4 py-2">Term</th>
+                                <th class="border px-4 py-2">Grand Total</th>
+                                <th class="border px-4 py-2">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% performance.forEach(p=> { %>
+                                <tr>
+                                    <td class="border px-4 py-2">
+                                        <%= p.term %>
+                                    </td>
+                                    <td class="border px-4 py-2">
+                                        <%= p.grand_total %>
+                                    </td>
+                                    <td class="border px-4 py-2">
+                                        <!-- Safely check and format percentage -->
+                                        <%= (typeof parseFloat(p.percentage)==='number' &&
+                                            !isNaN(parseFloat(p.percentage))) ? parseFloat(p.percentage).toFixed(2)
+                                            : '0' %> %
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+
         </div>
-        <!-- tables -->
-        <div id="accordion-collapse" data-accordion="collapse">
-            <h2 id="accordion-collapse-heading-1">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                    data-accordion-target="#accordion-collapse-body-1" aria-expanded="true"
-                    aria-controls="accordion-collapse-body-1">
-                    <span>First Term Marks</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
-                <div class="border border-b-0 border-gray-200 dark:border-gray-700">
-
-                    <!-- form 1 -->
-                    <div class="relative overflow-x-auto ">
-                        <form id="marks1_form" class="flex flex-col justify-center items-center">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Subjects
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Max Marks
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Obtained Marks
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <!-- ENGLISH -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            ENGLISH
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="english"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.english1 !== undefined && rows1.english1 !== null ? rows1.english1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- HINDI -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            HINDI
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="hindi"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.hindi1 !== undefined && rows1.hindi1 !== null ? rows1.hindi1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- MATHEMATICS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            MATHEMATICS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="maths"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.mathematics1 !== undefined && rows1.mathematics1 !== null ? rows1.mathematics1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SOCIAL SCIENCE/ EVS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ EVS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="sst"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.social_science1 !== undefined && rows1.social_science1 !== null ? rows1.social_science1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SCIENCE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SCIENCE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="science"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.science1 !== undefined && rows1.science1 !== null ? rows1.science1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- COMPUTER -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            COMPUTER
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="computer"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.computer1 !== undefined && rows1.computer1 !== null ? rows1.computer1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- GENERAL KNOWLEDGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GENERAL KNOWLEDGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="general"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.gn1 !== undefined && rows1.gn1 !== null ? rows1.gn1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- DRAWING -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            DRAWING
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="drawing"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.drawing1 !== undefined && rows1.drawing1 !== null ? rows1.drawing1 : 0  %>" />
-                                        </td>
-                                    </tr>
-
-                                    <!-- GRAND TOTAL -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GRAND TOTAL
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="grand_total"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.grandTotal1 !== undefined && rows1.grandTotal1 !== null ? rows1.grandTotal1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- PERCETAGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            PERCETAGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="percentage"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.percentage1 !== undefined && rows1.percentage1 !== null ? rows1.percentage1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- RANK/ GRADE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            RANK/ GRADE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            -
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="rank"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows1 && rows1.rank1 !== undefined && rows1.rank1 !== null ? rows1.rank1 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- remarks -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            REMARKS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            <select id="remarks1"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="Good" <%=rows1 && rows1.remarks==='Good' ? 'selected'
-                                                    : '' %>>Good</option>
-                                                <option value="Average" <%=rows1 && rows1.remarks==='Average'
-                                                    ? 'selected' : '' %>>Average</option>
-                                                <option value="Needs Improvement" <%=rows1 &&
-                                                    rows1.remarks==='Needs Improvement' ? 'selected' : '' %>>Needs
-                                                    Improvement</option>
-                                                <option value="Excellent" <%=rows1 && rows1.remarks==='Excellent'
-                                                    ? 'selected' : '' %>>Excellent</option>
-                                                <option value="Poor" <%=rows1 && rows1.remarks==='Poor' ? 'selected'
-                                                    : '' %>>Poor</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                            <!-- Save button -->
-                            <button id="marks1_button" type="button"
-                                class="text-white bg-blue-700 my-5 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center ">
-                                <svg aria-hidden="true" role="status"
-                                    class="hidden inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="#E5E7EB" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentColor" />
-                                </svg>
-                                Save
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <h2 id="accordion-collapse-heading-2">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                    data-accordion-target="#accordion-collapse-body-2" aria-expanded="false"
-                    aria-controls="accordion-collapse-body-2">
-                    <span>Second Term Marks</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
-                <div class="border border-b-0 border-gray-200 dark:border-gray-700">
-
-                    <!-- form 2 -->
-                    <div class="relative overflow-x-auto ">
-                        <form id="marks2_form" class="flex flex-col justify-center items-center">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Subjects
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Max Marks
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Obtained Marks
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <!-- ENGLISH -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            ENGLISH
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="english2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.english2 !== undefined && rows2.english2 !== null ? rows2.english2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- HINDI -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            HINDI
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="hindi2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.hindi2 !== undefined && rows2.hindi2 !== null ? rows2.hindi2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- MATHEMATICS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            MATHEMATICS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="maths2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.mathematics2 !== undefined && rows2.mathematics2 !== null ? rows2.mathematics2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SOCIAL SCIENCE/ EVS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ EVS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="sst2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.social_science2 !== undefined && rows2.social_science2 !== null ? rows2.social_science2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SCIENCE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SCIENCE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="science2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.science2 !== undefined && rows2.science2 !== null ? rows2.science2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- COMPUTER -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            COMPUTER
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="computer2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.computer2 !== undefined && rows2.computer2 !== null ? rows2.computer2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- GENERAL KNOWLEDGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GENERAL KNOWLEDGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="general2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.gn2 !== undefined && rows2.gn2 !== null ? rows2.gn2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- DRAWING -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            DRAWING
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="drawing2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.drawing2 !== undefined && rows2.drawing2 !== null ? rows2.drawing2 : 0  %>" />
-                                        </td>
-                                    </tr>
-
-                                    <!-- GRAND TOTAL -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GRAND TOTAL
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="grand_total2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.grandTotal2 !== undefined && rows2.grandTotal2 !== null ? rows2.grandTotal2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- PERCETAGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            PERCETAGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="percentage2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.percentage2 !== undefined && rows2.percentage2 !== null ? rows2.percentage2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- RANK/ GRADE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            RANK/ GRADE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="rank2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows2 && rows2.rank2 !== undefined && rows2.rank2 !== null ? rows2.rank2 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- remarks -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            REMARKS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            <select id="remarks2"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="Good" <%=rows1 && rows1.remarks==='Good' ? 'selected'
-                                                    : '' %>>Good</option>
-                                                <option value="Average" <%=rows1 && rows1.remarks==='Average'
-                                                    ? 'selected' : '' %>>Average</option>
-                                                <option value="Needs Improvement" <%=rows1 &&
-                                                    rows1.remarks==='Needs Improvement' ? 'selected' : '' %>>Needs
-                                                    Improvement</option>
-                                                <option value="Excellent" <%=rows1 && rows1.remarks==='Excellent'
-                                                    ? 'selected' : '' %>>Excellent</option>
-                                                <option value="Poor" <%=rows1 && rows1.remarks==='Poor' ? 'selected'
-                                                    : '' %>>Poor</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- Save button -->
-                            <button id="marks2_button" type="button"
-                                class="text-white bg-blue-700 my-5 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
-                                <svg aria-hidden="true" role="status"
-                                    class="hidden inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="#E5E7EB" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentColor" />
-                                </svg>
-                                Save
-                            </button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-
-            <h2 id="accordion-collapse-heading-3">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                    data-accordion-target="#accordion-collapse-body-3" aria-expanded="false"
-                    aria-controls="accordion-collapse-body-3">
-                    <span>Third Term Marks</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
-                <div class="border border-t-0 border-gray-200 dark:border-gray-700">
-
-                    <!-- form 3 -->
-                    <div class="relative overflow-x-auto ">
-                        <form id="marks3_form" class="flex flex-col justify-center items-center">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Subjects
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Max Marks
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Obtained Marks
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <!-- ENGLISH -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            ENGLISH
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="english3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.english3 !== undefined && rows3.english3 !== null ? rows3.english3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- HINDI -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            HINDI
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="hindi3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.hindi3 !== undefined && rows3.hindi3 !== null ? rows3.hindi3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- MATHEMATICS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            MATHEMATICS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="maths3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.mathematics3 !== undefined && rows3.mathematics3 !== null ? rows3.mathematics3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SOCIAL SCIENCE/ EVS -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SOCIAL SCIENCE/ EVS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="sst3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.social_science3 !== undefined && rows3.social_science3 !== null ? rows3.social_science3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- SCIENCE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            SCIENCE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="science3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.science3 !== undefined && rows3.science3 !== null ? rows3.science3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- COMPUTER -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            COMPUTER
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="computer3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.computer3 !== undefined && rows3.computer3 !== null ? rows3.computer3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- GENERAL KNOWLEDGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GENERAL KNOWLEDGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="general3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.gn3 !== undefined && rows3.gn3 !== null ? rows3.gn3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- DRAWING -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            DRAWING
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="drawing3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.drawing3 !== undefined && rows3.drawing3 !== null ? rows3.drawing3 : 0  %>" />
-                                        </td>
-                                    </tr>
-
-                                    <!-- GRAND TOTAL -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            GRAND TOTAL
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="grand_total3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.grandTotal3 !== undefined && rows3.grandTotal3 !== null ? rows3.grandTotal3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- PERCETAGE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            PERCETAGE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="percentage3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.percentage3 !== undefined && rows3.percentage3 !== null ? rows3.percentage3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- RANK/ GRADE -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            RANK/ GRADE
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            100
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <input type="text" id="rank3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="0" required
-                                                value="<%= rows3 && rows3.rank3 !== undefined && rows3.rank3 !== null ? rows3.rank3 : 0  %>" />
-                                        </td>
-                                    </tr>
-                                    <!-- remarks -->
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            REMARKS
-                                        </th>
-                                        <td class="px-6 py-1">
-                                            <select id="remarks3"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="Good" <%=rows1 && rows1.remarks==='Good' ? 'selected'
-                                                    : '' %>>Good</option>
-                                                <option value="Average" <%=rows1 && rows1.remarks==='Average'
-                                                    ? 'selected' : '' %>>Average</option>
-                                                <option value="Needs Improvement" <%=rows1 &&
-                                                    rows1.remarks==='Needs Improvement' ? 'selected' : '' %>>Needs
-                                                    Improvement</option>
-                                                <option value="Excellent" <%=rows1 && rows1.remarks==='Excellent'
-                                                    ? 'selected' : '' %>>Excellent</option>
-                                                <option value="Poor" <%=rows1 && rows1.remarks==='Poor' ? 'selected'
-                                                    : '' %>>Poor</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- Save button -->
-                            <button id="marks3_button" type="button"
-                                class="text-white bg-blue-700 my-5 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
-                                <svg aria-hidden="true" role="status"
-                                    class="hidden inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="#E5E7EB" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentColor" />
-                                </svg>
-                                Save
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            
-        </div>
-
     </div>
 </div>
-
-<input type="hidden" id="school_id" value="<%= student.school_id %>">
-<script src="/js/submit_marks.js" defer></script>
