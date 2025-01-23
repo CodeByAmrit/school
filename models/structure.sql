@@ -71,17 +71,23 @@ CREATE TABLE IF NOT EXISTS student_marks (
     term INT NOT NULL,
     subject VARCHAR(50) NOT NULL,
     marks VARCHAR(10),
-    grade VARCHAR(100),
-    remarks VARCHAR(100),
+
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
-CREATE TABLE IF NOT EXISTS student_details (
+CREATE TABLE IF NOT EXISTS student_attendance_status (
+    student_id INT PRIMARY KEY,
+    attendance VARCHAR(100),
+    status ENUM('passed', 'promoted', 'fail', 'pending') DEFAULT 'pending',
+    FOREIGN KEY (student_id) REFERENCES students (school_id)
+);
+
+CREATE TABLE IF NOT EXISTS student_grade_remarks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
-    term ENUM('1', '2', '3'),
-    attendance INT,
-    status ENUM('passed', 'promoted', 'fail', 'pending') DEFAULT 'pending',
+    grade VARCHAR(100), 
+    remarks VARCHAR(100),
+    term INT NOT NULL,
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 

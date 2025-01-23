@@ -1,60 +1,60 @@
-<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-white">
-    <div class="w-full h-full mt-10 dark:bg-gray-900 dark:text-white">
+<div class="p-4 sm:ml-64 bg-gray-100 dark:bg-gray-900 dark:text-white">
+    <div class="w-full h-full mt-10 bg-gray-100 dark:bg-gray-900 dark:text-white">
         <div class="container mx-auto py-8">
-            <h1 class="text-2xl font-bold text-center mb-8">Student Marks Entry</h1>
+            <h1 class="text-2xl font-bold text-center mb-8 dark:text-white">Student Marks Entry</h1>
 
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 class="text-xl font-semibold mb-4">Student Details</h2>
+            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4 dark:text-white">Student Details</h2>
 
                 <p><strong>Name:</strong>
                     <input type="text" value="<%= student.name %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
                 </p>
                 <p><strong>Class:</strong>
                     <input type="text" value="<%= student.class %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
                 </p>
                 <p><strong>Section:</strong>
                     <input type="text" value="<%= student.section %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200">
+                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
                 </p>
             </div>
 
-
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 class="text-xl font-semibold mb-4">Marks Entry</h2>
+            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4 dark:text-white">Marks Entry</h2>
 
                 <form action="/student/input-marks/<%= student.school_id %>" method="POST">
                     <input type="hidden" name="studentId" value="<%= student.school_id %>">
 
                     <% for (let term=1; term <=3; term++) { %>
                         <div class="mb-6">
-                            <h3 class="text-lg font-semibold mb-2">Term <%= term %>
+                            <h3 class="text-lg font-semibold mb-2 dark:text-white">Term <%= term %>
                             </h3>
 
                             <table class="table-auto w-full mb-4">
                                 <thead>
                                     <tr>
-                                        <th class="border px-4 py-2">Subject</th>
-                                        <th class="border px-4 py-2">Marks</th>
-                                        <th class="border px-4 py-2">Maximum Marks</th>
+                                        <th class="border px-4 py-2 dark:text-white">Subject</th>
+                                        <th class="border px-4 py-2 dark:text-white">Marks</th>
+                                        <th class="border px-4 py-2 dark:text-white">Maximum Marks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% subjects.forEach(subject=> { %>
                                         <tr>
-                                            <td class="border px-4 py-2">
+                                            <td class="border px-4 py-2 dark:text-white">
                                                 <%= subject %>
                                             </td>
                                             <td class="border px-4 py-2">
                                                 <input type="text" name="marks[<%= term %>][<%= subject %>]"
                                                     value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : 0 %>"
-                                                    class="w-full px-2 py-1 border rounded" placeholder="Enter marks">
+                                                    class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
+                                                    placeholder="Enter marks">
                                             </td>
                                             <td class="border px-4 py-2">
                                                 <input type="text" name="maxMarks[<%= term %>][<%= subject %>]"
                                                     value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : 100 %>"
-                                                    class="w-full px-2 py-1 border rounded"
+                                                    class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
                                                     placeholder="Enter max marks">
                                             </td>
                                         </tr>
@@ -73,27 +73,88 @@
                 </form>
             </div>
 
+            <!-- attendance and status -->
+            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4 dark:text-white">Attendance and Status</h2>
+
+                <form action="/student/attendance-status/<%= student.school_id %>" method="POST">
+                    <input type="hidden" name="studentId" value="<%= student.school_id %>">
+
+                    <div class="mb-6">
+
+
+                        <table class="table-auto w-full mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="border px-4 py-2 dark:text-white">Attendance</th>
+                                    <th class="border px-4 py-2 dark:text-white">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+
+                                    <td class="border px-4 py-2">
+                                        <input type="text" name="attendance"
+                                            value="<%= student_attendance_status ? student_attendance_status.attendance : 0 %>"
+                                            class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
+                                            placeholder="Enter marks">
+                                    </td>
+
+                                    <td class="border px-4 py-2">
+                                        <select name="status"
+                                            class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white">
+                                            <option value="pending" <%=student_attendance_status &&
+                                                student_attendance_status.status==='pending' ? 'selected' : '' %>
+                                                >Pending</option>
+                                            <option value="passed" <%=student_attendance_status &&
+                                                student_attendance_status.status==='passed' ? 'selected' : '' %>>Passed
+                                            </option>
+                                            <option value="promoted" <%=student_attendance_status &&
+                                                student_attendance_status.status==='promoted' ? 'selected' : '' %>
+                                                >Promoted</option>
+                                            <option value="fail" <%=student_attendance_status &&
+                                                student_attendance_status.status==='fail' ? 'selected' : '' %>>Fail
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                            Save Attendance
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             <% if (performance.length) { %>
-                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-                    <h2 class="text-xl font-semibold mb-4">Performance Overview</h2>
+                <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8">
+                    <h2 class="text-xl font-semibold mb-4 dark:text-white">Performance Overview</h2>
                     <table class="table-auto w-full">
                         <thead>
                             <tr>
-                                <th class="border px-4 py-2">Term</th>
-                                <th class="border px-4 py-2">Grand Total</th>
-                                <th class="border px-4 py-2">Percentage</th>
+                                <th class="border px-4 py-2 dark:text-white">Term</th>
+                                <th class="border px-4 py-2 dark:text-white">Grand Total</th>
+                                <th class="border px-4 py-2 dark:text-white">Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% performance.forEach(p=> { %>
                                 <tr>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 dark:text-white">
                                         <%= p.term %>
                                     </td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 dark:text-white">
                                         <%= p.grand_total %>
                                     </td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 dark:text-white">
                                         <!-- Safely check and format percentage -->
                                         <%= (typeof parseFloat(p.percentage)==='number' &&
                                             !isNaN(parseFloat(p.percentage))) ? parseFloat(p.percentage).toFixed(2)

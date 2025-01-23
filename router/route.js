@@ -212,7 +212,7 @@ router.get('/student/new', checkAuth, async (req, res) => {
 
 // route to search for students_ certificate
 router.get('/search_certificate', checkAuth, async (req, res) => {
-  
+
   try {
     let school_logo_url = "/image/graduated.png";
     const school_logo = await get_school_logo(req, res);
@@ -466,7 +466,11 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       [studentId]
     );
 
-    console.log(performanceRows);
+    // Fetch attendance and status for the student
+    const [[student_attendance_status]] = await connection.execute(
+      'SELECT attendance, status FROM student_attendance_status WHERE student_id = ?',
+      [studentId]
+    );
 
     // user 
     const school_logo_url = await getSchoolLogo(req, res);
@@ -480,7 +484,8 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       subjects,
       marks,
       maxMarks,
-      performance: performanceRows
+      performance: performanceRows,
+      student_attendance_status
     });
   } catch (error) {
     console.error('Error fetching student marks:', error);
@@ -509,6 +514,40 @@ router.post('/student/input-marks/:studentId', checkAuth, async (req, res) => {
     res.status(500).send('Error saving student marks');
   }
 });
+
+// POST route to insert or update attendance status
+router.post("/student/attendance-status/:school_id", async (req, res) => {
+  const { school_id } = req.params;
+  const { attendance, status } = req.body;
+
+  try {
+    // Validate input
+    if (!attendance || !status) {
+      return res.status(400).send("Invalid input data");
+    }
+
+    // Get a database connection
+    const connection = await getConnection();
+
+    // Create or update data in `student_attendance_status` table
+    const query = `
+      INSERT INTO student_attendance_status (student_id, attendance, status)
+      VALUES (?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        attendance = VALUES(attendance),
+        status = VALUES(status)
+    `;
+    await connection.execute(query, [school_id, attendance, status]);
+
+    // Release the connection and send response
+    connection.end();
+    res.redirect(`/student/get_marks/${school_id}`);
+  } catch (error) {
+    console.error("Error submitting/updating attendance status:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 // Route to upload and convert a file to PDF if necessary
 router.post('/upload', upload.single('file'), async (req, res) => {

@@ -77,6 +77,12 @@ async function generate(req, res) {
             };
         });
 
+        // Fetch attendance and status for the student
+        const [[student_attendance_status]] = await connection.execute(
+            'SELECT attendance, status FROM student_attendance_status WHERE student_id = ?',
+            [studentId]
+        );
+
         // Load the certificate template
         const templatePath = path.join(__dirname, "../template/certificate_template.pdf");
         const templateBytes = fs.readFileSync(templatePath);
@@ -100,6 +106,10 @@ async function generate(req, res) {
         firstPage.drawText(student.mother_name, { x: 1021, y: 2586, size: 30, font: boldFont, color: rgb(0, 0, 0) });
         firstPage.drawText(student.roll, { x: 232, y: 2444, size: 30, font: boldFont, color: rgb(0, 0, 0) });
         firstPage.drawText(student.session, { x: 1021, y: 2444, size: 30, font: boldFont, color: rgb(0, 0, 0) });
+
+        // attendance and status
+        firstPage.drawText(student_attendance_status.attendance.toUpperCase(), { x: 1746, y: 738, size: 38, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student_attendance_status.status.toUpperCase(), { x: 1856, y: 668, size: 38, font: boldFont, color: rgb(0, 0, 0) });
 
         // Add the student's image if available
         if (student.image) {
@@ -147,7 +157,7 @@ async function generate(req, res) {
                 const maxMarks = maxMarksBySubject[`${term}-${mark.subject}`];
 
                 if (maxMarks) {
-                    firstPage.drawText(maxMarks.toString(), { x: 857, y: yPosition, size: 30, color: rgb(0, 0, 0) });
+                    firstPage.drawText(maxMarks.toString(), { x: 857, y: yPosition + 10, size: 30, color: rgb(0, 0, 0) });
                     termGrandTotal += maxMarks; // Add to the term's grand total
                 }
 
