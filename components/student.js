@@ -23,6 +23,26 @@ async function getAllStudent(req, res) {
     }
 }
 
+async function getTotalStudents(req, res) {
+    const teacher_id = req.user._id;
+    let connection;
+    try {
+        connection = await getConnection();
+        const [[{ total_students }]] = await connection.execute(
+            'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
+            [teacher_id]
+        );
+        return total_students;
+    } catch (error) {
+        console.log(error);
+        res.json({ status: error.sqlMessage });
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+
 async function getOneStudent(req, res) {
     const teacher_id = req.user._id;
     const school_id = req.params.id;
@@ -657,5 +677,5 @@ module.exports = {
     getAllStudent, teacherLogin, getStudentMarksBySchoolId,
     getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
     getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
-    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks
+    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents
 }

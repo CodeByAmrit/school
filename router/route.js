@@ -3,7 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
   getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
-  getStudentMarksWithMaxMarks, saveStudentMarks } = require('../components/student');
+  getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
 const crypto = require('crypto');
@@ -43,10 +43,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     );
 
     // Fetch total students assigned to the teacher
-    const [studentsCount] = await connection.execute(
-      'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
-      [teacherId]
-    );
+    const studentsCount = await getTotalStudents(req, res);
 
     // Fetch student performance summaries
     const [marksSummary] = await connection.execute(
@@ -81,7 +78,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     res.render('index', {
       nonce,
       teacher: teacher[0],
-      total_students: studentsCount[0].total_students,
+      total_students: studentsCount,
       marks_summary: marksSummary,
       recent_files: recentFiles,
       user
@@ -97,12 +94,16 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
 router.get('/certificates', checkAuth, async (req, res) => {
   try {
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+    console.log(studentsCount);
+
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
 
     const studentlist = await getAllStudent(req, res);
-    res.render('certificates', { studentlist, user });
+    res.render('certificates', { studentlist, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).send('Internal Server Error');
@@ -112,6 +113,7 @@ router.get('/certificates', checkAuth, async (req, res) => {
 router.get('/students', checkAuth, async (req, res) => {
   try {
     let school_logo_url = "/image/graduated.png";
+    const connection = await getConnection();
     const school_logo = await get_school_logo(req, res);
     // console.log(school_logo);
     if (school_logo !== null) {
@@ -122,8 +124,17 @@ router.get('/students', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
+    // Fetch total students assigned to the teacher
+    const [studentsCount] = await connection.execute(
+      'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
+      [req.user._id]
+    );
+
+
     const studentlist = await getAllStudent(req, res);
-    res.render('students', { studentlist, user });
+
+    connection.end()
+    res.render('students', { studentlist, user, total_students: studentsCount[0].total_students });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).send('Internal Server Error');
@@ -138,7 +149,10 @@ router.get('/search', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
     const studentlist = await getStudentDetails(req, res);
-    res.render('students', { studentlist, user });
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+
+    res.render('students', { studentlist, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).send('Internal Server Error');
@@ -148,6 +162,9 @@ router.get('/search', checkAuth, async (req, res) => {
 // route to edit for students
 router.get('/student/edit/:id', checkAuth, async (req, res) => {
   try {
+
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
 
     const [student] = await getOneStudent(req, res)
     const photo = await getPhoto(req, res);
@@ -175,7 +192,7 @@ router.get('/student/edit/:id', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
     // Render the profile page with the data
-    res.render('profile', { student, user, photo: photoDataUrl, sign: signDataUrl, });
+    res.render('profile', { student, user, photo: photoDataUrl, sign: signDataUrl, total_students: studentsCount, });
   } catch (error) {
     console.error('Error fetching student or photo:', error);
     res.status(500).send('Internal Server Error');
@@ -188,7 +205,8 @@ router.get('/student/new', checkAuth, async (req, res) => {
     const student = null;
     let school_logo_url = "/image/user.png";
     const school_logo = await get_school_logo(req, res);
-    // console.log(school_logo);
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString('base64');
       school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
@@ -198,7 +216,7 @@ router.get('/student/new', checkAuth, async (req, res) => {
     user.school_logo = school_logo_url;
     let photoDataUrl = "/image/graduated.png"; // Default photo if none exists
     let sign = "/image/sign.png"; // Default photo if none exists
-    res.render('register', { student, user, photo: photoDataUrl, sign: sign });
+    res.render('register', { student, user, photo: photoDataUrl, sign: sign, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching student or photo:', error);
     res.status(500).send('Internal Server Error');
@@ -418,6 +436,9 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
   try {
     const connection = await getConnection();
 
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+
     // Fetch student details
     const [studentRows] = await connection.execute(
       'SELECT * FROM students WHERE school_id = ?',
@@ -485,13 +506,15 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       marks,
       maxMarks,
       performance: performanceRows,
-      student_attendance_status
+      student_attendance_status,
+      total_students: studentsCount,
     });
   } catch (error) {
     console.error('Error fetching student marks:', error);
     res.status(500).send('Internal server error');
   }
 });
+
 
 router.post('/student/input-marks/:studentId', checkAuth, async (req, res) => {
   const { studentId } = req.params;
@@ -575,6 +598,9 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 // Route to fetch all files
 router.get('/files', checkAuth, async (req, res) => {
   try {
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+
     const connection = await getConnection();
     const [files] = await connection.execute(
       'SELECT id, school_id, LENGTH(file_data) AS size FROM student_files'
@@ -584,7 +610,7 @@ router.get('/files', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    res.render('files', { files, user });
+    res.render('files', { files, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching files:', error);
     res.status(500).send('Server Error');
@@ -604,7 +630,10 @@ router.get('/files/one/:school_id', checkAuth, async (req, res) => {
   let user = req.user;
   user.school_logo = school_logo_url;
 
-  res.render('studentFiles', { files, user, school_id });
+  // Fetch total students assigned to the teacher
+  const studentsCount = await getTotalStudents(req, res);
+
+  res.render('studentFiles', { files, user, school_id, total_students: studentsCount });
 });
 
 // Route to view a file

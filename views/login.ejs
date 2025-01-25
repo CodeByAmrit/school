@@ -21,7 +21,7 @@
                 </a>
             </div>
             <div class="flex flex-col justify-center items-center h-full">
-                <img src="/image/student.svg" alt="Student" class="w-64 mb-6">
+                <img src="/image/teacher.svg" alt="Student" class="w-64 mb-6">
                 <div class="text-xl font-bold mb-2">Empower Your Teaching, FREE!</div>
                 <div class="text-center">Equip your students with essential skills using our all-in-one curriculum,
                     including data management, digital literacy, and coding!</div>
@@ -30,7 +30,7 @@
 
         <!-- Right Section -->
         <button id="theme-toggle" type="button"
-            class="fixed top-8 right-10 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            class="z-50 md:top-8 md:right-10 fixed top-2 right-4 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
             <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -42,10 +42,10 @@
                     fill-rule="evenodd" clip-rule="evenodd"></path>
             </svg>
         </button>
-        <div class="flex flex-col items-center justify-center w-full lg:w-2/3 p-6 lg:py-10">
+        <div class="flex flex-col items-center justify-center w-full lg:w-2/3 p-6 lg:py-10 mt-28 md:mt-0">
             <nav
                 class="lg:hidden bg-gradient-to-b from-blue-500 to-blue-400 w-full py-3 fixed top-0 dark:from-gray-800 dark:to-gray-700">
-                <div class="container mx-auto text-white text-lg font-bold text-center">Student Tracker</div>
+                <div class="container mx-auto text-white text-lg font-bold text-left pl-10">Student Tracker</div>
             </nav>
 
             <div class="text-2xl font-bold my-10 lg:mt-0">Login As Teacher</div>
@@ -69,7 +69,8 @@
 
                 <div class="text-sm mt-2 mb-6 flex justify-between">
                     <a href="/signup" class="text-blue-600 dark:text-blue-400 underline">Create Account</a>
-                    <a href="#" class="text-blue-600 dark:text-blue-400 underline">Forget Password</a>
+                    <a href="#" class="text-blue-600 dark:text-blue-400 underline">
+                        Forget Password</a>
                 </div>
 
                 <div class="text-center">
@@ -80,32 +81,7 @@
         </div>
     </div>
 
-    <!-- Forget Password Modal -->
-    <div id="forgetPassword" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-96">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold dark:text-gray-100">Forgot Your Login Info?</h2>
-                <button class="text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                    data-modal-hide="forgetPassword">&times;</button>
-            </div>
-            <p class="mb-4 dark:text-gray-200">Please enter your email below and password change instructions will be
-                sent to you.</p>
-            <div class="mb-4">
-                <label for="resetEmail" class="block text-sm font-medium dark:text-gray-300">Email *</label>
-                <input type="email" id="resetEmail"
-                    class="mt-1 w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="">
-            </div>
-            <div class="flex justify-end space-x-2">
-                <button
-                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600"
-                    data-modal-hide="forgetPassword">Close</button>
-                <button type="submit"
-                    class="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">Send
-                    Password Reset Email</button>
-            </div>
-        </div>
-    </div>
+
 
     <script src="/flowbite/flowbite.min.js"></script>
     <script src="/js/script.js"></script>

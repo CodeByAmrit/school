@@ -42,18 +42,18 @@
 
                     <div class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500">
                         <!-- Name -->
-                        <div class="relative mb-3 ">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="name" name="name"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.name ? student.name : '' %>" />
                             <label for="name"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Name</label>
                         </div>
 
                         <!-- Roll Number -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="roll_no" name="roll_no"
-                                class="appearance-none block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.roll ? student.roll : '' %>" />
                             <label for="rollno"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Roll
@@ -61,7 +61,7 @@
                         </div>
 
                         <!-- Class -->
-                        <div class="relative min-w-44">
+                        <div class="relative min-w-44 w-full md:w-fit lg:w-fit">
                             <select id="class" name="class"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="<%= student && student.class ? student.class : '' %>" selected>
@@ -87,7 +87,7 @@
                         </div>
 
                         <!-- dob  -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -106,7 +106,7 @@
                         <!-- corresponding_address Address -->
                         <div class="relative mb-3 w-full">
                             <input type="text" id="corresponding_address" name="corresponding_address"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.corresponding_address ? student.corresponding_address : '' %>" />
                             <label for="corresponding_address"
@@ -127,7 +127,7 @@
                         <!-- Permanant Address -->
                         <div class="relative mb-3 w-full">
                             <input type="text" id="permanent_address" name="permanent_address"
-                                class=" uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class=" uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.permanent_address ? student.permanent_address : '' %>" />
                             <label for="permanent_address"
@@ -141,9 +141,9 @@
                     <div class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500">
 
                         <!-- Father Name -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="father_name" name="father_name"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.father_name ? student.father_name : '' %>" />
                             <label for="father_name"
@@ -152,9 +152,9 @@
                         </div>
 
                         <!-- Mother Name -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="mother_name" name="mother_name"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.mother_name ? student.mother_name : '' %>" />
                             <label for="mother_name"
@@ -163,9 +163,9 @@
                         </div>
 
                         <!-- family_id  -->
-                        <div class="relative mb-3 ">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="family_id" name="family_id"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.family_id ? student.family_id : '' %>" />
                             <label for="family_id"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Family
@@ -173,9 +173,9 @@
                         </div>
 
                         <!-- Mobile  -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="mobile_no" name="mobile_no"
-                                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.mobile_no ? student.mobile_no : '' %>" />
                             <label for="mobile_no"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Mobile
@@ -187,9 +187,9 @@
                     <div class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500">
 
                         <!-- SRN Number -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="srn_no" name="srn_no"
-                                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.srn_no ? student.srn_no : '' %>" />
                             <label for="srn_no"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">SRN
@@ -197,9 +197,9 @@
                         </div>
 
                         <!-- Admission Number -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="admission_no" name="admission_no"
-                                class="uppercase  block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase  block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.admission_no ? student.admission_no : '' %>" />
                             <label for="admission_no"
@@ -208,9 +208,9 @@
                         </div>
 
                         <!-- pen Number -->
-                        <div class="relative mb-3">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="pen_no" name="pen_no"
-                                class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.pen_no ? student.pen_no : '' %>" />
                             <label for="pen_no"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">PEN
@@ -221,7 +221,7 @@
 
 
                         <!-- Session -->
-                        <div class="relative min-w-48">
+                        <div class="relative min-w-48 w-full md:w-fit lg:w-fit">
                             <select id="session" name="session"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
@@ -259,9 +259,9 @@
 
 
                         <!-- paste_file_no  -->
-                        <div class="relative mb-3 ">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="paste_file_no" name="paste_file_no"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.paste_file_no ? student.paste_file_no : '' %>" />
                             <label for="paste_file_no"
@@ -271,9 +271,9 @@
 
 
                         <!-- profile_status  -->
-                        <div class="relative mb-3 ">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="profile_status" name="profile_status"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 value="<%= student && student.profile_status ? student.profile_status : '' %>" />
                             <label for="profile_status"
@@ -281,9 +281,9 @@
                                 Status</label>
                         </div>
                         <!-- apaar_id  -->
-                        <div class="relative mb-3 ">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <input type="text" id="apaar_id" name="apaar_id"
-                                class="uppercase block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="<%= student && student.apaar_id ? student.apaar_id : '' %>" />
                             <label for="apaar_id"
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Apaar
@@ -291,7 +291,7 @@
                         </div>
 
                         <!-- Section -->
-                        <div class="relative">
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
                             <select id="section" name="section"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="A" selected>A</option>
@@ -307,7 +307,7 @@
                         </div>
 
                         <!-- button -->
-                        <div class="">
+                        <div class="flex justify-center items-center w-full ">
                             <button type="button" id="button_"
                                 class="p-2.5  text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 <svg aria-hidden="true" role="status"

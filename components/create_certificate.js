@@ -44,20 +44,20 @@ async function generate(req, res) {
             marksByTerm[mark.term].push({ subject: mark.subject, marks: mark.marks });
         });
 
-        // Fetch maximum marks for each subject based on class and term
-        const maxMarksBySubject = {};
-        for (const term of Object.keys(marksByTerm)) {
-            const [maxMarkResults] = await connection.execute(
-                `SELECT max_marks, subject 
-                 FROM maximum_marks 
-                 WHERE class = ? AND term = ?`,
-                [student.class, term]
-            );
+        // Fetch maximum marks for the student's class
+        const [maxMarksRows] = await connection.execute(
+            'SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?',
+            [student.class]
+        );
 
-            maxMarkResults.forEach((maxMark) => {
-                maxMarksBySubject[`${term}-${maxMark.subject}`] = parseInt(maxMark.max_marks, 10) || 100;
-            });
-        }
+        // Organize max marks by term
+        const maxMarks = {};
+        maxMarksRows.forEach((row) => {
+            if (!maxMarks[row.term]) {
+                maxMarks[row.term] = {};
+            }
+            maxMarks[row.term][row.subject] = row.max_marks;
+        });
 
         // Fetch grand total, total maximum marks, and percentage for each term
         const [performanceResults] = await connection.execute(
@@ -73,7 +73,6 @@ async function generate(req, res) {
                 grandTotal: row.grand_total,
                 totalMaxMarks: row.total_max_marks,
                 percentage: row.percentage,
-                max: row.max_marks,
             };
         });
 
@@ -100,12 +99,12 @@ async function generate(req, res) {
         const firstPage = pdfDoc.getPages()[0];
 
         // Add student details to the PDF
-        firstPage.drawText(student.name, { x: 232, y: 2725, size: 30, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.class, { x: 1021, y: 2725, size: 30, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.father_name, { x: 232, y: 2586, size: 30, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.mother_name, { x: 1021, y: 2586, size: 30, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.roll, { x: 232, y: 2444, size: 30, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.session, { x: 1021, y: 2444, size: 30, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.name, { x: 232, y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.class, { x: 1021, y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.father_name, { x: 232, y: 2586, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.mother_name, { x: 1021, y: 2586, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.roll, { x: 232, y: 2444, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        firstPage.drawText(student.session, { x: 1021, y: 2444, size: 34, font: boldFont, color: rgb(0, 0, 0) });
 
         // attendance and status
         firstPage.drawText(student_attendance_status.attendance.toUpperCase(), { x: 1746, y: 738, size: 38, font: boldFont, color: rgb(0, 0, 0) });
@@ -136,35 +135,33 @@ async function generate(req, res) {
         const startXPositions = [1293, 1695, 2087]; // X positions for Term columns
         const startYPosition = 2192; // Starting Y position for marks
         const rowHeight = 81; // Height between rows
-
+        let termGrandTotal = 0;
         // Iterate over each term and add marks
         Object.keys(marksByTerm).forEach((term, termIndex) => {
             const termMarks = marksByTerm[term];
             const startX = startXPositions[termIndex];
-            let termGrandTotal = 0;
+
 
             termMarks.forEach((mark, i) => {
                 const yPosition = startYPosition - (i * rowHeight);
 
                 // Subject (bold)
-                firstPage.drawText(mark.subject, { x: 223, y: yPosition, size: 30, font: boldFont, color: rgb(0, 0, 0) });
+                firstPage.drawText(mark.subject, { x: 223, y: yPosition, size: 34, font: boldFont, color: rgb(0, 0, 0) });
 
                 // Marks
-                firstPage.drawText(mark.marks.toString(), { x: startX, y: yPosition, size: 30, color: rgb(0, 0, 0) });
+                firstPage.drawText(mark.marks.toString(), { x: startX, y: yPosition, size: 34, color: rgb(0, 0, 0) });
 
-                // Maximum Marks (display only once for each term)
-
-                const maxMarks = maxMarksBySubject[`${term}-${mark.subject}`];
-
-                if (maxMarks) {
-                    firstPage.drawText(maxMarks.toString(), { x: 857, y: yPosition + 10, size: 30, color: rgb(0, 0, 0) });
-                    termGrandTotal += maxMarks; // Add to the term's grand total
+                // Maximum Marks (only in the first term column, at x = 226)
+                if (termIndex === 0) {
+                    const maxMarksForSubject = maxMarks[term] && maxMarks[term][mark.subject] ? maxMarks[term][mark.subject] : "N/A";
+                    firstPage.drawText(maxMarksForSubject.toString(), { x: 857, y: yPosition, size: 34, color: rgb(0, 0, 0) });
+                    termGrandTotal = termGrandTotal + maxMarksForSubject;
                 }
-
             });
-            firstPage.drawText(performanceResults[0].total_max_marks, { x: 857, y: 1535, size: 30, font: boldFont, color: rgb(0, 0, 0) });
 
-            // Display Total Marks at the correct position
+
+
+            // Display Total Marks and Percentage at the correct position
             const totalYPosition = startYPosition - (termMarks.length * rowHeight);
             const performance = performanceByTerm[term] || {};
 
@@ -172,7 +169,7 @@ async function generate(req, res) {
             firstPage.drawText(performance.grandTotal?.toString() || "N/A", {
                 x: startX,
                 y: totalYPosition,
-                size: 30,
+                size: 34,
                 font: boldFont,
                 color: rgb(0, 0, 0),
             });
@@ -184,12 +181,13 @@ async function generate(req, res) {
             firstPage.drawText(formattedPercentage, {
                 x: startX,
                 y: percentageYPosition,
-                size: 30,
+                size: 34,
                 font: boldFont,
                 color: rgb(0, 0, 0),
             });
         });
 
+        firstPage.drawText(termGrandTotal.toString(), { x: 862, y: 1544, size: 34, font: boldFont, color: rgb(0, 0, 0) });
 
         // Save the PDF and send it to the client
         const pdfBytes = await pdfDoc.save();

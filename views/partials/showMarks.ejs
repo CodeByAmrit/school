@@ -3,24 +3,69 @@
         <div class="container mx-auto py-8">
             <h1 class="text-2xl font-bold text-center mb-8 dark:text-white">Student Marks Entry</h1>
 
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 class="text-xl font-semibold mb-4 dark:text-white">Student Details</h2>
+            <div
+                class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col md:flex-row xl:flex-row justify-center gap-10 mx-2 md:mx-8 lg:mx-8">
+                <div>
+                    <h2 class="text-xl font-semibold mb-4 dark:text-white">Student Details</h2>
 
-                <p><strong>Name:</strong>
-                    <input type="text" value="<%= student.name %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
-                </p>
-                <p><strong>Class:</strong>
-                    <input type="text" value="<%= student.class %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
-                </p>
-                <p><strong>Section:</strong>
-                    <input type="text" value="<%= student.section %>" disabled
-                        class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
-                </p>
+                    <p><strong>Name:</strong>
+                        <input type="text" value="<%= student.name %>" disabled
+                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+                    </p>
+                    <p><strong>Class:</strong>
+                        <input type="text" value="<%= student.class %>" disabled
+                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+                    </p>
+                    <p><strong>Section:</strong>
+                        <input type="text" value="<%= student.section %>" disabled
+                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+                    </p>
+                </div>
+                <div>
+                    <% if (performance.length) { %>
+                        <div class="relative overflow-x-auto">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+
+                                <thead
+                                    class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                            Term
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Grand Total
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                            Percentage
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% performance.forEach(p=> { %>
+                                        <tr class="bg-white dark:bg-gray-800">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                <%= p.term %>
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                <%= p.grand_total %>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <%= (typeof parseFloat(p.percentage)==='number' &&
+                                                    !isNaN(parseFloat(p.percentage))) ?
+                                                    parseFloat(p.percentage).toFixed(2) : '0' %> %
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <% } %>
+                </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="rounde mx-2 md:mx-8 lg:mx-8 pt-6 pb-8 mb-4">
                 <h2 class="text-xl font-semibold mb-4 dark:text-white">Marks Entry</h2>
 
                 <form action="/student/input-marks/<%= student.school_id %>" method="POST">
@@ -28,144 +73,120 @@
 
                     <% for (let term=1; term <=3; term++) { %>
                         <div class="mb-6">
-                            <h3 class="text-lg font-semibold mb-2 dark:text-white">Term <%= term %>
+                            <h3 class="text-lg font-semibold mb-4 dark:text-white">Term <%= term %>
                             </h3>
 
-                            <table class="table-auto w-full mb-4">
-                                <thead>
-                                    <tr>
-                                        <th class="border px-4 py-2 dark:text-white">Subject</th>
-                                        <th class="border px-4 py-2 dark:text-white">Marks</th>
-                                        <th class="border px-4 py-2 dark:text-white">Maximum Marks</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% subjects.forEach(subject=> { %>
+                            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead
+                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
-                                            <td class="border px-4 py-2 dark:text-white">
-                                                <%= subject %>
-                                            </td>
-                                            <td class="border px-4 py-2">
-                                                <input type="text" name="marks[<%= term %>][<%= subject %>]"
-                                                    value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : 0 %>"
-                                                    class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
-                                                    placeholder="Enter marks">
-                                            </td>
-                                            <td class="border px-4 py-2">
-                                                <input type="text" name="maxMarks[<%= term %>][<%= subject %>]"
-                                                    value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : 100 %>"
-                                                    class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
-                                                    placeholder="Enter max marks">
-                                            </td>
+                                            <th scope="col" class="px-6 py-3">Subject</th>
+                                            <th scope="col" class="px-6 py-3">Marks</th>
+                                            <th scope="col" class="px-6 py-3">Maximum Marks</th>
                                         </tr>
-                                        <% }); %>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <% subjects.forEach(subject=> { %>
+                                            <tr
+                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                                <th scope="row"
+                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <%= subject %>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <input type="text" name="marks[<%= term %>][<%= subject %>]"
+                                                        value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : 0 %>"
+                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                                                        placeholder="Enter marks">
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <input required type="text"
+                                                        name="maxMarks[<%= term %>][<%= subject %>]"
+                                                        value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : '100' %>"
+                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                                                        placeholder="Enter max marks" <% if (maxMarks[term] &&
+                                                        maxMarks[term][subject]) { %>
+                                                    readonly <% } %> >
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <% } %>
 
-                            <div class="flex justify-end">
+                            <div class="flex justify-center">
                                 <button type="submit"
-                                    class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                                    class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Save Marks
                                 </button>
                             </div>
                 </form>
+
             </div>
 
             <!-- attendance and status -->
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 class="text-xl font-semibold mb-4 dark:text-white">Attendance and Status</h2>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-4 mx-2 md:mx-8 lg:mx-8">
 
                 <form action="/student/attendance-status/<%= student.school_id %>" method="POST">
                     <input type="hidden" name="studentId" value="<%= student.school_id %>">
-
-                    <div class="mb-6">
-
-
-                        <table class="table-auto w-full mb-4">
-                            <thead>
-                                <tr>
-                                    <th class="border px-4 py-2 dark:text-white">Attendance</th>
-                                    <th class="border px-4 py-2 dark:text-white">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-
-                                    <td class="border px-4 py-2">
-                                        <input type="text" name="attendance"
-                                            value="<%= student_attendance_status ? student_attendance_status.attendance : 0 %>"
-                                            class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white"
-                                            placeholder="Enter marks">
-                                    </td>
-
-                                    <td class="border px-4 py-2">
-                                        <select name="status"
-                                            class="w-full px-2 py-1 border rounded dark:bg-gray-700 dark:text-white">
-                                            <option value="pending" <%=student_attendance_status &&
-                                                student_attendance_status.status==='pending' ? 'selected' : '' %>
-                                                >Pending</option>
-                                            <option value="passed" <%=student_attendance_status &&
-                                                student_attendance_status.status==='passed' ? 'selected' : '' %>>Passed
-                                            </option>
-                                            <option value="promoted" <%=student_attendance_status &&
-                                                student_attendance_status.status==='promoted' ? 'selected' : '' %>
-                                                >Promoted</option>
-                                            <option value="fail" <%=student_attendance_status &&
-                                                student_attendance_status.status==='fail' ? 'selected' : '' %>>Fail
-                                            </option>
-                                        </select>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
-                            Save Attendance
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <% if (performance.length) { %>
-                <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8">
-                    <h2 class="text-xl font-semibold mb-4 dark:text-white">Performance Overview</h2>
-                    <table class="table-auto w-full">
-                        <thead>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th class="border px-4 py-2 dark:text-white">Term</th>
-                                <th class="border px-4 py-2 dark:text-white">Grand Total</th>
-                                <th class="border px-4 py-2 dark:text-white">Percentage</th>
+                                <th scope="col" class="px-6 py-3">
+                                    Attendance
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Actions</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% performance.forEach(p=> { %>
-                                <tr>
-                                    <td class="border px-4 py-2 dark:text-white">
-                                        <%= p.term %>
-                                    </td>
-                                    <td class="border px-4 py-2 dark:text-white">
-                                        <%= p.grand_total %>
-                                    </td>
-                                    <td class="border px-4 py-2 dark:text-white">
-                                        <!-- Safely check and format percentage -->
-                                        <%= (typeof parseFloat(p.percentage)==='number' &&
-                                            !isNaN(parseFloat(p.percentage))) ? parseFloat(p.percentage).toFixed(2)
-                                            : '0' %> %
-                                    </td>
-                                </tr>
-                                <% }); %>
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="px-6 py-4">
+                                    <input type="text" name="attendance"
+                                        value="<%= student_attendance_status ? student_attendance_status.attendance : 0 %>"
+                                        class="w-full px-4 py-2 border rounded bg-gray-50 dark:bg-gray-700 dark:text-white"
+                                        placeholder="Enter attendance">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <select name="status"
+                                        class="w-full px-4 py-2 border rounded bg-gray-50 dark:bg-gray-700 dark:text-white">
+                                        <option value="pending" <%=student_attendance_status &&
+                                            student_attendance_status.status==='pending' ? 'selected' : '' %>>
+                                            Pending
+                                        </option>
+                                        <option value="passed" <%=student_attendance_status &&
+                                            student_attendance_status.status==='passed' ? 'selected' : '' %>>
+                                            Passed
+                                        </option>
+                                        <option value="promoted" <%=student_attendance_status &&
+                                            student_attendance_status.status==='promoted' ? 'selected' : '' %>>
+                                            Promoted
+                                        </option>
+                                        <option value="fail" <%=student_attendance_status &&
+                                            student_attendance_status.status==='fail' ? 'selected' : '' %>>
+                                            Fail
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button type="submit"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        Save
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                </div>
-                <% } %>
+                </form>
+            </div>
 
         </div>
     </div>
