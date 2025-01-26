@@ -3,7 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
   getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
-  getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents } = require('../components/student');
+  getFileCount, saveStudentMarks, getTotalStudents } = require('../components/student');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
 const crypto = require('crypto');
@@ -24,8 +24,56 @@ async function getSchoolLogo(req, res) {
   return school_logo_url;
 }
 
+// Route to get total students count
+router.get('/total-students',checkAuth, async (req, res) => {
+  try {
+    let totalStudents;
+    let totalTeachers;
+    let connection;
 
-// Fetch dashboard information
+    try {
+      connection = await getConnection();
+      const [[{ total_students }]] = await connection.execute(
+        'SELECT COUNT(*) AS total_students FROM students'
+      );
+      const [[{ total_teachers }]] = await connection.execute(
+        'SELECT COUNT(*) AS total_teachers FROM teacher'
+      );
+      totalStudents = total_students;
+      totalTeachers = total_teachers;
+      res.json({ total_students: totalStudents, total_teachers: totalTeachers});
+    } catch (error) {
+      console.log(error);
+      res.json({ status: error.sqlMessage });
+    } finally {
+      if (connection) {
+        await connection.end();
+      }
+    }
+
+  } catch (error) {
+    console.error('Error fetching total students:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get("/chart-data",checkAuth, async (req, res) => {
+  try {
+      const connection = await getConnection();
+      const [rows] = await connection.execute(`
+          SELECT class AS label, COUNT(*) AS value
+          FROM students
+          GROUP BY class
+      `);
+      connection.end();
+      res.json(rows);
+  } catch (error) {
+      console.error("Error fetching chart data:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 router.get('/dashboard', checkAuth, async (req, res) => {
   const school_logo_url = await getSchoolLogo(req, res);
   let user = req.user;
@@ -72,15 +120,18 @@ router.get('/dashboard', checkAuth, async (req, res) => {
       [teacherId]
     );
 
-    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+    const count_Files = await getFileCount(req, res);
+
+    const nonce = 'ozfWMSeQ06g862KcEoWVKg==' ;
 
     // Render dashboard EJS
     res.render('index', {
       nonce,
       teacher: teacher[0],
-      total_students: studentsCount,
+      total_students: studentsCount, // Ensure the total_students variable is passed
       marks_summary: marksSummary,
       recent_files: recentFiles,
+      files_count: count_Files,
       user
     });
   } catch (error) {
@@ -88,6 +139,8 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+
 
 
 

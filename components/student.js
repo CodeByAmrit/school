@@ -669,12 +669,34 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
     }
 }
 
+async function getFileCount(req, res) {
+    const teacherId = req.user._id;
+
+    const query = `
+        SELECT COUNT(*) AS total_files
+        FROM student_files f
+        INNER JOIN students s ON f.school_id = s.school_id
+        WHERE s.teacher_id = ?;
+    `;
+
+    try {
+        const connection = await getConnection();
+        const [rows] = await connection.execute(query, [teacherId]);
+        connection.end();
+
+        // Return the count
+        return rows[0].total_files;
+    } catch (error) {
+        console.error("Error fetching file count:", error);
+        throw new Error("An error occurred while fetching the file count.");
+    }
+}
 
 
 
 
 module.exports = {
-    getAllStudent, teacherLogin, getStudentMarksBySchoolId,
+    getAllStudent, teacherLogin, getStudentMarksBySchoolId, getFileCount,
     getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
     getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
     insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents

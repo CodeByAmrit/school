@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS teacher (
     school_name VARCHAR(200),
     school_address VARCHAR(200),
     school_phone VARCHAR(200),
-    school_logo MEDIUMBLOB    
+    school_logo MEDIUMBLOB
 );
 
 CREATE TABLE IF NOT EXISTS students (
@@ -80,14 +80,19 @@ CREATE TABLE IF NOT EXISTS student_marks (
 CREATE TABLE IF NOT EXISTS student_attendance_status (
     student_id INT PRIMARY KEY,
     attendance VARCHAR(100),
-    status ENUM('passed', 'promoted', 'fail', 'pending') DEFAULT 'pending',
+    status ENUM(
+        'passed',
+        'promoted',
+        'fail',
+        'pending'
+    ) DEFAULT 'pending',
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
 CREATE TABLE IF NOT EXISTS student_grade_remarks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
-    grade VARCHAR(100), 
+    grade VARCHAR(100),
     remarks VARCHAR(100),
     term INT NOT NULL,
     FOREIGN KEY (student_id) REFERENCES students (school_id)
@@ -182,7 +187,6 @@ GROUP BY
     s.school_id,
     s.name,
     sm.term;
-
 
 DELIMITER $$
 

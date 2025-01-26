@@ -28,6 +28,8 @@ class App {
             next();
         });
 
+        
+
         // Limit request rate to prevent DoS attacks
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000, // 15 minutes
@@ -75,6 +77,9 @@ class App {
 
     // Start Server
     startServer() {
+        this.app.use((req, res, next) => {
+            res.status(404).render("custom404");
+        });
         const PORT = process.env.PORT || 3000;
         this.app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);
