@@ -25,7 +25,7 @@ async function getSchoolLogo(req, res) {
 }
 
 // Route to get total students count
-router.get('/total-students',checkAuth, async (req, res) => {
+router.get('/total-students', async (req, res) => {
   try {
     let totalStudents;
     let totalTeachers;
@@ -41,6 +41,7 @@ router.get('/total-students',checkAuth, async (req, res) => {
       );
       totalStudents = total_students;
       totalTeachers = total_teachers;
+      connection.end();
       res.json({ total_students: totalStudents, total_teachers: totalTeachers});
     } catch (error) {
       console.log(error);
@@ -56,6 +57,37 @@ router.get('/total-students',checkAuth, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Route to fetch the number of male and female students in each class for a given session
+router.get('/students/count/:session', async (req, res) => {
+  const { session } = req.params; // Extract session from path params
+
+  if (!session) {
+    return res.status(400).json({ error: 'Session parameter is required' });
+  }
+
+  const query = `
+      SELECT 
+          class,
+          COUNT(CASE WHEN gender = 'Male' THEN 1 END) AS male_count,
+          COUNT(CASE WHEN gender = 'Female' THEN 1 END) AS female_count
+      FROM students
+      WHERE session = ?
+      GROUP BY class;
+  `;
+
+  try {
+    const connection = await getConnection(); // Get a connection
+    const [results] = await connection.query(query, [session]); // Execute the query with session as a parameter
+    connection.end(); // Close the connection
+
+    res.status(200).json({ data: results });
+  } catch (error) {
+    console.error('Error fetching student count:', error);
+    res.status(500).json({ error: 'An error occurred while fetching student count' });
+  }
+});
+
 
 router.get("/chart-data",checkAuth, async (req, res) => {
   try {
@@ -79,46 +111,11 @@ router.get('/dashboard', checkAuth, async (req, res) => {
   let user = req.user;
   user.school_logo = school_logo_url;
 
-  const teacherId = req.user._id; // Assume teacher_id is passed in the query params
+  const teacherId = req.user._id; 
 
   try {
-    const connection = await getConnection();
-
-    // Fetch teacher details
-    const [teacher] = await connection.execute(
-      'SELECT first_name, last_name, school_name, school_address, school_phone FROM teacher WHERE id = ?',
-      [teacherId]
-    );
-
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
-
-    // Fetch student performance summaries
-    const [marksSummary] = await connection.execute(
-      `SELECT 
-        students.school_id,
-        students.name AS student_name,
-        AVG(CASE WHEN sm.term = 1 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term1,
-        AVG(CASE WHEN sm.term = 2 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term2,
-        AVG(CASE WHEN sm.term = 3 THEN CAST(sm.marks AS DECIMAL) / CAST(mm.max_marks AS DECIMAL) * 100 ELSE NULL END) AS avg_percentage_term3
-      FROM students
-      LEFT JOIN student_marks sm ON students.school_id = sm.student_id
-      LEFT JOIN maximum_marks mm ON sm.subject = mm.subject AND students.class = mm.class AND sm.term = mm.term
-      WHERE students.teacher_id = ?
-      GROUP BY students.school_id`,
-      [teacherId]
-    );
-
-    // Fetch recent uploads by the teacher's students
-    const [recentFiles] = await connection.execute(
-      `SELECT file_name, upload_date, students.name AS student_name 
-      FROM student_files 
-      INNER JOIN students ON student_files.school_id = students.school_id 
-      WHERE students.teacher_id = ? 
-      ORDER BY upload_date DESC 
-      LIMIT 5`,
-      [teacherId]
-    );
 
     const count_Files = await getFileCount(req, res);
 
@@ -127,10 +124,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     // Render dashboard EJS
     res.render('index', {
       nonce,
-      teacher: teacher[0],
-      total_students: studentsCount, // Ensure the total_students variable is passed
-      marks_summary: marksSummary,
-      recent_files: recentFiles,
+      total_students: studentsCount, 
       files_count: count_Files,
       user
     });
@@ -499,6 +493,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
     );
 
     if (studentRows.length === 0) {
+      connection.end();
       return res.status(404).send('Student not found');
     }
 
@@ -551,6 +546,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
+    connection.end();
     // Render the EJS view
     res.render('studentMarks', {
       user,
@@ -640,6 +636,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       [school_id, buffer, file_name, mimetype]
     );
 
+    connection.end();
     res.redirect(`/files/one/${school_id}`); // Redirect to the file manager page
 
   } catch (error) {
@@ -663,6 +660,7 @@ router.get('/files', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
+    connection.end();
     res.render('files', { files, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching files:', error);
@@ -685,7 +683,7 @@ router.get('/files/one/:school_id', checkAuth, async (req, res) => {
 
   // Fetch total students assigned to the teacher
   const studentsCount = await getTotalStudents(req, res);
-
+  connection.end();
   res.render('studentFiles', { files, user, school_id, total_students: studentsCount });
 });
 
@@ -705,6 +703,7 @@ router.get('/files/:id', async (req, res) => {
     }
 
     res.contentType('application/pdf'); // Set the content type
+    connection.end();
     res.send(file[0].file_data); // Send the file data
   } catch (error) {
     console.error('Error fetching file:', error);
@@ -722,7 +721,7 @@ router.post('/delete-file/:id', async (req, res) => {
     const query = 'DELETE FROM student_files WHERE id = ?';
 
     const [result] = await connection.execute(query, [fileId]);
-
+    connection.end();
     if (result.affectedRows > 0) {
       res.redirect(`/files/one/${fileId}`); // Redirect back to file manager after deletion
     } else {
@@ -738,13 +737,16 @@ router.post('/delete-file/:id', async (req, res) => {
 // Helper function to execute stored procedures
 async function executeProcedure(schoolId, action) {
   let results;
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const query = 'CALL promote_or_demote_student(?, ?)';
     [results] = await connection.execute(query, [schoolId, action]);
 
   } catch (error) {
     console.log(error);
+  } finally{
+    connection.end();
   }
 
   return results;
@@ -758,7 +760,7 @@ router.post('/promote', checkAuth, async (req, res) => {
 
   for (const studentId of studentIds) {
     try {
-      console.log(studentId, 'promote');
+      // console.log(studentId, 'promote');
 
       await executeProcedure(studentId, 'promote');
       success = success + 1;
@@ -795,8 +797,14 @@ router.post('/demote', checkAuth, async (req, res) => {
 
 // Logout route - Clears token and redirects to login
 router.get("/logout", (req, res) => {
-  res.clearCookie("token").redirect("/login");
+  res.clearCookie("token").clearCookie("introShown").send(`
+    <script nonce='ozfWMSeQ06g862KcEoWVKg=='>
+      localStorage.clear();
+      window.location.href = "/login";
+    </script>
+  `);
 });
+
 
 
 // Account page - Renders account management page

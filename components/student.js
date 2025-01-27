@@ -32,6 +32,7 @@ async function getTotalStudents(req, res) {
             'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
             [teacher_id]
         );
+        connection.end();
         return total_students;
     } catch (error) {
         console.log(error);
@@ -143,8 +144,8 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
             // Insert new record without school_id
             query = `
                 INSERT INTO students (teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             values = [
@@ -165,14 +166,15 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                 student.family_id,
                 student.dob,
                 student.profile_status,
-                student.apaar_id
+                student.apaar_id,
+                student.gender
             ];
         } else {
             // Insert or update existing record with school_id
             query = `
                 INSERT INTO students (school_id, teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     teacher_id = VALUES(teacher_id),
                     name = VALUES(name),
@@ -191,7 +193,8 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                     family_id = VALUES(family_id),
                     dob = VALUES(dob),
                     profile_status = VALUES(profile_status),
-                    apaar_id = VALUES(apaar_id)
+                    apaar_id = VALUES(apaar_id),
+                    gender = VALUES(gender)
             `;
 
             values = [
@@ -213,7 +216,8 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                 student.family_id,
                 student.dob,
                 student.profile_status,
-                student.apaar_id
+                student.apaar_id,
+                student.gender
             ];
         }
 
@@ -344,7 +348,7 @@ async function get_school_logo(req, res) {
         connection = await getConnection();
 
         const [[result]] = await connection.execute("select school_logo from teacher where email = ?", [email,]);
-        // console.log(result);
+        connection.end();
         return (result);
     } catch (error) {
         return null;

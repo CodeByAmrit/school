@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS students (
     dob VARCHAR(10),
     profile_status VARCHAR(255),
     apaar_id VARCHAR(40),
+    gender ENUM('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
 
@@ -100,6 +101,18 @@ CREATE TABLE IF NOT EXISTS student_grade_remarks (
 
 -- Create an index on the `class` column
 CREATE INDEX idx_class ON students (class);
+
+-- Create a view for the count of students in each class for a given session
+CREATE OR REPLACE VIEW students_per_class AS
+SELECT 
+    class,
+    session,
+    COUNT(CASE WHEN gender = 'MALE' THEN 1 END) AS male_count,
+    COUNT(CASE WHEN gender = 'FEMALE' THEN 1 END) AS female_count
+FROM 
+    students
+GROUP BY 
+    class, session;
 
 -- Table for storing maximum marks by term and subject
 CREATE TABLE IF NOT EXISTS maximum_marks (

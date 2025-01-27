@@ -80,7 +80,7 @@ class App {
         this.app.use((req, res, next) => {
             res.status(404).render("custom404");
         });
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 8000;
         this.app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);
         });

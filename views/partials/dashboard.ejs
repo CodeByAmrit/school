@@ -1,163 +1,93 @@
-<script nonce="<%= nonce %>">
-    // dashboard.js
+<div id="introScreen" class="w-screen h-screen bg-gray-50 z-50 fixed top-0 left-0 flex justify-center items-center">
+    <img src="/image/logo.svg" alt="favicon">
+</div>
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('marksChart').getContext('2d');
+<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-stone-50 mt-16 bg-blue-50 h-full min-h-screen">
 
-        const labels = ['Term 1', 'Term 2', 'Term 3'];
-        const data = [
-            <%= marks_summary && typeof marks_summary.avg_percentage_term1 === 'number' && !isNaN(marks_summary.avg_percentage_term1) ? marks_summary.avg_percentage_term1.toFixed(2) : 0 %>,
-            <%= marks_summary && typeof marks_summary.avg_percentage_term2 === 'number' && !isNaN(marks_summary.avg_percentage_term2) ? marks_summary.avg_percentage_term2.toFixed(2) : 0 %>,
-            <%= marks_summary && typeof marks_summary.avg_percentage_term3 === 'number' && !isNaN(marks_summary.avg_percentage_term3) ? marks_summary.avg_percentage_term3.toFixed(2) : 0 %>
-        ];
-
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Average Marks',
-                    data: data,
-                    backgroundColor: ['#4CAF50', '#FF9800', '#F44336'],
-                    borderColor: ['#388E3C', '#FF5722', '#D32F2F'],
-                    borderWidth: 1,
-                }],
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 10
-                        }
-                    }
-                }
-            }
-        });
-    });
-
-</script>
-
-<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-stone-50 mt-16 bg-blue-50 h-screen">
-    <div class="mb-4">
-        <h1 class="text-2xl font-bold">Welcome, <%= teacher.first_name %>
-                <%= teacher.last_name %>
-        </h1>
-        <p>
-            <%= teacher.school_name %>, <%= teacher.school_address %>
-        </p>
-        <p>Contact: <%= teacher.school_phone %>
-        </p>
-    </div>
 
     <div class="flex gap-5 flex-wrap rounded-md ">
-        <div class="flex gap-5">
-            <div class="flex flex-col gap-5">
-                <!-- Total Students Card -->
-                <div
-                    class="bg-white max-w-sm lg:max-w-full lg:flex px-10 gap-2 justify-center items-center  rounded-md shadow w-full md:w-fit">
-                    <div
-                        class=" h-48 lg:h-auto  flex-none bg-cover  lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
-                            width="60" height="60" class="bg-orange-100 rounded-full p-2">
-                            <path fill="orange"
-                                d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM5.683,16H1a1,1,0,0,1-1-1A6.022,6.022,0,0,1,5.131,9.084a1,1,0,0,1,1.1,1.266A6.009,6.009,0,0,0,6,12a5.937,5.937,0,0,0,.586,2.57,1,1,0,0,1-.9,1.43ZM17,24H7a1,1,0,0,1-1-1,6,6,0,0,1,12,0A1,1,0,0,1,17,24ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8Zm17,8H18.317a1,1,0,0,1-.9-1.43A5.937,5.937,0,0,0,18,12a6.009,6.009,0,0,0-.236-1.65,1,1,0,0,1,1.105-1.266A6.022,6.022,0,0,1,24,15,1,1,0,0,1,23,16Z" />
-                        </svg>
-                    </div>
-                    <div
-                        class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                        <div class="mb-2">
-                            <div class="text-gray-900 font-bold text-3xl mb-0 font-poppins">
-                                <%= total_students || 0 %>
-                            </div>
-                            <p class="text-gray-700 text-base p-0">Total Students</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Total Files Card -->
+        <div class="flex md:flex-col lg:flex-col xl:flex-col gap-5 w-full md:w-auto">
+            <!-- Total Students Card -->
+            <div
+                class="bg-white  dark:bg-gray-800 flex px-0 pl-4 gap-2 justify-center items-center rounded-md shadow w-full min-w-fit">
                 <div
-                    class="bg-white max-w-sm lg:max-w-full lg:flex px-10 gap-2 justify-center items-center  rounded-md shadow w-full md:w-auto">
-                    <div
-                        class=" h-48 lg:h-auto  flex-none bg-cover  lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
-                            width="60" height="60" class="bg-green-100 rounded-full p-2">
-                            <path fill="green"
-                                d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM5.683,16H1a1,1,0,0,1-1-1A6.022,6.022,0,0,1,5.131,9.084a1,1,0,0,1,1.1,1.266A6.009,6.009,0,0,0,6,12a5.937,5.937,0,0,0,.586,2.57,1,1,0,0,1-.9,1.43ZM17,24H7a1,1,0,0,1-1-1,6,6,0,0,1,12,0A1,1,0,0,1,17,24ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8Zm17,8H18.317a1,1,0,0,1-.9-1.43A5.937,5.937,0,0,0,18,12a6.009,6.009,0,0,0-.236-1.65,1,1,0,0,1,1.105-1.266A6.022,6.022,0,0,1,24,15,1,1,0,0,1,23,16Z" />
-                        </svg>
-                    </div>
-                    <div
-                        class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                        <div class="mb-2">
-                            <div class="text-gray-900 font-bold text-3xl mb-0 font-poppins">
-                                <%= files_count || 0 %>
-                            </div>
-                            <p class="text-gray-700 text-base p-0">Total Files</p>
+                    class="h-auto md:h-fit flex-none bg-cover lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
+                        width="60" height="60" class="bg-orange-100 dark:bg-orange-200 rounded-full p-2">
+                        <path fill="orange"
+                            d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM5.683,16H1a1,1,0,0,1-1-1A6.022,6.022,0,0,1,5.131,9.084a1,1,0,0,1,1.1,1.266A6.009,6.009,0,0,0,6,12a5.937,5.937,0,0,0,.586,2.57,1,1,0,0,1-.9,1.43ZM17,24H7a1,1,0,0,1-1-1,6,6,0,0,1,12,0A1,1,0,0,1,17,24ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8Zm17,8H18.317a1,1,0,0,1-.9-1.43A5.937,5.937,0,0,0,18,12a6.009,6.009,0,0,0-.236-1.65,1,1,0,0,1,1.105-1.266A6.022,6.022,0,0,1,24,15,1,1,0,0,1,23,16Z" />
+                    </svg>
+                </div>
+                <div class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                    <div class="mb-2">
+                        <div class="text-gray-900 dark:text-gray-100 font-bold text-3xl mb-0 font-poppins">
+                            <%= total_students || 0 %>
                         </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-base p-0">Total Student</p>
                     </div>
                 </div>
             </div>
 
-
-            <div class="">
-                <!-- Chart Card -->
-                <div class="bg-white rounded-lg shadow px-6 py-3">
-                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Students per Class</h2>
-                    <div>
-                        <canvas id="classChart"></canvas>
+            <!-- Total Files Card -->
+            <div
+                class="bg-white dark:bg-gray-800 flex px-0 pl-4 gap-2 justify-center items-center rounded-md shadow w-full">
+                <div
+                    class="h-auto md:h-full flex-none bg-cover lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center min-w-fit">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
+                        width="60" height="60" class="bg-green-100 dark:bg-green-200 rounded-full p-2">
+                        <path fill="green"
+                            d="m0,18V5C0,2.794,1.794,1,4,1h2c.464,0,.928.109,1.342.316l3.155,1.578c.138.069.293.105.447.105h5.056c2.757,0,5,2.243,5,5h-10.976c-2.638,0-5.003,1.766-5.754,4.303l-2.673,9.339c-.977-.913-1.597-2.203-1.597-3.642Zm23.493-6.983c-.479-.643-1.209-1.012-2.008-1.025-.015,0-.027.008-.042.008h-11.419c-1.758,0-3.335,1.177-3.834,2.862l-2.818,9.843c.513.178,1.055.295,1.628.295h12.558c2.226,0,4.15-1.432,4.802-3.607l1.532-6.116c.234-.782.089-1.605-.398-2.26Z" />
+                    </svg>
+                </div>
+                <div class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                    <div class="mb-2">
+                        <div class="text-gray-900 dark:text-gray-100 font-bold text-3xl mb-0 font-poppins">
+                            <%= files_count || 0 %>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-base p-0">Total Files</p>
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <div class="relative overflow-x-auto  bg-white rounded-lg shadow-lg p-6  w-full">
-            <h2 class="text-xl font-bold mb-4">Recent Student Uploads</h2>
+
+        <div
+            class="relative overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 xl:w-1/2 lg:w-1/2 md:w-full mb-20 lg:mb-0 md:mb-0">
+            <h2 class="text-xl font-bold mb-4 dark:text-gray-100">Student Count by Class</h2>
+
+            <!-- Session Dropdown -->
+            <form id="sessionForm" class="mb-4 absolute top-2 right-2">
+                
+                <select id="session" name="session"
+                    class=" ml-2 p-1 border-0 border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-300">
+                    <% const currentYear = new Date().getFullYear(); %>
+                    <% for (let year=currentYear-2; year <=currentYear+2; year++) { %>
+                        <option value="<%= year %>-<%= year + 1 %>" <%=year===new Date().getFullYear() ? 'selected' : ''
+                            %>>
+                            <%= year %>-<%= year + 1 %>
+                        </option>
+                        <% } %>
+                </select>
+            </form>
+
+            <!-- Data Table -->
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            File Name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Student Name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Upload Date
-                        </th>
+                        <th scope="col" class="px-6 py-3">Class</th>
+                        <th scope="col" class="px-6 py-3">Male Count</th>
+                        <th scope="col" class="px-6 py-3">Female Count</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <% if (recent_files && recent_files.length> 0) { %>
-                        <% recent_files.forEach(file=> { %>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <%= file.file_name %>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <%= file.student_name %>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <%= new Date(file.upload_date).toLocaleDateString() %>
-                                </td>
-                            </tr>
-                            <% }) %>
-                                <% } else { %>
-                                    <tr class="bg-white dark:bg-gray-800">
-                                        <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                            No recent uploads available.
-                                        </td>
-                                    </tr>
-                                    <% } %>
+                <tbody id="classData">
+
                 </tbody>
             </table>
         </div>
-
 
 
     </div>
 
     <!-- FlowbiteChart Script -->
     <script src="/js/dashboard_marks_show.js" defer></script>
-    <!-- <script src="/js/chart.js" defer></script> -->
