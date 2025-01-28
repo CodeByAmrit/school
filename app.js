@@ -34,7 +34,7 @@ class App {
         // Limit request rate to prevent DoS attacks
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000, // 15 minutes
-            max: 400, // Limit each IP to 400 requests per windowMs
+            max: 700, // Limit each IP to 400 requests per windowMs
             standardHeaders: true, // Send rate limit info in the `RateLimit-*` headers
             legacyHeaders: false, // Disable the `X-RateLimit-*` headers
         });

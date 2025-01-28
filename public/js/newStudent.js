@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('dob', document.getElementById('dob').value.toUpperCase());
         formData.append('profile_status', document.getElementById('profile_status').value.toUpperCase());
         formData.append('apaar_id', document.getElementById('apaar_id').value.toUpperCase());
+        formData.append('gender', document.getElementById('gender').value.toUpperCase());
 
 
         // Check if photo is selected and append it to FormData

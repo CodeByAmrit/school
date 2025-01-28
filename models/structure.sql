@@ -249,3 +249,31 @@ BEGIN
 END $$
 
 DELIMITER;
+
+
+DELIMITER $$
+CREATE PROCEDURE delete_student(IN p_school_id INT)
+BEGIN
+    -- Delete student marks
+    DELETE FROM student_marks WHERE student_id = p_school_id;
+
+    -- Delete student attendance status
+    DELETE FROM student_attendance_status WHERE student_id = p_school_id;
+
+    -- Delete student grade remarks
+    DELETE FROM student_grade_remarks WHERE student_id = p_school_id;
+
+    -- Delete student credentials
+    DELETE FROM student_credentials WHERE student_id = p_school_id;
+
+    -- Delete student files
+    DELETE FROM student_files WHERE school_id = p_school_id;
+
+    -- Delete student photos
+    DELETE FROM photo WHERE id = p_school_id;
+
+    -- Finally, delete the student record
+    DELETE FROM students WHERE school_id = p_school_id;
+END $$
+
+DELIMITER ;

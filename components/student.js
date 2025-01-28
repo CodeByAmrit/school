@@ -451,56 +451,36 @@ async function deleteStudent(req, res) {
         connection = await getConnection();
 
         try {
-            await connection.execute(`DELETE from marks1 where id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
-        }
-        try {
-            await connection.execute(`DELETE from marks2 where id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
-        }
-        try {
-            await connection.execute(`DELETE from marks3 where id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
-        }
-        try {
-            await connection.execute(`DELETE from maximum_marks where id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
-        }
+            // Call the stored procedure
+            const result = await connection.execute('CALL delete_student(?)', [school_id]);
 
-        try {
-            await connection.execute(`DELETE from student_files where school_id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
+            // Success response
+            // res.status(200).json({ message: `Student with ID ${school_id} has been deleted successfully.` });
+            const user = req.user;
+            if (result.affectedRows === 0) {
+                const studentlist = await getAllStudent(req, res);
+                const error_message = `No Student found with School ID - ${school_id} to delete.`;
+                return res.status(400).render("students", { studentlist, user, error_message });
+            }
+            if (result.affectedRows > 0) {
+                const studentlist = await getAllStudent(req, res);
+                const message = `Student with School Id. ${school_id} has been deleted successfully.`;
+                return res.status(200).render("students", { studentlist, user, message });
+            }
+        } catch (err) {
+            console.error(`Error executing stored procedure 'delete_student':`, err);
+            res.status(500).json({ error: 'An error occurred while deleting the student record.' });
         }
-        try {
-            await connection.execute(`DELETE from photo where id = ?`, [school_id,]);
-        } catch (error) {
-            console.log("studentDocument", error);
-        }
-
-        const [result] = await connection.execute(`DELETE from students where school_id = ?`, [school_id,]);
-        const user = req.user;
-        if (result.affectedRows === 0) {
-            const studentlist = await getAllStudent(req, res);
-            const error_message = `No Student found with School ID - ${school_id} to delete.`;
-            return res.status(400).render("students", { studentlist, user, error_message });
-        }
-        if (result.affectedRows > 0) {
-            const studentlist = await getAllStudent(req, res);
-            const message = `Student with School Id. ${school_id} has been deleted successfully.`;
-            return res.status(200).render("students", { studentlist, user, message });
-        }
-        // res.status(200).render({ message: 'Student Deleted successfully', school_id: result });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: error.sqlMessage });
+        console.error(`Database connection error:`, error);
+        res.status(500).json({ message: 'Failed to connect to the database.' });
     } finally {
         if (connection) {
-            await connection.end();
+            try {
+                await connection.end();
+            } catch (error) {
+                console.error(`Error closing the database connection:`, error);
+            }
         }
     }
 }
