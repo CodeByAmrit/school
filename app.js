@@ -20,35 +20,38 @@ class App {
 
     // Middleware Configuration
     configureMiddleware() {
+        // Restrict 'trust proxy' to only your reverse proxy (Nginx)
+        this.app.set("trust proxy", "loopback"); // Only trust localhost (127.0.0.1) as the proxy
+    
         // Security headers
         this.app.use(helmet());
-
+    
         this.app.use((req, res, next) => {
             res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg=='`);
             next();
         });
-
-        
-
+    
         // Limit request rate to prevent DoS attacks
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000, // 15 minutes
-            max: 400, // Limit each IP to 100 requests per windowMs
+            max: 400, // Limit each IP to 400 requests per windowMs
+            standardHeaders: true, // Send rate limit info in the `RateLimit-*` headers
+            legacyHeaders: false, // Disable the `X-RateLimit-*` headers
         });
         this.app.use(limiter);
-
+    
         // Logging HTTP requests
         this.app.use(morgan("combined"));
-
+    
         // Body parsers
         this.app.use(express.json({ limit: "10mb" }));
         this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
         this.app.use(bodyParser.json({ limit: "10mb" }));
         this.app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-
+    
         // Cookies parser
         this.app.use(cookieParser());
-
+    
         // Serve static files and set up path aliases
         this.app.use(express.static(path.join(__dirname, "public")));
         this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
@@ -56,7 +59,7 @@ class App {
         this.app.use("/flowbite", express.static(path.join(__dirname, "node_modules/flowbite/dist")));
         this.app.use("/apexcharts", express.static(path.join(__dirname, "node_modules", "apexcharts", "dist")));
         this.app.use("/output", express.static(path.join(__dirname, "output")));
-
+    
         // Serve favicon
         this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
     }
