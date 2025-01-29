@@ -19,28 +19,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
 <body>
-    <div class="mainLanding" id="picGroup">
+    <div class="mainLanding" id="picGroup" style="overflow-y: hidden !important;">
         <nav class="navbar fixed-top bg-body-tertiary py-2" id="customNav">
-            <div class="container">
+            <div class="d-flex w-100 justify-content-between align-items-center" style="padding: 0px 20px;" id="nav">
                 <a class="navbar-brand" href="#">
 
-                    <span class="menuWhite" style=" font-weight: bold; font-size:25px;">
-                        Student Tracker
+                    <span class="menuWhite" style=" font-weight: bold; font-size:28px;">
+                        StudentTracker
                     </span>
                 </a>
                 <div>
-                    <a href="/login">
-                        <div class="btn" style="color:white;">Login</div>
-                    </a>
+                    <a href="/login" class="btn" style="color: white;">Login</a>
 
                     <a href="/signup" class="btn btn-outline-light">Sign Up</a>
 
                 </div>
             </div>
         </nav>
-        <div style="padding-left: 40px;">
-            <div class="d-flex flex-row custom-responsive" style="padding-top: 7rem;">
-                <div class="contentLeft pb-4 ">
+        <div style="padding-left: 40px;" id="landing">
+            <div class="d-flex flex-row custom-responsive" style="padding-top: 7rem; position: relative;">
+                <div class="contentLeft md:pb-4" id="topMain">
                     <h1 
                         style="font-family: quicksand; padding-bottom: 20px; max-width: 458px; font-weight: 700; font-size: 2.25rem; line-height: 2.5rem; word-spacing: 0.3em;">
                         Track and Manage Student Data Easily
@@ -58,12 +56,12 @@
                             style="mix-blend-mode: multiply; margin-right:10px;">Optimized for Efficient Classroom
                         Management</h6>
                 </div>
-                <div class="d-flex contentRight">
-
+                <img src="/image/school-bg.svg" alt="school-bg.svg" style="position: absolute; scale: 1.24;">
+                <div class="d-flex contentRight" id="center">
                     <div class="card mx-2 resCard"
                         style="background-color: #4299e100; border:0; align-items: center; height:fit-content">
-                        <img src="/image/student.svg" alt="student" width="220px" class="landingImage">
-                        <div class="card card-body shadow pb-5">
+                        <img src="/image/student.svg" alt="student" width="260px" class="landingImage">
+                        <div class="card card-body shadow pb-5" style="border-radius: 15px; border:0;  width: 340px;">
                             <p class="card-text"><b>Track Your Progress with Ease</b></p>
                             <p class="card-text">Join thousands of students and manage your learning journey with
                                 personalized tools assessments.</p>
@@ -74,11 +72,11 @@
 
                     <div class="card mx-2 resCard"
                         style="background-color: #4299e100; border:0; align-items: center; height:fit-content">
-                        <img src="/image/teacher.svg" alt="student" width="220px" class="landingImage">
-                        <div class="card card-body shadow pb-5">
+                        <img src="/image/teacher.svg" alt="student" width="260px" class="landingImage">
+                        <div class="card card-body shadow pb-5" style="border-radius: 15px; border:0; width: 340px;">
                             <p class="card-text"><b>For Instructors and Admins</b></p>
                             <p class="card-text">Easily Manage Class and Student Settings
-                                with Timed Assessments, Customized Lessons,
+                                with 
                                 Automated Reports, and More.</p>
                         </div>
                         <a href="/login" class="btn btn-warning customBtnColor"
@@ -89,14 +87,14 @@
             </div>
         </div>
 
-        <img src="/image/white_triangle.svg" alt="white" id="triangle" width="100%">
+        <img src="/image/white_triangle.svg" alt="white" id="triangle" width="100%" >
     </div>
 
     <div class="container" style="height: fit-content;">
         <div class="secondPage">
             <div style="display: flex; align-items:center; width:100%; justify-content:center;" class="my-4">
                 <p
-                    style="font-weight: 700; color:rgb(49,130,206); font-size: 30px;line-height: 2rem; text-align: center; max-width:900px;">
+                    style="font-weight: 700; color:rgb(49,130,206); font-size: 30px;line-height: 2rem; text-align: center; max-width:600px;">
                     More Than Management: Records, Tracking, & Parent Communication
                 </p>
             </div>

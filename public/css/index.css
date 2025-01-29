@@ -1,5 +1,5 @@
 * {
-    font-family: "Calibri";
+    font-family: "quicksand", sans-serif;
 }
 
 a {
@@ -8,12 +8,14 @@ a {
 
 body {
     overflow-x: hidden;
+    
 }
 
 .mainLanding {
     position: relative;
     height: 100vh !important;
-    background: linear-gradient(-90deg, #4299e1, #90cdf4 100%);
+    background: linear-gradient(-45deg, #4299e1, #90cdf4 100%);
+    overflow-x: hidden;
 }
 
 .bg-body-tertiary {
@@ -34,7 +36,6 @@ body {
 .contentRight {
     height: 400px;
     width: 60%;
-
 }
 
 .contentLeft {
@@ -98,8 +99,11 @@ body {
 #triangle {
     position: absolute !important;
     bottom: 0px !important;
-    height: 150px;
+    width: 100%;
     object-fit: cover;
+    margin-bottom: -50px;
+    margin-left: 0px;
+    scale: 1.4 !important;
 }
 
 .future {
@@ -111,31 +115,62 @@ body {
 
 #customNav {
     width: 100% !important;
+    overflow: hidden;
+}
+
+#topMain{
+    width: fit-content !important;
 }
 
 @media (max-width: 800px) {
+    #landing{
+        padding-left: 0 !important;
+    }
+    .custom-responsive{
+        justify-content: center;
+        align-items: center;
+    }
     .custom-responsive {
         flex-direction: column !important;
     }
 
-    .custom-responsive div {
-        width: 100%;
-    }
 
     #picGroup {
         height: fit-content !important;
     }
+}
 
-
+#landing{
+    overflow: hidden;
 }
 
 @media (max-width: 650px) {
+    .custom-responsive {
+        flex-direction: column !important;
+        padding-top: 2rem !important;
+        width: 100% !important;
+        align-items: center !important;
+        justify-content: center !important; 
+    }
+    #landing{
+        padding-top: 2rem !important;
+        padding-left: 0 !important;
+        justify-content: center !important;
+        align-items: center !important; 
+    }
+    .menuWhite{
+        font-size: medium !important;
+    }
+    #nav{
+        padding: 0 !important;
+    }
     .contentRight {
         flex-direction: column !important;
     }
 
     #picGroup {
         padding: 0 10px;
+        overflow-y: hidden !important;
     }
 
     .landingImage {
@@ -144,8 +179,12 @@ body {
 
     .resCard,
     .contentLeft {
-        scale: 0.7;
+        scale: 0.9;
         z-index: 3002;
+    }
+    #center{
+        justify-content: center !important;
+        align-items: center !important;
     }
 
     #customNav {
