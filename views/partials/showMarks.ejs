@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/inputCustom.css" type="text/css">
 <div class="p-4 sm:ml-64 bg-gray-100 dark:bg-gray-900 dark:text-white">
     <div class="w-full h-full mt-10 bg-gray-100 dark:bg-gray-900 dark:text-white">
         <div class="container mx-auto py-8">
@@ -142,7 +143,7 @@
                                                     <%= subject %>
                                                 </th>
                                                 <td class="px-2 lg:px-4 py-2">
-                                                    <input type="text" name="marks[<%= term %>][<%= subject %>]"
+                                                    <input type="<%= subject === 'DRAWING' ? 'text' : 'number' %>" name="marks[<%= term %>][<%= subject %>]"
                                                         value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : '' %>"
                                                         class="w-full lg:w-2/3 px-3 py-1 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                                                         placeholder="Enter marks">

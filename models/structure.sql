@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS students (
     teacher_id INT,
     permanent_address VARCHAR(255),
     corresponding_address VARCHAR(255),
-    mobile_no VARCHAR(20),
+    mobile_no VARCHAR(40),
     paste_file_no VARCHAR(40),
     family_id VARCHAR(40),
     dob VARCHAR(10),
