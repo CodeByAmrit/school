@@ -11,7 +11,7 @@ async function getAllStudent(req, res) {
     let connection;
     try {
         connection = await getConnection();
-        const [rows] = await connection.execute('SELECT * FROM students WHERE teacher_id = ?', [teacher_id]);
+        const [rows] = await connection.execute('SELECT * FROM students WHERE teacher_id = ? LIMIT 100', [teacher_id]);
         return rows;
     } catch (error) {
         console.log(error);
@@ -289,8 +289,6 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     return result;
 }
 
-
-
 async function getStudentDetails(req, res) {
     const { name, roll_no, class: studentClass, srn_no, father_name, mother_name, session } = req.query;
     let connection;
@@ -437,7 +435,6 @@ async function teacherSignup(req, res) {
         }
     }
 }
-
 
 async function deleteStudent(req, res) {
     const school_id = req.params.id;

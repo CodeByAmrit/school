@@ -5,8 +5,8 @@
 
             <div
                 class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col md:flex-row xl:flex-row justify-center gap-10 mx-2 md:mx-8 lg:mx-8">
-                <div>
-                    <h2 class="text-xl font-semibold mb-4 dark:text-white">Student Details</h2>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-xl font-semibold dark:text-white">Student Details</h2>
 
                     <p><strong>Name:</strong>
                         <input type="text" value="<%= student.name %>" disabled
@@ -16,46 +16,94 @@
                         <input type="text" value="<%= student.class %>" disabled
                             class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
                     </p>
-                    <p><strong>Section:</strong>
-                        <input type="text" value="<%= student.section %>" disabled
+                    <p><strong>Father Name:</strong>
+                        <input type="text" value="<%= student.father_name %>" disabled
                             class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
                     </p>
                 </div>
                 <div>
                     <% if (performance.length) { %>
-                        <div class="relative overflow-x-auto">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <div class="relative overflow-x-auto ">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 lg:mt-5">
 
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                        <th scope="col" class="px-2 py-3 rounded-s-lg">
                                             Term
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            Grand Total
+                                            Grand&nbsp;Total
                                         </th>
-                                        <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                        <th scope="col" class="pl-6 py-3">
                                             Percentage
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            RANK/GRADE
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Remarks
+                                        </th>
+                                        <th scope="col" class="px-1 py-3 rounded-e-lg">
+                                            Actions
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% performance.forEach(p=> { %>
-                                        <tr class="bg-white dark:bg-gray-800">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <%= p.term %>
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                <%= p.grand_total %>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <%= (typeof parseFloat(p.percentage)==='number' &&
-                                                    !isNaN(parseFloat(p.percentage))) ?
-                                                    parseFloat(p.percentage).toFixed(2) : '0' %> %
-                                            </td>
-                                        </tr>
+                                        <form action="/action-rank/<%= p.term %>/<%= student.school_id %>" method="post">
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <th scope="row"
+                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <%= p.term %>
+                                                </th>
+                                                <td class="px-6 py-2">
+                                                    <%= p.grand_total %>
+                                                </td>
+                                                <td class="pl-6 py-2">
+                                                    <%= (typeof parseFloat(p.percentage)==='number' &&
+                                                        !isNaN(parseFloat(p.percentage))) ?
+                                                        parseFloat(p.percentage).toFixed(2) : '0' %> %
+                                                </td>
+                                                <td class="px-1 py-2">
+                                                    <input required type="text" name="grade" 
+                                                        value="<%= rank_remarks.find(r => r.term === p.term)?.grade || '' %>"
+                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                                                        Placeholder="Enter max marks">
+
+                                                </td>
+                                                <td class="px-1 py-2">
+                                                    <select name="remarks"
+                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                                        <% const currentRemark = rank_remarks.find(r => r.term === p.term)?.remarks || ''; %>
+                                                        <option value="<%= currentRemark %>" selected>
+                                                            <%= currentRemark || 'Select Remarks' %>
+                                                        </option>
+                                                        <% if (currentRemark !== 'Excellent') { %>
+                                                            <option value="Excellent">Excellent</option>
+                                                        <% } %>
+                                                        <% if (currentRemark !== 'Very Good') { %>
+                                                            <option value="Very Good">Very Good</option>
+                                                        <% } %>
+                                                        <% if (currentRemark !== 'Good') { %>
+                                                            <option value="Good">Good</option>
+                                                        <% } %>
+                                                        <% if (currentRemark !== 'Satisfactory') { %>
+                                                            <option value="Satisfactory">Satisfactory</option>
+                                                        <% } %>
+                                                        <% if (currentRemark !== 'Needs Improvement') { %>
+                                                            <option value="Needs Improvement">Needs Improvement</option>
+                                                        <% } %>
+                                                    </select>
+                                                </td>
+                                                <td class="px-1 py-2">
+                                                    <button type="submit"
+                                                        class="text-blue-700 px-4 py-2 rounded-lg  hover:text-blue-500 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+                                                        Save
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                         <% }); %>
                                 </tbody>
                             </table>
@@ -66,7 +114,6 @@
             </div>
 
             <div class="rounde mx-2 md:mx-8 lg:mx-8 pt-6 pb-8 mb-4">
-                <h2 class="text-xl font-semibold mb-4 dark:text-white">Marks Entry</h2>
 
                 <form action="/student/input-marks/<%= student.school_id %>" method="POST">
                     <input type="hidden" name="studentId" value="<%= student.school_id %>">
@@ -91,20 +138,20 @@
                                             <tr
                                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                                 <th scope="row"
-                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    class="px-2 lg:px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     <%= subject %>
                                                 </th>
-                                                <td class="px-6 py-4">
+                                                <td class="px-2 lg:px-4 py-2">
                                                     <input type="text" name="marks[<%= term %>][<%= subject %>]"
-                                                        value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : 0 %>"
-                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                                                        value="<%= marks[term] && marks[term][subject] ? marks[term][subject] : '' %>"
+                                                        class="w-full lg:w-2/3 px-3 py-1 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                                                         placeholder="Enter marks">
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td class="px-2 lg:px-4 py-2">
                                                     <input required type="text"
                                                         name="maxMarks[<%= term %>][<%= subject %>]"
                                                         value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : '100' %>"
-                                                        class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                                                        class="w-full lg:w-2/3 px-3 py-1 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                                                         placeholder="Enter max marks" <% if (maxMarks[term] &&
                                                         maxMarks[term][subject]) { %>
                                                     readonly <% } %> >

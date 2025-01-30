@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS student_marks (
     student_id INT NOT NULL,
     term INT NOT NULL,
     subject VARCHAR(50) NOT NULL,
-    marks VARCHAR(10),
+    marks VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE (student_id, term, subject),
@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS student_grade_remarks (
     grade VARCHAR(100),
     remarks VARCHAR(100),
     term INT NOT NULL,
+    UNIQUE (student_id, term),
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
@@ -120,7 +121,7 @@ CREATE TABLE IF NOT EXISTS maximum_marks (
     class VARCHAR(40) NOT NULL,
     term INT NOT NULL,
     subject VARCHAR(50) NOT NULL,
-    max_marks INT NOT NULL, -- Changed to INT for max_marks
+    max_marks VARCHAR(20) NOT NULL, -- Changed to INT for max_marks
     UNIQUE KEY (class, term, subject) -- Ensure each combination of class, term, and subject is unique
 );
 

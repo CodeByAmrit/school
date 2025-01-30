@@ -4,6 +4,7 @@ const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
   getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
   getFileCount, saveStudentMarks, getTotalStudents } = require('../components/student');
+const { generateCertificate } = require('../components/achievement');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
 const crypto = require('crypto');
@@ -42,7 +43,7 @@ router.get('/total-students', async (req, res) => {
       totalStudents = total_students;
       totalTeachers = total_teachers;
       connection.end();
-      res.json({ total_students: totalStudents, total_teachers: totalTeachers});
+      res.json({ total_students: totalStudents, total_teachers: totalTeachers });
     } catch (error) {
       console.log(error);
       res.json({ status: error.sqlMessage });
@@ -59,8 +60,9 @@ router.get('/total-students', async (req, res) => {
 });
 
 // Route to fetch the number of male and female students in each class for a given session
-router.get('/students/count/:session', async (req, res) => {
-  const { session } = req.params; // Extract session from path params
+router.get('/students/count/:session', checkAuth, async (req, res) => {
+  const { session } = req.params;
+  const teacher_id = req.user._id;
 
   if (!session) {
     return res.status(400).json({ error: 'Session parameter is required' });
@@ -73,12 +75,13 @@ router.get('/students/count/:session', async (req, res) => {
           COUNT(CASE WHEN gender = 'Female' THEN 1 END) AS female_count
       FROM students
       WHERE session = ?
+      and teacher_id = ?
       GROUP BY class;
   `;
 
   try {
     const connection = await getConnection(); // Get a connection
-    const [results] = await connection.query(query, [session]); // Execute the query with session as a parameter
+    const [results] = await connection.query(query, [session, teacher_id]); // Execute the query with session as a parameter
     connection.end(); // Close the connection
 
     res.status(200).json({ data: results });
@@ -88,20 +91,42 @@ router.get('/students/count/:session', async (req, res) => {
   }
 });
 
-
-router.get("/chart-data",checkAuth, async (req, res) => {
+// Create Certificate (Generate PDF)
+router.post('/create-certificate', checkAuth, async (req, res) => {
+  const { student_id, activity, date, type } = req.body;
+  let connection;
   try {
-      const connection = await getConnection();
-      const [rows] = await connection.execute(`
+    const connection = await getConnection();
+    const [student] = await connection.execute('SELECT * FROM students WHERE school_id = ?', [student_id]);
+    if (student.length > 0) {
+      const studentData = student[0];
+      const pdfBytes = await generateCertificate(studentData, activity, date, type);
+      res.contentType('application/pdf');
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline; filename=certificate.pdf");
+      res.send(Buffer.from(pdfBytes));
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get("/chart-data", checkAuth, async (req, res) => {
+  try {
+    const connection = await getConnection();
+    const [rows] = await connection.execute(`
           SELECT class AS label, COUNT(*) AS value
           FROM students
           GROUP BY class
       `);
-      connection.end();
-      res.json(rows);
+    connection.end();
+    res.json(rows);
   } catch (error) {
-      console.error("Error fetching chart data:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error fetching chart data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -111,7 +136,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
   let user = req.user;
   user.school_logo = school_logo_url;
 
-  const teacherId = req.user._id; 
+  const teacherId = req.user._id;
 
   try {
     // Fetch total students assigned to the teacher
@@ -119,12 +144,12 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
     const count_Files = await getFileCount(req, res);
 
-    const nonce = 'ozfWMSeQ06g862KcEoWVKg==' ;
+    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
 
     // Render dashboard EJS
     res.render('index', {
       nonce,
-      total_students: studentsCount, 
+      total_students: studentsCount,
       files_count: count_Files,
       user
     });
@@ -139,10 +164,11 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
 
 
-router.get('/certificates', checkAuth, async (req, res) => {
+router.get('/generate-certificate/:school_id', checkAuth, async (req, res) => {
   try {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
+    const school_id = req.params.school_id;
     console.log(studentsCount);
 
     const school_logo_url = await getSchoolLogo(req, res);
@@ -150,7 +176,7 @@ router.get('/certificates', checkAuth, async (req, res) => {
     user.school_logo = school_logo_url;
 
     const studentlist = await getAllStudent(req, res);
-    res.render('certificates', { studentlist, user, total_students: studentsCount });
+    res.render('certificates', {student_id: school_id, studentlist, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).send('Internal Server Error');
@@ -342,8 +368,8 @@ router.get('/profile', checkAuth, async (req, res, next) => {
   res.render('index', { studentlist });
 });
 
-// Generate and Preview certificate routes
-router.get('/generate/:school_id', checkAuth, async (req, res) => {
+// Generate and Preview Report Card routes
+router.get('/generate-report/:school_id', checkAuth, async (req, res) => {
   try {
     await generate(req, res);
   } catch (error) {
@@ -535,6 +561,11 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       [studentId]
     );
 
+    const [gradeRankRows] = await connection.execute(
+      'SELECT * FROM student_grade_remarks WHERE student_id = ?',
+      [studentId]
+    );
+
     // Fetch attendance and status for the student
     const [[student_attendance_status]] = await connection.execute(
       'SELECT attendance, status FROM student_attendance_status WHERE student_id = ?',
@@ -547,6 +578,8 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
     user.school_logo = school_logo_url;
 
     connection.end();
+
+    console.log(gradeRankRows);
     // Render the EJS view
     res.render('studentMarks', {
       user,
@@ -555,6 +588,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       marks,
       maxMarks,
       performance: performanceRows,
+      rank_remarks: gradeRankRows,
       student_attendance_status,
       total_students: studentsCount,
     });
@@ -745,12 +779,39 @@ async function executeProcedure(schoolId, action) {
 
   } catch (error) {
     console.log(error);
-  } finally{
+  } finally {
     connection.end();
   }
 
   return results;
 }
+
+// Route for rank and grading
+router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
+  const { id } = req.params;
+  const { term } = req.params;
+  const { grade, remarks } = req.body;
+  console.log(id);
+  let connection;
+  try {
+    connection = await getConnection();
+    await connection.execute(
+      `INSERT INTO student_grade_remarks (student_id, grade, remarks, term) 
+       VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+       grade = VALUES(grade),
+       remarks = VALUES(remarks)`,
+      [id, grade, remarks, term]
+    );
+
+    connection.end();
+
+    res.redirect(`/student/get_marks/${id}`);
+  } catch (error) {
+    console.error('Error ranking students:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // Route for promoting students
 router.post('/promote', checkAuth, async (req, res) => {

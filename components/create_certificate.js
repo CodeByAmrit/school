@@ -81,18 +81,25 @@ async function generate(req, res) {
             'SELECT attendance, status FROM student_attendance_status WHERE student_id = ?',
             [studentId]
         );
+        
+        // Fetch attendance and status for the student
+        const [grade_remarks] = await connection.execute(
+            'SELECT * FROM student_grade_remarks WHERE student_id = ?',
+            [studentId]
+        );
+
+        console.log(grade_remarks);
 
         // Load the certificate template
         const templatePath = path.join(__dirname, "../template/certificate_template.pdf");
         const templateBytes = fs.readFileSync(templatePath);
         const pdfDoc = await PDFDocument.load(templateBytes);
 
-        // Register fontkit with PDFDocument
-        pdfDoc.registerFontkit(fontkit);
 
         // Embed the bold font
         const fontPath = path.join(__dirname, "../template/Inter_18pt-Bold.ttf");
         const boldFontBytes = fs.readFileSync(fontPath);
+        pdfDoc.registerFontkit(fontkit);
         const boldFont = await pdfDoc.embedFont(boldFontBytes);
 
         // Get the first page of the PDF
@@ -100,7 +107,14 @@ async function generate(req, res) {
 
         // Add student details to the PDF
         firstPage.drawText(student.name, { x: 232, y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
-        firstPage.drawText(student.class, { x: 1021, y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        // Add class and section with superscript for ordinal indicators
+        const classText = student.class.replace(/(\d+)(st|nd|rd|th)/, "$1");
+        const ordinalIndicator = student.class.match(/(\d+)(st|nd|rd|th)/) ? student.class.match(/(\d+)(st|nd|rd|th)/)[2] : "";
+        firstPage.drawText(classText, { x: 1021, y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        if (ordinalIndicator) {
+            firstPage.drawText(ordinalIndicator, { x: 1021 + boldFont.widthOfTextAtSize(classText, 34), y: 2725 + 10, size: 20, font: boldFont, color: rgb(0, 0, 0) });
+        }
+        firstPage.drawText(` & ${student.section}`, { x: 1021 + boldFont.widthOfTextAtSize(classText + ordinalIndicator, 34), y: 2725, size: 34, font: boldFont, color: rgb(0, 0, 0) });
         firstPage.drawText(student.father_name, { x: 232, y: 2586, size: 34, font: boldFont, color: rgb(0, 0, 0) });
         firstPage.drawText(student.mother_name, { x: 1021, y: 2586, size: 34, font: boldFont, color: rgb(0, 0, 0) });
         firstPage.drawText(student.roll, { x: 232, y: 2444, size: 34, font: boldFont, color: rgb(0, 0, 0) });
@@ -136,11 +150,29 @@ async function generate(req, res) {
         const startYPosition = 2192; // Starting Y position for marks
         const rowHeight = 81; // Height between rows
         let termGrandTotal = 0;
+
+        // Define the desired order of subjects
+        const subjectOrder = [
+            "ENGLISH",
+            "HINDI",
+            "MATHEMATICS",
+            "SOCIAL SCIENCE/EVS",
+            "SCIENCE",
+            "COMPUTER",
+            "DRAWING",
+            "GENERAL KNOWLEDGE"
+        ];
+
         // Iterate over each term and add marks
         Object.keys(marksByTerm).forEach((term, termIndex) => {
             const termMarks = marksByTerm[term];
-            const startX = startXPositions[termIndex];
 
+            // Sort termMarks based on the desired subject order
+            termMarks.sort((a, b) => {
+                return subjectOrder.indexOf(a.subject) - subjectOrder.indexOf(b.subject);
+            });
+
+            const startX = startXPositions[termIndex];
 
             termMarks.forEach((mark, i) => {
                 const yPosition = startYPosition - (i * rowHeight);
@@ -155,11 +187,12 @@ async function generate(req, res) {
                 if (termIndex === 0) {
                     const maxMarksForSubject = maxMarks[term] && maxMarks[term][mark.subject] ? maxMarks[term][mark.subject] : "N/A";
                     firstPage.drawText(maxMarksForSubject.toString(), { x: 857, y: yPosition, size: 34, color: rgb(0, 0, 0) });
-                    termGrandTotal = termGrandTotal + maxMarksForSubject;
+                    const maxMarksForSubjectInt = parseInt(maxMarksForSubject, 10);
+                    if (!isNaN(maxMarksForSubjectInt)) {
+                        termGrandTotal += maxMarksForSubjectInt;
+                    }
                 }
             });
-
-
 
             // Display Total Marks and Percentage at the correct position
             const totalYPosition = startYPosition - (termMarks.length * rowHeight);
@@ -188,11 +221,24 @@ async function generate(req, res) {
         });
 
         firstPage.drawText(termGrandTotal.toString(), { x: 862, y: 1544, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+        let xvalue = 1293;
+        let yvalue = 1161;
+
+        grade_remarks.forEach((grade_remark, i) => {
+            firstPage.drawText(grade_remark.grade, { x: xvalue, y: 1380, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+            firstPage.drawText(grade_remark.remarks, { x: 525, y: yvalue, size: 34, font: boldFont, color: rgb(0, 0, 0) });
+            xvalue += 400;  
+            yvalue -= 244;
+        })
+        firstPage.drawText(termGrandTotal.toString(), { x: 862, y: 1544, size: 34, font: boldFont, color: rgb(0, 0, 0) });
 
         // Save the PDF and send it to the client
         const pdfBytes = await pdfDoc.save();
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", "inline; filename=certificate.pdf");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
         res.send(Buffer.from(pdfBytes));
     } catch (error) {
         console.error("Error generating certificate:", error);
