@@ -3,7 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
   getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
-  getFileCount, saveStudentMarks, getTotalStudents } = require('../components/student');
+  getFileCount, saveStudentMarks, getTotalStudents, getSchoolLogo } = require('../components/student');
 const { generateCertificate } = require('../components/achievement');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
@@ -14,16 +14,6 @@ const pdf = require('pdf-lib'); // Import pdf-lib for PDF conversion
 const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
-
-async function getSchoolLogo(req, res) {
-  let school_logo_url = "/image/graduated.png";
-  const school_logo = await get_school_logo(req, res);
-  if (school_logo !== null) {
-    const school_logo_ = school_logo.school_logo.toString('base64');
-    school_logo_url = `data:image/png;base64,${school_logo_}`;
-  }
-  return school_logo_url;
-}
 
 // Route to get total students count
 router.get('/total-students', async (req, res) => {

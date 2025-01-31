@@ -26,7 +26,7 @@ function confirmDelete(event, link) {
     }
 }
 // JavaScript to handle "Select All" checkbox
-document.getElementById('select-all').addEventListener('change', function () {
+document.getElementById('checkbox-all-search').addEventListener('change', function () {
     const isChecked = this.checked;
     const checkboxes = document.querySelectorAll('.student-checkbox');
     checkboxes.forEach(checkbox => {

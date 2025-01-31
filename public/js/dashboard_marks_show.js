@@ -82,17 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('load', () => {
-    if (!localStorage.getItem('introShown')) {
+    setTimeout(() => {
+        const introScreen = document.getElementById('introScreen');
+        introScreen.style.transition = 'opacity 1s ease-out';
+        introScreen.style.opacity = '0';
         setTimeout(() => {
-            const introScreen = document.getElementById('introScreen');
-            introScreen.style.transition = 'opacity 1s ease-out';
-            introScreen.style.opacity = '0';
-            setTimeout(() => {
-                introScreen.style.display = 'none';
-                localStorage.setItem('introShown', 'true');
-            }, 1000);
+            introScreen.style.display = 'none';
+            localStorage.setItem('introShown', 'true');
         }, 1000);
-    } else {
-        document.getElementById('introScreen').style.display = 'none';
-    }
-});
+    }, 1000);
+}
+);

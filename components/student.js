@@ -11,7 +11,11 @@ async function getAllStudent(req, res) {
     let connection;
     try {
         connection = await getConnection();
-        const [rows] = await connection.execute('SELECT * FROM students WHERE teacher_id = ? LIMIT 100', [teacher_id]);
+        const [rows] = await connection.execute(`SELECT name, father_name, session, mother_name, class, school_id, 
+                              COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image 
+                              
+                                FROM student_photos_view 
+                                WHERE teacher_id = ?`, [teacher_id]);
         return rows;
     } catch (error) {
         console.log(error);
@@ -673,12 +677,20 @@ async function getFileCount(req, res) {
     }
 }
 
-
+async function getSchoolLogo(req, res) {
+    let school_logo_url = "/image/graduated.png";
+    const school_logo = await get_school_logo(req, res);
+    if (school_logo !== null) {
+      const school_logo_ = school_logo.school_logo.toString('base64');
+      school_logo_url = `data:image/png;base64,${school_logo_}`;
+    }
+    return school_logo_url;
+  }
 
 
 module.exports = {
     getAllStudent, teacherLogin, getStudentMarksBySchoolId, getFileCount,
     getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
     getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
-    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents
+    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents, getSchoolLogo
 }

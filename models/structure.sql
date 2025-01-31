@@ -65,6 +65,22 @@ CREATE TABLE IF NOT EXISTS photo (
     FOREIGN KEY (id) REFERENCES students (school_id)
 );
 
+CREATE VIEW student_photos_base64 AS
+SELECT 
+    id,
+    TO_BASE64(image) AS image_base64,
+    TO_BASE64(student_sign) AS student_sign_base64
+FROM photo;
+
+
+CREATE OR REPLACE VIEW student_photos_view AS
+SELECT s.name, s.father_name, s.session, s.mother_name, s.class, s.school_id, s.teacher_id, 
+       TO_BASE64(p.image) AS image_base64, 
+       TO_BASE64(p.student_sign) AS student_sign_base64
+FROM students s
+LEFT JOIN photo p ON s.school_id = p.id;
+
+
 -- Table for storing student marks by term and subject
 CREATE TABLE IF NOT EXISTS student_marks (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -210,12 +226,16 @@ BEGIN
     DECLARE new_class VARCHAR(40);
     DECLARE class_order VARCHAR(255);
     DECLARE i INT;
+    DECLARE current_session VARCHAR(40);
+    DECLARE new_session VARCHAR(40);
+    DECLARE start_year INT;
+    DECLARE end_year INT;
     
     -- Define the class order
     SET class_order = 'NURSERY,KG,1ST,2ND,3RD,4TH,5TH,6TH,7TH,8TH,9TH,10TH,11TH,12TH';
     
-    -- Get the current class of the student
-    SELECT class INTO current_class
+    -- Get the current class and session of the student
+    SELECT class, session INTO current_class, current_session
     FROM students
     WHERE school_id = p_school_id;
     
@@ -227,12 +247,17 @@ BEGIN
     -- Find the index of the current class in the class_order list
     SET i = FIND_IN_SET(current_class, class_order);
     
+    -- Extract the start and end year from the current session
+    SET start_year = CAST(SUBSTRING_INDEX(current_session, '-', 1) AS UNSIGNED);
+    SET end_year = CAST(SUBSTRING_INDEX(current_session, '-', -1) AS UNSIGNED);
+    
     -- Promote or demote based on the action
     IF p_action = 'promote' THEN
         -- If it's not the last class, promote to the next class
         IF i < (LENGTH(class_order) - LENGTH(REPLACE(class_order, ',', '')) + 1) THEN
             SET new_class = ELT(i + 1, 'NURSERY', 'KG', '1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH', '9TH', '10TH', '11TH', '12TH');
-            UPDATE students SET class = new_class WHERE school_id = p_school_id;
+            SET new_session = CONCAT(start_year + 1, '-', end_year + 1);
+            UPDATE students SET class = new_class, session = new_session WHERE school_id = p_school_id;
         ELSE
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Student is in the highest class';
         END IF;
@@ -240,7 +265,8 @@ BEGIN
         -- If it's not the first class, demote to the previous class
         IF i > 1 THEN
             SET new_class = ELT(i - 1, 'NURSERY', 'KG', '1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH', '9TH', '10TH', '11TH', '12TH');
-            UPDATE students SET class = new_class WHERE school_id = p_school_id;
+            SET new_session = CONCAT(start_year - 1, '-', end_year - 1);
+            UPDATE students SET class = new_class, session = new_session WHERE school_id = p_school_id;
         ELSE
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Student is in the lowest class';
         END IF;

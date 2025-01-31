@@ -3,6 +3,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const router = require("./router/route");
+const student = require("./router/student");
 const favicon = require("serve-favicon");
 const helmet = require("helmet"); // For security headers
 const rateLimit = require("express-rate-limit"); // To prevent brute-force attacks
@@ -58,6 +59,7 @@ class App {
         this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
         this.app.use("/flowbite", express.static(path.join(__dirname, "node_modules/flowbite/dist")));
         this.app.use("/apexcharts", express.static(path.join(__dirname, "node_modules", "apexcharts", "dist")));
+        this.app.use("/simple-datatables", express.static(path.join(__dirname, "node_modules", "simple-datatables", "dist")));
         this.app.use("/output", express.static(path.join(__dirname, "output")));
     
         // Serve favicon
@@ -70,6 +72,9 @@ class App {
 
         // Mount the router
         this.app.use("/", router);
+
+        // 
+        this.app.use("/api/students/", student);
     }
 
     // Error Handling Configuration
