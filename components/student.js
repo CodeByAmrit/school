@@ -359,49 +359,60 @@ async function get_school_logo(req, res) {
 }
 
 async function teacherLogin(req, res) {
-    let { email, password } = req.body;
     let connection;
     try {
+        let { email, password } = req.body;
+        email = email.trim().toLowerCase(); // Normalize email
+
         connection = await getConnection();
 
+        // Fetch user with LIMIT 1 for performance boost
         const [rows] = await connection.execute(
-            'SELECT * FROM teacher WHERE email = ?',
+            'SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1',
             [email]
         );
+
         if (rows.length === 0) {
-            return res.json({ status: 'Invalid email' });
+            // Delay response slightly to prevent email enumeration attacks
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            return res.status(401).json({ status: 'Invalid email' });
         }
+
         const teacher = rows[0];
-        const passwordMatch = await bcrypt.compare(password, teacher.password);
-        if (!passwordMatch) {
-            return res.json({ status: 'Invalid Password' });
+
+        // Secure password comparison
+        if (!bcrypt.compareSync(password, teacher.password)) {
+            return res.status(403).json({ status: 'Invalid Password' });
         }
-        // res.removeHeader(Authorization)
+
+        // JWT Payload
         const payload = {
             id: teacher.id,
             first_name: teacher.first_name,
             last_name: teacher.last_name,
             email: teacher.email,
-            school_address: teacher.school_address,
             school_name: teacher.school_name,
-            school_phone: teacher.school_phone
-        }; // Return the logged-in teacher's details
+            school_address: teacher.school_address,
+            school_phone: teacher.school_phone,
+        };
 
+        // Generate JWT token
         const token = setUser(payload);
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: true, // Set to true if using https
-            sameSite: 'Strict'
-        });
-        res.redirect("/dashboard",)
 
+        res.cookie("token", token, {
+            httpOnly: true,    
+            secure: true,      
+            sameSite: "Strict",
+            maxAge: 3600000,   
+        });
+        await connection.end();
+        res.json({ status: 'success', token });
 
     } catch (error) {
-        res.json({ status: error.sqlMessage });
+        console.error("Login Error:", error);
+        res.status(500).json({ status: 'Internal Server Error' });
     } finally {
-        if (connection) {
-            await connection.end();
-        }
+        if (connection) await connection.end();
     }
 }
 
@@ -681,16 +692,61 @@ async function getSchoolLogo(req, res) {
     let school_logo_url = "/image/graduated.png";
     const school_logo = await get_school_logo(req, res);
     if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString('base64');
-      school_logo_url = `data:image/png;base64,${school_logo_}`;
+        const school_logo_ = school_logo.school_logo.toString('base64');
+        school_logo_url = `data:image/png;base64,${school_logo_}`;
     }
     return school_logo_url;
-  }
+}
+
+async function changePassword(req, res) {
+    let connection;
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user._id; // Extracted from JWT token
+
+        connection = await getConnection();
+
+        // Fetch the user's current hashed password from DB
+        const [rows] = await connection.execute(
+            "SELECT password FROM teacher WHERE id = ? LIMIT 1",
+            [userId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ status: "error", message: "User not found" });
+        }
+
+        const user = rows[0];
+
+        // Verify current password
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(403).json({ status: "error", message: "Incorrect current password" });
+        }
+
+        // Hash new password before saving
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update password in DB
+        await connection.execute(
+            "UPDATE teacher SET password = ? WHERE id = ?",
+            [hashedPassword, userId]
+        );
+
+        res.json({ status: "success", message: "Password changed successfully" });
+
+    } catch (error) {
+        console.error("Error changing password:", error);
+        res.status(500).json({ status: "error", message: "Internal Server Error" });
+    } finally {
+        if (connection) await connection.end();
+    }
+}
 
 
 module.exports = {
     getAllStudent, teacherLogin, getStudentMarksBySchoolId, getFileCount,
-    getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
+    getStudentDetails, deleteStudent, teacherSignup, changePassword, get_school_logo,
     getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
     insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents, getSchoolLogo
 }

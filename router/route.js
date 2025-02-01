@@ -1,7 +1,7 @@
 const express = require('express');
 const checkAuth = require('../services/checkauth');
 const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
-  getStudentDetails, deleteStudent, teacherSignup, get_school_logo,
+  getStudentDetails, deleteStudent, teacherSignup, changePassword, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
   getFileCount, saveStudentMarks, getTotalStudents, getSchoolLogo } = require('../components/student');
 const { generateCertificate } = require('../components/achievement');
@@ -166,7 +166,7 @@ router.get('/generate-certificate/:school_id', checkAuth, async (req, res) => {
     user.school_logo = school_logo_url;
 
     const studentlist = await getAllStudent(req, res);
-    res.render('certificates', {student_id: school_id, studentlist, user, total_students: studentsCount });
+    res.render('certificates', { student_id: school_id, studentlist, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).send('Internal Server Error');
@@ -322,6 +322,27 @@ router.post('/signup', upload.single("school_logo"), async (req, res) => {
     console.error('Error signing up teacher:', error);
     res.status(400).send('Signup Failed');
   }
+});
+
+
+router.post("/change-password", checkAuth, changePassword);
+
+router.get("/change-password", checkAuth, async (req, res) => {
+  let school_logo_url = "/image/graduated.png";
+  const school_logo = await get_school_logo(req, res);
+  if (school_logo !== null) {
+    const school_logo_ = school_logo.school_logo.toString('base64');
+    school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+  }
+
+  const studentsCount = await getTotalStudents(req, res);
+  
+
+  let user = req.user;
+  user.school_logo = school_logo_url;
+
+
+  res.render("change-password", { user, total_students: studentsCount  });
 });
 
 router.post('/login', async (req, res) => {
