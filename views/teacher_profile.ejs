@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Teacher Profile</h2>
+        
+        <div class="flex space-x-6">
+            <div class="w-32 h-32 overflow-hidden rounded-full border border-gray-300">
+                <% if (base64Image) { %>
+                    <img src="<%= base64Image %>" alt="School Logo" class="w-full h-full object-cover">
+                <% } else { %>
+                    <p class="text-gray-400 text-center mt-10">No Logo</p>
+                <% } %>
+            </div>
+            <div>
+                <p class="text-gray-600"><strong>Name:</strong> <%= teacher.first_name %> <%= teacher.last_name %></p>
+                <p class="text-gray-600"><strong>Email:</strong> <%= teacher.email %></p>
+                <p class="text-gray-600"><strong>School:</strong> <%= teacher.school_name %></p>
+                <p class="text-gray-600"><strong>Address:</strong> <%= teacher.school_address %></p>
+                <p class="text-gray-600"><strong>Phone:</strong> <%= teacher.school_phone %></p>
+            </div>
+        </div>
+
+        <button id="editBtn" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg">Edit</button>
+
+        <form id="editForm" action="/teacher/profile/update/<%= teacher.id %>" method="POST" enctype="multipart/form-data" class="hidden mt-6 space-y-6">
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="<%= teacher.first_name %>" class="uppercase mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="w-1/2">
+                    <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="<%= teacher.last_name %>" class="uppercase mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" value="<%= teacher.email %>" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <label for="school_name" class="block text-sm font-medium text-gray-700">School Name</label>
+                    <input type="text" id="school_name" name="school_name" value="<%= teacher.school_name %>" class="uppercase mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="w-1/2 max-h-20">
+                    <div class="flex items-center justify-center w-full px-10 mt-5">
+                        <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500 text-center"><span class="font-semibold">Click to upload School LOGO</span><br>or drag and drop</p>
+                                <p class="text-xs text-gray-500">PNG, JPG (MAX. 800x400px)</p>
+                            </div>
+                            <input id="dropzone-file" type="file" name="school_logo" class="hidden" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="school_address" class="block text-sm font-medium text-gray-700">School Address</label>
+                <input type="text" id="school_address" name="school_address" value="<%= teacher.school_address %>" class="uppercase w-1/2 mt-1 block  p-2 border border-gray-300 rounded-md">
+            </div>
+            <div>
+                <label for="school_phone" class="block text-sm font-medium text-gray-700">School Phone No</label>
+                <input type="text" id="school_phone" name="school_phone" value="<%= teacher.school_phone %>" placeholder="xxx xxx xxxx, xxx xxx xxxx" class="uppercase mt-1 block w-1/2 p-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="flex justify-start">
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">Update</button>
+            </div>
+        </form>
+    </div>
+
+    <script nonce='ozfWMSeQ06g862KcEoWVKg=='>
+        document.getElementById('editBtn').addEventListener('click', () => {
+            document.getElementById('editForm').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

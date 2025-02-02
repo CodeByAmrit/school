@@ -12,7 +12,7 @@
     <div class="flex justify-center">
         <!-- Left Section -->
         <div
-            class="hidden fixed top-0 left-0 lg:flex flex-col w-1/3 bg-gradient-to-b from-blue-500 to-blue-400 text-white p-6 h-screen dark:from-gray-800 dark:to-gray-700">
+            class="hidden fixed top-0 left-0 lg:flex flex-col w-1/3 bg-gradient-to-b bg-blue-700 text-white p-6 h-screen dark:from-gray-800 dark:to-gray-700">
             <div class="flex justify-between items-center">
                 <div class="text-lg font-bold">Student Tracker</div>
                 <a href="index.html">
@@ -143,42 +143,7 @@
                     </form>
                 </div>
             </div>
-        </div>
-
-        <!-- Forget Password -->
-        <div id="forgetPassword"
-            class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 dark:bg-opacity-80 flex justify-center items-center">
-            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-1/3">
-                <div class="p-4 border-b dark:border-gray-700">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Forgot Your Login Info?</h2>
-                    <button
-                        class="float-right text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                        onclick="document.getElementById('forgetPassword').classList.add('hidden')">&times;</button>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Please enter your email below and password
-                        change
-                        instructions will be
-                        sent to you.</p>
-                    <div class="mt-4">
-                        <label for="exampleFormControlInput1"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email
-                            *</label>
-                        <input type="email" id="exampleFormControlInput1"
-                            class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
-                    </div>
-                </div>
-                <div class="p-4 border-t dark:border-gray-700 flex justify-between">
-                    <button
-                        class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
-                        onclick="document.getElementById('forgetPassword').classList.add('hidden')">Close</button>
-                    <button
-                        class="bg-blue-500 dark:bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700">Send
-                        Password Reset
-                        Email</button>
-                </div>
-            </div>
-        </div>
+        </div>        
 
     </div>
 

@@ -374,9 +374,54 @@ router.get("/signup", (req, res) => {
 
 });
 
-router.get('/profile', checkAuth, async (req, res, next) => {
-  const studentlist = await getAllStudent(req, res);
-  res.render('index', { studentlist });
+// Route to get teacher details
+router.get("/teacher/profile/:id", async (req, res) => {
+  const teacherId = req.params.id;
+  let connection;
+
+  try {
+      connection = await getConnection();
+      const [rows] = await connection.execute("SELECT * FROM teacher WHERE id = ?", [teacherId]);
+
+      if (rows.length === 0) {
+          return res.status(404).send("Teacher not found");
+      }
+
+      const teacher = rows[0];
+      let base64Image = teacher.school_logo ? `data:image/png;base64,${teacher.school_logo.toString("base64")}` : null;
+
+      res.render("teacher_profile", { teacher, base64Image });
+  } catch (error) {
+      console.error("Error fetching teacher details:", error);
+      res.status(500).send("Internal Server Error");
+  } finally {
+      if (connection) connection.end();
+  }
+});
+
+// Route to update teacher details
+router.post("/teacher/profile/update/:id", upload.single("school_logo"), async (req, res) => {
+  const teacherId = req.params.id;
+  const { first_name, last_name, email, school_name, school_address, school_phone } = req.body;
+  const school_logo = req.file ? req.file.buffer : null;
+  
+  let connection;
+  try {
+      connection = await getConnection();
+      const query = `
+          UPDATE teacher 
+          SET first_name = ?, last_name = ?, email = ?, school_name = ?, 
+              school_address = ?, school_phone = ?, school_logo = ?
+          WHERE id = ?`;
+      
+      await connection.execute(query, [first_name, last_name, email, school_name, school_address, school_phone, school_logo, teacherId]);
+      res.redirect(`/teacher/profile/${teacherId}`);
+  } catch (error) {
+      console.error("Error updating teacher details:", error);
+      res.status(500).send("Internal Server Error");
+  } finally {
+      if (connection) connection.end();
+  }
 });
 
 // Generate and Preview Report Card routes

@@ -16,8 +16,6 @@ function confirmDelete(event, link) {
 
     // If the user clicked "Yes", proceed to the link
     if (isConfirmed) {
-        // event.preventDefault();
-
         return true;
     } else {
         // If the user clicked "No", prevent the link from being followed
@@ -25,6 +23,7 @@ function confirmDelete(event, link) {
         return false;
     }
 }
+
 // JavaScript to handle "Select All" checkbox
 document.getElementById('checkbox-all-search').addEventListener('change', function () {
     const isChecked = this.checked;
@@ -111,25 +110,10 @@ function getSelectedStudents() {
     return selectedStudents;
 }
 
-// if (document.getElementById("student-table") && typeof simpleDatatables.DataTable !== 'undefined') {
-//     // const dataTable = new simpleDatatables.DataTable("#student-table", {
-//     //     searchable: false,
-//     //     perPageSelect: false
-//     // });
-//     const dataTable = new simpleDatatables.DataTable("#student-table", {
-//         searchable: false,
-//         perPageSelect: false,
-//         perPage: 50, // set the number of rows per page
-//         perPageSelect: [50, 100, 200, 500], // set the number of rows per page options
-//          // enable or disable the next and previous buttons
-//     });
-//     // Observer to reapply Tailwind styles when new pages are inserted
-//     dataTable.on("datatable.update", function () {
-//         setTimeout(() => {
-//             document.querySelectorAll('.datatable-pagination li').forEach(el => {
-//                 el.classList.add("bg-gray-200", "px-3", "py-1", "rounded", "cursor-pointer", "hover:bg-gray-300");
-//             });
-//             document.querySelector('.datatable-pagination .active')?.classList.add("bg-blue-500", "text-white");
-//         }, 50);
-//     });
-// }
+const dataTable = new simpleDatatables.DataTable("#student-table", {
+    searchable: true,
+    perPageSelect: true,
+    perPage: 50,
+    perPageSelect: [50, 100, 200, 500],
+
+});
