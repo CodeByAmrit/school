@@ -3,6 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getConnection } = require("../models/getConnection");
 const student = express.Router();
 const { getSchoolLogo, getFileCount, getTotalStudents } = require('../components/student');
+const {generateVirtualIdCard, generateVirtualIdCards_with_session} = require('../components/virtual_id_card');
 
 student.get('/get/', checkAuth, async (req, res) => {
     try {
@@ -51,5 +52,8 @@ student.get('/accounts', checkAuth, async (req, res) => {
     }
 });
 
+
+student.get('/get/virual-card/:school_id', checkAuth, generateVirtualIdCard);
+student.get('/all/virual-card/:session', checkAuth, generateVirtualIdCards_with_session);
 
 module.exports = student;
