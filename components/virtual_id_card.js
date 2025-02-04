@@ -25,7 +25,7 @@ async function generateVirtualIdCard(req, res, next) {
 
         const firstPage = pdfDoc.getPages()[0];
 
-        if (photo.image.length > 0) {
+        if (photo != undefined) {
             try {
                 const pngBuffer = await sharp(Buffer.from(photo.image))
                     .resize(300, 380)

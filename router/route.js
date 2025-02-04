@@ -515,16 +515,6 @@ router.post("/update-student/:id", checkAuth, upload.fields([{ name: 'photo' }, 
   }
 });
 
-const subjects = [
-  "ENGLISH",
-  "HINDI",
-  "MATHEMATICS",
-  "SOCIAL SCIENCE/EVS",
-  "SCIENCE",
-  "COMPUTER",
-  "GENERAL KNOWLEDGE",
-  "DRAWING"
-];
 // Route to get marks for a single student by school ID
 router.get('/marks/school/:schoolId', checkAuth, async (req, res) => {
   const { schoolId } = req.params;
@@ -635,7 +625,30 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
 
     connection.end();
 
-    console.log(gradeRankRows);
+    console.log(student.class);
+    let subjects = [
+      "ENGLISH",
+      "HINDI",
+      "MATHEMATICS",
+      "SOCIAL SCIENCE/EVS",
+      "SCIENCE",
+      "COMPUTER",
+      "GENERAL KNOWLEDGE",
+      "DRAWING"
+    ];
+
+    if (student.class === "NURSERY" || student.class === "KG" ) {
+      subjects = [
+        "ENGLISH (WR.)",
+        "ENGLISH ORAL",
+        "HINDI (WR.)",
+        "HINDI ORAL",
+        "MATHS (WR.)",
+        "MATHS ORAL",
+        "DRAWING",
+        "GENERAL KNOWLEDGE"
+      ];
+    }
     // Render the EJS view
     res.render('studentMarks', {
       user,

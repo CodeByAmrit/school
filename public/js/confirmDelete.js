@@ -110,10 +110,10 @@ function getSelectedStudents() {
     return selectedStudents;
 }
 
-const dataTable = new simpleDatatables.DataTable("#student-table", {
-    searchable: true,
-    perPageSelect: true,
-    perPage: 50,
-    perPageSelect: [50, 100, 200, 500],
+// const dataTable = new simpleDatatables.DataTable("#student-table", {
+//     searchable: true,
+//     perPageSelect: true,
+//     perPage: 50,
+//     perPageSelect: [50, 100, 200, 500],
 
-});
+// });

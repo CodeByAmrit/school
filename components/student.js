@@ -298,15 +298,17 @@ async function getStudentDetails(req, res) {
     let connection;
     try {
         connection = await getConnection();
-        let query = 'SELECT * FROM students WHERE 1=1';
-        const params = [];
+        // let query = 'SELECT * FROM student_photos_view WHERE 1=1';
+        let query = `SELECT name, father_name, session, mother_name, class, school_id, COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image FROM student_photos_view
+             WHERE teacher_id = ?`;
+        const params = [req.user._id];
 
         if (name) {
             query += ' AND name LIKE ?';
             params.push(`%${name}%`);
         }
         if (roll_no) {
-            query += ' AND roll_no LIKE ?';
+            query += ' AND roll LIKE ?';
             params.push(`%${roll_no}%`);
         }
         if (studentClass) {
@@ -331,6 +333,7 @@ async function getStudentDetails(req, res) {
         }
 
         const [rows] = await connection.execute(query, params);
+        console.log(rows);
         return rows;
     } catch (error) {
         console.log(error);
