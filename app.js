@@ -54,13 +54,20 @@ class App {
         this.app.use(cookieParser());
     
         // Serve static files and set up path aliases
-        this.app.use(express.static(path.join(__dirname, "public")));
+        // this.app.use(express.static(path.join(__dirname, "public")));
         this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
         this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
         this.app.use("/flowbite", express.static(path.join(__dirname, "node_modules/flowbite/dist")));
         this.app.use("/apexcharts", express.static(path.join(__dirname, "node_modules", "apexcharts", "dist")));
         this.app.use("/simple-datatables", express.static(path.join(__dirname, "node_modules", "simple-datatables", "dist")));
         this.app.use("/output", express.static(path.join(__dirname, "output")));
+
+        this.app.use(express.static(path.join(__dirname, "public"), {
+            setHeaders: (res, path) => {
+                res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins (Gmail needs this)
+                res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 1 day
+            }
+        }));
     
         // Serve favicon
         this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));

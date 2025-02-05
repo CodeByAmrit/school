@@ -97,6 +97,43 @@ document.getElementById('demote-button').addEventListener('click', function () {
     }
 });
 
+document.getElementById('selected_id_card_button').addEventListener('click', function () {
+    const selectedStudents = getSelectedStudents();
+    console.log(selectedStudents);
+
+    if (selectedStudents.length > 0) {
+        fetch('/api/students/virtual-cards', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studentIds: selectedStudents.map(student => student.id)
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to generate PDF');
+            }
+            return response.blob(); // Convert response to binary blob
+        })
+        .then(blob => {
+            const pdfUrl = URL.createObjectURL(blob); // Create a temporary URL
+            const a = document.createElement("a"); // Create a hidden <a> element
+            a.href = pdfUrl;
+            a.download = "ID-Cards.pdf"; // Set the default filename
+            document.body.appendChild(a);
+            a.click(); // Trigger the download
+            document.body.removeChild(a); // Remove the element after download
+            URL.revokeObjectURL(pdfUrl); // Clean up the temporary URL
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred: ' + error.message);
+        });
+    }
+});
+
 // Function to get selected students
 function getSelectedStudents() {
     const checkboxes = document.querySelectorAll('.student-checkbox:checked');

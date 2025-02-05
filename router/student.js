@@ -2,8 +2,11 @@ const express = require('express');
 const checkAuth = require('../services/checkauth');
 const { getConnection } = require("../models/getConnection");
 const student = express.Router();
-const { getSchoolLogo, getFileCount, getTotalStudents } = require('../components/student');
-const {generateVirtualIdCard, generateVirtualIdCards_with_session} = require('../components/virtual_id_card');
+const { getSchoolLogo, getFileCount, getTotalStudents, } = require('../components/student');
+const { generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard } = require('../components/virtual_id_card');
+const { sendEmail, sendOTPEmail } = require('../components/email');
+
+
 
 student.get('/get/', checkAuth, async (req, res) => {
     try {
@@ -55,5 +58,44 @@ student.get('/accounts', checkAuth, async (req, res) => {
 
 student.get('/get/virual-card/:school_id', checkAuth, generateVirtualIdCard);
 student.get('/all/virual-card/:session', checkAuth, generateVirtualIdCards_with_session);
+
+student.post('/virtual-cards', checkAuth, selectedVirtualIdCard);
+
+// email test route
+student.get('/mail', checkAuth, async (req, res) => {
+    // Example student data
+    const studentData = {
+        name: "John Doe",
+        admissionStatus: "Approved",
+        attendance: 95,
+        marksObtained: 450,
+        totalMarks: 500,
+        percentage: 90,
+        actionUrl: "https://student.codebyamrit.co.in/dashboard",
+    };
+
+    // Send email
+    sendEmail("amritsharma54300@gmail.com", studentData);
+
+});
+
+student.get('/otp', checkAuth, async (req, res) => {
+    // Example student data
+    const studentData = {
+        name: "John Doe",
+        admissionStatus: "Approved",
+        attendance: 95,
+        marksObtained: 450,
+        totalMarks: 500,
+        percentage: 90,
+        actionUrl: "https://student.codebyamrit.co.in/dashboard",
+    };
+
+    // Send email
+    const otpStatus = sendOTPEmail("amritsharma54300@gmail.com", "654321");
+    if(otpStatus){
+        return res.json({message: "OTP sent successfully"});
+    }
+});
 
 module.exports = student;

@@ -225,6 +225,119 @@ async function generateVirtualIdCards_with_session(req, res, next) {
     }
 }
 
+async function selectedVirtualIdCard(req, res) {
+    const { studentIds } = req.body; 
+    const schoolData = req.user;
+    console.log(studentIds);
+
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+        return res.status(400).json({ message: "Invalid or empty student ID list." });
+    }
+
+    let connection;
+    try {
+        connection = await getConnection();
+
+        // Fix SQL query for IN clause
+        const placeholders = studentIds.map(() => "?").join(",");
+        const [students] = await connection.execute(
+            `SELECT school_id, name, class, dob, mobile_no, session, admission_no, corresponding_address 
+             FROM students 
+             WHERE teacher_id = ? AND school_id IN (${placeholders})`,
+            [req.user._id, ...studentIds]
+        );
+
+        if (students.length === 0) {
+            return res.status(404).json({ message: "No students found for the given IDs." });
+        }
+
+        // Fetch school logo
+        const [[schoolLogo]] = await connection.execute(
+            "SELECT school_logo FROM teacher WHERE id = ?",
+            [req.user._id]
+        );
+
+        // Load the certificate template
+        const templatePath = path.join(__dirname, "../template/id-card.pdf");
+        const templateBytes = fs.readFileSync(templatePath);
+        const templatePDF = await PDFDocument.load(templateBytes);
+
+        // Create a new PDF document
+        const pdfDoc = await PDFDocument.create();
+
+        for (const student of students) {
+            const [templatePage] = await pdfDoc.copyPages(templatePDF, [0]);
+            pdfDoc.addPage(templatePage);
+            const newPage = pdfDoc.getPage(pdfDoc.getPageCount() - 1);
+
+            // Fetch student photo
+            const [[photo]] = await connection.execute(
+                "SELECT image FROM photo WHERE id = ?",
+                [student.school_id]
+            );
+
+            if (photo && photo.image) {
+                try {
+                    const pngBuffer = await sharp(Buffer.from(photo.image))
+                        .resize(300, 380)
+                        .composite([{ input: Buffer.from('<svg><rect x="0" y="0" width="300" height="380" rx="20" ry="20"/></svg>'), blend: 'dest-in' }])
+                        .toFormat("png")
+                        .toBuffer();
+                    const embeddedImage = await pdfDoc.embedPng(pngBuffer);
+                    newPage.drawImage(embeddedImage, { x: 42, y: 31 });
+                } catch (error) {
+                    console.error("Error embedding student image:", error);
+                }
+            }
+
+            if (schoolLogo && schoolLogo.school_logo) {
+                try {
+                    const pngBuffer = await sharp(Buffer.from(schoolLogo.school_logo))
+                        .resize(160, 160)
+                        .toFormat("png")
+                        .toBuffer();
+                    const embeddedImage = await pdfDoc.embedPng(pngBuffer);
+                    newPage.drawImage(embeddedImage, { x: 42, y: 445 });
+                } catch (error) {
+                    console.error("Error embedding school logo:", error);
+                }
+            }
+
+            // School details
+            newPage.drawText(schoolData.school_name, { x: 254, y: 537, size: 55, color: rgb(0.101, 0.337, 0.859), font: pdfDoc.embedStandardFont('Helvetica-Bold') });
+            newPage.drawText(schoolData.school_address, { x: 254, y: 500, size: 20, color: rgb(0, 0, 0) });
+            newPage.drawText(`Ph - ${schoolData.school_phone}`, { x: 254, y: 473, size: 20, color: rgb(0, 0, 0) });
+
+            // Student details
+            newPage.drawText(student.name, { x: 417, y: 325, size: 30, color: rgb(0, 0, 0) });
+            newPage.drawText(student.class, { x: 417, y: 253, size: 26, color: rgb(0, 0, 0) });
+            newPage.drawText(student.session, { x: 673, y: 253, size: 26, color: rgb(0, 0, 0) });
+            newPage.drawText(student.dob, { x: 417, y: 181, size: 26, color: rgb(0, 0, 0) });
+            newPage.drawText(student.admission_no, { x: 673, y: 181, size: 26, color: rgb(0, 0, 0) });
+            newPage.drawText(student.mobile_no, { x: 417, y: 109, size: 26, color: rgb(0, 0, 0) });
+
+            let text_id = `${student.session.replace("-", "")}${student.school_id}`;
+            newPage.drawText(text_id, { x: 673, y: 109, size: 26, color: rgb(0, 0, 0) });
+        }
+
+        // Save the PDF and send it to the client
+        const pdfBytes = await pdfDoc.save();
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `inline; filename=ID-Card-range.pdf`);
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+        res.send(Buffer.from(pdfBytes));
+
+    } catch (error) {
+        console.error("Error generating ID cards:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    } finally {
+        if (connection) connection.end();
+    }
+}
+
+
 module.exports = {
-    generateVirtualIdCard, generateVirtualIdCards_with_session
+    generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard
 };
