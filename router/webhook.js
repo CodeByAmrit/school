@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
 
         // Run Git Pull, Install Dependencies, and Restart PM2
         exec(
-            `cd ${APP_DIRECTORY} && git pull origin main && npm install && pm2 restart ${PM2_APP_NAME} --update-env`,
+            `cd ${APP_DIRECTORY} && git pull origin main && npm install && nssm restart school && nssm restart nginx`,
             (error, stdout, stderr) => {
                 if (error) {
                     console.error(`❌ Deployment error: ${error.message}`);
