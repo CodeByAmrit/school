@@ -933,37 +933,6 @@ router.get("/account", checkAuth, (req, res) => {
   res.render('account');
 });
 
-const GITHUB_SECRET = process.env.GITHUB_SECRET;
-// GitHub Webhook Route
-router.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
-  const signature = req.headers["x-hub-signature-256"];
-
-  if (!signature) {
-    console.warn("No signature found in webhook request!");
-    return res.status(400).send("Signature required");
-  }
-
-  // Generate our own hash using the secret and request body
-  const hash = `sha256=${crypto.createHmac("sha256", GITHUB_SECRET).update(req.body).digest("hex")}`;
-
-  // Verify that the signature matches
-  if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(hash))) {
-    console.log("Signature verified. Pulling changes...");
-
-    exec(`git -C ${path.resolve(__dirname, '..')} pull origin main`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Git pull error: ${error.message}`);
-        return res.status(500).send("Git pull failed");
-      }
-      console.log(`Git Pull Output:\n${stdout}`);
-      console.error(`Git Pull Errors:\n${stderr}`);
-      res.status(200).send("Git pull successful");
-    });
-  } else {
-    console.warn("Invalid signature. Request rejected.");
-    return res.status(403).send("Invalid signature");
-  }
-});
 
 router.get("/delete/:id", checkAuth, deleteStudent);
 

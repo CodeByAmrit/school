@@ -10,6 +10,7 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
+const webhook = require("./router/webhook"); // Webhook for GitHub auto-deploy
 
 class App {
     constructor() {
@@ -60,6 +61,9 @@ class App {
         }));
 
         this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+
+        // Webhooks require raw body parsing for signature verification
+        this.app.use("/webhook", express.raw({ type: "application/json" })); 
     }
 
     // Routes Configuration
@@ -67,6 +71,7 @@ class App {
         this.app.set("view engine", "ejs");
         this.app.use("/", router);
         this.app.use("/api/students/", student);
+        this.app.use("/webhook", webhook); // Register Webhook Route
     }
 
     // Error Handling Configuration
@@ -82,7 +87,7 @@ class App {
         });
         const PORT = process.env.PORT;
         this.app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
+            console.log(`🚀 Server running at http://localhost:${PORT}`);
         });
     }
 }
