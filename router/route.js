@@ -9,7 +9,9 @@ const { generate, preview, generateAll } = require("../components/create_certifi
 const multer = require('multer');
 const crypto = require('crypto');
 const { getConnection } = require('../models/getConnection');
-const pdf = require('pdf-lib'); // Import pdf-lib for PDF conversion
+const { exec } = require("child_process");
+require("dotenv").config();
+
 // Configure multer
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -149,11 +151,6 @@ router.get('/dashboard', checkAuth, async (req, res) => {
   }
 });
 
-
-
-
-
-
 router.get('/generate-certificate/:school_id', checkAuth, async (req, res) => {
   try {
     // Fetch total students assigned to the teacher
@@ -286,11 +283,6 @@ router.get('/student/new', checkAuth, async (req, res) => {
   }
 });
 
-
-// router.get("/user-image/:id", checkAuth,  async (req, res) => {
-//   await getPhoto(req, res);
-// })
-
 // route to search for students_ certificate
 router.get('/search_certificate', checkAuth, async (req, res) => {
 
@@ -336,13 +328,13 @@ router.get("/change-password", checkAuth, async (req, res) => {
   }
 
   const studentsCount = await getTotalStudents(req, res);
-  
+
 
   let user = req.user;
   user.school_logo = school_logo_url;
 
 
-  res.render("change-password", { user, total_students: studentsCount  });
+  res.render("change-password", { user, total_students: studentsCount });
 });
 
 router.post('/login', async (req, res) => {
@@ -380,22 +372,22 @@ router.get("/teacher/profile/:id", async (req, res) => {
   let connection;
 
   try {
-      connection = await getConnection();
-      const [rows] = await connection.execute("SELECT * FROM teacher WHERE id = ?", [teacherId]);
+    connection = await getConnection();
+    const [rows] = await connection.execute("SELECT * FROM teacher WHERE id = ?", [teacherId]);
 
-      if (rows.length === 0) {
-          return res.status(404).send("Teacher not found");
-      }
+    if (rows.length === 0) {
+      return res.status(404).send("Teacher not found");
+    }
 
-      const teacher = rows[0];
-      let base64Image = teacher.school_logo ? `data:image/png;base64,${teacher.school_logo.toString("base64")}` : null;
+    const teacher = rows[0];
+    let base64Image = teacher.school_logo ? `data:image/png;base64,${teacher.school_logo.toString("base64")}` : null;
 
-      res.render("teacher_profile", { teacher, base64Image });
+    res.render("teacher_profile", { teacher, base64Image });
   } catch (error) {
-      console.error("Error fetching teacher details:", error);
-      res.status(500).send("Internal Server Error");
+    console.error("Error fetching teacher details:", error);
+    res.status(500).send("Internal Server Error");
   } finally {
-      if (connection) connection.end();
+    if (connection) connection.end();
   }
 });
 
@@ -404,23 +396,23 @@ router.post("/teacher/profile/update/:id", upload.single("school_logo"), async (
   const teacherId = req.params.id;
   const { first_name, last_name, email, school_name, school_address, school_phone } = req.body;
   const school_logo = req.file ? req.file.buffer : null;
-  
+
   let connection;
   try {
-      connection = await getConnection();
-      const query = `
+    connection = await getConnection();
+    const query = `
           UPDATE teacher 
           SET first_name = ?, last_name = ?, email = ?, school_name = ?, 
               school_address = ?, school_phone = ?, school_logo = ?
           WHERE id = ?`;
-      
-      await connection.execute(query, [first_name, last_name, email, school_name, school_address, school_phone, school_logo, teacherId]);
-      res.redirect(`/teacher/profile/${teacherId}`);
+
+    await connection.execute(query, [first_name, last_name, email, school_name, school_address, school_phone, school_logo, teacherId]);
+    res.redirect(`/teacher/profile/${teacherId}`);
   } catch (error) {
-      console.error("Error updating teacher details:", error);
-      res.status(500).send("Internal Server Error");
+    console.error("Error updating teacher details:", error);
+    res.status(500).send("Internal Server Error");
   } finally {
-      if (connection) connection.end();
+    if (connection) connection.end();
   }
 });
 
@@ -637,7 +629,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
       "DRAWING"
     ];
 
-    if (student.class === "NURSERY" || student.class === "KG" ) {
+    if (student.class === "NURSERY" || student.class === "KG") {
       subjects = [
         "ENGLISH (WR.)",
         "ENGLISH ORAL",
@@ -936,10 +928,41 @@ router.get("/logout", (req, res) => {
 });
 
 
-
 // Account page - Renders account management page
 router.get("/account", checkAuth, (req, res) => {
   res.render('account');
+});
+
+const GITHUB_SECRET = process.env.GITHUB_SECRET;
+// GitHub Webhook Route
+router.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+  const signature = req.headers["x-hub-signature-256"];
+
+  if (!signature) {
+    console.warn("No signature found in webhook request!");
+    return res.status(400).send("Signature required");
+  }
+
+  // Generate our own hash using the secret and request body
+  const hash = `sha256=${crypto.createHmac("sha256", GITHUB_SECRET).update(req.body).digest("hex")}`;
+
+  // Verify that the signature matches
+  if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(hash))) {
+    console.log("Signature verified. Pulling changes...");
+
+    exec(`git -C ${path.resolve(__dirname, '..')} pull origin main`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Git pull error: ${error.message}`);
+        return res.status(500).send("Git pull failed");
+      }
+      console.log(`Git Pull Output:\n${stdout}`);
+      console.error(`Git Pull Errors:\n${stderr}`);
+      res.status(200).send("Git pull successful");
+    });
+  } else {
+    console.warn("Invalid signature. Request rejected.");
+    return res.status(403).send("Invalid signature");
+  }
 });
 
 router.get("/delete/:id", checkAuth, deleteStudent);
