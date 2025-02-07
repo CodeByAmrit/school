@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const router = require("./router/route");
 const student = require("./router/student");
+const downloadRoutes = require("./router/download");
 const favicon = require("serve-favicon");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -25,6 +26,7 @@ class App {
         this.app.set("trust proxy", "loopback");
 
         this.app.use(helmet());
+        this.app.use(downloadRoutes);
 
         this.app.use((req, res, next) => {
             res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg=='`);
@@ -56,7 +58,6 @@ class App {
         this.app.use(express.static(path.join(__dirname, "public"), {
             setHeaders: (res, path) => {
                 res.setHeader("Access-Control-Allow-Origin", "*");
-                res.setHeader("Cache-Control", "public, max-age=86400");
             }
         }));
 
