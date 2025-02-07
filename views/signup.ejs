@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body class="bg-white dark:bg-gray-900 font-sans">
+<body class="bg-white dark:bg-gray-900 font-sans select-none">
     <div class="flex justify-center">
         <!-- Left Section -->
         <div
@@ -61,14 +61,14 @@
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">First
                                     Name</label>
                                 <input type="text" id="exampleInputName" name="firstName" autocomplete="name"
-                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
+                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md" required>
                             </div>
                             <div class="w-1/2">
                                 <label for="lastName"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Last
                                     Name</label>
                                 <input type="text" id="lastName" name="lastName" autocomplete="name"
-                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
+                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md" >
                             </div>
                         </div>
                         <div>
@@ -76,7 +76,7 @@
                                 Id
                                 *</label>
                             <input type="email" id="email" name="email" autocomplete="username"
-                                class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
+                                class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md" required>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">We'll never share your email with
                                 anyone
                                 else.</p>
@@ -85,7 +85,7 @@
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
                             <input type="password" id="password" name="password" autocomplete="current-password"
-                                class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
+                                class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md" required>
                         </div>
                         <div class="flex gap-4">
                             <div class="w-1/2">
@@ -94,12 +94,12 @@
                                     School Name
                                 </label>
                                 <input type="text" id="school_name" name="school_name"
-                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
+                                    class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md" required>
                             </div>
                             <div class="w-1/2 max-h-20">
                                 <div class="flex items-center justify-center w-full px-10 mt-5">
                                     <label for="dropzone-file"
-                                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600" >
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                             <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -134,16 +134,32 @@
                                 placeholder="xxx xxx xxxx, xxx xxx xxxx"
                                 class="uppercase mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-md">
                         </div>
-                        <div class="flex justify-start">
-                            <button type="submit"
-                                class="bg-blue-500 dark:bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700">Create
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="terms" aria-describedby="terms" type="checkbox"
+                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                                    required="">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="terms" class="font-light text-gray-500 dark:text-gray-300">
+                                    I accept the 
+                                    <a class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                                        href="/term_condition.html">
+                                        Terms and Conditions
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex justify-start" >
+                            <button type="submit" data-modal-target="otp-modal" data-modal-toggle="otp-modal"
+                                class="bg-blue-700 dark:bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700">Create
                                 Account</button>
                         </div>
 
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>
 
     </div>
 
