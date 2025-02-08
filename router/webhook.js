@@ -9,22 +9,36 @@ const GITHUB_SECRET = process.env.GITHUB_SECRET;
 const APP_DIRECTORY = path.resolve(__dirname, ".."); // Root directory of your project
 const PM2_APP_NAME = "school"; // Change this to your PM2 process name
 
-router.post("/", (req, res) => {
-    console.log("✅ Webhook received. Deploying latest changes...");
+function verifySignature(req, res, next) {
+    const signature = req.headers['x-hub-signature-256'];
+    if (!signature) return res.status(401).send('Unauthorized');
 
-    // Run Git Pull, Install Dependencies, and Restart PM2
-    exec(
-        `cd ${APP_DIRECTORY} && git pull && npm install`,
-        (error, stdout, stderr) => {
-            if (error) {
-                console.error(`❌ Deployment error: ${error.message}`);
-                return res.status(500).send("Deployment failed");
+    const hmac = crypto.createHmac('sha256', GITHUB_SECRET);
+    const digest = 'sha256=' + hmac.update(JSON.stringify(req.body)).digest('hex');
+
+    if (signature !== digest) return res.status(403).send('Invalid signature');
+
+    next();
+}
+
+router.post('/webhook', verifySignature, (req, res) => {
+    const payload = req.body;
+
+    if (payload.ref === 'refs/heads/main') {
+        console.log('New push detected on main branch. Deploying...');
+
+        exec(`cd ${APP_DIRECTORY} && git pull origin main && npm install`, (err, stdout, stderr) => {
+            if (err) {
+                console.error(`Deployment error: ${stderr}`);
+                return res.status(500).send('Deployment failed');
             }
-            console.log(`✅ Deployment successful!\n${stdout}`);
-            console.error(`⚠️ Deployment warnings/errors:\n${stderr}`);
-            res.status(200).send("Deployment completed successfully");
-        }
-    );
+            console.log(`Deployment output: ${stdout}`);
+            res.status(200).send('Deployment successful');
+        });
+
+    } else {
+        res.status(200).send('No action needed');
+    }
 });
 
 module.exports = router;

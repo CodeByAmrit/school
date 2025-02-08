@@ -8,7 +8,7 @@ const { sendEmail, sendOTPEmail } = require('../components/email');
 
 
 
-student.get('/get/', checkAuth, async (req, res) => {
+student.get('/get/', async (req, res) => {
     try {
         const teacher_id = req.user._id;
         let connection = await getConnection();
@@ -27,6 +27,10 @@ student.get('/get/', checkAuth, async (req, res) => {
         console.error("Error fetching students:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
+});
+
+student.get('/', async (req, res) => {
+    res.json({ message: "Student data fetched successfully" });
 });
 
 
