@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
 
     // Run Git Pull, Install Dependencies, and Restart PM2
     exec(
-        `cd ${APP_DIRECTORY} && git pull origin master && npm install && pm2 restart ${PM2_APP_NAME}`,
+        `cd ${APP_DIRECTORY} && git pull origin master && npm install`,
         (error, stdout, stderr) => {
             if (error) {
                 console.error(`❌ Deployment error: ${error.message}`);
@@ -23,6 +23,18 @@ router.post("/", (req, res) => {
             console.log(`✅ Deployment successful!\n${stdout}`);
             console.error(`⚠️ Deployment warnings/errors:\n${stderr}`);
             res.status(200).send("Deployment completed successfully");
+        }
+    );
+    exec(
+        `pm2 restart ${PM2_APP_NAME} && nssm restart nginx`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.error(`❌ Deployment error: ${error.message}`);
+                
+            }
+            console.log(`✅ Service Restarted successful!\n${stdout}`);
+            console.error(`⚠️ Restart warnings/errors:\n${stderr}`);
+            return;
         }
     );
 });
