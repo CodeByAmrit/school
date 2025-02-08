@@ -4,7 +4,6 @@ dotenv.config();
 
 
 async function sendEmail(recipientEmail, studentData) {
-    console.log(process.env.EMAIL_PASSWORD);
     let transporter = nodemailer.createTransport({
         host: "smtp.zoho.in",
         port: 465,

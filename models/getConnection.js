@@ -14,9 +14,9 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT,
-  ssl: {
-    ca: caContent
-  }
+  // ssl: {
+  //   ca: caContent
+  // }
 };
 
 async function getConnection() {

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             const fileUrl = button.getAttribute('data-file-url');
             const fileType = button.getAttribute('data-file-type'); // Get file type based on extension
-            console.log(fileUrl, fileType);// Pass the file type to the modal
             openModal(fileUrl, fileType);
         });
     });

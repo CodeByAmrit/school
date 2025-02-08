@@ -348,7 +348,6 @@ async function getStudentDetails(req, res) {
 
 async function get_school_logo(req, res) {
     const email = req.user.email;
-    // console.log(email);
     let connection;
     try {
         connection = await getConnection();
@@ -424,7 +423,6 @@ async function teacherSignup(req, res) {
     const { firstName, lastName, email, password, school_name, school_address, school_phone } = req.body;
     let school_logo = null;
     if (req.file) {
-        console.log("Photo uploaded");
         school_logo = await sharp(req.file.buffer)
             .resize(300, 300, { fit: sharp.fit.cover, position: sharp.gravity.center })
             .toFormat('png')
@@ -537,7 +535,6 @@ async function insertPDF(req, res) {
     } finally {
         if (connection) {
             await connection.end();
-            console.log("disconnect");
         }
     }
 }

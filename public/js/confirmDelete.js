@@ -99,7 +99,6 @@ document.getElementById('demote-button').addEventListener('click', function () {
 
 document.getElementById('selected_id_card_button').addEventListener('click', function () {
     const selectedStudents = getSelectedStudents();
-    console.log(selectedStudents);
 
     if (selectedStudents.length > 0) {
         fetch('/api/students/virtual-cards', {

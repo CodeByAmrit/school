@@ -519,7 +519,6 @@ async function insertPDF(req, res) {
   const pdf_from_body = req.file.buffer;
 
   if (!pdf_from_body || !student_id) {
-    console.log("No PDF file or student_id");
     res.status(400).json({ result: 'Invalid request, missing PDF or student_id' });
     return;
   }

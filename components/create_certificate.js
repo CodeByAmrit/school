@@ -88,8 +88,6 @@ async function generate(req, res) {
             [studentId]
         );
 
-        console.log(grade_remarks);
-
         // Load the certificate template
         const templatePath = path.join(__dirname, "../template/certificate_template.pdf");
         const templateBytes = fs.readFileSync(templatePath);

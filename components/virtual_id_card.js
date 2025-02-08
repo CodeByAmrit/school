@@ -228,7 +228,6 @@ async function generateVirtualIdCards_with_session(req, res, next) {
 async function selectedVirtualIdCard(req, res) {
     const { studentIds } = req.body; 
     const schoolData = req.user;
-    console.log(studentIds);
 
     if (!Array.isArray(studentIds) || studentIds.length === 0) {
         return res.status(400).json({ message: "Invalid or empty student ID list." });

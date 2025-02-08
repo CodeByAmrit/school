@@ -156,7 +156,6 @@ router.get('/generate-certificate/:school_id', checkAuth, async (req, res) => {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
     const school_id = req.params.school_id;
-    console.log(studentsCount);
 
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
@@ -175,7 +174,6 @@ router.get('/students', checkAuth, async (req, res) => {
     let school_logo_url = "/image/graduated.png";
     const connection = await getConnection();
     const school_logo = await get_school_logo(req, res);
-    // console.log(school_logo);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString('base64');
       school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
@@ -454,7 +452,6 @@ router.get('/student/marks/:id', checkAuth, async (req, res) => {
     const student = students[0];
     let school_logo_url = "/image/graduated.png";
     const school_logo = await get_school_logo(req, res);
-    // console.log(maxMarks);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString('base64');
       school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
@@ -617,7 +614,6 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
 
     connection.end();
 
-    console.log(student.class);
     let subjects = [
       "ENGLISH",
       "HINDI",
@@ -663,10 +659,6 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
 router.post('/student/input-marks/:studentId', checkAuth, async (req, res) => {
   const { studentId } = req.params;
   const { marks, maxMarks } = req.body;  // Use `marks` and `maxMarks` directly
-
-  // Log the body to inspect its structure and confirm it's correct
-  console.log('Marks:', marks);
-  console.log('Max Marks:', maxMarks);
 
   try {
     if (!marks || !maxMarks) {
@@ -852,7 +844,6 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   const { id } = req.params;
   const { term } = req.params;
   const { grade, remarks } = req.body;
-  console.log(id);
   let connection;
   try {
     connection = await getConnection();
@@ -882,8 +873,6 @@ router.post('/promote', checkAuth, async (req, res) => {
 
   for (const studentId of studentIds) {
     try {
-      // console.log(studentId, 'promote');
-
       await executeProcedure(studentId, 'promote');
       success = success + 1;
     } catch (err) {
