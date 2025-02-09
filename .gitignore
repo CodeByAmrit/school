@@ -4,6 +4,7 @@ npm-debug.log
 yarn-error.log
 
 output/
+ca.pem
 
 # Environment variables
 .env
