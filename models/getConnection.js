@@ -1,11 +1,14 @@
 const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
 
 // Load environment variables from .env file
 dotenv.config();
 
 // Read CA file content from environment variable
-const caContent = process.env.DB_CA;
+const caPath = path.join(__dirname, "..", 'ca.pem');
+const caContent = fs.readFileSync(caPath, 'utf8');
 
 
 const dbConfig = {
@@ -14,9 +17,9 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT,
-  // ssl: {
-  //   ca: caContent
-  // }
+  ssl: {
+    ca: caContent
+  }
 };
 
 async function getConnection() {
