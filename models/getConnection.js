@@ -6,9 +6,8 @@ const path = require('path');
 // Load environment variables from .env file
 dotenv.config();
 
-// Read CA file content from environment variable
-const caPath = path.join(__dirname, "..", 'ca.pem');
-const caContent = fs.readFileSync(caPath, 'utf8');
+const dbCaBase64 = process.env.DB_CA;
+const caContent = Buffer.from(dbCaBase64, 'base64').toString('utf8');
 
 
 const dbConfig = {
