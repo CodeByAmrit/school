@@ -7,11 +7,17 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full ml-0 mx-5 lg:w-96 lg:ml-72 mt-20">
     <h2 class="text-2xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100">Create Certificate</h2>
     <form action="/create-certificate" method="POST">
-        <label class="block mb-2 text-gray-900 dark:text-gray-100">Student ID:</label>
-        <input type="text" name="student_name" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= student_id %>">
-        
-        <label class="block mb-2 text-gray-900 dark:text-gray-100">Student ID:</label>
-        <input type="text" name="student_id" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= student_id %>">
+        <div class="flex gap-2">
+            <div> 
+                <label class="block mb-2 text-gray-900 dark:text-gray-100">Name:</label>
+                <input type="text" name="student_name" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= studentlist[0].name %>">
+            </div>
+            
+            <div>
+                <label class="block mb-2 text-gray-900 dark:text-gray-100">Student ID:</label>
+                <input type="text" name="student_id" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= student_id %>">
+            </div>
+        </div>
 
         <label class="block mb-2 text-gray-900 dark:text-gray-100">Activity:</label>
         <input type="text" name="activity" value="Outstanding Performance in Science Fair" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
