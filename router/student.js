@@ -64,6 +64,7 @@ student.get('/get/virual-card/:school_id', checkAuth, generateVirtualIdCard);
 student.get('/all/virual-card/:session', checkAuth, generateVirtualIdCards_with_session);
 
 student.post('/virtual-cards', checkAuth, selectedVirtualIdCard);
+student.post('/virtual-cards', checkAuth, selectedVirtualIdCard);
 
 // email test route
 student.get('/mail', checkAuth, async (req, res) => {

@@ -144,6 +144,74 @@ async function generateCertificate(student, activity, date, type) {
             throw new Error('Failed to generate certificate');
         }
     }
+    else if (type === 'ceremony'){
+        try {
+            // Load the certificate template
+            const templatePath = path.join(__dirname, "../template/ceremony.pdf");
+            const templateBytes = fs.readFileSync(templatePath);
+            const pdfDoc = await PDFDocument.load(templateBytes);
+            // Register fontkit with PDFDocument
+            pdfDoc.registerFontkit(fontkit);
+            const fontPath = path.join(__dirname, "../template/ceremony.ttf");
+            const fontBytesCermony = fs.readFileSync(fontPath);
+            const boldFont = await pdfDoc.embedFont(fontBytesCermony, { subset: true });
+
+            const firstPage = pdfDoc.getPages()[0];
+
+            // Insert student details
+            const pageWidth = firstPage.getWidth();
+            const nameText =  `${student.name}`[0].toUpperCase() + `${student.name}`.slice(1).toLowerCase();
+            
+            var parent;
+            if(student.gender === 'MALE'){
+                parent = `S/O ${student.father_name} & ${student.mother_name}`;
+            }else if(student.gender === 'FEMALE'){
+                parent = `D/O ${student.father_name[0].toUpperCase() +  student.father_name.slice(1).toLowerCase()} & ${student.mother_name[0].toUpperCase() +  student.mother_name.slice(1).toLowerCase()}`;
+            }
+
+            const nameTextWidth = boldFont.widthOfTextAtSize(nameText, 24);
+            var parentWidth = boldFont.widthOfTextAtSize(parent, 14);
+            
+
+            firstPage.drawText(nameText, { x: (pageWidth - nameTextWidth) / 2, y: 420, size: 24, font: boldFont, color: rgb(0.502, 0, 0) });
+            
+            firstPage.drawText(parent, { x: (pageWidth - parentWidth) / 2, y: 395, size: 14, font: boldFont, color: rgb(0, 0, 0) });
+            
+            
+
+            
+            let connection = await getConnection();
+
+            const [rows] = await connection.execute('SELECT school_logo FROM teacher WHERE id = ?', [student.teacher_id]);
+            if (rows.length > 0 && rows[0].school_logo) {
+                const schoolLogoBuffer = Buffer.from(rows[0].school_logo);
+                const embeddedSchoolLogo = await pdfDoc.embedPng(schoolLogoBuffer);
+                const schoolLogoWidth = 90;
+                const pageWidth = firstPage.getWidth();
+                const xPosition = (pageWidth - schoolLogoWidth) / 2;
+                firstPage.drawImage(embeddedSchoolLogo, { x: xPosition, y: 580, width: 90, height: 90 });
+            }
+
+            await connection.end();
+
+            // Insert student photo if available
+            if (student.image) {
+                const studentImageBuffer = await sharp(Buffer.from(student.image))
+                    .resize(100, 100)
+                    .toFormat('png')
+                    .toBuffer();
+                const embeddedStudentImage = await pdfDoc.embedPng(studentImageBuffer);
+                firstPage.drawImage(embeddedStudentImage, { x: 450, y: 650, width: 100, height: 100 });
+            }
+
+            // Save the modified PDF
+            const pdfBytes = await pdfDoc.save();
+            return pdfBytes;
+        } catch (error) {
+            console.error('Error generating certificate:', error);
+            throw new Error('Failed to generate certificate');
+        }
+    }
 }
 
 module.exports = {

@@ -8,12 +8,15 @@
     <h2 class="text-2xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100">Create Certificate</h2>
     <form action="/create-certificate" method="POST">
         <label class="block mb-2 text-gray-900 dark:text-gray-100">Student ID:</label>
+        <input type="text" name="student_name" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= student_id %>">
+        
+        <label class="block mb-2 text-gray-900 dark:text-gray-100">Student ID:</label>
         <input type="text" name="student_id" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" readonly value="<%= student_id %>">
 
         <label class="block mb-2 text-gray-900 dark:text-gray-100">Activity:</label>
         <input type="text" name="activity" value="Outstanding Performance in Science Fair" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
 
-        <label class="block mb-2 text-gray-900 dark:text-gray-100">Date:</label>
+        <!-- <label class="block mb-2 text-gray-900 dark:text-gray-100">Date:</label> -->
         <!-- <input type="date" name="date" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"> -->
         <div class="relative max-w-sm mb-4">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -26,6 +29,7 @@
         
         <label class="block mb-2 text-gray-900 dark:text-gray-100">Type:</label>
         <select name="type" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+            <option value="ceremony" selected>Felicitation Ceremony</option>
             <option value="juniors">Juniors</option>
             <option value="seniors">Seniors</option>
         </select>
