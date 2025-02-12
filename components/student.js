@@ -16,7 +16,7 @@ async function getAllStudent(req, res) {
                               COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image 
                               
                                 FROM student_photos_view 
-                                WHERE teacher_id = ?`, [teacher_id]);
+                                WHERE class = 'NURSERY' and teacher_id = ?`, [teacher_id]);
         return rows;
     } catch (error) {
         console.log(error);

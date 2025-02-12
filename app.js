@@ -29,9 +29,14 @@ class App {
         this.app.use(downloadRoutes);
 
         this.app.use((req, res, next) => {
-            res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg=='`);
+            res.setHeader(
+                'Content-Security-Policy',
+                "script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg==' https://www.google.com https://www.gstatic.com; " +
+                "frame-src 'self' https://www.google.com;"
+            );
             next();
         });
+
 
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000,
@@ -64,7 +69,7 @@ class App {
         this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
         // Webhooks require raw body parsing for signature verification
-        this.app.use("/webhook", express.raw({ type: "application/json" })); 
+        this.app.use("/webhook", express.raw({ type: "application/json" }));
     }
 
     // Routes Configuration

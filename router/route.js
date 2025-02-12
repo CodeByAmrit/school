@@ -7,9 +7,8 @@ const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
 const { generateCertificate } = require('../components/achievement');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
-const crypto = require('crypto');
 const { getConnection } = require('../models/getConnection');
-const { exec } = require("child_process");
+const verifyCaptcha = require("../middleware/verifyCaptcha");
 require("dotenv").config();
 
 // Configure multer
@@ -335,7 +334,7 @@ router.get("/change-password", checkAuth, async (req, res) => {
   res.render("change-password", { user, total_students: studentsCount });
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', verifyCaptcha, async (req, res) => {
   try {
     const token = await teacherLogin(req, res);  // Ensure only one response is sent
   } catch (error) {
