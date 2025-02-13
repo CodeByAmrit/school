@@ -94,7 +94,7 @@ router.post('/create-certificate', checkAuth, async (req, res) => {
       const pdfBytes = await generateCertificate(studentData, activity, date, type);
       res.contentType('application/pdf');
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", "inline; filename=certificate.pdf");
+      res.setHeader("Content-Disposition", `inline; filename=${studentData.name}_ceremony.pdf`);
       res.send(Buffer.from(pdfBytes));
     } else {
       res.status(404).send('Student not found');

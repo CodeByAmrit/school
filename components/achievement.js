@@ -150,6 +150,15 @@ async function generateCertificate(student, activity, date, type) {
             const templatePath = path.join(__dirname, "../template/ceremony.pdf");
             const templateBytes = fs.readFileSync(templatePath);
             const pdfDoc = await PDFDocument.load(templateBytes);
+
+            // Set metadata
+            pdfDoc.setTitle('Felicitation Certificate');
+            pdfDoc.setAuthor('Bajrang Vidya Mandir');
+            pdfDoc.setSubject('Certificate of Participation');
+            pdfDoc.setProducer('PDF-LIB');
+            pdfDoc.setCreator('Amrit');
+
+
             // Register fontkit with PDFDocument
             pdfDoc.registerFontkit(fontkit);
             const fontPath = path.join(__dirname, "../template/ceremony.ttf");
@@ -164,9 +173,9 @@ async function generateCertificate(student, activity, date, type) {
             
             var parent;
             if(student.gender === 'MALE'){
-                parent = `S/O ${student.father_name} & ${student.mother_name}`;
+                parent = `S/O Shri. ${student.father_name[0].toUpperCase() +  student.father_name.slice(1).toLowerCase()} & Smt. ${student.mother_name[0].toUpperCase() +  student.mother_name.slice(1).toLowerCase()}`;
             }else if(student.gender === 'FEMALE'){
-                parent = `D/O ${student.father_name[0].toUpperCase() +  student.father_name.slice(1).toLowerCase()} & ${student.mother_name[0].toUpperCase() +  student.mother_name.slice(1).toLowerCase()}`;
+                parent = `D/O Shri. ${student.father_name[0].toUpperCase() +  student.father_name.slice(1).toLowerCase()} & Smt. ${student.mother_name[0].toUpperCase() +  student.mother_name.slice(1).toLowerCase()}`;
             }
 
             const nameTextWidth = boldFont.widthOfTextAtSize(nameText, 24);

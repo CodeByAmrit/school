@@ -133,6 +133,49 @@ document.getElementById('selected_id_card_button').addEventListener('click', fun
     }
 });
 
+document.getElementById('selected_Certificate_button').addEventListener('click', function () {
+    const selectedStudents = getSelectedStudents();
+    const spinner = document.getElementById('spinner');
+
+    if (selectedStudents.length > 0) {
+        spinner.classList.remove('hidden'); // Show spinner
+
+        fetch('/api/students/ceremonty-certificates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studentIds: selectedStudents.map(student => student.id)
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to generate PDF');
+            }
+            return response.blob(); // Convert response to binary blob
+        })
+        .then(blob => {
+            const pdfUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = pdfUrl;
+            a.download = "Ceremony.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(pdfUrl);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred: ' + error.message);
+        })
+        .finally(() => {
+            spinner.classList.add('hidden'); // Hide spinner after completion
+        });
+    }
+});
+
+
 // Function to get selected students
 function getSelectedStudents() {
     const checkboxes = document.querySelectorAll('.student-checkbox:checked');
@@ -146,10 +189,3 @@ function getSelectedStudents() {
     return selectedStudents;
 }
 
-// const dataTable = new simpleDatatables.DataTable("#student-table", {
-//     searchable: true,
-//     perPageSelect: true,
-//     perPage: 50,
-//     perPageSelect: [50, 100, 200, 500],
-
-// });
