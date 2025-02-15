@@ -3,7 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getConnection } = require("../models/getConnection");
 const student = express.Router();
 const { getSchoolLogo, getFileCount, getTotalStudents, } = require('../components/student');
-const { generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard } = require('../components/virtual_id_card');
+const { generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard, selectedCeremonyCertificate } = require('../components/virtual_id_card');
 const { sendEmail, sendOTPEmail } = require('../components/email');
 
 
@@ -64,7 +64,7 @@ student.get('/get/virual-card/:school_id', checkAuth, generateVirtualIdCard);
 student.get('/all/virual-card/:session', checkAuth, generateVirtualIdCards_with_session);
 
 student.post('/virtual-cards', checkAuth, selectedVirtualIdCard);
-student.post('/virtual-cards', checkAuth, selectedVirtualIdCard);
+student.post('/ceremonty-certificates', checkAuth, selectedCeremonyCertificate);
 
 // email test route
 student.get('/mail', checkAuth, async (req, res) => {

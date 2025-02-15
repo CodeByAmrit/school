@@ -226,7 +226,7 @@ async function generateVirtualIdCards_with_session(req, res, next) {
 }
 
 async function selectedVirtualIdCard(req, res) {
-    const { studentIds } = req.body; 
+    const { studentIds } = req.body;
     const schoolData = req.user;
 
     if (!Array.isArray(studentIds) || studentIds.length === 0) {
@@ -337,6 +337,106 @@ async function selectedVirtualIdCard(req, res) {
 }
 
 
+async function selectedCeremonyCertificate(req, res) {
+    const { studentIds } = req.body;
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+        return res.status(400).json({ message: "Invalid or empty student ID list." });
+    }
+
+    let connection;
+    try {
+        connection = await getConnection();
+        const placeholders = studentIds.map(() => "?").join(",");
+        const [students] = await connection.execute(
+            `SELECT school_id, name, gender, father_name, mother_name, teacher_id 
+             FROM students WHERE school_id IN (${placeholders})`,
+            [...studentIds]
+        );
+
+        if (students.length === 0) {
+            return res.status(404).json({ message: "No students found for the given IDs." });
+        }
+
+        const [[schoolLogoRow]] = await connection.execute(
+            "SELECT school_logo FROM teacher WHERE id = ?",
+            [students[0].teacher_id]
+        );
+
+        const templatePath = path.join(__dirname, "../template/ceremony.pdf");
+        const templateBytes = fs.readFileSync(templatePath);
+        const templatePdf = await PDFDocument.load(templateBytes);
+        const pdfDoc = await PDFDocument.create();
+
+        pdfDoc.setTitle('Felicitation Certificates');
+        pdfDoc.setAuthor('Bajrang Vidya Mandir');
+        pdfDoc.setSubject('Certificate of Participation');
+        pdfDoc.setProducer('PDF-LIB');
+        pdfDoc.setCreator('Amrit');
+
+        pdfDoc.registerFontkit(fontkit);
+        const fontPath = path.join(__dirname, "../template/ceremony.ttf");
+        const fontBytes = fs.readFileSync(fontPath);
+        const boldFont = await pdfDoc.embedFont(fontBytes, { subset: true });
+
+        for (const student of students) {
+            const [templatePage] = await pdfDoc.copyPages(templatePdf, [0]);
+            pdfDoc.addPage(templatePage);
+            const currentPage = pdfDoc.getPages().at(-1);
+            const pageWidth = currentPage.getWidth();
+
+            const capitalizeName = (name) => 
+                name
+                  .split(' ')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                  .join(' ');
+              
+              const nameText = capitalizeName(student.name);
+              
+              const parent = `${student.gender === 'MALE' ? 'S/O' : 'D/O'} Shri. ${capitalizeName(student.father_name)} & Smt. ${capitalizeName(student.mother_name)}`;
+              
+            currentPage.drawText(nameText, {
+                x: (pageWidth - boldFont.widthOfTextAtSize(nameText, 24)) / 2,
+                y: 420,
+                size: 24,
+                font: boldFont,
+                color: rgb(0.502, 0, 0)
+            });
+            currentPage.drawText(parent, {
+                x: (pageWidth - boldFont.widthOfTextAtSize(parent, 14)) / 2,
+                y: 395,
+                size: 14,
+                font: boldFont,
+                color: rgb(0, 0, 0)
+            });
+
+            if (schoolLogoRow?.school_logo) {
+                const schoolLogoBuffer = Buffer.from(schoolLogoRow.school_logo);
+                const embeddedSchoolLogo = await pdfDoc.embedPng(schoolLogoBuffer);
+                currentPage.drawImage(embeddedSchoolLogo, {
+                    x: (pageWidth - 90) / 2,
+                    y: 580,
+                    width: 90,
+                    height: 90
+                });
+            }
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline; filename=Ceremony_Certificates.pdf");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+        res.send(Buffer.from(pdfBytes));
+    } catch (error) {
+        console.error("Error generating certificates:", error);
+        res.status(500).json({ message: "Failed to generate certificates." });
+    } finally {
+        if (connection) await connection.end();
+    }
+}
+
+
 module.exports = {
-    generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard
+    generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard, selectedCeremonyCertificate
 };
