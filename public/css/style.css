@@ -1638,6 +1638,10 @@ input:checked + .toggle-bg {
   height: 2.75rem;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
 .h-14 {
   height: 3.5rem;
 }
@@ -1723,10 +1727,6 @@ input:checked + .toggle-bg {
   height: 100vh;
 }
 
-.h-12 {
-  height: 3rem;
-}
-
 .max-h-20 {
   max-height: 5rem;
 }
@@ -1753,6 +1753,10 @@ input:checked + .toggle-bg {
 
 .w-11 {
   width: 2.75rem;
+}
+
+.w-12 {
+  width: 3rem;
 }
 
 .w-14 {
@@ -1826,10 +1830,6 @@ input:checked + .toggle-bg {
 
 .w-screen {
   width: 100vw;
-}
-
-.w-12 {
-  width: 3rem;
 }
 
 .min-w-44 {
@@ -2368,11 +2368,6 @@ input:checked + .toggle-bg {
   background-color: rgb(225 239 254 / var(--tw-bg-opacity, 1));
 }
 
-.bg-blue-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(235 245 255 / var(--tw-bg-opacity, 1));
-}
-
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(63 131 248 / var(--tw-bg-opacity, 1));
@@ -2483,11 +2478,6 @@ input:checked + .toggle-bg {
 
 .bg-white\/50 {
   background-color: rgb(255 255 255 / 0.5);
-}
-
-.bg-gray-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-50 {
@@ -2856,6 +2846,11 @@ input:checked + .toggle-bg {
   letter-spacing: -0.025em;
 }
 
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
+}
+
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(63 131 248 / var(--tw-text-opacity, 1));
@@ -3141,6 +3136,11 @@ input:checked + .toggle-bg {
 .hover\:bg-white:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-none:hover {
@@ -3670,6 +3670,11 @@ input:checked + .toggle-bg {
 .dark\:hover\:bg-gray-800:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:hover\:bg-gray-900:hover:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
 }
 
 .dark\:hover\:bg-green-700:hover:is(.dark *) {

@@ -1,4 +1,4 @@
-<nav class="fixed top-0 bg-blue-700 sm:ml-64 w-full pr-64 z-50 border-b border-gray-200 dark:border-gray-700">
+<nav class="fixed top-0 bg-white dark:bg-gray-800 sm:ml-64 w-full pr-64 z-50 border-b border-gray-200 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start rtl:justify-end">
@@ -15,8 +15,7 @@
                 </button>
                 <a href="/dashboard" class="flex ms-2 md:me-24">
                     <!-- <img src="<%= user.school_logo %>" class="h-8 me-3 hidden md:block lg:block xl:block" alt="BVM" /> -->
-                    <span class="self-center text-xl font-medium sm:text-2xl whitespace-nowrap text-white font-poppins"
-                        style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);">
+                    <span class="self-center font-bold sm:text-2xl whitespace-nowrap font-poppins text-blue-700">
                         <%= user.school_name.toUpperCase() %>
                     </span>
                 </a>
@@ -29,7 +28,7 @@
 
 
                         <button id="theme-toggle" type="button"
-                            class="text-white  hover:bg-gray-100 focus:outline-none focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                            class="text-gray-600 dark:text-gray-200  hover:bg-gray-300 dark:hover:bg-gray-900 focus:outline-none focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                             <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -43,7 +42,7 @@
                         </button>
 
                         <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
-                            class="relative inline-flex items-center text-sm font-medium text-center text-white hover:text-gray-200 focus:outline-none dark:hover:text-white"
+                            class="relative inline-flex items-center text-sm font-medium text-center text-gray-600 dark:text-gray-200 focus:outline-none dark:hover:text-white"
                             type="button">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor" viewBox="0 0 20 20">
