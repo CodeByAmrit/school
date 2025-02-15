@@ -66,7 +66,7 @@ class App {
             }
         }));
 
-        this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+        // this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
 
         // Webhooks require raw body parsing for signature verification
         this.app.use("/webhook", express.raw({ type: "application/json" }));
