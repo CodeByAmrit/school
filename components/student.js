@@ -5,7 +5,7 @@ const { sendWelcomeEmail } = require('./email');
 const fs = require('fs');
 const sharp = require("sharp");
 
-saltRounds = 10;
+const saltRounds = 10;
 
 async function getAllStudent(req, res) {
     const teacher_id = req.user._id;
