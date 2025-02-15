@@ -12,17 +12,6 @@
             "dest": "app.js"
         }
     ],
-    "functions": {
-        "app.js": {
-            "includeFiles": [
-                "views/**",
-                "public/**",
-                "router/**",
-                "middleware/**",
-                "output/**"
-            ]
-        }
-    },
     "env": {
         "PORT": "3000"
     }
