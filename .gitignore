@@ -8,3 +8,4 @@ ca.pem
 
 # Environment variables
 .env
+.vercel
