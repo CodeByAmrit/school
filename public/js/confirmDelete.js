@@ -110,26 +110,26 @@ document.getElementById('selected_id_card_button').addEventListener('click', fun
                 studentIds: selectedStudents.map(student => student.id)
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to generate PDF');
-            }
-            return response.blob(); // Convert response to binary blob
-        })
-        .then(blob => {
-            const pdfUrl = URL.createObjectURL(blob); // Create a temporary URL
-            const a = document.createElement("a"); // Create a hidden <a> element
-            a.href = pdfUrl;
-            a.download = "ID-Cards.pdf"; // Set the default filename
-            document.body.appendChild(a);
-            a.click(); // Trigger the download
-            document.body.removeChild(a); // Remove the element after download
-            URL.revokeObjectURL(pdfUrl); // Clean up the temporary URL
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error occurred: ' + error.message);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+                return response.blob(); // Convert response to binary blob
+            })
+            .then(blob => {
+                const pdfUrl = URL.createObjectURL(blob); // Create a temporary URL
+                const a = document.createElement("a"); // Create a hidden <a> element
+                a.href = pdfUrl;
+                a.download = "ID-Cards.pdf"; // Set the default filename
+                document.body.appendChild(a);
+                a.click(); // Trigger the download
+                document.body.removeChild(a); // Remove the element after download
+                URL.revokeObjectURL(pdfUrl); // Clean up the temporary URL
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred: ' + error.message);
+            });
     }
 });
 
@@ -149,29 +149,73 @@ document.getElementById('selected_Certificate_button').addEventListener('click',
                 studentIds: selectedStudents.map(student => student.id)
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to generate PDF');
-            }
-            return response.blob(); // Convert response to binary blob
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+                return response.blob(); // Convert response to binary blob
+            })
+            .then(blob => {
+                const pdfUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = pdfUrl;
+                a.download = "Class_list.xls";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(pdfUrl);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred: ' + error.message);
+            })
+            .finally(() => {
+                spinner.classList.add('hidden'); // Hide spinner after completion
+            });
+    }
+});
+
+document.getElementById('selected_excel_file_button').addEventListener('click', function () {
+    const selectedStudents = getSelectedStudents();
+    const spinner = document.getElementById('spinner');
+
+    if (selectedStudents.length > 0) {
+        spinner.classList.remove('hidden'); // Show spinner
+
+        fetch('/api/students/create-excel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studentIds: selectedStudents.map(student => student.id)
+            })
         })
-        .then(blob => {
-            const pdfUrl = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = pdfUrl;
-            a.download = "Ceremony.pdf";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(pdfUrl);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error occurred: ' + error.message);
-        })
-        .finally(() => {
-            spinner.classList.add('hidden'); // Hide spinner after completion
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+                return response.blob(); // Convert response to binary blob
+            })
+            .then(blob => {
+                const pdfUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = pdfUrl;
+                a.download = `Student_List.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(pdfUrl);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred: ' + error.message);
+            })
+            .finally(() => {
+                spinner.classList.add('hidden'); // Hide spinner after completion
+            });
+    } else {
+        alert("Select At least one student to create excel file");
     }
 });
 
