@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "nodemon app",
-    "build:css": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch"
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch",
+    "vercel-build": "npm install && node app.js"
   },
   "author": "Amrit",
   "license": "ISC",
