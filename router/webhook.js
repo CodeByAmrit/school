@@ -21,13 +21,14 @@ function verifySignature(req, res, next) {
     next();
 }
 
-router.post('/', verifySignature, (req, res) => {
+router.post('/', (req, res) => {
     const payload = req.body;
+    console.log("webhook entry -- >")
 
     if (payload.ref === 'refs/heads/master') {
         console.log('New push detected on main branch. Deploying...');
 
-        exec(`cd ${APP_DIRECTORY} && git pull origin main && npm install`, (err, stdout, stderr) => {
+        exec(`cd ${APP_DIRECTORY} && git pull && npm install`, (err, stdout, stderr) => {
             if (err) {
                 console.error(`Deployment error: ${stderr}`);
                 return res.status(500).send('Deployment failed');
@@ -41,4 +42,7 @@ router.post('/', verifySignature, (req, res) => {
     }
 });
 
+router.get("/", (req, res) => {
+    res.send("HI");
+})
 module.exports = router;
