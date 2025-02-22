@@ -5,6 +5,7 @@ yarn-error.log
 
 output/
 ca.pem
+captcha.json
 
 # Environment variables
 .env
