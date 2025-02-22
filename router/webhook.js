@@ -24,7 +24,7 @@ function verifySignature(req, res, next) {
 router.post('/', verifySignature, (req, res) => {
     const payload = req.body;
 
-    if (payload.ref === 'refs/heads/main') {
+    if (payload.ref === 'refs/heads/master') {
         console.log('New push detected on main branch. Deploying...');
 
         exec(`cd ${APP_DIRECTORY} && git pull origin main && npm install`, (err, stdout, stderr) => {
