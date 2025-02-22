@@ -9,6 +9,7 @@ const favicon = require("serve-favicon");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
+const authRoutes = require("./services/auth");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 const webhook = require("./router/webhook"); // Webhook for GitHub auto-deploy
@@ -72,6 +73,7 @@ class App {
 
     // Routes Configuration
     configureRoutes() {
+        this.app.use(authRoutes);
         this.app.set("view engine", "ejs");
         this.app.use("/", router);
         this.app.use("/api/students/", student);

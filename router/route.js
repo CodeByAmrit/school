@@ -334,7 +334,7 @@ router.get("/change-password", checkAuth, async (req, res) => {
   res.render("change-password", { user, total_students: studentsCount });
 });
 
-router.post('/login', verifyCaptcha,  async (req, res) => {
+router.post('/login', verifyCaptcha, async (req, res) => {
   try {
     const token = await teacherLogin(req, res);  // Ensure only one response is sent
   } catch (error) {

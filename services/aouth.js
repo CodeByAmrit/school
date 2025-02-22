@@ -1,8 +1,9 @@
-const sessionIdToUserMap = new Map()
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv');
-dotenv.config()
-const chabi = process.env.jwt_token
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const chabi = process.env.jwt_token;
+const sessionIdToUserMap = new Map(); // For storing refresh tokens if needed
 
 function setUser(user) {
   return jwt.sign(
@@ -15,21 +16,22 @@ function setUser(user) {
       school_name: user.school_name,
       school_phone: user.school_phone
     },
-    chabi
-  )
+    chabi,
+    { expiresIn: "24h" } // Token expires in 24 hours
+  );
 }
 
 function getUser(token) {
-  if (!token) return null
+  if (!token) return null;
   try {
-    return jwt.verify(token, chabi)
+    return jwt.verify(token, chabi);
   } catch (error) {
-    return null
+    return null;
   }
 }
 
 function logoutUser(id) {
-  sessionIdToUserMap.delete(id)
+  sessionIdToUserMap.delete(id);
 }
 
-module.exports = { setUser, getUser, logoutUser }
+module.exports = { setUser, getUser, logoutUser };
