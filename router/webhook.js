@@ -21,7 +21,7 @@ function verifySignature(req, res, next) {
     next();
 }
 
-router.post('/webhook', verifySignature, (req, res) => {
+router.post('/', verifySignature, (req, res) => {
     const payload = req.body;
 
     if (payload.ref === 'refs/heads/main') {

@@ -9,7 +9,7 @@ async function sendEmail(recipientEmail, studentData) {
         port: 465,
         secure: true,
         auth: {
-            user: "student@codebyamrit.co.in",
+            user: process.env.EMAIL_ID,
             pass: process.env.EMAIL_PASSWORD,
         },
     });
