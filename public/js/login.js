@@ -5,6 +5,9 @@ document.getElementById('login-form').onsubmit = async function (e) {
     const password = this.password.value.trim();
     const loginBtn = this.querySelector('button[type="submit"]');
 
+    // show spnner loading button
+    document.getElementById("login_spinner").classList.remove("hidden");
+
     // Get reCAPTCHA token
     let captchaToken;
     grecaptcha.enterprise.ready(async () => {
@@ -33,6 +36,8 @@ document.getElementById('login-form').onsubmit = async function (e) {
         if (data.status === 'success') {
             window.location.href = '/dashboard';
         } else {
+            document.getElementById("login_spinner").classList.add("hidden");
+            
             if (data.status === 'Invalid Password') {
                 document.getElementById('password-error').classList.remove('hidden');
                 document.getElementById('password').classList.add('border-red-500');
