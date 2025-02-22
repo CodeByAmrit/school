@@ -42,6 +42,18 @@ npm install
 ```
 
 ### 3️⃣ Set Up Configuration
+Create a `.env` file and add:
+```ini
+DB_HOST=your-database-host
+DB_USER=your-database-user
+DB_PASSWORD=your-database-password
+DB_DATABASE=your-database-name
+DB_PORT=your-email-password
+jwt_token=your-jwt-password
+EMAIL_PASSWORD=your-email-password
+DB_CA=your-CA-from-MySQL
+```
+
 Instead of using environment variables for Google reCAPTCHA credentials, create a `captcha.json` file in the project root with the following structure:
 ```json
 {
