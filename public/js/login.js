@@ -5,26 +5,35 @@ document.getElementById('login-form').onsubmit = async function (e) {
     const password = this.password.value.trim();
     const loginBtn = this.querySelector('button[type="submit"]');
 
-    // show spnner loading button
+    // Show spinner loading button
     document.getElementById("login_spinner").classList.remove("hidden");
 
-    // Get reCAPTCHA token
-    let captchaToken;
-    grecaptcha.enterprise.ready(async () => {
-        const token = await grecaptcha.enterprise.execute('6LfB29QqAAAAAHo2JKtWWZx24MoRn75EMb0NKg3s', { action: 'LOGIN' });
-        captchaToken = token;
-    });
-
-    // Hide previous errors
-    document.getElementById('email-error').classList.add('hidden');
-    document.getElementById('password-error').classList.add('hidden');
-    document.getElementById('email').classList.remove('border-red-500');
-    document.getElementById('password').classList.remove('border-red-500');
-
-    // Disable button to prevent multiple requests
-    loginBtn.disabled = true;
-
     try {
+        // Get reCAPTCHA token
+        const captchaToken = await new Promise((resolve, reject) => {
+            grecaptcha.enterprise.ready(async () => {
+                try {
+                    const token = await grecaptcha.enterprise.execute('6LfB29QqAAAAAHo2JKtWWZx24MoRn75EMb0NKg3s', { action: 'LOGIN' });
+                    resolve(token);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+
+        if (!captchaToken) {
+            throw new Error("CAPTCHA token not generated");
+        }
+
+        // Hide previous errors
+        document.getElementById('email-error').classList.add('hidden');
+        document.getElementById('password-error').classList.add('hidden');
+        document.getElementById('email').classList.remove('border-red-500');
+        document.getElementById('password').classList.remove('border-red-500');
+
+        // Disable button to prevent multiple requests
+        loginBtn.disabled = true;
+
         const res = await fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -37,7 +46,7 @@ document.getElementById('login-form').onsubmit = async function (e) {
             window.location.href = '/dashboard';
         } else {
             document.getElementById("login_spinner").classList.add("hidden");
-            
+
             if (data.status === 'Invalid Password') {
                 document.getElementById('password-error').classList.remove('hidden');
                 document.getElementById('password').classList.add('border-red-500');
@@ -49,7 +58,8 @@ document.getElementById('login-form').onsubmit = async function (e) {
             }
         }
     } catch (err) {
-        alert("Network error. Please try again.");
+        console.error("Error in login process:", err);
+        alert("Network error or CAPTCHA issue. Please try again.");
     } finally {
         loginBtn.disabled = false; // Re-enable button
     }
