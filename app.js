@@ -2,17 +2,18 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const router = require("./router/route");
-const student = require("./router/student");
-const downloadRoutes = require("./router/download");
-const favicon = require("serve-favicon");
+const compression = require("compression");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
-const authRoutes = require("./services/auth");
-const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
+const favicon = require("serve-favicon");
 
-const webhook = require("./router/webhook"); // Webhook for GitHub auto-deploy
+const router = require("./router/route");
+const student = require("./router/student");
+const downloadRoutes = require("./router/download");
+const authRoutes = require("./services/auth");
+const webhook = require("./router/webhook");
+const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 class App {
     constructor() {
@@ -22,12 +23,10 @@ class App {
         this.configureErrorHandling();
     }
 
-    // Middleware Configuration
     configureMiddleware() {
         this.app.set("trust proxy", "loopback");
-
         this.app.use(helmet());
-        this.app.use(downloadRoutes);
+        this.app.use(compression());
 
         this.app.use((req, res, next) => {
             res.setHeader(
@@ -38,7 +37,6 @@ class App {
             next();
         });
 
-
         const limiter = rateLimit({
             windowMs: 15 * 60 * 1000,
             max: 700,
@@ -47,7 +45,10 @@ class App {
         });
         this.app.use(limiter);
 
-        this.app.use(morgan("combined"));
+        if (process.env.NODE_ENV !== "production") {
+            this.app.use(morgan("combined"));
+        }
+
         this.app.use(express.json({ limit: "10mb" }));
         this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
         this.app.use(bodyParser.json({ limit: "10mb" }));
@@ -58,40 +59,34 @@ class App {
         this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
         this.app.use("/flowbite", express.static(path.join(__dirname, "node_modules/flowbite/dist")));
         this.app.use("/apexcharts", express.static(path.join(__dirname, "node_modules", "apexcharts", "dist")));
-        this.app.use("/simple-datatables", express.static(path.join(__dirname, "node_modules", "simple-datatables", "dist")));
         this.app.use("/output", express.static(path.join(__dirname, "output")));
-
         this.app.use(express.static(path.join(__dirname, "public"), {
-            setHeaders: (res, path) => {
-                res.setHeader("Access-Control-Allow-Origin", "*");
-            }
+            setHeaders: (res) => res.setHeader("Access-Control-Allow-Origin", "*")
         }));
 
-        // this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
-
+        this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
     }
 
-    // Routes Configuration
     configureRoutes() {
         this.app.use(authRoutes);
         this.app.set("view engine", "ejs");
         this.app.use("/", router);
         this.app.use("/api/students/", student);
-        this.app.use("/webhook", webhook); // Register Webhook Route
+        this.app.use("/webhook", webhook);
     }
 
-    // Error Handling Configuration
     configureErrorHandling() {
         this.app.use(notFoundHandler);
         this.app.use(errorHandler);
     }
 
-    // Start Server
     startServer() {
-        this.app.use((req, res, next) => {
-            res.status(404).render("custom404");
-        });
-        const PORT = process.env.PORT;
+        if (process.env.NODE_ENV === "production") {
+            this.app.set("view cache", true);
+        }
+        this.app.use((req, res) => res.status(404).render("custom404"));
+
+        const PORT = process.env.PORT || 3000;
         this.app.listen(PORT, () => {
             console.log(`🚀 Server running at http://localhost:${PORT}`);
         });

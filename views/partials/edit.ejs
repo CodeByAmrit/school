@@ -75,8 +75,8 @@
                     </div>
                 </div>
 
-                <div class="relative  shadow-md sm:rounded-lg ">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg ">
+                    <table class="select-none w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
                         id="student-table">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -114,12 +114,11 @@
                         <tbody>
                             <% if (studentlist.length> 0) { %>
                                 <% studentlist.forEach((student)=> { %>
-                                    <tr
-                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer">
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
                                         <!-- Checkbox for each row -->
                                         <td class="px-3 py-3">
                                             <input type="checkbox"
-                                                class="student-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                class="border-1 student-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 data-id="<%= student.school_id %>">
                                         </td>
                                         <!-- <th scope="row"

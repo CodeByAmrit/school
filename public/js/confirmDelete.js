@@ -27,9 +27,15 @@ function confirmDelete(event, link) {
 // JavaScript to handle "Select All" checkbox
 document.getElementById('checkbox-all-search').addEventListener('change', function () {
     const isChecked = this.checked;
+    console.log(this.checked);
     const checkboxes = document.querySelectorAll('.student-checkbox');
     checkboxes.forEach(checkbox => {
         checkbox.checked = isChecked;
+        if (isChecked) {
+            checkbox.classList.add("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+        } else {
+            checkbox.classList.remove("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+        }
     });
 });
 
@@ -225,6 +231,7 @@ function getSelectedStudents() {
     const checkboxes = document.querySelectorAll('.student-checkbox:checked');
     let selectedStudents = [];
     checkboxes.forEach(checkbox => {
+        checkbox.classList.add("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
         selectedStudents.push({
             id: checkbox.getAttribute('data-id'),
             currentClass: checkbox.getAttribute('data-class')
@@ -232,4 +239,15 @@ function getSelectedStudents() {
     });
     return selectedStudents;
 }
+
+document.querySelectorAll(".student-checkbox").forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+        let row = this.closest("tr");
+        if (this.checked) {
+            row.classList.add("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+        } else {
+            row.classList.remove("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+        }
+    });
+});
 

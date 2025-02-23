@@ -4,120 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/flowbite/flowbite.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Drag Selection for Table</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
-            <div
-                class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-                <div>
-                    <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
-                        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        type="button">
-                        <span class="sr-only">Action button</span>
-                        Action
-                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownAction"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
-                        <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownActionButton">
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate
-                                    account</a>
-                            </li>
-                        </ul>
-                        <div class="py-1">
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                                User</a>
-                        </div>
-                    </div>
-                </div>
-                <label for="table-search" class="sr-only">Search</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </div>
-                    <input type="text" id="table-search-users"
-                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search for users">
-                </div>
-            </div>
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="table-users">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="p-4">
-                            <div class="flex items-center">
-                                <input id="checkbox-all-search" type="checkbox"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Position
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Status
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="table-search-body">
-                    <tr>
-                        <td colspan="8" class="border px-4 py-2 text-center text-gray-500" id="loading_table">
-                            <div role="status" class="flex justify-center items-center">
-                                <svg aria-hidden="true"
-                                    class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                                    viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="currentColor" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentFill" />
-                                </svg>
-                                <span class="sr-only">Loading...</span>
-                            </div>
+<body class="bg-gray-100 dark:bg-gray-900 flex justify-center items-center min-h-screen select-none">
 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="w-full max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-4">Drag to Select Rows</h2>
+
+        <table class="w-full border border-gray-300 dark:border-gray-600 rounded-lg">
+            <thead>
+                <tr class="bg-blue-500 dark:bg-blue-700 text-white">
+                    <th class="p-3">Select</th>
+                    <th class="p-3">Name</th>
+                    <th class="p-3">Age</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-700">
+                <tr class="border-b dark:border-gray-600 row">
+                    <td class="p-3"><input type="checkbox" class="row-checkbox w-5 h-5"></td>
+                    <td class="p-3">John Doe</td>
+                    <td class="p-3">28</td>
+                </tr>
+                <tr class="border-b dark:border-gray-600 row">
+                    <td class="p-3"><input type="checkbox" class="row-checkbox w-5 h-5"></td>
+                    <td class="p-3">Jane Smith</td>
+                    <td class="p-3">32</td>
+                </tr>
+                <tr class="border-b dark:border-gray-600 row">
+                    <td class="p-3"><input type="checkbox" class="row-checkbox w-5 h-5"></td>
+                    <td class="p-3">Robert Brown</td>
+                    <td class="p-3">40</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
+    <script>
+        let startX, startY, selectionBox;
+        let isDragging = false;
 
-    <script src="/js/test.js" type="text/javascript"></script>
-    <script src="/flowbite/flowbite.min.js"></script>
-    <!-- <script src="/js/script.js"></script> -->
+        document.addEventListener("mousedown", function (e) {
+            if (e.target.tagName === "INPUT") return;
+
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+
+            selectionBox = document.createElement("div");
+            selectionBox.classList.add("absolute", "bg-blue-100", "dark:bg-blue-200", "bg-opacity-50", "border-blue-400", "border");
+            document.body.appendChild(selectionBox);
+            selectionBox.style.left = startX + "px";
+            selectionBox.style.top = startY + "px";
+
+            document.addEventListener("mousemove", onMouseMove);
+        });
+
+        document.addEventListener("mouseup", function () {
+            isDragging = false;
+            if (selectionBox) {
+                document.body.removeChild(selectionBox);
+                selectionBox = null;
+            }
+            document.removeEventListener("mousemove", onMouseMove);
+        });
+
+        function onMouseMove(e) {
+            if (!isDragging) return;
+
+            let x = Math.min(e.clientX, startX);
+            let y = Math.min(e.clientY, startY);
+            let width = Math.abs(e.clientX - startX);
+            let height = Math.abs(e.clientY - startY);
+
+            selectionBox.style.left = x + "px";
+            selectionBox.style.top = y + "px";
+            selectionBox.style.width = width + "px";
+            selectionBox.style.height = height + "px";
+
+            selectRows(x, y, width, height);
+        }
+
+        function selectRows(x, y, width, height) {
+            let checkboxes = document.querySelectorAll(".row-checkbox");
+
+            checkboxes.forEach(checkbox => {
+                let rect = checkbox.getBoundingClientRect();
+                let checkboxX = rect.left + rect.width / 2;
+                let checkboxY = rect.top + rect.height / 2;
+                let row = checkbox.closest("tr");
+
+                if (
+                    checkboxX >= x && checkboxX <= x + width &&
+                    checkboxY >= y && checkboxY <= y + height
+                ) {
+                    checkbox.checked = true;
+                    row.classList.add("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+                }
+            });
+        }
+
+        document.querySelectorAll(".student-checkbox").forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                let row = this.closest("tr");
+                if (this.checked) {
+                    row.classList.add("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+                } else {
+                    row.classList.remove("border-1", "border-blue-400", "bg-blue-50", "dark:bg-blue-900");
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
