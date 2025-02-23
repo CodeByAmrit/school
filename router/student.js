@@ -4,8 +4,9 @@ const { getConnection } = require("../models/getConnection");
 const student = express.Router();
 const { getSchoolLogo, getFileCount, getTotalStudents, } = require('../components/student');
 const { generateVirtualIdCard, generateVirtualIdCards_with_session, selectedVirtualIdCard,
-    selectedCeremonyCertificate, create_excel_selected } = require('../components/virtual_id_card');
+    selectedCeremonyCertificate } = require('../components/virtual_id_card');
 const { sendEmail, sendOTPEmail } = require('../components/email');
+const { create_excel_selected } = require('../components/create_excel_file');
 
 
 
@@ -101,8 +102,8 @@ student.get('/otp', checkAuth, async (req, res) => {
 
     // Send email
     const otpStatus = sendOTPEmail("amritsharma54300@gmail.com", "654321");
-    if(otpStatus){
-        return res.json({message: "OTP sent successfully"});
+    if (otpStatus) {
+        return res.json({ message: "OTP sent successfully" });
     }
 });
 

@@ -1,82 +1,118 @@
 const { getConnection } = require("../models/getConnection");
-const ExcelJS = require('exceljs');
-const fs = require('fs');
-const path = require('path');
+const ExcelJS = require("exceljs");
 
 // Function to generate Excel file with student data
-async function create_student_excel(req, res) {
-    let connection = getConnection();
-    const currentYear = req.params.session || '2024-2025';
+async function create_excel_selected(req, res) {
+    const { studentIds } = req.body;
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+        return res.status(400).json({ message: "Invalid or empty student ID list." });
+    }
 
+    let connection;
     try {
-        // Get a database connection
         connection = await getConnection();
+        const placeholders = studentIds.map(() => "?").join(",");
+        const [students] = await connection.execute(
+            `SELECT school_id, name, father_name, mother_name, session, class
+             FROM students WHERE school_id IN (${placeholders})`,
+            [...studentIds]
+        );
 
-        // Fetch all student data grouped by class
-        const [rows] = await connection.execute('SELECT * FROM students WHERE session = ? ORDER BY class', [currentYear]);
+        const [subjects_rows] = await connection.execute(
+            `SELECT subject FROM student_marks WHERE student_id = ?`,
+            [students[0].school_id]
+        );
 
-        if (rows.length === 0) {
-            return res.status(404).send('No student data found for the given session.');
+        // Remove duplicates using Set
+        let subjects = ["SR NO", "NAME", "FATHER NAME", "MOTHER NAME", ...new Set(subjects_rows.map(sub => sub.subject))];
+
+        console.log(subjects);
+
+        if (students.length === 0) {
+            return res.status(404).json({ message: "No students found for the given IDs." });
         }
 
-        // Create a new workbook
+        // Create an Excel workbook
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'Amrit';
-        workbook.created = new Date();
+        const worksheet = workbook.addWorksheet(`${students[0].class}`);
 
-        // Group students by class
-        const studentsByClass = rows.reduce((acc, student) => {
-            if (!acc[student.class]) acc[student.class] = [];
-            acc[student.class].push(student);
-            return acc;
-        }, {});
+        // Merged Header
+        worksheet.mergeCells("A1:L1");
+        worksheet.getCell("A1").value = `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
+        worksheet.getCell("A1").alignment = { horizontal: "center", vertical: "middle" };
+        worksheet.getCell("A1").font = { bold: true, size: 20 };
+        worksheet.getCell("A1").height = 25;
 
-        // Create a worksheet for each class
-        for (const [className, students] of Object.entries(studentsByClass)) {
-            const sheet = workbook.addWorksheet(`Class ${className}`);
+        worksheet.getCell("A1").fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "2E2E2E" }
+        };
 
-            // Define columns for the sheet
-            sheet.columns = [
-                { header: 'Name', key: 'name', width: 20 },
-                { header: 'Father Name', key: 'father_name', width: 20 },
-                { header: 'Mother Name', key: 'mother_name', width: 20 },
-                { header: 'SRN No', key: 'srn_no', width: 20 },
-                { header: 'PEN No', key: 'pen_no', width: 20 },
-                { header: 'Admission No', key: 'admission_no', width: 20 },
-                { header: 'Class', key: 'class', width: 15 },
-                { header: 'Session', key: 'session', width: 15 },
-                { header: 'Roll', key: 'roll', width: 10 },
-            ];
+        worksheet.getCell("A1").font = {
+            bold: true,
+            size: 14,
+            color: { argb: "FFFFFF" }
+        };
 
-            // Add rows for each student in the class
-            students.forEach((student) => {
-                sheet.addRow({
-                    name: student.name,
-                    father_name: student.father_name,
-                    mother_name: student.mother_name,
-                    srn_no: student.srn_no,
-                    pen_no: student.pen_no,
-                    admission_no: student.admission_no,
-                    class: student.class,
-                    session: student.session,
-                    roll: student.roll,
-                });
+        const headerRow = worksheet.addRow(subjects);
+        headerRow.font = { bold: true };
+        headerRow.alignment = { horizontal: "center", vertical: "middle" };
+
+        headerRow.eachCell((cell) => {
+            cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "E6E6E6" }
+            };
+        });
+
+        // Add Student Data
+        students.forEach((student, index) => {
+            worksheet.addRow([
+                index + 1, // Sr No
+                student.name,
+                student.father_name,
+                student.mother_name,
+            ]);
+        });
+
+        worksheet.eachRow((row) => {
+            row.height = 20;
+            row.eachCell((cell) => {
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" }
+                };
             });
-        }
+        });
 
-        // Send the Excel file as a response
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename=students_${currentYear}.xlsx`);
+        // Set column widths and alignments
+        worksheet.getColumn(1).width = 6; // Small width for Sr No
+        worksheet.getColumn(1).alignment = { horizontal: "center" }; // Sr No centered
 
+
+        // Auto-fit column width for Name, Father Name, and Mother Name
+        [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach((colIndex) => {
+            worksheet.getColumn(colIndex).width = 16;
+        });
+
+        // Set correct headers
+        res.setHeader("Content-Disposition", "attachment; filename=Class_list.xlsx");
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        // Write Excel file to response stream
         await workbook.xlsx.write(res);
         res.end();
     } catch (error) {
-        console.error('Error generating Excel file:', error);
-        res.status(500).send('Internal Server Error');
-    }finally{
-        (await connection).end();
+        console.error("Error Creating Excel:", error);
+        res.status(500).json({ message: "Failed to Create Excel." });
+    } finally {
+        if (connection) await connection.end();
     }
-};
+}
 
 
-module.exports = { create_student_excel };
+module.exports = { create_excel_selected };
