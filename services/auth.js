@@ -5,6 +5,7 @@ const { setUser } = require("./aouth");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const router = express.Router();
 router.use(cookieParser());
 
 // Load Google OAuth credentials
-const credentials = JSON.parse(fs.readFileSync("google-credentials.json", "utf8"));
+const credentials = JSON.parse(fs.readFileSync(path.join(__dirname, "..", 'google-credentials.json'), "utf8"));
 const CLIENT_ID = credentials.web.client_id;
 const CLIENT_SECRET = credentials.web.client_secret;
 const REDIRECT_URI = credentials.web.redirect_uris[0];
