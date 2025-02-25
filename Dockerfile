@@ -1,14 +1,15 @@
 FROM node:latest AS build
 
-RUN apt update -y 
-RUN apt upgrade -y 
+RUN apt update -y && apt upgrade -y
 
-RUN mkdir school
+WORKDIR /school
 
-RUN git clone https://github.com/CodeByAmrit/school.git school 
+RUN git clone https://github.com/CodeByAmrit/school.git .
 
-RUN cd school && npm install -g pm2 && npm install
+RUN npm install -g pm2 && npm install
 
-CMD ["pm2-runtime", "start", "school/app.js"]
+COPY google-credentials.json ./google-credentials.json
+COPY captcha.json ./captcha.json
+COPY .env ./.env
 
-
+CMD ["pm2-runtime", "start", "app.js"]

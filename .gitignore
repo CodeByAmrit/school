@@ -3,6 +3,8 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+docker run command.bat
+
 output/
 ca.pem
 captcha.json
