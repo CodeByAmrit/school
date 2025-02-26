@@ -83,7 +83,6 @@ class App {
         if (process.env.NODE_ENV === "production") {
             this.app.set("view cache", true);
         }
-        this.app.use((req, res) => res.status(404).render("custom404"));
 
         const PORT = process.env.PORT || 3000;
         this.app.listen(PORT, () => {
