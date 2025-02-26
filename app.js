@@ -10,7 +10,6 @@ const favicon = require("serve-favicon");
 
 const router = require("./router/route");
 const student = require("./router/student");
-const downloadRoutes = require("./router/download");
 const authRoutes = require("./services/auth");
 const webhook = require("./router/webhook");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
@@ -93,5 +92,6 @@ class App {
     }
 }
 
-const app = new App();
-app.startServer();
+// const app = new App();
+// app.startServer();
+module.exports = App;
