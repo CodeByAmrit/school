@@ -10,7 +10,6 @@ const favicon = require("serve-favicon");
 
 const router = require("./router/route");
 const student = require("./router/student");
-const downloadRoutes = require("./router/download");
 const authRoutes = require("./services/auth");
 const webhook = require("./router/webhook");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
@@ -84,7 +83,6 @@ class App {
         if (process.env.NODE_ENV === "production") {
             this.app.set("view cache", true);
         }
-        this.app.use((req, res) => res.status(404).render("custom404"));
 
         const PORT = process.env.PORT || 3000;
         this.app.listen(PORT, () => {
@@ -93,5 +91,6 @@ class App {
     }
 }
 
-const app = new App();
-app.startServer();
+// const app = new App();
+// app.startServer();
+module.exports = App;
