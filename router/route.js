@@ -150,6 +150,34 @@ router.get('/dashboard', checkAuth, async (req, res) => {
   }
 });
 
+router.get("/ai/chat", checkAuth, async (req, res) => {
+  const school_logo_url = await getSchoolLogo(req, res);
+  let user = req.user;
+  user.school_logo = school_logo_url;
+
+  const teacherId = req.user._id;
+
+  try {
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+
+    const count_Files = await getFileCount(req, res);
+
+    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+
+    // Render dashboard EJS
+    res.render('google_AI', {
+      nonce,
+      total_students: studentsCount,
+      files_count: count_Files,
+      user
+    });
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
 router.get('/generate-certificate/:school_id', checkAuth, async (req, res) => {
   try {
     // Fetch total students assigned to the teacher

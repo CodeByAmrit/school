@@ -14,8 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/recaptcha-enterprise": "^5.13.0",
+    "@google/generative-ai": "^0.24.0",
     "@pdf-lib/fontkit": "^1.1.1",
-    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "bootstrap": "^5.3.3",
