@@ -1,7 +1,16 @@
-
 const chatContainer = document.getElementById("chat-container");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
+
+// Function to format AI response with markdown-like styling
+function formatMessage(message) {
+    return message
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bold **text**
+        .replace(/\*(.*?)\*/g, "<em>$1</em>") // Italic *text*
+        .replace(/`([^`]+)`/g, "<code>$1</code>") // Inline code `text`
+        .replace(/\*\s([^*]+)\s\*/g, "$1") // Remove asterisk around single words/items
+        .replace(/\*\s([^*]+)\s/g, "$1, "); // Convert bullet list to comma-separated list
+}
 
 // Function to append a chat message
 function appendMessage(sender, message) {
@@ -12,25 +21,20 @@ function appendMessage(sender, message) {
     } else {
         msgDiv.classList.add("bg-gray-200", "text-gray-900", "self-start", "mr-auto");
     }
-    msgDiv.textContent = message;
+    msgDiv.innerHTML = formatMessage(message); // Use innerHTML to render formatted text
     chatContainer.appendChild(msgDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to bottom
 }
 
 // Function to simulate AI response
 async function getAIResponse(userMessage) {
-    fetch("/ai", {
+    return fetch("/ai", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            appendMessage("ai", data.reply);
-        });
-    
+    .then((response) => response.json())
+    .then((data) => data.reply);
 }
 
 // Handle user input
@@ -41,7 +45,7 @@ sendBtn.addEventListener("click", async () => {
     appendMessage("user", message);
     userInput.value = "";
 
-    // Simulate AI response
+    // Get AI response and display it
     const aiResponse = await getAIResponse(message);
     appendMessage("ai", aiResponse);
 });

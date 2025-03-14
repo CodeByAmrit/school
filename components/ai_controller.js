@@ -112,7 +112,7 @@ async function run(message) {
     });
 
     const result = await chatSession.sendMessage(message);
-    console.log(result.response.text());
+    // console.log(result.response.text());
     return result.response;
 }
 
