@@ -334,7 +334,7 @@ async function getStudentDetails(req, res) {
         }
 
         const [rows] = await connection.execute(query, params);
-        console.log(rows);
+        // console.log(rows);
         return rows;
     } catch (error) {
         console.log(error);

@@ -26,7 +26,7 @@ async function create_excel_selected(req, res) {
         // Remove duplicates using Set
         let subjects = ["SR NO", "NAME", "FATHER NAME", "MOTHER NAME", ...new Set(subjects_rows.map(sub => sub.subject))];
 
-        console.log(subjects);
+        // console.log(subjects);
 
         if (students.length === 0) {
             return res.status(404).json({ message: "No students found for the given IDs." });
