@@ -162,18 +162,18 @@ async function generateCertificate(student, activity, date, type, position="") {
             // Insert student details
             const pageWidth = firstPage.getWidth();
             const nameText =  `S/O - D/O OF ${student.father_name} & ${student.mother_name}`.toUpperCase();
-            const first = "Amrit SharmA".split(" ").map(element => 
+            const first = student.name.split(" ").map(element => 
                 element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
             ).join(" ");
             // const father_nameText = student.father_name.toUpperCase();
             // const mother_nameText = student.mother_name.toUpperCase();
-            const activityText = `Session ${student.session} in Class: ${student.class} and secured: ${position} Position.`;
+            const activityText = `Session ${student.session} in Class: ${student.class} and secured: ${position.toUpperCase()} Position.`;
 
-            const firstWidth = boldFont.widthOfTextAtSize(first, 30);
+            const firstWidth = boldFont.widthOfTextAtSize(first, 35);
             const parentWidth = boldFont.widthOfTextAtSize(nameText, 18);
             const activityTextWidth = boldFont.widthOfTextAtSize(activityText, 12);
 
-            firstPage.drawText(first, { x: (pageWidth - firstWidth) / 2, y: 375, size: 30, font: boldFont, color: rgb(0, 0, 0) });
+            firstPage.drawText(first, { x: (pageWidth - firstWidth) / 2, y: 375, size: 35, font: boldFont, color: rgb(0.698, 0.455, 0.035) });
             firstPage.drawText(nameText, { x: (pageWidth - parentWidth) / 2, y: 345, size: 18, font: boldFont, color: rgb(0, 0, 0) });
             firstPage.drawText(activityText, { x: (pageWidth - activityTextWidth ) / 2.5, y: 290, size: 14,  color: rgb(0, 0, 0) });
             // firstPage.drawText(date, { x: 205, y: 140, size: 12, font: boldFont, color: rgb(0, 0, 0) });
