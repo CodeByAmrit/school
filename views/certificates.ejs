@@ -32,13 +32,31 @@
             </div>
             <input datepicker id="default-datepicker" datepicker-buttons datepicker-autoselect-today name="date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" >
         </div>
+
+        <div class="flex gap-2">
+            <div>
+                <label class="block mb-2 text-gray-900 dark:text-gray-100">Type:</label>
+                <select name="type" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" id="certificate_type">
+                    <option value="ceremony" selected>Felicitation Ceremony</option>
+                    <option value="achievement" >Certificate of Achievement</option>
+                    <option value="juniors">Juniors</option>
+                    <option value="seniors">Seniors</option>
+                </select>
+            </div>
+
+            <div id="position">
+                <label class="block mb-2 text-gray-900 dark:text-gray-100">Position:</label>
+                <select name="position" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <option value="" selected></option>
+                    <option value="First">First</option>
+                    <option value="Second">Second</option>
+                    <option value="Third">Third</option>
+                </select>
+            </div>
         
-        <label class="block mb-2 text-gray-900 dark:text-gray-100">Type:</label>
-        <select name="type" required class="w-full p-2 border rounded mb-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-            <option value="ceremony" selected>Felicitation Ceremony</option>
-            <option value="juniors">Juniors</option>
-            <option value="seniors">Seniors</option>
-        </select>
+        </div>
+        
+        
 
         <button type="submit" class="w-full bg-blue-500 dark:bg-blue-700 text-white py-2 rounded">Generate Certificate</button>
     </form>

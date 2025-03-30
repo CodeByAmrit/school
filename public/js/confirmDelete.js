@@ -240,6 +240,50 @@ function getSelectedStudents() {
     return selectedStudents;
 }
 
+document.getElementById('selected_excel_file_button').addEventListener('click', function () {
+    const selectedStudents = getSelectedStudents();
+    const spinner = document.getElementById('spinner');
+
+    if (selectedStudents.length > 0) {
+        spinner.classList.remove('hidden'); // Show spinner
+
+        fetch('/api/students/create-excel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studentIds: selectedStudents.map(student => student.id)
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+                return response.blob(); // Convert response to binary blob
+            })
+            .then(blob => {
+                const pdfUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = pdfUrl;
+                a.download = `Student_List.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(pdfUrl);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred: ' + error.message);
+            })
+            .finally(() => {
+                spinner.classList.add('hidden'); // Hide spinner after completion
+            });
+    } else {
+        alert("Select At least one student to create excel file");
+    }
+});
+
 document.querySelectorAll(".student-checkbox").forEach(checkbox => {
     checkbox.addEventListener("change", function () {
         let row = this.closest("tr");

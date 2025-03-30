@@ -85,13 +85,14 @@ router.get('/students/count/:session', checkAuth, async (req, res) => {
 // Create Certificate (Generate PDF)
 router.post('/create-certificate', checkAuth, async (req, res) => {
   const { student_id, activity, date, type } = req.body;
+  const position = req.body.position || 0;
   let connection;
   try {
     const connection = await getConnection();
     const [student] = await connection.execute('SELECT * FROM students WHERE school_id = ?', [student_id]);
     if (student.length > 0) {
       const studentData = student[0];
-      const pdfBytes = await generateCertificate(studentData, activity, date, type);
+      const pdfBytes = await generateCertificate(studentData, activity, date, type, position);
       res.contentType('application/pdf');
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", `inline; filename=${studentData.name}_ceremony.pdf`);
