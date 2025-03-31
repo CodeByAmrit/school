@@ -83,9 +83,9 @@ class App {
     }
 
     startServer() {
-        if (process.env.NODE_ENV === "production") {
-            this.app.set("view cache", true);
-        }
+        //if (process.env.NODE_ENV === "production") {
+            //this.app.set("view cache", true);
+        //}
 
         const PORT = process.env.PORT || 3000;
         this.app.listen(PORT, () => {
