@@ -1,4 +1,4 @@
-![School Logo](public/image/logo.svg)
+![School Logo](https://raw.githubusercontent.com/CodeByAmrit/school/5e4b126ebf1c8cd43b49f0213927914bb5e3dfe4/public/image/logo.svg)
 
 **Student Tracker** is a comprehensive **Student Management System** designed for schools. It simplifies student data management, allowing teachers to register students, store essential documents, generate reports, and more. The platform ensures data security and provides useful features like email notifications, virtual ID cards, and annual report cards.
 
