@@ -403,10 +403,10 @@ async function teacherLogin(req, res) {
         const token = setUser(payload);
 
         res.cookie("token", token, {
-            httpOnly: true,    
-            secure: true,      
+            httpOnly: true,
+            secure: true,
             sameSite: "Strict",
-            maxAge: 3600000,   
+            maxAge: 3600000,
         });
         await connection.end();
         res.json({ status: 'success', token });
@@ -745,10 +745,73 @@ async function changePassword(req, res) {
     }
 }
 
+async function markStudentAsLeft(req, res) {
+    const { reason } = req.body;
+    const studentId = req.params.schoolId;
+
+    if (!studentId || !reason) {
+        return res.status(400).json({ message: 'Student ID and reason are required.' });
+    }
+
+    const connection = await getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // Fetch the student record
+        const [studentRows] = await connection.execute(
+            'SELECT * FROM students WHERE school_id = ?',
+            [studentId]
+        );
+
+        if (studentRows.length === 0) {
+            await connection.rollback();
+            return res.status(404).json({ message: 'Student not found.' });
+        }
+
+        const student = studentRows[0];
+
+        // Insert into school_leaved_students
+        const insertQuery = `
+            INSERT INTO school_leaved_students (
+                original_student_id, name, father_name, mother_name, srn_no, pen_no, admission_no,
+                class, session, roll, section, teacher_id, permanent_address, corresponding_address,
+                mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender, reason
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        await connection.execute(insertQuery, [
+            student.school_id, student.name, student.father_name, student.mother_name, student.srn_no,
+            student.pen_no, student.admission_no, student.class, student.session, student.roll,
+            student.section, student.teacher_id, student.permanent_address, student.corresponding_address,
+            student.mobile_no, student.paste_file_no, student.family_id, student.dob,
+            student.profile_status, student.apaar_id, student.gender, reason
+        ]);
+
+        // Delete student from main table
+        await connection.execute('DELETE FROM students WHERE school_id = ?', [studentId]);
+
+        await connection.commit();
+
+        // Redirect after success
+        res.redirect('/students'); // Adjust path if needed
+
+    } catch (err) {
+        console.error('Error marking student as left:', err);
+        await connection.rollback();
+        res.status(500).send('An error occurred while processing the request.');
+    } finally {
+        await connection.end();
+    }
+}
+
+
 
 module.exports = {
     getAllStudent, teacherLogin, getStudentMarksBySchoolId, getFileCount,
     getStudentDetails, deleteStudent, teacherSignup, changePassword, get_school_logo,
     getOneStudent, insertPDF, getStudentMarks, storeStudentMarks, getPhoto, getSign,
-    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents, getSchoolLogo
+    insertOrUpdateStudent, getStudentMarksWithMaxMarks, saveStudentMarks, getTotalStudents, getSchoolLogo,
+    markStudentAsLeft
 }

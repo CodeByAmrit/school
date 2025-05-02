@@ -141,6 +141,35 @@ CREATE TABLE IF NOT EXISTS maximum_marks (
     UNIQUE KEY (class, term, subject) -- Ensure each combination of class, term, and subject is unique
 );
 
+CREATE TABLE IF NOT EXISTS school_leaved_students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    original_student_id INT,
+    name VARCHAR(40),
+    father_name VARCHAR(40),
+    mother_name VARCHAR(40),
+    srn_no VARCHAR(255),
+    pen_no VARCHAR(40),
+    admission_no VARCHAR(40),
+    class VARCHAR(40),
+    session VARCHAR(40),
+    roll VARCHAR(40),
+    section VARCHAR(40),
+    teacher_id INT,
+    permanent_address VARCHAR(255),
+    corresponding_address VARCHAR(255),
+    mobile_no VARCHAR(40),
+    paste_file_no VARCHAR(40),
+    family_id VARCHAR(40),
+    dob VARCHAR(10),
+    profile_status VARCHAR(255),
+    apaar_id VARCHAR(40),
+    gender ENUM('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
+    leave_date DATE DEFAULT(CURRENT_DATE),
+    reason TEXT,
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+
 CREATE OR REPLACE VIEW StudentPerformance AS
 SELECT
     s.school_id,

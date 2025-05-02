@@ -1,0 +1,64 @@
+<%- include('./partials/header.ejs',{title: "Student Leaved"}) %> <%-
+include('./partials/topMenu.ejs') %> <%- include('./partials/navbar.ejs') %>
+<div
+  class="relative p-4 sm:ml-64 dark:bg-gray-900 dark:text-stone-50 mt-16 bg-white h-full min-h-screen"
+>
+  <div
+    class="relative w-full overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-20"
+  >
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold dark:text-gray-100">Leaved Students</h2>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by name..."
+        class="p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200"
+      />
+    </div>
+
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">Name</th>
+          <th scope="col" class="px-6 py-3">Father Name</th>
+          <th scope="col" class="px-6 py-3">Class</th>
+          <th scope="col" class="px-6 py-3">Session</th>
+          <th scope="col" class="px-6 py-3">Reason</th>
+        </tr>
+      </thead>
+      <tbody id="studentTableBody">
+        <% students.forEach(student => { %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-6 py-4"><%= student.original_student_id %></td>
+          <td class="px-6 py-4 student-name"><%= student.name %></td>
+          <td class="px-6 py-4"><%= student.father_name %></td>
+          <td class="px-6 py-4"><%= student.class %></td>
+          <td class="px-6 py-4"><%= student.session %></td>
+          <td class="px-6 py-4"><%= student.reason %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script nonce="<%= nonce %>">
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#studentTableBody tr");
+
+    rows.forEach((row) => {
+      const nameCell = row.querySelector(".student-name");
+      const name = nameCell ? nameCell.textContent.toLowerCase() : "";
+      row.style.display = name.includes(filter) ? "" : "none";
+    });
+  });
+</script>
+
+<%- include('./partials/bottonNavBar.ejs') %> <%-
+include('./partials/footer.ejs') %>

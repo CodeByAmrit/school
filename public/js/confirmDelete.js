@@ -295,3 +295,15 @@ document.querySelectorAll(".student-checkbox").forEach(checkbox => {
     });
 });
 
+// confimation for move students to leaved section
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('[id^="move-to-leaved-form-"]'); // Match by ID pattern
+    
+    form.addEventListener('submit', function (event) {
+        // Confirm the action before submitting the form
+        if (!confirm('Are you sure you want to move this student to the leaved list?')) {
+            event.preventDefault(); // Prevent form submission if user cancels
+        }
+    });
+});
+

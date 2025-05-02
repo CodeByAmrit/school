@@ -3,7 +3,7 @@ const checkAuth = require('../services/checkauth');
 const { getAllStudent, teacherLogin, getStudentMarksBySchoolId,
   getStudentDetails, deleteStudent, teacherSignup, changePassword, get_school_logo,
   getOneStudent, getStudentMarks, storeStudentMarks, getPhoto, getSign, insertOrUpdateStudent,
-  getFileCount, saveStudentMarks, getTotalStudents, getSchoolLogo } = require('../components/student');
+  getFileCount, saveStudentMarks, getTotalStudents, getSchoolLogo, markStudentAsLeft  } = require('../components/student');
 const { generateCertificate } = require('../components/achievement');
 const { generate, preview, generateAll } = require("../components/create_certificate");
 const multer = require('multer');
@@ -931,6 +931,37 @@ router.post('/demote', checkAuth, async (req, res) => {
     res.status(400).json({ message: 'Some students could not be demoted.', errors });
   } else {
     res.status(200).json({ message: `${success} students demoted successfully.` });
+  }
+});
+
+router.post('/student/mark-left/:schoolId', checkAuth, markStudentAsLeft);
+
+router.get('/students/leaved',checkAuth, async (req, res) => {
+  const school_logo_url = await getSchoolLogo(req, res);
+  let user = req.user;
+  user.school_logo = school_logo_url;
+
+  const teacherId = req.user._id;
+
+  try {
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+
+    const count_Files = await getFileCount(req, res);
+
+    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+
+    const connection = await getConnection();
+    const [students] = await connection.execute('SELECT * FROM school_leaved_students');
+    await connection.end();
+    res.render('leave-students', { students, user, nonce,
+      total_students: studentsCount,
+      files_count: count_Files,
+      user 
+    }); // View: leave-students.ejs
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to load leave students');
   }
 });
 

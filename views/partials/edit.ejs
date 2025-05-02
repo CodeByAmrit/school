@@ -200,6 +200,15 @@
                                                         class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Files</a>
                                                 </div>
                                                 <div class="py-1">
+                                                    <form id="move-to-leaved-form-<%= student.school_id %>" action="/student/mark-left/<%= student.school_id %>" method="POST">
+                                                        <input type="hidden" name="reason" value="Graduated"> <!-- or make it a textarea if needed -->
+                                                        <button type="submit"
+                                                            class="w-full text-left block py-2 px-4 text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-600 dark:text-red-400 dark:hover:text-white">
+                                                            Move to Leaved Students
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="py-1">
                                                     <a href="/delete/<%= student.school_id %>"
                                                         id="delete-link-<%= student.school_id %>"
                                                         class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
