@@ -952,7 +952,8 @@ router.get('/students/leaved',checkAuth, async (req, res) => {
     const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
 
     const connection = await getConnection();
-    const [students] = await connection.execute('SELECT * FROM school_leaved_students');
+    const  teacherId = req.user._id;
+    const [students] = await connection.execute('SELECT * FROM school_leaved_students where teacher_id = ?', [teacherId]);
     await connection.end();
     res.render('leave-students', { students, user, nonce,
       total_students: studentsCount,
