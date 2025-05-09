@@ -110,7 +110,7 @@ async function getSign(req, res) {
         if (result && result.student_sign) {
             // Dynamically process the image
             const pngBuffer = await sharp(result.student_sign) // Pass the binary data directly
-                .resize(300, 380, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop
+                .resize(380, 240, { fit: sharp.fit.cover, position: sharp.gravity.center }) // Resize and crop
                 .toFormat("png") // Convert to PNG format
                 .toBuffer(); // Get the processed buffer
 
@@ -269,7 +269,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     if (sign) {
         try {
             const processedPhoto = await sharp(sign)
-                .resize(150, 150, { fit: sharp.fit.cover, position: sharp.gravity.center })
+                .resize(380, 240, { fit: sharp.fit.cover, position: sharp.gravity.center })
                 .toFormat('png')
                 .toBuffer();
 
