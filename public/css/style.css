@@ -1404,12 +1404,12 @@ input:checked + .toggle-bg {
   margin: 0px;
 }
 
-.m-2 {
-  margin: 0.5rem;
-}
-
 .m-1 {
   margin: 0.25rem;
+}
+
+.m-2 {
+  margin: 0.5rem;
 }
 
 .-mx-1\.5 {
@@ -1852,22 +1852,6 @@ input:checked + .toggle-bg {
 
 .w-screen {
   width: 100vw;
-}
-
-.w-lvw {
-  width: 100lvw;
-}
-
-.w-svw {
-  width: 100svw;
-}
-
-.w-80 {
-  width: 20rem;
-}
-
-.w-96 {
-  width: 24rem;
 }
 
 .min-w-44 {
@@ -2712,12 +2696,12 @@ input:checked + .toggle-bg {
   padding-bottom: 2rem;
 }
 
-.pb-16 {
-  padding-bottom: 4rem;
-}
-
 .pb-2\.5 {
   padding-bottom: 0.625rem;
+}
+
+.pb-20 {
+  padding-bottom: 5rem;
 }
 
 .pb-4 {
@@ -2780,8 +2764,8 @@ input:checked + .toggle-bg {
   padding-top: 1.5rem;
 }
 
-.pb-20 {
-  padding-bottom: 5rem;
+.pt-8 {
+  padding-top: 2rem;
 }
 
 .text-left {
@@ -3980,10 +3964,6 @@ input:checked + .toggle-bg {
     width: 100%;
   }
 
-  .md\:w-96 {
-    width: 24rem;
-  }
-
   .md\:scale-100 {
     --tw-scale-x: 1;
     --tw-scale-y: 1;
@@ -3998,10 +3978,6 @@ input:checked + .toggle-bg {
     flex-direction: row;
   }
 
-  .md\:flex-row-reverse {
-    flex-direction: row-reverse;
-  }
-
   .md\:flex-col {
     flex-direction: column;
   }
@@ -4012,10 +3988,6 @@ input:checked + .toggle-bg {
 
   .md\:justify-start {
     justify-content: flex-start;
-  }
-
-  .md\:justify-center {
-    justify-content: center;
   }
 
   .md\:gap-8 {
@@ -4129,10 +4101,6 @@ input:checked + .toggle-bg {
     flex-direction: row;
   }
 
-  .lg\:flex-row-reverse {
-    flex-direction: row-reverse;
-  }
-
   .lg\:flex-col {
     flex-direction: column;
   }
@@ -4143,10 +4111,6 @@ input:checked + .toggle-bg {
 
   .lg\:justify-start {
     justify-content: flex-start;
-  }
-
-  .lg\:justify-center {
-    justify-content: center;
   }
 
   .lg\:rounded-b-none {
