@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:  # 👈 adds a "Run workflow" button
+
 
 jobs:
   deploy:
