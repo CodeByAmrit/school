@@ -19,12 +19,11 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy and restart app on VPS
+      - name: Deploy to VPS using PM2 Ecosystem
         run: |
-          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd ${{ secrets.VPS_PROJECT_PATH }}
             git pull origin main
             npm install
-            pm2 restart ecosystem.config.js --env production || pm2 start app.js --name student-tracker
+            pm2 restart ecosystem.config.js --env production
           EOF
