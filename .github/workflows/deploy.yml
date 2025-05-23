@@ -3,7 +3,7 @@ name: Deploy StudentTracker
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
