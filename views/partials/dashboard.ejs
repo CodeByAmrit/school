@@ -1,93 +1,295 @@
-<div id="introScreen" class="w-screen h-screen bg-gray-50 z-50 fixed top-0 left-0 flex justify-center items-center">
-    <img src="/image/logo.svg" alt="favicon" class="scale-75 md:scale-100 lg:scale-100 xl:scale-100">
+<div id="introScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <img src="/image/logo.svg" alt="favicon" class="scale-75 md:scale-100">
 </div>
 
-<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-stone-50 mt-16 bg-white h-full min-h-screen">
-
-
-    <div class="flex gap-5 flex-wrap rounded-md ">
-
-        <div class="flex flex-col md:flex-row lg:flex-row xl:flex-col gap-5 w-full md:w-auto">
-            <!-- Total Students Card -->
-            <div
-                class="bg-white  dark:bg-gray-800 flex px-0 pl-4 gap-2 justify-center items-center rounded-md shadow w-full min-w-fit">
-                <div
-                    class="h-auto md:h-fit flex-none bg-cover lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
-                        width="60" height="60" class="bg-orange-100 dark:bg-orange-200 rounded-full p-2">
-                        <path fill="orange"
-                            d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM5.683,16H1a1,1,0,0,1-1-1A6.022,6.022,0,0,1,5.131,9.084a1,1,0,0,1,1.1,1.266A6.009,6.009,0,0,0,6,12a5.937,5.937,0,0,0,.586,2.57,1,1,0,0,1-.9,1.43ZM17,24H7a1,1,0,0,1-1-1,6,6,0,0,1,12,0A1,1,0,0,1,17,24ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8Zm17,8H18.317a1,1,0,0,1-.9-1.43A5.937,5.937,0,0,0,18,12a6.009,6.009,0,0,0-.236-1.65,1,1,0,0,1,1.105-1.266A6.022,6.022,0,0,1,24,15,1,1,0,0,1,23,16Z" />
-                    </svg>
-                </div>
-                <div class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                    <div class="mb-2">
-                        <div class="text-gray-900 dark:text-gray-100 font-bold text-3xl mb-0 font-poppins">
-                            <%= total_students || 0 %>
-                        </div>
-                        <p class="text-gray-700 dark:text-gray-300 text-base p-0">Total Student</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Files Card -->
-            <div
-                class="bg-white dark:bg-gray-800 flex px-0 pl-4 gap-2 justify-center items-center rounded-md shadow w-full">
-                <div
-                    class="h-auto md:h-full flex-none bg-cover lg:rounded-t-none lg:rounded-l text-center overflow-hidden flex justify-center items-center min-w-fit">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="-4 -4 30 30"
-                        width="60" height="60" class="bg-green-100 dark:bg-green-200 rounded-full p-2">
-                        <path fill="green"
-                            d="m0,18V5C0,2.794,1.794,1,4,1h2c.464,0,.928.109,1.342.316l3.155,1.578c.138.069.293.105.447.105h5.056c2.757,0,5,2.243,5,5h-10.976c-2.638,0-5.003,1.766-5.754,4.303l-2.673,9.339c-.977-.913-1.597-2.203-1.597-3.642Zm23.493-6.983c-.479-.643-1.209-1.012-2.008-1.025-.015,0-.027.008-.042.008h-11.419c-1.758,0-3.335,1.177-3.834,2.862l-2.818,9.843c.513.178,1.055.295,1.628.295h12.558c2.226,0,4.15-1.432,4.802-3.607l1.532-6.116c.234-.782.089-1.605-.398-2.26Z" />
-                    </svg>
-                </div>
-                <div class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                    <div class="mb-2">
-                        <div class="text-gray-900 dark:text-gray-100 font-bold text-3xl mb-0 font-poppins">
-                            <%= files_count || 0 %>
-                        </div>
-                        <p class="text-gray-700 dark:text-gray-300 text-base p-0">Total Files</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div
-            class="relative w-full overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 xl:w-1/2 lg:w-1/2 md:w-full mb-20 lg:mb-0 md:mb-0">
-            <h2 class="text-xl font-bold mb-4 dark:text-gray-100">Student Count by Class</h2>
-
-            <!-- Session Dropdown -->
-            <form id="sessionForm" class="mb-4 absolute top-2 right-2">
-                
-                <select id="session" name="session"
-                    class=" ml-2 p-1 border-0 border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-300">
-                    <% const currentYear = new Date().getFullYear(); %>
-                    <% for (let year=currentYear-2; year <=currentYear+2; year++) { %>
-                        <option value="<%= year %>-<%= year + 1 %>" <%=year===new Date().getFullYear() ? 'selected' : ''
-                            %>>
-                            <%= year %>-<%= year + 1 %>
-                        </option>
-                        <% } %>
-                </select>
-            </form>
-
-            <!-- Data Table -->
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">Class</th>
-                        <th scope="col" class="px-6 py-3">Boys</th>
-                        <th scope="col" class="px-6 py-3">Girls</th>
-                    </tr>
-                </thead>
-                <tbody id="classData">
-
-                </tbody>
-            </table>
-        </div>
-
-
+<div class="p-4 sm:ml-64 dark:bg-gray-900 dark:text-stone-50 mt-16 bg-gray-50 min-h-screen">
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-md p-6 mb-6 text-white">
+        <h1 class="text-2xl font-bold mb-2">Welcome back, <%= user.first_name %>!</h1>
+        <p class="opacity-90">Here's what's happening with your classes today</p>
     </div>
 
-    <!-- FlowbiteChart Script -->
-    <script src="/js/dashboard_marks_show.js" defer></script>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column - Stats Cards -->
+        <div class="space-y-6">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Total Students Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-orange-100 dark:bg-orange-200 rounded-full p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 30 30" width="30" height="30" fill="orange">
+                                <path d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM5.683,16H1a1,1,0,0,1-1-1A6.022,6.022,0,0,1,5.131,9.084a1,1,0,0,1,1.1,1.266A6.009,6.009,0,0,0,6,12a5.937,5.937,0,0,0,.586,2.57,1,1,0,0,1-.9,1.43ZM17,24H7a1,1,0,0,1-1-1,6,6,0,0,1,12,0A1,1,0,0,1,17,24ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8Zm17,8H18.317a1,1,0,0,1-.9-1.43A5.937,5.937,0,0,0,18,12a6.009,6.009,0,0,0-.236-1.65,1,1,0,0,1,1.105-1.266A6.022,6.022,0,0,1,24,15,1,1,0,0,1,23,16Z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Students</p>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white"><%= total_students || 0 %></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Classes Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-purple-100 dark:bg-purple-200 rounded-full p-2">
+                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Classes</p>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white"><%= 0 %></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Today Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-green-100 dark:bg-green-200 rounded-full p-2">
+                            <svg class="w-6 h-6 text-green-600 dark:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Today's Attendance</p>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white"><%= '0%' %></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Tasks Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-red-100 dark:bg-red-200 rounded-full p-2">
+                            <svg class="w-6 h-6 text-red-600 dark:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Pending Tasks</p>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white"><%= 0 %></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Academic Calendar</h3>
+                    <span class="text-sm text-blue-600 dark:text-blue-400">View All</span>
+                </div>
+                <div class="space-y-3">
+                    <% [1,2,3].forEach(event => { %>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-100 dark:bg-blue-900 rounded-lg p-2 mr-3">
+                            <div class="text-center">
+                                <div class="text-xs font-bold text-blue-800 dark:text-blue-200">MON</div>
+                                <div class="text-lg font-bold text-blue-800 dark:text-blue-200">15</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Parent-Teacher Meeting</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">10:00 AM - 12:00 PM</p>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="/student/new" class="flex flex-col items-center p-3 bg-blue-50 dark:bg-gray-700 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors">
+                        <div class="bg-blue-100 dark:bg-blue-900 rounded-full p-2 mb-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23,11H21V9a1,1,0,0,0-2,0v2H17a1,1,0,0,0,0,2h2v2a1,1,0,0,0,2,0V13h2a1,1,0,0,0,0-2Z"/>
+                                <path d="M9,12A6,6,0,1,0,3,6,6.006,6.006,0,0,0,9,12ZM9,2A4,4,0,1,1,5,6,4,4,0,0,1,9,2Z"/>
+                                <path d="M9,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,9,14Z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs text-center text-gray-700 dark:text-gray-300">Add Student</span>
+                    </a>
+                    <a href="/attendance" class="flex flex-col items-center p-3 bg-blue-50 dark:bg-gray-700 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors">
+                        <div class="bg-blue-100 dark:bg-blue-900 rounded-full p-2 mb-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs text-center text-gray-700 dark:text-gray-300">Take Attendance</span>
+                    </a>
+                    <a href="/grades" class="flex flex-col items-center p-3 bg-blue-50 dark:bg-gray-700 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors">
+                        <div class="bg-blue-100 dark:bg-blue-900 rounded-full p-2 mb-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs text-center text-gray-700 dark:text-gray-300">Enter Grades</span>
+                    </a>
+                    <a href="/reports" class="flex flex-col items-center p-3 bg-blue-50 dark:bg-gray-700 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors">
+                        <div class="bg-blue-100 dark:bg-blue-900 rounded-full p-2 mb-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs text-center text-gray-700 dark:text-gray-300">Generate Reports</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Column -->
+        <div class="space-y-6">
+            <!-- Class Performance Chart -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Class Performance</h3>
+                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        <option>This Month</option>
+                        <option>Last Month</option>
+                        <option>This Term</option>
+                    </select>
+                </div>
+                <div class="h-64 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    <!-- Chart placeholder - would be replaced with actual chart -->
+                    <p class="text-gray-500 dark:text-gray-400">Performance chart will appear here</p>
+                </div>
+            </div>
+
+            <!-- Upcoming Assignments -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upcoming Assignments</h3>
+                    <a href="#" class="text-sm text-blue-600 dark:text-blue-400">View All</a>
+                </div>
+                <div class="space-y-4">
+                    <% [1,2,3].forEach(assignment => { %>
+                    <div class="flex items-start p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex-shrink-0 bg-yellow-100 dark:bg-yellow-900 rounded-full p-2 mr-3">
+                            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Math Homework Chapter 5</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Due: Tomorrow</p>
+                            <div class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">
+                                <span>Class 9A</span>
+                                <span class="mx-1">•</span>
+                                <span>12/15 submitted</span>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+            <!-- Student Count by Class Table -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Student Count by Class</h2>
+                        <form id="sessionForm" class="flex items-center">
+                            <select id="session" name="session" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <% const currentYear = new Date().getFullYear(); %>
+                                <% for (let year=currentYear-2; year <=currentYear+2; year++) { %>
+                                    <option value="<%= year %>-<%= year + 1 %>" <%=year===new Date().getFullYear() ? 'selected' : '' %>>
+                                        <%= year %>-<%= year + 1 %>
+                                    </option>
+                                <% } %>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">Class</th>
+                                    <th scope="col" class="px-4 py-3">Boys</th>
+                                    <th scope="col" class="px-4 py-3">Girls</th>
+                                    <th scope="col" class="px-4 py-3">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="classData" class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
+                    <a href="#" class="text-sm text-blue-600 dark:text-blue-400">View All</a>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <img class="h-8 w-8 rounded-full" src="/image/student.svg" alt="Student">
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Rahul Sharma</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Submitted Math assignment</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <img class="h-8 w-8 rounded-full" src="/image/teacher.svg" alt="Teacher">
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">You</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Posted new Science project</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">5 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-100 dark:bg-blue-900 rounded-full p-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">System Notification</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Parent meeting scheduled for Friday</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">Yesterday</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Announcement -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Announcement</h3>
+                <form>
+                    <div class="mb-4">
+                        <label for="announcement" class="sr-only">Announcement</label>
+                        <textarea id="announcement" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your announcement here..."></textarea>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-offset-0 focus:ring-blue-200 focus:ring-opacity-50">
+                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-300">Send notification</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition duration-300">
+                            Post
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FlowbiteChart Script -->
+<script src="/js/dashboard_marks_show.js" defer></script>
