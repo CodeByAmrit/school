@@ -22,9 +22,10 @@ jobs:
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
           echo -e "Host *\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
 
-      - name: Deploy to EC2 and restart app
+      - name: SSH & deploy to EC2
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            sudo -s
             cd ${{ secrets.VPS_PROJECT_PATH }}
             git pull origin master
             npm install
