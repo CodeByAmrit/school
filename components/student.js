@@ -790,7 +790,7 @@ async function markStudentAsLeft(req, res) {
         ]);
 
         // Delete student from main table
-        await connection.execute('DELETE FROM students WHERE school_id = ?', [studentId]);
+        await connection.query('CALL delete_student(?)', [studentId]);
 
         await connection.commit();
 
