@@ -21,11 +21,6 @@ RUN npm install -g pm2
 
 COPY --from=build /school /school
 
-# Copy secrets (if you want them inside image, not recommended for security)
-# Better: use Coolify's secrets/volumes
-COPY google-credentials.json ./google-credentials.json
-COPY captcha.json ./captcha.json
-COPY .env ./.env
 
 EXPOSE 3000
 CMD ["pm2-runtime", "start", "bin/www"]
