@@ -23,4 +23,4 @@ COPY --from=build /school /school
 
 
 EXPOSE 3000
-CMD ["pm2-runtime", "start", "bin/www"]
+CMD ["pm2-runtime", "start", "app"]
