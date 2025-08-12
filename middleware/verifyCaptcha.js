@@ -1,9 +1,6 @@
 const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise');
 const path = require('path');
 
-// Set Google Cloud credentials manually
-process.env.GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, "..", 'captcha.json');
-
 const client = new RecaptchaEnterpriseServiceClient();
 
 const verifyCaptcha = async (req, res, next) => {
