@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('apaar_id', document.getElementById('apaar_id').value.toUpperCase());
         formData.append('gender', document.getElementById('gender').value.toUpperCase());
 
+        formData.append('student_aadhar_no', document.getElementById('student_aadhar_no').value);
+        formData.append('father_aadhar_no', document.getElementById('father_aadhar_no').value);
+        formData.append('mother_aadhar_no', document.getElementById('mother_aadhar_no').value);
 
         // Check if photo is selected and append it to FormData
         const file = dropzoneFileInput.files[0];
