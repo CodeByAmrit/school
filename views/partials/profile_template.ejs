@@ -153,6 +153,15 @@
                                 Of Birth</label>
                         </div>
 
+                        <!-- Student Aadhar no -->
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
+                            <input type="text" id="student_aadhar_no" name="student_aadhar_no"
+                                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="<%= student.student_aadhar_no ? student.student_aadhar_no : '' %>" />
+                            <label for="student_aadhar_no"
+                                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Student Aadhar Number</label>
+                        </div>
+
                         <!-- corresponding_address Address -->
                         <div class="relative mb-3 w-full">
                             <input type="text" id="corresponding_address" name="corresponding_address"
@@ -231,6 +240,25 @@
                                 class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Mobile
                                 No</label>
                         </div>
+
+                        <!-- Father Aadhar no -->
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
+                            <input type="text" id="father_aadhar_no" name="father_aadhar_no"
+                                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="<%= student.father_aadhar_no ? student.father_aadhar_no : '' %>" />
+                            <label for="father_aadhar_no"
+                                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Father Aadhar Number</label>
+                        </div>
+
+                        <!-- Mother Aadhar no -->
+                        <div class="relative mb-3 w-full md:w-fit lg:w-fit">
+                            <input type="text" id="mother_aadhar_no" name="mother_aadhar_no"
+                                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="<%= student.mother_aadhar_no ? student.mother_aadhar_no : '' %>" />
+                            <label for="mother_aadhar_no"
+                                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Mother Aadhar Number</label>
+                        </div>
+
                     </div>
 
                     <p class="dark:text-white text-xl p-2">Admission Details</p>
