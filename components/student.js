@@ -149,8 +149,8 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
             // Insert new record without school_id
             query = `
                 INSERT INTO students (teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender, student_aadhar_no, father_aadhar_no, mother_aadhar_no)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             values = [
@@ -172,14 +172,17 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                 student.dob,
                 student.profile_status,
                 student.apaar_id,
-                student.gender
+                student.gender,
+                student.student_aadhar_no,
+                student.father_aadhar_no,
+                student.mother_aadhar_no
             ];
         } else {
             // Insert or update existing record with school_id
             query = `
                 INSERT INTO students (school_id, teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender, student_aadhar_no, father_aadhar_no, mother_aadhar_no)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     teacher_id = VALUES(teacher_id),
                     name = VALUES(name),
@@ -199,7 +202,10 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                     dob = VALUES(dob),
                     profile_status = VALUES(profile_status),
                     apaar_id = VALUES(apaar_id),
-                    gender = VALUES(gender)
+                    gender = VALUES(gender),
+                    student_aadhar_no = VALUES(student_aadhar_no),
+                    father_aadhar_no = VALUES(father_aadhar_no),
+                    mother_aadhar_no = VALUES(mother_aadhar_no)
             `;
 
             values = [
@@ -222,7 +228,10 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
                 student.dob,
                 student.profile_status,
                 student.apaar_id,
-                student.gender
+                student.gender,
+                student.student_aadhar_no,
+                student.father_aadhar_no,
+                student.mother_aadhar_no
             ];
         }
 
