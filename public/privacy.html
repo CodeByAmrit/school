@@ -1,49 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Privacy Policy - StudentTracker</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="bg-gray-100 text-gray-900">
-    <div class="max-w-4xl mx-auto py-12 px-6">
-        <h1 class="text-3xl font-bold text-center mb-6">Privacy Policy</h1>
-        <p class="text-gray-700 text-lg mb-4">Last Updated: <span class="font-semibold">February 2025</span></p>
-        
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">1. Introduction</h2>
-            <p class="text-gray-700">Welcome to StudentTracker. This privacy policy explains how we collect, use, and protect your personal data when you use our platform.</p>
-        </section>
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">2. Information We Collect</h2>
-            <ul class="list-disc pl-5 text-gray-700">
-                <li>Personal Information (Name, Email, etc.)</li>
-                <li>Student Academic Records (Grades, Attendance, etc.)</li>
-                <li>Usage Data (IP address, browser type, etc.)</li>
-            </ul>
-        </section>
+    <meta
+      name="description"
+      content="Read the Privacy Policy for StudentTracker to understand how we collect, use, and protect your personal and academic data."
+    />
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">3. How We Use Your Information</h2>
-            <p class="text-gray-700">We use your information to manage student records, improve our services, and ensure security.</p>
-        </section>
+    <script
+      src="https://cdn.tailwindcss.com"
+      nonce="nonce-ozfWMSeQ06g862KcEoWVKg=="
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">4. Data Protection</h2>
-            <p class="text-gray-700">We implement industry-standard security measures to protect your data. However, no method is 100% secure.</p>
-        </section>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Quicksand:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">5. Your Rights</h2>
-            <p class="text-gray-700">You have the right to request access, correction, or deletion of your data. Contact us for any concerns.</p>
-        </section>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/icons/site.webmanifest" />
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">6. Contact Us</h2>
-            <p class="text-gray-700">If you have any questions about this policy, contact us at <a href="mailto:support@studenttracker.com" class="text-blue-600 underline">support@studenttracker.com</a>.</p>
-        </section>
-    </div>
-</body>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .quicksand {
+        font-family: "Quicksand", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <nav class="fixed w-full bg-white backdrop-blur-sm shadow-sm z-50">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
+      >
+        <a href="/" class="text-2xl font-bold text-blue-600 quicksand"
+          >StudentTracker</a
+        >
+
+        <div class="hidden md:flex items-center space-x-4">
+          <a
+            href="/login"
+            class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            >Login</a
+          >
+          <a
+            href="/signup"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
+          >
+            Sign Up
+          </a>
+        </div>
+
+        <div class="md:hidden">
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-default"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="hidden w-full md:hidden" id="navbar-default">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="/login"
+            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Login</a
+          >
+          <a
+            href="/signup"
+            class="block bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-base font-medium"
+            >Sign Up</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <main class="pt-24 pb-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg shadow-md p-6 md:p-10">
+          <h1
+            class="text-3xl md:text-4xl font-bold text-blue-600 text-center mb-4 quicksand"
+          >
+            Privacy Policy
+          </h1>
+          <p class="text-gray-500 text-center text-sm mb-8">
+            Last Updated: <span class="font-medium">October 2025</span>
+          </p>
+
+          <div class="space-y-6 text-gray-700 leading-relaxed">
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                1. Introduction
+              </h2>
+              <p>
+                Welcome to StudentTracker. This privacy policy explains how we
+                collect, use, and protect your personal data when you use our
+                platform. Your privacy is critically important to us, and we are
+                committed to safeguarding your information.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                2. Information We Collect
+              </h2>
+              <p class="mb-2">
+                To provide our services, we may collect the following types of
+                information:
+              </p>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>
+                  <strong>Personal Information:</strong> Name, email address,
+                  contact details, and other identifiers provided during account
+                  registration.
+                </li>
+                <li>
+                  <strong>Student Academic Records:</strong> Information such as
+                  grades, attendance records, class schedules, and other
+                  performance-related data.
+                </li>
+                <li>
+                  <strong>Usage Data:</strong> We automatically collect
+                  technical information, including IP address, browser type,
+                  device information, and pages visited, to monitor and improve
+                  our service.
+                </li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                3. How We Use Your Information
+              </h2>
+              <p>
+                We use the information we collect to operate and maintain the
+                StudentTracker platform, provide personalized features, improve
+                our services, communicate with you, and ensure the security of
+                our systems.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                4. Data Protection
+              </h2>
+              <p>
+                We implement industry-standard security measures, including
+                encryption and access controls, to protect your data from loss,
+                misuse, and unauthorized access. However, no method of
+                transmission over the Internet is 100% secure.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                5. Your Rights
+              </h2>
+              <p>
+                You have the right to request access to, correction of, or
+                deletion of your personal data. You can also object to the
+                processing of your data. Please contact us to make such a
+                request.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                6. Contact Us
+              </h2>
+              <p>
+                If you have any questions or concerns about this privacy policy,
+                please do not hesitate to contact us at
+                <a
+                  href="mailto:me.sharma.amrit@gmail.com"
+                  class="text-blue-600 hover:underline font-medium"
+                  >me.sharma.amrit@gmail.com</a
+                >.
+              </p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-gray-100 text-gray-600 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+        <p class="mb-3">
+          © 2025 Student Tracker |
+          <a href="/term_condition.html" class="hover:text-blue-600"
+            >Terms & Conditions</a
+          >
+          |
+          <a href="/privacy.html" class="hover:text-blue-600">Privacy Policy</a>
+        </p>
+        <div class="mb-3">
+          <a
+            href="https://www.instagram.com/warrior_amrit/"
+            target="_blank"
+            class="hover:text-blue-600 mx-2"
+            >Instagram</a
+          >
+          |
+          <a
+            href="https://github.com/CodeByAmrit/"
+            target="_blank"
+            class="hover:text-blue-600 mx-2"
+            >GitHub</a
+          >
+        </div>
+        <p>
+          Contact:
+          <a href="mailto:me.sharma.amrit@gmail.com" class="hover:text-blue-600"
+            >me.sharma.amrit@gmail.com</a
+          >
+          | +91 9817044885
+        </p>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"
+      nonce="nonce-ozfWMSeQ06g862KcEoWVKg=="
+    ></script>
+  </body>
 </html>
