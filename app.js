@@ -16,82 +16,92 @@ const Gemini_router = require("./router/ai_router");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 class App {
-    constructor() {
-        this.app = express();
-        this.configureMiddleware();
-        this.configureRoutes();
-        this.configureErrorHandling();
+  constructor() {
+    this.app = express();
+    this.configureMiddleware();
+    this.configureRoutes();
+    this.configureErrorHandling();
+  }
+
+  configureMiddleware() {
+    this.app.set("trust proxy", "loopback");
+    this.app.use(helmet());
+    this.app.use(compression());
+
+    this.app.use((req, res, next) => {
+      res.setHeader(
+        "Content-Security-Policy",
+        "script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg==' https://www.google.com https://www.gstatic.com " +
+          // Add the required CDN domains here
+          "https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; " +
+          "frame-src 'self' https://www.google.com;"
+      );
+      next();
+    });
+
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 700,
+      standardHeaders: true,
+      legacyHeaders: false,
+    });
+    this.app.use(limiter);
+
+    if (process.env.NODE_ENV !== "production") {
+      this.app.use(morgan("combined"));
     }
 
-    configureMiddleware() {
-        this.app.set("trust proxy", "loopback");
-        this.app.use(helmet());
-        this.app.use(compression());
+    this.app.use(express.json({ limit: "10mb" }));
+    this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
+    this.app.use(bodyParser.json({ limit: "10mb" }));
+    this.app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+    this.app.use(cookieParser());
 
-        this.app.use((req, res, next) => {
-            res.setHeader(
-                'Content-Security-Policy',
-                "script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg==' https://www.google.com https://www.gstatic.com; " +
-                "frame-src 'self' https://www.google.com;"
-            );
-            next();
-        });
+    this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
+    this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
+    this.app.use(
+      "/flowbite",
+      express.static(path.join(__dirname, "node_modules/flowbite/dist"))
+    );
+    this.app.use(
+      "/apexcharts",
+      express.static(path.join(__dirname, "node_modules", "apexcharts", "dist"))
+    );
+    this.app.use("/output", express.static(path.join(__dirname, "output")));
+    this.app.use(
+      express.static(path.join(__dirname, "public"), {
+        setHeaders: (res) => res.setHeader("Access-Control-Allow-Origin", "*"),
+      })
+    );
+    this.app.set("views", path.join(__dirname, "views"));
 
-        const limiter = rateLimit({
-            windowMs: 15 * 60 * 1000,
-            max: 700,
-            standardHeaders: true,
-            legacyHeaders: false,
-        });
-        this.app.use(limiter);
+    this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
+  }
 
-        if (process.env.NODE_ENV !== "production") {
-            this.app.use(morgan("combined"));
-        }
+  configureRoutes() {
+    // this.app.use(authRoutes);
+    this.app.set("view engine", "ejs");
+    this.app.use("/", router);
+    this.app.use("/api/students/", student);
+    // this.app.use("/webhook", webhook);
+    this.app.use("/ai", Gemini_router);
+  }
 
-        this.app.use(express.json({ limit: "10mb" }));
-        this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
-        this.app.use(bodyParser.json({ limit: "10mb" }));
-        this.app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-        this.app.use(cookieParser());
+  configureErrorHandling() {
+    this.app.use(notFoundHandler);
+    this.app.use(errorHandler);
+  }
 
-        this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
-        this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
-        this.app.use("/flowbite", express.static(path.join(__dirname, "node_modules/flowbite/dist")));
-        this.app.use("/apexcharts", express.static(path.join(__dirname, "node_modules", "apexcharts", "dist")));
-        this.app.use("/output", express.static(path.join(__dirname, "output")));
-        this.app.use(express.static(path.join(__dirname, "public"), {
-            setHeaders: (res) => res.setHeader("Access-Control-Allow-Origin", "*")
-        }));
-        this.app.set("views", path.join(__dirname, "views"));
+  startServer() {
+    // if (process.env.NODE_ENV === "production") {
+    //     this.app.set("view cache", true);
+    // }
 
-        this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
-    }
-
-    configureRoutes() {
-        // this.app.use(authRoutes);
-        this.app.set("view engine", "ejs");
-        this.app.use("/", router);
-        this.app.use("/api/students/", student);
-        // this.app.use("/webhook", webhook);
-        this.app.use("/ai", Gemini_router);
-    }
-
-    configureErrorHandling() {
-        this.app.use(notFoundHandler);
-        this.app.use(errorHandler);
-    }
-
-    startServer() {
-        // if (process.env.NODE_ENV === "production") {
-        //     this.app.set("view cache", true);
-        // }
-
-        const PORT = process.env.PORT || 3000;
-        this.app.listen(PORT, () => {
-            console.log(`🚀 Server running at http://localhost:${PORT}`);
-        });
-    }
+    const PORT = process.env.PORT || 3000;
+    this.app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  }
 }
 
 // const app = new App();
