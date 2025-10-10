@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS students (
     apaar_id VARCHAR(40),
     gender ENUM('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
     student_aadhar_no CHAR(12) NULL UNIQUE,
-    father_aadhar_no CHAR(12) NULL UNIQUE,
-    mother_aadhar_no CHAR(12) NULL UNIQUE,
+    father_aadhar_no CHAR(12) NULL,
+    mother_aadhar_no CHAR(12) NULL,
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
 
