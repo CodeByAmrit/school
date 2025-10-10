@@ -1,26 +1,37 @@
-# Use a smaller base image
-FROM node:20-alpine AS build
+# ---- Stage 1: Build ----
+FROM node:lts-slim AS build
 
-# Install dependencies and tools
-RUN apk add --no-cache python3 make g++ && npm install -g pm2
+# Install build tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3 make g++ && \
+    npm install -g pm2 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /school
 
-# Copy everything from local machine (Coolify will mount repo here)
+# Copy package files first to leverage caching
 COPY package*.json ./
+
+# Install dependencies (omit dev for production)
 RUN npm install --omit=dev && npm cache clean --force
 
+# Copy the rest of the application
 COPY . .
 
-# Use a lightweight runtime image
-FROM node:20-alpine
+# ---- Stage 2: Runtime ----
+FROM node:lts-slim
 
 WORKDIR /school
+
+# Install pm2 for process management
 RUN npm install -g pm2
 
+# Copy built app from the build stage
 COPY --from=build /school /school
 
-
+# Expose app port
 EXPOSE 3000
+
+# Start the application
 CMD ["pm2-runtime", "start", "app"]
