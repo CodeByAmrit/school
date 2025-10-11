@@ -1,26 +1,26 @@
 {
-    "name": "Student Tracker",
-    "short_name": "StudentTracker",
-    "icons": [
-        {
-            "src": "/icons/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/icons/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone",
-    "scope": "/",
-    "start_url": "/index.html",
-    "orientation": "portrait",
-    "dir": "ltr",
-    "lang": "en"
+  "name": "Student Tracker",
+  "short_name": "StudentTracker",
+  "icons": [
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/index.html",
+  "orientation": "portrait",
+  "dir": "ltr",
+  "lang": "en"
 }

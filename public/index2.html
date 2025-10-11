@@ -1,369 +1,572 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Tracker - School Management System</title>
 
     <!-- Meta Description -->
-    <meta name="description"
-        content="Student Tracker is an advanced school management system that helps schools manage student records, attendance, and academic performance efficiently. Try Student Tracker today!">
+    <meta
+      name="description"
+      content="Student Tracker is an advanced school management system that helps schools manage student records, attendance, and academic performance efficiently. Try Student Tracker today!"
+    />
 
     <!-- Keywords for SEO -->
-    <meta name="keywords"
-        content="student tracker, school management system, student management, attendance system, student records, academic performance, school software">
+    <meta
+      name="keywords"
+      content="student tracker, school management system, student management, attendance system, student records, academic performance, school software"
+    />
 
     <!-- Author -->
-    <meta name="author" content="Amrit">
+    <meta name="author" content="Amrit" />
 
     <!-- Open Graph Meta Tags for Social Sharing -->
-    <meta property="og:title" content="Student Tracker - School Management System">
-    <meta property="og:description"
-        content="A powerful school management solution to track student data, attendance, and academic performance with ease.">
-    <meta property="og:image" content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png">
-    <meta property="og:url" content="https://edu.codebyamrit.co.in">
-    <meta property="og:type" content="website">
+    <meta
+      property="og:title"
+      content="Student Tracker - School Management System"
+    />
+    <meta
+      property="og:description"
+      content="A powerful school management solution to track student data, attendance, and academic performance with ease."
+    />
+    <meta
+      property="og:image"
+      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
+    />
+    <meta property="og:url" content="https://edu.codebyamrit.co.in" />
+    <meta property="og:type" content="website" />
 
     <!-- Twitter Card for Social Sharing -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Student Tracker - School Management System">
-    <meta name="twitter:description" content="Manage student records, attendance, and academic performance with ease.">
-    <meta name="twitter:image" content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png">
-    <meta name="twitter:site" content="@codebyamrit">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Student Tracker - School Management System"
+    />
+    <meta
+      name="twitter:description"
+      content="Manage student records, attendance, and academic performance with ease."
+    />
+    <meta
+      name="twitter:image"
+      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
+    />
+    <meta name="twitter:site" content="@codebyamrit" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Flowbite CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-    
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-    <link rel="manifest" href="/icons/site.webmanifest">
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .quicksand {
-            font-family: 'Quicksand', sans-serif;
-        }
-    </style>
-</head>
 
-<body class="bg-gray-50">
+    <!-- Flowbite CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          135deg,
+          #1e3a8a 0%,
+          #2563eb 50%,
+          #3b82f6 100%
+        );
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .quicksand {
+        font-family: 'Quicksand', sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="fixed w-full bg-white shadow-sm z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
-                    <a href="#" class="text-2xl font-bold text-blue-600 quicksand">StudentTracker</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/login" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Login</a>
-                    <a href="/signup" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
-                        Sign Up
-                    </a>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <div class="flex items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600 quicksand"
+              >StudentTracker</a
+            >
+          </div>
+          <div class="flex items-center space-x-4">
+            <a
+              href="/login"
+              class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+              >Login</a
+            >
+            <a
+              href="/signup"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
+            >
+              Sign Up
+            </a>
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero-gradient pt-24 pb-32 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex md:items-center md:justify-between">
-                <div class="md:w-1/2 mb-12 md:mb-0">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 quicksand leading-tight">
-                        Track and Manage Student Data Easily
-                    </h1>
-                    
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Aligned with Educational Standards</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Empowers Teachers with Comprehensive Insights</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Optimized for Efficient Classroom Management</span>
-                        </li>
-                    </ul>
-                    
-                    <div class="flex space-x-4">
-                        <a href="/privacy.html" class="border border-white hover:bg-white hover:text-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300">
-                            Privacy Policy
-                        </a>
-                        <a href="/term_condition.html" class="border border-white hover:bg-white hover:text-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300">
-                            Terms & Conditions
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2 flex space-x-6">
-                    <!-- Student Card -->
-                    <div class="w-1/2 relative">
-                        <div class="flex justify-center mb-4">
-                            <img src="/image/student.svg" alt="student" class="w-48">
-                        </div>
-                        <div class="bg-white rounded-lg shadow-lg p-6 text-gray-800">
-                            <h3 class="font-bold text-lg mb-2">Track Your Progress with Ease</h3>
-                            <p class="text-sm text-gray-600 mb-4">Join thousands of students and manage your learning journey with personalized tools assessments.</p>
-                            <a href="/login" class="block w-full bg-yellow-400 hover:bg-yellow-500 text-center text-sm font-medium py-2 px-4 rounded-md transition duration-300">
-                                Login as Student
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Teacher Card -->
-                    <div class="w-1/2 relative">
-                        <div class="flex justify-center mb-4">
-                            <img src="/image/teacher.svg" alt="teacher" class="w-48">
-                        </div>
-                        <div class="bg-white rounded-lg shadow-lg p-6 text-gray-800">
-                            <h3 class="font-bold text-lg mb-2">For Instructors and Admins</h3>
-                            <p class="text-sm text-gray-600 mb-4">Easily Manage Class and Student Settings with Automated Reports, and More.</p>
-                            <a href="/login" class="block w-full bg-yellow-400 hover:bg-yellow-500 text-center text-sm font-medium py-2 px-4 rounded-md transition duration-300">
-                                Login as Teacher
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between">
+          <div class="md:w-1/2 mb-12 md:mb-0">
+            <h1
+              class="text-4xl md:text-5xl font-bold mb-6 quicksand leading-tight"
+            >
+              Track and Manage Student Data Easily
+            </h1>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <svg
+                  class="w-5 h-5 mr-3 text-blue-300"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Aligned with Educational Standards</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-5 h-5 mr-3 text-blue-300"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Empowers Teachers with Comprehensive Insights</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-5 h-5 mr-3 text-blue-300"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Optimized for Efficient Classroom Management</span>
+              </li>
+            </ul>
+
+            <div class="flex space-x-4">
+              <a
+                href="/privacy.html"
+                class="border border-white hover:bg-white hover:text-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="/term_condition.html"
+                class="border border-white hover:bg-white hover:text-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
+              >
+                Terms & Conditions
+              </a>
             </div>
+          </div>
+
+          <div class="md:w-1/2 flex space-x-6">
+            <!-- Student Card -->
+            <div class="w-1/2 relative">
+              <div class="flex justify-center mb-4">
+                <img src="/image/student.svg" alt="student" class="w-48" />
+              </div>
+              <div class="bg-white rounded-lg shadow-lg p-6 text-gray-800">
+                <h3 class="font-bold text-lg mb-2">
+                  Track Your Progress with Ease
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                  Join thousands of students and manage your learning journey
+                  with personalized tools assessments.
+                </p>
+                <a
+                  href="/login"
+                  class="block w-full bg-yellow-400 hover:bg-yellow-500 text-center text-sm font-medium py-2 px-4 rounded-md transition duration-300"
+                >
+                  Login as Student
+                </a>
+              </div>
+            </div>
+
+            <!-- Teacher Card -->
+            <div class="w-1/2 relative">
+              <div class="flex justify-center mb-4">
+                <img src="/image/teacher.svg" alt="teacher" class="w-48" />
+              </div>
+              <div class="bg-white rounded-lg shadow-lg p-6 text-gray-800">
+                <h3 class="font-bold text-lg mb-2">
+                  For Instructors and Admins
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                  Easily Manage Class and Student Settings with Automated
+                  Reports, and More.
+                </p>
+                <a
+                  href="/login"
+                  class="block w-full bg-yellow-400 hover:bg-yellow-500 text-center text-sm font-medium py-2 px-4 rounded-md transition duration-300"
+                >
+                  Login as Teacher
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Features Section 1 -->
     <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-blue-600 mb-12">
-                More Than Management: Records, Tracking, & Parent Communication
-            </h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                <!-- Feature 1 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/database.gif" alt="database" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Comprehensive Data Management</p>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/checklist.gif" alt="checklist" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Student Profiles & Academic Insights</p>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/encryption.gif" alt="encryption" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Secure Data Handling & Privacy</p>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/calendar.gif" alt="calendar" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Attendance & Grading Systems</p>
-                </div>
-                
-                <!-- Feature 5 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/family.gif" alt="family" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Parental Engagement & Reporting</p>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-12">
+          More Than Management: Records, Tracking, & Parent Communication
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <!-- Feature 1 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="/animate/database.gif"
+                alt="database"
+                class="w-16 h-16"
+              />
             </div>
+            <p class="text-sm font-medium text-gray-700">
+              Comprehensive Data Management
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="/animate/checklist.gif"
+                alt="checklist"
+                class="w-16 h-16"
+              />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Student Profiles & Academic Insights
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="/animate/encryption.gif"
+                alt="encryption"
+                class="w-16 h-16"
+              />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Secure Data Handling & Privacy
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="/animate/calendar.gif"
+                alt="calendar"
+                class="w-16 h-16"
+              />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Attendance & Grading Systems
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/family.gif" alt="family" class="w-16 h-16" />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Parental Engagement & Reporting
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Features Section 2 -->
     <section class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-blue-600 mb-12">
-                Free Student Management for Educators
-            </h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                <!-- Feature 1 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/report.gif" alt="report" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Detailed Performance Reports</p>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/school.gif" alt="school" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Comprehensive School & District Management Features</p>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/share-link.gif" alt="link" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">SSO Integration with Clever, ClassLink, & Google</p>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/setting.gif" alt="setting" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Customizable Learning Modules</p>
-                </div>
-                
-                <!-- Feature 5 -->
-                <div class="text-center">
-                    <div class="flex justify-center mb-4">
-                        <img src="/animate/test.gif" alt="test" class="w-16 h-16">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Preparation for Standardized Testing</p>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-12">
+          Free Student Management for Educators
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <!-- Feature 1 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/report.gif" alt="report" class="w-16 h-16" />
             </div>
+            <p class="text-sm font-medium text-gray-700">
+              Detailed Performance Reports
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/school.gif" alt="school" class="w-16 h-16" />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Comprehensive School & District Management Features
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/share-link.gif" alt="link" class="w-16 h-16" />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              SSO Integration with Clever, ClassLink, & Google
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/setting.gif" alt="setting" class="w-16 h-16" />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Customizable Learning Modules
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="text-center">
+            <div class="flex justify-center mb-4">
+              <img src="/animate/test.gif" alt="test" class="w-16 h-16" />
+            </div>
+            <p class="text-sm font-medium text-gray-700">
+              Preparation for Standardized Testing
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Stats Section -->
     <section class="py-16 bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h3 class="text-2xl font-bold mb-8">Students for the Future Preparing</h3>
-            
-            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
-                <span class="bg-white text-blue-600 px-6 py-3 rounded-full font-bold text-sm md:text-base">38,916,000+ students</span>
-                <span class="bg-green-500 text-white px-6 py-3 rounded-full font-bold text-sm md:text-base">677,000+ teachers</span>
-            </div>
-            
-            <p class="text-xl">Tens of thousands of schools rely on us every year.</p>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h3 class="text-2xl font-bold mb-8">
+          Students for the Future Preparing
+        </h3>
+
+        <div
+          class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8"
+        >
+          <span
+            class="bg-white text-blue-600 px-6 py-3 rounded-full font-bold text-sm md:text-base"
+            >38,916,000+ students</span
+          >
+          <span
+            class="bg-green-500 text-white px-6 py-3 rounded-full font-bold text-sm md:text-base"
+            >677,000+ teachers</span
+          >
         </div>
+
+        <p class="text-xl">
+          Tens of thousands of schools rely on us every year.
+        </p>
+      </div>
     </section>
 
     <!-- Why Choose Us Section -->
     <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-                Why You'll Love Student Tracker
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Card 1 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl">
-                    <div class="p-6 flex flex-col items-center">
-                        <div class="flex justify-center mb-4">
-                            <img src="/animate/neural-network.gif" alt="neural network" class="w-20 h-20">
-                        </div>
-                        <div class="text-center">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">Comprehensive Curriculum</h3>
-                            <p class="text-gray-600 text-sm">
-                                Equip students with essential academic skills – crafted by experts for learners at every level.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card 2 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl">
-                    <div class="p-6 flex flex-col items-center">
-                        <div class="flex justify-center mb-4">
-                            <img src="/animate/graduate.gif" alt="graduate" class="w-20 h-20">
-                        </div>
-                        <div class="text-center">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">Interactive Learning</h3>
-                            <p class="text-gray-600 text-sm">
-                                Motivate students with engaging activities, personalized lessons, and progress tracking.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl">
-                    <div class="p-6 flex flex-col items-center">
-                        <div class="flex justify-center mb-4">
-                            <img src="/animate/online-lesson.gif" alt="online lesson" class="w-20 h-20">
-                        </div>
-                        <div class="text-center">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">Tailor It to Your Needs</h3>
-                            <p class="text-gray-600 text-sm">
-                                Customize the platform by creating your own modules to reinforce cross-disciplinary learning.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl">
-                    <div class="p-6 flex flex-col items-center">
-                        <div class="flex justify-center mb-4">
-                            <img src="/animate/score.gif" alt="score" class="w-20 h-20">
-                        </div>
-                        <div class="text-center">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">Standardized Test Readiness</h3>
-                            <p class="text-gray-600 text-sm">
-                                Help your students excel in standardized tests with tailored preparation tools.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          Why You'll Love Student Tracker
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Card 1 -->
+          <div
+            class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl"
+          >
+            <div class="p-6 flex flex-col items-center">
+              <div class="flex justify-center mb-4">
+                <img
+                  src="/animate/neural-network.gif"
+                  alt="neural network"
+                  class="w-20 h-20"
+                />
+              </div>
+              <div class="text-center">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">
+                  Comprehensive Curriculum
+                </h3>
+                <p class="text-gray-600 text-sm">
+                  Equip students with essential academic skills – crafted by
+                  experts for learners at every level.
+                </p>
+              </div>
             </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div
+            class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl"
+          >
+            <div class="p-6 flex flex-col items-center">
+              <div class="flex justify-center mb-4">
+                <img
+                  src="/animate/graduate.gif"
+                  alt="graduate"
+                  class="w-20 h-20"
+                />
+              </div>
+              <div class="text-center">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">
+                  Interactive Learning
+                </h3>
+                <p class="text-gray-600 text-sm">
+                  Motivate students with engaging activities, personalized
+                  lessons, and progress tracking.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl"
+          >
+            <div class="p-6 flex flex-col items-center">
+              <div class="flex justify-center mb-4">
+                <img
+                  src="/animate/online-lesson.gif"
+                  alt="online lesson"
+                  class="w-20 h-20"
+                />
+              </div>
+              <div class="text-center">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">
+                  Tailor It to Your Needs
+                </h3>
+                <p class="text-gray-600 text-sm">
+                  Customize the platform by creating your own modules to
+                  reinforce cross-disciplinary learning.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div
+            class="bg-white rounded-xl shadow-md overflow-hidden feature-card transition duration-300 hover:shadow-xl"
+          >
+            <div class="p-6 flex flex-col items-center">
+              <div class="flex justify-center mb-4">
+                <img src="/animate/score.gif" alt="score" class="w-20 h-20" />
+              </div>
+              <div class="text-center">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">
+                  Standardized Test Readiness
+                </h3>
+                <p class="text-gray-600 text-sm">
+                  Help your students excel in standardized tests with tailored
+                  preparation tools.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-gray-100 text-gray-600 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <p class="mb-4">© 2024 Student Tracker | 
-                    <a href="/term_condition.html" class="hover:text-blue-600">Terms & Conditions</a> | 
-                    <a href="/privacy.html" class="hover:text-blue-600">Privacy Policy</a>
-                </p>
-                <div class="mb-4">
-                    <a href="https://www.instagram.com/warrior_amrit/" target="_blank" class="hover:text-blue-600 mx-2">Instagram</a> |
-                    <a href="https://github.com/CodeByAmrit/" target="_blank" class="hover:text-blue-600 mx-2">GitHub</a>
-                </div>
-                <p>Contact: me.sharma.amrit@gmail.com | +91 9817044885</p>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <p class="mb-4">
+            © 2024 Student Tracker |
+            <a href="/term_condition.html" class="hover:text-blue-600"
+              >Terms & Conditions</a
+            >
+            |
+            <a href="/privacy.html" class="hover:text-blue-600"
+              >Privacy Policy</a
+            >
+          </p>
+          <div class="mb-4">
+            <a
+              href="https://www.instagram.com/warrior_amrit/"
+              target="_blank"
+              class="hover:text-blue-600 mx-2"
+              >Instagram</a
+            >
+            |
+            <a
+              href="https://github.com/CodeByAmrit/"
+              target="_blank"
+              class="hover:text-blue-600 mx-2"
+              >GitHub</a
+            >
+          </div>
+          <p>Contact: me.sharma.amrit@gmail.com | +91 9817044885</p>
         </div>
+      </div>
     </footer>
 
     <!-- Flowbite JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-</body>
-
+  </body>
 </html>

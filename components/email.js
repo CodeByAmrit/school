@@ -1,20 +1,19 @@
-const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 dotenv.config();
 
-
 async function sendEmail(recipientEmail, studentData) {
-    let transporter = nodemailer.createTransport({
-        host: "smtp.zoho.in",
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_ID,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.in',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_ID,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
-    let emailHTML = `
+  let emailHTML = `
         <html>
         <body>
             <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -35,27 +34,27 @@ async function sendEmail(recipientEmail, studentData) {
         </html>
     `;
 
-    let info = await transporter.sendMail({
-        from: '"Student Tracker" student@codebyamrit.co.in',
-        to: recipientEmail,
-        subject: "Your Student Tracker Update",
-        html: emailHTML,
-    });
+  let info = await transporter.sendMail({
+    from: '"Student Tracker" student@codebyamrit.co.in',
+    to: recipientEmail,
+    subject: 'Your Student Tracker Update',
+    html: emailHTML,
+  });
 
-    console.log("Email sent: " + info.response);
+  console.log('Email sent: ' + info.response);
 }
 
 async function sendOTPEmail(teacherEmail, otp) {
-    let transporter = nodemailer.createTransport({
-        host: "smtp.zoho.in",
-        port: 465,
-        secure: true,
-        auth: {
-            user: "student@codebyamrit.co.in",
-            pass: process.env.EMAIL_PASSWORD,  // Use environment variable for security
-        },
-    });
-    let emailHTML = `
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.in',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'student@codebyamrit.co.in',
+      pass: process.env.EMAIL_PASSWORD, // Use environment variable for security
+    },
+  });
+  let emailHTML = `
     <html>
     <head>
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
@@ -81,30 +80,29 @@ async function sendOTPEmail(teacherEmail, otp) {
     </html>
 `;
 
+  let info = await transporter.sendMail({
+    from: '"Student Tracker" <student@codebyamrit.co.in>',
+    to: teacherEmail,
+    subject: 'OTP for Account Verification',
+    html: emailHTML,
+  });
 
-    let info = await transporter.sendMail({
-        from: '"Student Tracker" <student@codebyamrit.co.in>',
-        to: teacherEmail,
-        subject: "OTP for Account Verification",
-        html: emailHTML,
-    });
-
-    console.log("OTP email sent: " + info.response);
-    return true;
+  console.log('OTP email sent: ' + info.response);
+  return true;
 }
 
 async function sendWelcomeEmail(recipientEmail, userName) {
-    let transporter = nodemailer.createTransport({
-        host: "smtp.zoho.in",
-        port: 465,
-        secure: true,
-        auth: {
-            user: "student@codebyamrit.co.in",
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.in',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'student@codebyamrit.co.in',
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
-    let emailHTML = `
+  let emailHTML = `
         <html>
         <body style="font-family: Arial, sans-serif; padding: 20px; background-color: #f3f4f6;">
             <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
@@ -128,15 +126,14 @@ async function sendWelcomeEmail(recipientEmail, userName) {
         </html>
     `;
 
-    let info = await transporter.sendMail({
-        from: '"Amrit Sharma - Student Tracker" <student@codebyamrit.co.in>',
-        to: recipientEmail,
-        subject: "Welcome to Student Tracker!",
-        html: emailHTML,
-    });
+  let info = await transporter.sendMail({
+    from: '"Amrit Sharma - Student Tracker" <student@codebyamrit.co.in>',
+    to: recipientEmail,
+    subject: 'Welcome to Student Tracker!',
+    html: emailHTML,
+  });
 
-    console.log("Welcome email sent: " + info.response);
+  console.log('Welcome email sent: ' + info.response);
 }
-
 
 module.exports = { sendEmail, sendOTPEmail, sendWelcomeEmail };

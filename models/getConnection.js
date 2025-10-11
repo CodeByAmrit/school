@@ -9,7 +9,6 @@ dotenv.config();
 const dbCaBase64 = process.env.DB_CA;
 const caContent = Buffer.from(dbCaBase64, 'base64').toString('utf8');
 
-
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -17,8 +16,8 @@ const dbConfig = {
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT,
   ssl: {
-    ca: caContent
-  }
+    ca: caContent,
+  },
 };
 
 async function getConnection() {
@@ -32,5 +31,5 @@ async function getConnection() {
 }
 
 module.exports = {
-  getConnection
+  getConnection,
 };

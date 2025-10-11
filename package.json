@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
+    "format": "npx prettier --write .",
     "build:css": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch",
     "vercel-build": "npm install",
     "start:pm2": "pm2 start ./bin/www --name studenttracker --env production"
