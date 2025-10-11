@@ -451,7 +451,7 @@ async function teacherSignup(req, res) {
             [firstName, lastName, email, hashedPassword, school_name, school_address, school_phone, school_logo]
         );
 
-        await sendWelcomeEmail(email, `${firstName} ${lastName}`);
+        // await sendWelcomeEmail(email, `${firstName} ${lastName}`);
         return res.render("show", { result }); // Show the result after successful insert
     } catch (error) {
         console.error(error); // Log the actual error for debugging
