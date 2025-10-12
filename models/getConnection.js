@@ -1,35 +1,47 @@
 const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
-const fs = require('fs');
-const path = require('path');
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
-const dbCaBase64 = process.env.DB_CA;
-const caContent = Buffer.from(dbCaBase64, 'base64').toString('utf8');
+// Decode SSL CA from Base64 (if used)
+let sslConfig = undefined;
+if (process.env.DB_CA) {
+  const caContent = Buffer.from(process.env.DB_CA, 'base64').toString('utf8');
+  sslConfig = { ca: caContent };
+}
 
-const dbConfig = {
+// Create a connection pool
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT,
-  ssl: {
-    ca: caContent,
-  },
-};
+  ssl: sslConfig,
+  waitForConnections: true,
+  connectionLimit: 10, // adjust as needed
+  queueLimit: 0,
+});
 
+// Helper function to get a pooled connection
 async function getConnection() {
   try {
-    const connection = await mysql.createConnection(dbConfig);
+    const connection = await pool.getConnection();
     return connection;
   } catch (error) {
-    console.error('Error connecting to the database:', error);
+    console.error('❌ Database connection error:', error);
     throw error;
   }
 }
 
+process.on('SIGINT', async () => {
+  await pool.end();
+  console.log('Database pool closed.');
+  process.exit(0);
+});
+
 module.exports = {
   getConnection,
+  pool,
 };

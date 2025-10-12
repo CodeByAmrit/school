@@ -52,7 +52,7 @@ router.get('/auth/google/callback', async (req, res) => {
       'SELECT * FROM teacher WHERE email = ?',
       [email]
     );
-    await connection.end();
+    await connection.release();
 
     if (rows.length > 0) {
       const teacher = rows[0];

@@ -48,8 +48,9 @@ async function create_excel_selected(req, res) {
 
     // Merged Header
     worksheet.mergeCells('A1:L1');
-    worksheet.getCell('A1').value =
-      `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
+    worksheet.getCell(
+      'A1'
+    ).value = `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
     worksheet.getCell('A1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
@@ -129,7 +130,7 @@ async function create_excel_selected(req, res) {
     console.error('Error Creating Excel:', error);
     res.status(500).json({ message: 'Failed to Create Excel.' });
   } finally {
-    if (connection) await connection.end();
+    if (connection) await connection.release();
   }
 }
 

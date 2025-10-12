@@ -353,7 +353,7 @@ async function generate(req, res) {
     console.error('Error generating certificate:', error);
     res.status(500).send('Error generating certificate.');
   } finally {
-    if (connection) connection.end();
+    if (connection) connection.release();
   }
 }
 

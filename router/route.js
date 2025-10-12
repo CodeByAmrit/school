@@ -39,37 +39,26 @@ const router = express.Router();
 
 // Route to get total students count
 router.get('/total-students', async (req, res) => {
-  try {
-    let totalStudents;
-    let totalTeachers;
-    let connection;
+  let connection;
 
-    try {
-      connection = await getConnection();
-      const [[{ total_students }]] = await connection.execute(
-        'SELECT COUNT(*) AS total_students FROM students'
-      );
-      const [[{ total_teachers }]] = await connection.execute(
-        'SELECT COUNT(*) AS total_teachers FROM teacher'
-      );
-      totalStudents = total_students;
-      totalTeachers = total_teachers;
-      connection.end();
-      res.json({
-        total_students: totalStudents,
-        total_teachers: totalTeachers,
-      });
-    } catch (error) {
-      console.log(error);
-      res.json({ status: error.sqlMessage });
-    } finally {
-      if (connection) {
-        await connection.end();
-      }
-    }
+  try {
+    connection = await getConnection();
+
+    const [[counts]] = await connection.execute(`
+      SELECT
+        (SELECT COUNT(*) FROM students) AS total_students,
+        (SELECT COUNT(*) FROM teacher) AS total_teachers
+    `);
+
+    res.json(counts);
   } catch (error) {
-    console.error('Error fetching total students:', error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error fetching total counts:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error.sqlMessage || 'Internal Server Error',
+    });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -96,7 +85,7 @@ router.get('/students/count/:session', checkAuth, async (req, res) => {
   try {
     const connection = await getConnection(); // Get a connection
     const [results] = await connection.query(query, [session, teacher_id]); // Execute the query with session as a parameter
-    connection.end(); // Close the connection
+    connection.release(); // Close the connection
 
     res.status(200).json({ data: results });
   } catch (error) {
@@ -151,7 +140,7 @@ router.get('/chart-data', checkAuth, async (req, res) => {
           FROM students
           GROUP BY class
       `);
-    connection.end();
+    connection.release();
     res.json(rows);
   } catch (error) {
     console.error('Error fetching chart data:', error);
@@ -259,7 +248,7 @@ router.get('/students', checkAuth, async (req, res) => {
 
     const studentlist = await getAllStudent(req, res);
 
-    connection.end();
+    connection.release();
     res.render('students', {
       studentlist,
       user,
@@ -468,7 +457,7 @@ router.get('/teacher/profile/:id', async (req, res) => {
     console.error('Error fetching teacher details:', error);
     res.status(500).send('Internal Server Error');
   } finally {
-    if (connection) connection.end();
+    if (connection) connection.release();
   }
 });
 
@@ -512,7 +501,7 @@ router.post(
       console.error('Error updating teacher details:', error);
       res.status(500).send('Internal Server Error');
     } finally {
-      if (connection) connection.end();
+      if (connection) connection.release();
     }
   }
 );
@@ -682,7 +671,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
     );
 
     if (studentRows.length === 0) {
-      connection.end();
+      connection.release();
       return res.status(404).send('Student not found');
     }
 
@@ -740,7 +729,7 @@ router.get('/student/get_marks/:studentId', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    connection.end();
+    connection.release();
 
     let subjects = [
       'ENGLISH',
@@ -826,7 +815,7 @@ router.post('/student/attendance-status/:school_id', async (req, res) => {
     await connection.execute(query, [school_id, attendance, status]);
 
     // Release the connection and send response
-    connection.end();
+    connection.release();
     res.redirect(`/student/get_marks/${school_id}`);
   } catch (error) {
     console.error('Error submitting/updating attendance status:', error);
@@ -847,7 +836,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       [school_id, buffer, file_name, mimetype]
     );
 
-    connection.end();
+    connection.release();
     res.redirect(`/files/one/${school_id}`); // Redirect to the file manager page
   } catch (error) {
     console.error('Error uploading file:', error);
@@ -870,7 +859,7 @@ router.get('/files', checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    connection.end();
+    connection.release();
     res.render('files', { files, user, total_students: studentsCount });
   } catch (error) {
     console.error('Error fetching files:', error);
@@ -894,7 +883,7 @@ router.get('/files/one/:school_id', checkAuth, async (req, res) => {
 
   // Fetch total students assigned to the teacher
   const studentsCount = await getTotalStudents(req, res);
-  connection.end();
+  connection.release();
   res.render('studentFiles', {
     files,
     user,
@@ -919,7 +908,7 @@ router.get('/files/:id', async (req, res) => {
     }
 
     res.contentType('application/pdf'); // Set the content type
-    connection.end();
+    connection.release();
     res.send(file[0].file_data); // Send the file data
   } catch (error) {
     console.error('Error fetching file:', error);
@@ -937,7 +926,7 @@ router.post('/delete-file/:id', async (req, res) => {
     const query = 'DELETE FROM student_files WHERE id = ?';
 
     const [result] = await connection.execute(query, [fileId]);
-    connection.end();
+    connection.release();
     if (result.affectedRows > 0) {
       res.redirect(`/files/one/${fileId}`); // Redirect back to file manager after deletion
     } else {
@@ -960,7 +949,7 @@ async function executeProcedure(schoolId, action) {
   } catch (error) {
     console.log(error);
   } finally {
-    connection.end();
+    connection.release();
   }
 
   return results;
@@ -983,7 +972,7 @@ router.post('/action-rank/:term/:id', checkAuth, async (req, res) => {
       [id, grade, remarks, term]
     );
 
-    connection.end();
+    connection.release();
 
     res.redirect(`/student/get_marks/${id}`);
   } catch (error) {
@@ -1064,7 +1053,7 @@ router.get('/students/leaved', checkAuth, async (req, res) => {
       'SELECT * FROM school_leaved_students where teacher_id = ?',
       [teacherId]
     );
-    await connection.end();
+    await connection.release();
     res.render('leave-students', {
       students,
       user,

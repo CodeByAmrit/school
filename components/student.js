@@ -26,7 +26,7 @@ async function getAllStudent(req, res) {
     res.json({ status: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -40,14 +40,14 @@ async function getTotalStudents(req, res) {
       'SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?',
       [teacher_id]
     );
-    connection.end();
+    connection.release();
     return total_students;
   } catch (error) {
     console.log(error);
     res.json({ status: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -68,7 +68,7 @@ async function getOneStudent(req, res) {
     res.json({ status: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -106,7 +106,7 @@ async function getPhoto(req, res) {
     res.status(500).send({ message: 'Internal Server Error' });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -143,7 +143,7 @@ async function getSign(req, res) {
     res.status(500).send({ message: 'Internal Server Error' });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -266,7 +266,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     console.log(error);
     throw new Error(error.sqlMessage || 'Database error');
   } finally {
-    if (connection) connection.end();
+    if (connection) connection.release();
   }
 
   // Handle photo upload
@@ -293,7 +293,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     } catch (error) {
       console.error('Error storing photo:', error);
     } finally {
-      if (connection) connection.end();
+      if (connection) connection.release();
     }
   }
   if (sign) {
@@ -319,7 +319,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     } catch (error) {
       console.error('Error storing photo:', error);
     } finally {
-      if (connection) connection.end();
+      if (connection) connection.release();
     }
   }
 
@@ -381,7 +381,7 @@ async function getStudentDetails(req, res) {
     res.json({ status: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -396,7 +396,7 @@ async function get_school_logo(req, res) {
       'select school_logo from teacher where email = ?',
       [email]
     );
-    connection.end();
+    connection.release();
     return result;
   } catch (error) {
     return null;
@@ -450,13 +450,13 @@ async function teacherLogin(req, res) {
       sameSite: 'Strict',
       maxAge: 3600000,
     });
-    await connection.end();
+    await connection.release();
     res.json({ status: 'success', token });
   } catch (error) {
     console.error('Login Error:', error);
     res.status(500).json({ status: 'Internal Server Error' });
   } finally {
-    if (connection) await connection.end();
+    if (connection) await connection.release();
   }
 }
 
@@ -510,7 +510,7 @@ async function teacherSignup(req, res) {
     res.json({ status: error.sqlMessage || 'An error occurred' });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -561,7 +561,7 @@ async function deleteStudent(req, res) {
   } finally {
     if (connection) {
       try {
-        await connection.end();
+        await connection.release();
       } catch (error) {
         console.error(`Error closing the database connection:`, error);
       }
@@ -608,7 +608,7 @@ async function insertPDF(req, res) {
     res.status(500).json({ result: error.sqlMessage.toString() });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -632,7 +632,7 @@ async function getStudentMarksBySchoolId(schoolId) {
   try {
     const connection = await getConnection();
     const [results] = await connection.execute(query, [schoolId, schoolId]);
-    await connection.end();
+    await connection.release();
     return results;
   } catch (error) {
     console.error('Error fetching marks for student:', error);
@@ -657,7 +657,7 @@ async function getStudentMarks(studentId, term) {
       studentId,
       term,
     ]);
-    await connection.end();
+    await connection.release();
     return results;
   } catch (error) {
     console.error('Error fetching student marks:', error);
@@ -682,7 +682,7 @@ async function storeStudentMarks(studentId, term, marksData) {
         mark.marks,
       ]);
     }
-    await connection.end();
+    await connection.release();
   } catch (error) {
     console.error('Error storing student marks:', error);
     throw error;
@@ -703,7 +703,7 @@ async function getStudentMarksWithMaxMarks(studentId) {
   try {
     const connection = await getConnection();
     const [results] = await connection.execute(query, [studentId, studentId]);
-    await connection.end();
+    await connection.release();
     return results;
   } catch (error) {
     console.error('Error fetching marks with max marks:', error);
@@ -753,7 +753,7 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
       }
     }
 
-    await connection.end();
+    await connection.release();
   } catch (error) {
     console.error('Error saving marks:', error);
     throw error;
@@ -773,7 +773,7 @@ async function getFileCount(req, res) {
   try {
     const connection = await getConnection();
     const [rows] = await connection.execute(query, [teacherId]);
-    connection.end();
+    connection.release();
 
     // Return the count
     return rows[0].total_files;
@@ -837,7 +837,7 @@ async function changePassword(req, res) {
     console.error('Error changing password:', error);
     res.status(500).json({ status: 'error', message: 'Internal Server Error' });
   } finally {
-    if (connection) await connection.end();
+    if (connection) await connection.release();
   }
 }
 
@@ -916,7 +916,7 @@ async function markStudentAsLeft(req, res) {
     await connection.rollback();
     res.status(500).send('An error occurred while processing the request.');
   } finally {
-    await connection.end();
+    await connection.release();
   }
 }
 

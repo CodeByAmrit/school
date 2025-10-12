@@ -54,7 +54,7 @@ async function exportStudentData() {
   } catch (err) {
     console.error('❌ Error exporting student data:', err);
   } finally {
-    await connection.end();
+    await connection.release();
   }
 }
 

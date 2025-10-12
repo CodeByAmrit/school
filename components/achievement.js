@@ -100,7 +100,7 @@ async function generateCertificate(
         });
       }
 
-      await connection.end();
+      await connection.release();
 
       // Save the modified PDF
       const pdfBytes = await pdfDoc.save();
@@ -191,7 +191,7 @@ async function generateCertificate(
         });
       }
 
-      await connection.end();
+      await connection.release();
 
       // Insert student photo if available
       if (student.image) {
@@ -243,7 +243,9 @@ async function generateCertificate(
         .join(' ');
       // const father_nameText = student.father_name.toUpperCase();
       // const mother_nameText = student.mother_name.toUpperCase();
-      const activityText = `Session ${student.session} in Class: ${student.class} and secured: ${position.toUpperCase()} Position.`;
+      const activityText = `Session ${student.session} in Class: ${
+        student.class
+      } and secured: ${position.toUpperCase()} Position.`;
 
       const firstWidth = boldFont.widthOfTextAtSize(first, 35);
       const parentWidth = boldFont.widthOfTextAtSize(nameText, 18);
@@ -291,7 +293,7 @@ async function generateCertificate(
         });
       }
 
-      await connection.end();
+      await connection.release();
 
       // Insert student photo if available
       if (student.image) {
@@ -347,9 +349,21 @@ async function generateCertificate(
 
       var parent;
       if (student.gender === 'MALE') {
-        parent = `S/O Shri. ${student.father_name[0].toUpperCase() + student.father_name.slice(1).toLowerCase()} & Smt. ${student.mother_name[0].toUpperCase() + student.mother_name.slice(1).toLowerCase()}`;
+        parent = `S/O Shri. ${
+          student.father_name[0].toUpperCase() +
+          student.father_name.slice(1).toLowerCase()
+        } & Smt. ${
+          student.mother_name[0].toUpperCase() +
+          student.mother_name.slice(1).toLowerCase()
+        }`;
       } else if (student.gender === 'FEMALE') {
-        parent = `D/O Shri. ${student.father_name[0].toUpperCase() + student.father_name.slice(1).toLowerCase()} & Smt. ${student.mother_name[0].toUpperCase() + student.mother_name.slice(1).toLowerCase()}`;
+        parent = `D/O Shri. ${
+          student.father_name[0].toUpperCase() +
+          student.father_name.slice(1).toLowerCase()
+        } & Smt. ${
+          student.mother_name[0].toUpperCase() +
+          student.mother_name.slice(1).toLowerCase()
+        }`;
       }
 
       const nameTextWidth = boldFont.widthOfTextAtSize(nameText, 24);
@@ -391,7 +405,7 @@ async function generateCertificate(
         });
       }
 
-      await connection.end();
+      await connection.release();
 
       // Insert student photo if available
       if (student.image) {

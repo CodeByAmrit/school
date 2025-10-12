@@ -33,7 +33,7 @@ student.get('/', checkAuth, async (req, res) => {
       studentClass,
     ]);
 
-    connection.end();
+    connection.release();
     res.json(results);
   } catch (error) {
     console.error('Error fetching students:', error);
@@ -54,7 +54,7 @@ student.get('/:id', checkAuth, async (req, res) => {
                        WHERE teacher_id = ? AND id = ?`;
     const [results] = await connection.execute(query, [teacher_id, studentId]);
 
-    connection.end();
+    connection.release();
     res.json(results.length > 0 ? results[0] : { error: 'Student not found' });
   } catch (error) {
     console.error('Error fetching student:', error);
@@ -88,7 +88,7 @@ student.post('/', checkAuth, async (req, res) => {
       school_id,
     ]);
 
-    connection.end();
+    connection.release();
     res.status(201).json({
       message: 'Student added successfully',
       student_id: result.insertId,
@@ -128,7 +128,7 @@ student.put('/:id', checkAuth, async (req, res) => {
       teacher_id,
     ]);
 
-    connection.end();
+    connection.release();
     if (result.affectedRows === 0) {
       return res
         .status(404)
@@ -152,7 +152,7 @@ student.delete('/:id', checkAuth, async (req, res) => {
     const query = `DELETE FROM students WHERE id = ? AND teacher_id = ?`;
     const [result] = await connection.execute(query, [studentId, teacher_id]);
 
-    connection.end();
+    connection.release();
     if (result.affectedRows === 0) {
       return res
         .status(404)

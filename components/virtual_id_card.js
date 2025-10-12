@@ -521,7 +521,7 @@ async function selectedVirtualIdCard(req, res) {
     console.error('Error generating ID cards:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   } finally {
-    if (connection) connection.end();
+    if (connection) connection.release();
   }
 }
 
@@ -586,7 +586,11 @@ async function selectedCeremonyCertificate(req, res) {
 
       const nameText = capitalizeName(student.name);
 
-      const parent = `${student.gender === 'MALE' ? 'S/O' : 'D/O'} Shri. ${capitalizeName(student.father_name)} & Smt. ${capitalizeName(student.mother_name)}`;
+      const parent = `${
+        student.gender === 'MALE' ? 'S/O' : 'D/O'
+      } Shri. ${capitalizeName(student.father_name)} & Smt. ${capitalizeName(
+        student.mother_name
+      )}`;
 
       currentPage.drawText(nameText, {
         x: (pageWidth - boldFont.widthOfTextAtSize(nameText, 24)) / 2,
@@ -629,7 +633,7 @@ async function selectedCeremonyCertificate(req, res) {
     console.error('Error generating certificates:', error);
     res.status(500).json({ message: 'Failed to generate certificates.' });
   } finally {
-    if (connection) await connection.end();
+    if (connection) await connection.release();
   }
 }
 
@@ -679,8 +683,9 @@ async function create_excel_selected(req, res) {
 
     // Merged Header
     worksheet.mergeCells('A1:L1');
-    worksheet.getCell('A1').value =
-      `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
+    worksheet.getCell(
+      'A1'
+    ).value = `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
     worksheet.getCell('A1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
@@ -760,7 +765,7 @@ async function create_excel_selected(req, res) {
     console.error('Error Creating Excel:', error);
     res.status(500).json({ message: 'Failed to Create Excel.' });
   } finally {
-    if (connection) await connection.end();
+    if (connection) await connection.release();
   }
 }
 

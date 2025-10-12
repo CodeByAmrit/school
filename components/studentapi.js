@@ -22,7 +22,7 @@ async function getAllStudentsByTeacherId(req, res) {
     res.json({ data: 'Fail to get students' });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -45,7 +45,7 @@ async function getAllStudent_to_Render(req, res, next) {
     next();
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -77,7 +77,7 @@ async function getStudentWithPhoto(req, res, next) {
     next();
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -98,7 +98,7 @@ async function getAllStudentsByStudentId(req, res) {
     res.json({ data: 'Fail to get students' });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -223,7 +223,7 @@ async function getStudentById_render(req, res, next) {
     next();
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -320,7 +320,7 @@ async function insertStudent(req, res) {
     res.status(500).json({ message: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -361,7 +361,7 @@ async function deleteStudent(req, res) {
     res.status(500).json({ message: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -392,7 +392,7 @@ async function deletePDF(req, res) {
     res.status(500).json({ message: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -434,7 +434,7 @@ async function teacherLogin(req, res) {
     res.json({ status: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -549,7 +549,7 @@ async function updateStudentDetails(req, res) {
     res.json({ message: error.sqlMessage });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
@@ -613,7 +613,7 @@ async function insertPDF(req, res) {
     res.status(500).json({ result: error.sqlMessage.toString() });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
       console.log('disconnect');
     }
   }
