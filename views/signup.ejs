@@ -25,18 +25,13 @@
 
     <style>
       body {
-        font-family: "Inter", sans-serif;
+        font-family: 'Inter', sans-serif;
       }
       .quicksand {
-        font-family: "Quicksand", sans-serif;
+        font-family: 'Quicksand', sans-serif;
       }
       .hero-gradient {
-        background: linear-gradient(
-          135deg,
-          #1e3a8a 0%,
-          #2563eb 50%,
-          #3b82f6 100%
-        );
+        background: linear-gradient(-45deg, #3182ce 0%, #63b3ed 100%);
       }
     </style>
   </head>
@@ -50,13 +45,14 @@
       >
         <a
           href="/"
-          class="text-2xl font-bold text-blue-600 quicksand dark:text-blue-500"
-          >StudentTracker</a
+          class="text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent quicksand"
         >
+          StudentTracker
+        </a>
         <div class="flex items-center space-x-4">
           <a
             href="/login"
-            class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500 px-3 py-2 text-sm font-medium"
+            class="text-gray-600 dark:text-gray-300 hover:text-[#3182ce] dark:hover:text-blue-500 px-3 py-2 text-sm font-medium"
             >Login</a
           >
         </div>
@@ -72,7 +68,7 @@
             <img
               src="/image/teacher.svg"
               alt="Teacher Illustration"
-              class="w-48 mx-auto mb-6"
+              class="w-64 mx-auto mb-6"
             />
             <h2 class="text-2xl font-bold mb-2 quicksand">
               Join Our Community
@@ -94,21 +90,21 @@
             Already have an account?
             <a
               href="/login"
-              class="font-medium text-blue-600 hover:underline dark:text-blue-500"
+              class="font-medium text-[#3182ce] hover:underline dark:text-blue-500"
               >Log in here</a
             >
           </p>
 
           <div class="w-full mb-6">
             <div class="flex justify-between mb-1">
-              <span class="text-sm font-medium text-blue-700 dark:text-white"
+              <span class="text-sm font-medium text-[#3182ce] dark:text-white"
                 >Step <span id="current-step">1</span> of 2</span
               >
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div
                 id="progress-bar"
-                class="bg-blue-600 h-2.5 rounded-full w-1/2 transition-all duration-500"
+                class="bg-[#3182ce] h-2.5 rounded-full w-1/2 transition-all duration-500"
               ></div>
             </div>
           </div>
@@ -116,7 +112,7 @@
           <form
             action="/signup"
             method="post"
-            class="flex-grow flex flex-col"
+            class="flex-grow flex flex-col pt-2"
             enctype="multipart/form-data"
           >
             <div class="relative flex-grow overflow-y-auto overflow-x-hidden">
@@ -138,7 +134,7 @@
                       />
                       <label
                         for="exampleInputName"
-                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                         >First Name</label
                       >
                     </div>
@@ -153,7 +149,7 @@
                       />
                       <label
                         for="lastName"
-                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                         >Last Name</label
                       >
                     </div>
@@ -169,7 +165,7 @@
                     />
                     <label
                       for="school_phone"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                       >Phone No</label
                     >
                   </div>
@@ -185,7 +181,7 @@
                     />
                     <label
                       for="email"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                       >Email *</label
                     >
                   </div>
@@ -202,13 +198,13 @@
                     />
                     <label
                       for="password"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                       >Password</label
                     >
                   </div>
                 </div>
 
-                <div id="step-2" class="w-1/2 px-1 space-y-5">
+                <div id="step-2" class="w-1/2 px-1 space-y-5 -z-10">
                   <div class="relative">
                     <input
                       type="text"
@@ -220,7 +216,7 @@
                     />
                     <label
                       for="school_name"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                       >School Name</label
                     >
                   </div>
@@ -234,7 +230,7 @@
                     />
                     <label
                       for="school_address"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
+                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
                       >School Address</label
                     >
                   </div>
@@ -302,7 +298,7 @@
               <button
                 id="submit-btn"
                 type="submit"
-                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-800 hidden"
+                class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md hidden"
               >
                 Create Account
               </button>
