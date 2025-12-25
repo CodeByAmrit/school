@@ -1,205 +1,115 @@
-![School Logo](https://raw.githubusercontent.com/CodeByAmrit/school/5e4b126ebf1c8cd43b49f0213927914bb5e3dfe4/public/image/logo.svg)
+# Student Tracker
 
-**Student Tracker** is a comprehensive **Student Management System** designed for schools. It simplifies student data management, allowing teachers to register students, store essential documents, generate reports, and more. The platform ensures data security and provides useful features like email notifications, virtual ID cards, and annual report cards.
+Student Tracker is a comprehensive Student Management System designed for schools to simplify student data management. It allows teachers to register students, store essential documents, generate reports, and more.
 
 ## 🚀 Features
 
-- 👩‍🏫 **For Teachers**:
-  - Register students with class details
-  - Store parent information
-  - Upload and manage student files (PDF, JPEG, Audio, Video)
-  - Generate **Annual Report Cards** with **PDF generation (pdf-lib)**
-  - Issue **Virtual ID Cards** for students
-  - Send **Email Notifications** to parents/students
-  - Securely store and manage student data
-  - **NEW:** Google reCAPTCHA v3 integration for secure login
-
-- 📚 **For Students** _(Coming Soon!)_
-  - Access academic records and attendance
-  - View report cards and virtual ID
-  - Stay updated with school announcements
+-   **Teacher Dashboard**: Manage students, view statistics, and access all features from a central dashboard.
+-   **Student Management**: Register new students, edit existing student information, and view a list of all students.
+-   **Document Management**: Upload and manage student files such as documents, photos, and signatures.
+-   **Certificate Generation**:
+    -   Generate **Annual Report Cards** in PDF format.
+    -   Create and download **Achievement Certificates**.
+    -   Issue **Virtual ID Cards**.
+-   **AI Chat**: An integrated AI chat feature to assist teachers.
+-   **Secure Authentication**: Secure login for teachers with password hashing.
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Node.js, Express.js, MySQL
-- **Frontend**: EJS, Tailwind CSS
-- **Database**: MySQL (`mysql2` library)
-- **Authentication & Security**: JSON cookies, `cookie-parser`, `body-parser`, Google reCAPTCHA v3
-- **File Handling**: PDF/Audio/Video uploads, `pdf-lib` for report generation
-- **Other Tools**: `npm` for package management
+-   **Backend**: Node.js, Express.js
+-   **Frontend**: EJS (Embedded JavaScript templates), Tailwind CSS, Flowbite
+-   **Database**: MySQL (using the `mysql2` library)
+-   **Authentication**: JWT (JSON Web Tokens) stored in cookies.
+-   **File Handling**: `pdf-lib` for PDF generation, `multer` for file uploads.
+-   **Security**: `helmet` for securing HTTP headers, `express-rate-limit` for rate limiting, and dynamic CSP nonces to prevent XSS attacks.
 
-## ⚙️ Installation & Setup
+## ⚙️ Getting Started
 
-### 1️⃣ Clone the Repository
+### Prerequisites
 
-```sh
-git clone https://github.com/CodeByAmrit/school.git
-cd school
-```
+-   [Node.js](https://nodejs.org/) (v18 or later)
+-   [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 
-### 2️⃣ Install Dependencies
+### Local Development
 
-```sh
-npm install
-```
+1.  **Clone the repository:**
 
-### 3️⃣ Set Up Configuration
+    ```sh
+    git clone https://github.com/CodeByAmrit/school.git
+    cd school
+    ```
 
-Create a `.env` file and add:
+2.  **Install dependencies:**
 
-```ini
-GITHUB_SECRET=your-github-webhook-secret-key
-DB_HOST=your-database-host
-DB_USER=your-database-user
-DB_PASSWORD=your-database-password
-DB_DATABASE=your-database-name
-DB_PORT=your-database-port
-jwt_token=your-jwt-password
-EMAIL_ID=your-email-name
-EMAIL_PASSWORD=your-email-password
-DB_CA=your-CA-from-MySQL
-```
+    ```sh
+    npm install
+    ```
 
-Instead of using environment variables for Google reCAPTCHA credentials, create a `captcha.json` file in the project root with the following structure:
+3.  **Set up environment variables:**
 
-```json
-{
-  "type": "service_account",
-  "project_id": "your-project-id",
-  "private_key_id": "your-private-key-id",
-  "private_key": "your-private-key",
-  "client_email": "your-client-email",
-  "client_id": "your-client-id",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "your-client-cert-url"
-}
-```
+    Create a `.env` file in the root of the project and add the following variables:
 
-Ensure this file is **excluded** from version control using `.gitignore` to keep your credentials secure.
+    ```env
+    DB_HOST=your-database-host
+    DB_USER=your-database-user
+    DB_PASSWORD=your-database-password
+    DB_DATABASE=your-database-name
+    DB_PORT=your-database-port
+    JWT_SECRET=your-jwt-secret
+    EMAIL_ID=your-email-address
+    EMAIL_PASSWORD=your-email-password
+    ```
 
-### 4️⃣ Run the Application
+4.  **Run the application:**
 
-```sh
-npm start
-```
+    ```sh
+    npm run dev
+    ```
 
-The server will start at [http://localhost:3000](http://localhost:3000)
+    The server will start in development mode with nodemon at `http://localhost:4000`.
 
-## Docker Setup
+## 🐳 Docker
 
-### 1. Build the Docker Image
+This project is fully containerized and can be run using Docker.
 
-```sh
-docker build -t codebyamrit/student-tracker .
-```
+### Running with Docker Compose
 
-### 2. Run the Container
+The easiest way to run the application in a production-like environment is with `docker-compose`.
 
-```sh
-docker run -d --name school -p 3000:3000 codebyamrit/student-tracker
-```
+1.  **Start the service:**
 
-### 3. Stop and Remove the Container
+    ```sh
+    docker-compose up
+    ```
 
-```sh
-docker stop school
+    This will use the pre-built image `codebyamrit/student-tracker` from Docker Hub. The application will be available at `http://localhost:8080`.
 
-docker rm school
-```
+### Building the Docker Image
 
-### 4. View Running Containers
+You can also build the Docker image from the source code.
 
-```sh
-docker ps
-```
+1.  **Build the image:**
 
-### 5. Check Container Logs
+    ```sh
+    docker build -t your-dockerhub-username/student-tracker .
+    ```
 
-```sh
-docker logs -f school
-```
+2.  **Run the container:**
 
-## Environment Variables
+    ```sh
+    docker run -d -p 8080:5000 --name student-tracker your-dockerhub-username/student-tracker
+    ```
 
-Ensure that the following files are included in the project:
+## 🔄 CI/CD
 
-- `google-credentials.json`
-- `captcha.json`
-- `.env`
+This project uses **GitHub Actions** for continuous integration and deployment.
 
-## Access the Application
+-   **Workflow**: `.github/workflows/docker-image.yml`
+-   **Trigger**: The workflow is triggered on every `push` to the `create-docker-image` branch.
+-   **Action**: It builds a new Docker image and pushes it to [Docker Hub](https://hub.docker.com/r/codebyamrit/student-tracker) with the tags `latest` and a build number (e.g., `123`).
 
-Once the container is running, open http\://localhost:3000 in your browser.
+This setup automates the process of creating a new Docker image whenever changes are pushed to the specified branch, ensuring that the latest version of the application is always ready for deployment.
 
-## 🔄 GitHub Webhook for Auto Deployment
+## 📝 License
 
-To automate deployment, configure a webhook in GitHub that triggers on `push` events. Add the following webhook route to your Express app:
-
-```javascript
-const express = require('express');
-const crypto = require('crypto');
-const { exec } = require('child_process');
-const path = require('path');
-require('dotenv').config(); // Load environment variables
-
-const router = express.Router();
-const GITHUB_SECRET = process.env.GITHUB_SECRET;
-const APP_DIRECTORY = path.resolve(__dirname, '..'); // Root directory of your project
-const PM2_APP_NAME = 'school'; // Change this to your PM2 process name
-
-function verifySignature(req, res, next) {
-  const signature = req.headers['x-hub-signature-256'];
-  if (!signature) return res.status(401).send('Unauthorized');
-
-  const hmac = crypto.createHmac('sha256', GITHUB_SECRET);
-  const digest =
-    'sha256=' + hmac.update(JSON.stringify(req.body)).digest('hex');
-
-  if (signature !== digest) return res.status(403).send('Invalid signature');
-
-  next();
-}
-
-router.post('/webhook', verifySignature, (req, res) => {
-  const payload = req.body;
-
-  if (payload.ref === 'refs/heads/main') {
-    console.log('New push detected on main branch. Deploying...');
-
-    exec(
-      `cd ${APP_DIRECTORY} && git pull origin main && npm install`,
-      (err, stdout, stderr) => {
-        if (err) {
-          console.error(`Deployment error: ${stderr}`);
-          return res.status(500).send('Deployment failed');
-        }
-        console.log(`Deployment output: ${stdout}`);
-        res.status(200).send('Deployment successful');
-      }
-    );
-  } else {
-    res.status(200).send('No action needed');
-  }
-});
-
-module.exports = router;
-```
-
-## 🔐 Database Connection
-
-The application uses MySQL with the `mysql2` package.  
-A `getConnection()` function manages secure database connections efficiently.
-
-## 🏫 School Details Customization
-
-School details (such as name, logo, etc.) can be modified by teachers through the Settings section.
-
-## 📧 Contact
-
-Developed by Amrit Sharma
-
-🌐 Website: [www.school.codebyamrit.co.in](http://www.codebyamrit.co.in)  
-📧 Email: [me.sharma.amrit@gmail.com](mailto:me.sharma.amrit@gmail.com)  
-📱 Phone: +91 9817044885
+This project is licensed under the **ISC License**. See the `LICENSE` file for details.
