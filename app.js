@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -29,12 +30,10 @@ class App {
     this.app.use(compression());
 
     this.app.use((req, res, next) => {
+      res.locals.nonce = crypto.randomBytes(16).toString('hex');
       res.setHeader(
         'Content-Security-Policy',
-        "script-src 'self' 'nonce-ozfWMSeQ06g862KcEoWVKg==' https://www.google.com https://www.gstatic.com " +
-          // Add the required CDN domains here
-          'https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; ' +
-          "frame-src 'self' https://www.google.com;"
+        `script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; frame-src 'self' https://www.google.com;`
       );
       next();
     });
@@ -97,7 +96,7 @@ class App {
     //     this.app.set("view cache", true);
     // }
 
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT || 4000;
     this.app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
