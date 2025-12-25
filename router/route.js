@@ -161,7 +161,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
     const count_Files = await getFileCount(req, res);
 
-    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+    const nonce = res.locals.nonce;
 
     // Render dashboard EJS
     res.render('index', {
@@ -189,7 +189,7 @@ router.get('/ai/chat', checkAuth, async (req, res) => {
 
     const count_Files = await getFileCount(req, res);
 
-    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+    const nonce = res.locals.nonce;
 
     // Render dashboard EJS
     res.render('google_AI', {
@@ -1045,7 +1045,7 @@ router.get('/students/leaved', checkAuth, async (req, res) => {
 
     const count_Files = await getFileCount(req, res);
 
-    const nonce = 'ozfWMSeQ06g862KcEoWVKg==';
+    const nonce = res.locals.nonce;
 
     const connection = await getConnection();
     const teacherId = req.user._id;
@@ -1071,7 +1071,7 @@ router.get('/students/leaved', checkAuth, async (req, res) => {
 // Logout route - Clears token and redirects to login
 router.get('/logout', (req, res) => {
   res.clearCookie('token').clearCookie('introShown').send(`
-    <script nonce='ozfWMSeQ06g862KcEoWVKg=='>
+    <script nonce='${res.locals.nonce}'>
       localStorage.clear();
       window.location.href = "/login";
     </script>
