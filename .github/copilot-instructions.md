@@ -31,8 +31,7 @@ Patterns & conventions (do this)
 AI & external integrations
 
 - AI: `components/ai_controller.js` integrates with Google Generative AI (Gemini) via `@google/generative-ai`; env var: `GEMINI_API_KEY`.
-- reCAPTCHA: `middleware/verifyCaptcha.js` uses Google reCAPTCHA Enterprise — treat keys/project IDs as secrets (they appear hard-coded in the current file; avoid committing real secrets).
-- Email and recaptcha rely on env vars and third-party libraries (`nodemailer`, `@google-cloud/recaptcha-enterprise`).
+- Email and recaptcha rely on env vars and third-party libraries (`nodemailer`).
 
 Debugging & testing tips
 
@@ -62,7 +61,7 @@ connection.release();
 
 Security & review points for PRs
 
-- Verify no plaintext secrets in code (e.g., reCAPTCHA keys, API keys). Move any such values to `.env` or GitHub Secrets.
+- Verify no plaintext secrets in code (e.g., API keys). Move any such values to `.env` or GitHub Secrets.
 - Confirm JWT `jwt_token` secret exists and is sufficiently strong.
 - Ensure image processing (`sharp`) uses safe memory limits for large uploads.
 

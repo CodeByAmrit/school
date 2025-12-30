@@ -7,7 +7,6 @@ docker run command.bat
 
 output/
 ca.pem
-captcha.json
 google-credentials.json
 
 # Environment variables

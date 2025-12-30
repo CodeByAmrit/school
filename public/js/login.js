@@ -9,22 +9,6 @@ document.getElementById('login-form').onsubmit = async function (e) {
   document.getElementById('login_spinner').classList.remove('hidden');
 
   try {
-    // Get reCAPTCHA token
-    // const captchaToken = await new Promise((resolve, reject) => {
-    //     grecaptcha.enterprise.ready(async () => {
-    //         try {
-    //             const token = await grecaptcha.enterprise.execute('6LfB29QqAAAAAHo2JKtWWZx24MoRn75EMb0NKg3s', { action: 'LOGIN' });
-    //             resolve(token);
-    //         } catch (error) {
-    //             reject(error);
-    //         }
-    //     });
-    // });
-
-    // if (!captchaToken) {
-    //     throw new Error("CAPTCHA token not generated");
-    // }
-
     // Hide previous errors
     document.getElementById('email-error').classList.add('hidden');
     document.getElementById('password-error').classList.add('hidden');
@@ -37,7 +21,7 @@ document.getElementById('login-form').onsubmit = async function (e) {
     const res = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }), // Include captcha token
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
@@ -53,13 +37,11 @@ document.getElementById('login-form').onsubmit = async function (e) {
       } else if (data.status === 'Invalid email') {
         document.getElementById('email-error').classList.remove('hidden');
         document.getElementById('email').classList.add('border-red-500');
-      } else if (data.status === 'captcha_failed') {
-        alert('CAPTCHA verification failed. Please try again.');
       }
     }
   } catch (err) {
     console.error('Error in login process:', err);
-    alert('Network error or CAPTCHA issue. Please try again.');
+    alert('Network error. Please try again.');
   } finally {
     loginBtn.disabled = false; // Re-enable button
   }

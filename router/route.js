@@ -29,7 +29,6 @@ const {
 } = require('../components/create_certificate');
 const multer = require('multer');
 const { getConnection } = require('../models/getConnection');
-const verifyCaptcha = require('../middleware/verifyCaptcha');
 require('dotenv').config();
 
 // Configure multer
@@ -1101,4 +1100,7 @@ router.get('/privacy', (req, res) => {
   res.render('privacy', { nonce: res.locals.nonce });
 });
 
+router.get('/about', (req, res) => {
+  res.render('about', { nonce: res.locals.nonce });
+});
 module.exports = router;
