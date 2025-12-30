@@ -7,9 +7,15 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "format": "npx prettier --write .",
+    "prepare": "husky install",
     "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/css/style.css --watch",
     "vercel-build": "npm install",
     "start:pm2": "pm2 start ./bin/www --name studenttracker --env production"
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss,md,ejs,html}": [
+      "prettier --write"
+    ]
   },
   "author": "Amrit",
   "license": "ISC",
@@ -49,6 +55,9 @@
   },
   "devDependencies": {
     "@emnapi/runtime": "^1.7.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18"
   }
 }
