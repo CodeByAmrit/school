@@ -10,17 +10,23 @@
       content="Read the Privacy Policy for StudentTracker to understand how we collect, use, and protect your personal and academic data."
     />
 
-    <link rel="stylesheet" href="/css/style.css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="/css/style.css" nonce="<%= nonce %>" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      nonce="<%= nonce %>"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+      nonce="<%= nonce %>"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Quicksand:wght@600;700&display=swap"
       rel="stylesheet"
+      nonce="<%= nonce %>"
     />
 
     <link
@@ -42,34 +48,85 @@
     />
     <link rel="manifest" href="/icons/site.webmanifest" />
 
-    <style>
+    <style nonce="<%= nonce %>">
       body {
         font-family: 'Inter', sans-serif;
       }
       .quicksand {
         font-family: 'Quicksand', sans-serif;
       }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #63b3ed, #3182ce);
+        border-radius: 4px;
+      }
+
+      /* Animation */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .sticky-nav {
+        position: sticky;
+        top: 100px;
+        align-self: start;
+      }
+
+      .privacy-section {
+        scroll-margin-top: 120px;
+      }
     </style>
   </head>
 
-  <body class="bg-gray-50">
-    <nav class="fixed w-full bg-white backdrop-blur-sm shadow-sm z-50">
+  <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+    <!-- Navigation -->
+    <nav
+      class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50 border-b border-blue-100"
+    >
       <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
       >
-        <a href="/" class="text-2xl font-bold text-blue-600 quicksand"
-          >StudentTracker</a
+        <a
+          href="/"
+          class="text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent quicksand"
         >
+          StudentTracker
+        </a>
 
         <div class="hidden md:flex items-center space-x-4">
           <a
+            href="/"
+            class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-300"
+            >Home</a
+          >
+          <a
             href="/login"
-            class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-300"
             >Login</a
           >
           <a
             href="/signup"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
+            class="bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg"
           >
             Sign Up
           </a>
@@ -79,7 +136,7 @@
           <button
             data-collapse-toggle="navbar-default"
             type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
             aria-controls="navbar-default"
             aria-expanded="false"
           >
@@ -103,167 +160,843 @@
         </div>
       </div>
       <div class="hidden w-full md:hidden" id="navbar-default">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
+          <a
+            href="/"
+            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-50"
+            >Home</a
+          >
           <a
             href="/login"
-            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-50"
             >Login</a
           >
           <a
             href="/signup"
-            class="block bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-base font-medium"
+            class="block bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
             >Sign Up</a
           >
         </div>
       </div>
     </nav>
 
-    <main class="pt-24 pb-12">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-lg shadow-md p-6 md:p-10">
+    <!-- Header -->
+    <header class="pt-28 pb-16 relative overflow-hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-blue-100/20 to-blue-50/20"
+      ></div>
+      <div
+        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-4xl mx-auto">
+          <div class="inline-flex items-center justify-center space-x-2 mb-6">
+            <div
+              class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
+            ></div>
+            <span class="text-sm font-semibold text-blue-600"
+              >PRIVACY & SECURITY</span
+            >
+          </div>
+
           <h1
-            class="text-3xl md:text-4xl font-bold text-blue-600 text-center mb-4 quicksand"
+            class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 quicksand"
           >
-            Privacy Policy
+            Your Privacy is Our
+            <span
+              class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
+            >
+              Priority
+            </span>
           </h1>
-          <p class="text-gray-500 text-center text-sm mb-8">
-            Last Updated: <span class="font-medium">October 2025</span>
+
+          <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            We are committed to protecting your personal information and
+            academic data with enterprise-grade security measures.
           </p>
 
-          <div class="space-y-6 text-gray-700 leading-relaxed">
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                1. Introduction
-              </h2>
-              <p>
-                Welcome to StudentTracker. This privacy policy explains how we
-                collect, use, and protect your personal data when you use our
-                platform. Your privacy is critically important to us, and we are
-                committed to safeguarding your information.
-              </p>
-            </section>
+          <div
+            class="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <div class="flex items-center text-gray-600">
+              <svg
+                class="w-5 h-5 text-blue-500 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="text-sm font-medium">End-to-end encryption</span>
+            </div>
+            <div class="flex items-center text-gray-600">
+              <svg
+                class="w-5 h-5 text-blue-500 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="text-sm font-medium">GDPR compliant</span>
+            </div>
+            <div class="flex items-center text-gray-600">
+              <svg
+                class="w-5 h-5 text-blue-500 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="text-sm font-medium">Regular security audits</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                2. Information We Collect
-              </h2>
-              <p class="mb-2">
-                To provide our services, we may collect the following types of
-                information:
-              </p>
-              <ul class="list-disc list-outside pl-5 space-y-1">
-                <li>
-                  <strong>Personal Information:</strong> Name, email address,
-                  contact details, and other identifiers provided during account
-                  registration.
-                </li>
-                <li>
-                  <strong>Student Academic Records:</strong> Information such as
-                  grades, attendance records, class schedules, and other
-                  performance-related data.
-                </li>
-                <li>
-                  <strong>Usage Data:</strong> We automatically collect
-                  technical information, including IP address, browser type,
-                  device information, and pages visited, to monitor and improve
-                  our service.
-                </li>
-              </ul>
-            </section>
+    <!-- Main Content -->
+    <main class="pb-16 fade-in-up">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <!-- Sticky Navigation -->
+          <div class="lg:col-span-1">
+            <div class="sticky-nav">
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6"
+              >
+                <h3
+                  class="text-lg font-bold text-gray-900 mb-4 flex items-center"
+                >
+                  <svg
+                    class="w-5 h-5 mr-2 text-blue-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                      clip-rule="evenodd"
+                    />
+                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
+                  </svg>
+                  Table of Contents
+                </h3>
+                <nav class="space-y-2">
+                  <a
+                    href="#introduction"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >1. Introduction</a
+                  >
+                  <a
+                    href="#information-collected"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >2. Information We Collect</a
+                  >
+                  <a
+                    href="#data-usage"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >3. How We Use Your Information</a
+                  >
+                  <a
+                    href="#data-protection"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >4. Data Protection</a
+                  >
+                  <a
+                    href="#your-rights"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >5. Your Rights</a
+                  >
+                  <a
+                    href="#contact"
+                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                    >6. Contact Us</a
+                  >
+                </nav>
 
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                3. How We Use Your Information
-              </h2>
-              <p>
-                We use the information we collect to operate and maintain the
-                StudentTracker platform, provide personalized features, improve
-                our services, communicate with you, and ensure the security of
-                our systems.
-              </p>
-            </section>
+                <div class="mt-6 pt-6 border-t border-blue-100">
+                  <p class="text-sm text-gray-500 mb-2">Last Updated</p>
+                  <p class="text-lg font-bold text-blue-600">October 2025</p>
+                </div>
+              </div>
 
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                4. Data Protection
-              </h2>
-              <p>
-                We implement industry-standard security measures, including
-                encryption and access controls, to protect your data from loss,
-                misuse, and unauthorized access. However, no method of
-                transmission over the Internet is 100% secure.
-              </p>
-            </section>
+              <!-- Security Badge -->
+              <div
+                class="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl border border-blue-200 p-6"
+              >
+                <div class="flex items-center mb-4">
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-3"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900">Secure by Design</h4>
+                    <p class="text-xs text-gray-600">
+                      Enterprise-grade security
+                    </p>
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600">
+                  All data is encrypted in transit and at rest, with regular
+                  security audits.
+                </p>
+              </div>
+            </div>
+          </div>
 
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                5. Your Rights
-              </h2>
-              <p>
-                You have the right to request access to, correction of, or
-                deletion of your personal data. You can also object to the
-                processing of your data. Please contact us to make such a
-                request.
-              </p>
-            </section>
+          <!-- Content -->
+          <div class="lg:col-span-3">
+            <div
+              class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden"
+            >
+              <!-- Progress Indicator -->
+              <div
+                class="h-1 bg-gradient-to-r from-blue-500 to-blue-600"
+                id="progress-bar"
+              ></div>
 
-            <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-2">
-                6. Contact Us
-              </h2>
-              <p>
-                If you have any questions or concerns about this privacy policy,
-                please do not hesitate to contact us at
-                <a
-                  href="mailto:me.sharma.amrit@gmail.com"
-                  class="text-blue-600 hover:underline font-medium"
-                  >me.sharma.amrit@gmail.com</a
-                >.
-              </p>
-            </section>
+              <div class="p-6 md:p-10">
+                <!-- Introduction -->
+                <section id="introduction" class="privacy-section mb-12">
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">1</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        Introduction
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed">
+                        Welcome to StudentTracker. This privacy policy explains
+                        how we collect, use, and protect your personal data when
+                        you use our platform. Your privacy is critically
+                        important to us, and we are committed to safeguarding
+                        your information with the highest standards of security
+                        and transparency.
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Information We Collect -->
+                <section
+                  id="information-collected"
+                  class="privacy-section mb-12"
+                >
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">2</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        Information We Collect
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed mb-4">
+                        To provide our services, we may collect the following
+                        types of information:
+                      </p>
+
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div
+                          class="bg-blue-50 rounded-xl p-5 border border-blue-100"
+                        >
+                          <div class="flex items-center mb-3">
+                            <div
+                              class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                            >
+                              <svg
+                                class="w-4 h-4 text-blue-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900">
+                              Personal Information
+                            </h3>
+                          </div>
+                          <p class="text-sm text-gray-600">
+                            Name, email address, contact details, and other
+                            identifiers provided during account registration.
+                          </p>
+                        </div>
+
+                        <div
+                          class="bg-blue-50 rounded-xl p-5 border border-blue-100"
+                        >
+                          <div class="flex items-center mb-3">
+                            <div
+                              class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                            >
+                              <svg
+                                class="w-4 h-4 text-blue-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900">
+                              Academic Records
+                            </h3>
+                          </div>
+                          <p class="text-sm text-gray-600">
+                            Grades, attendance records, class schedules, and
+                            other performance-related data.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="bg-blue-50 rounded-xl p-5 border border-blue-100"
+                      >
+                        <div class="flex items-center mb-3">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                          >
+                            <svg
+                              class="w-4 h-4 text-blue-600"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          <h3 class="font-bold text-gray-900">Usage Data</h3>
+                        </div>
+                        <p class="text-sm text-gray-600">
+                          We automatically collect technical information,
+                          including IP address, browser type, device
+                          information, and pages visited, to monitor and improve
+                          our service.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- How We Use Your Information -->
+                <section id="data-usage" class="privacy-section mb-12">
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">3</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        How We Use Your Information
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed mb-6">
+                        We use the information we collect to operate and
+                        maintain the StudentTracker platform, provide
+                        personalized features, improve our services, communicate
+                        with you, and ensure the security of our systems.
+                      </p>
+
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="text-center p-4">
+                          <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3"
+                          >
+                            <svg
+                              class="w-6 h-6 text-blue-600"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          <h4 class="font-bold text-gray-900 mb-1">
+                            Platform Operation
+                          </h4>
+                          <p class="text-sm text-gray-600">
+                            Running and maintaining our service
+                          </p>
+                        </div>
+
+                        <div class="text-center p-4">
+                          <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3"
+                          >
+                            <svg
+                              class="w-6 h-6 text-blue-600"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          <h4 class="font-bold text-gray-900 mb-1">
+                            Service Improvement
+                          </h4>
+                          <p class="text-sm text-gray-600">
+                            Enhancing user experience
+                          </p>
+                        </div>
+
+                        <div class="text-center p-4">
+                          <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3"
+                          >
+                            <svg
+                              class="w-6 h-6 text-blue-600"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          <h4 class="font-bold text-gray-900 mb-1">Security</h4>
+                          <p class="text-sm text-gray-600">
+                            Protecting your data
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Data Protection -->
+                <section id="data-protection" class="privacy-section mb-12">
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">4</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        Data Protection
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed mb-6">
+                        We implement industry-standard security measures,
+                        including encryption and access controls, to protect
+                        your data from loss, misuse, and unauthorized access.
+                        However, no method of transmission over the Internet is
+                        100% secure.
+                      </p>
+
+                      <div
+                        class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
+                      >
+                        <h4
+                          class="font-bold text-gray-900 mb-3 flex items-center"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Our Security Measures Include:
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div class="flex items-center">
+                            <div
+                              class="w-2 h-2 rounded-full bg-blue-500 mr-3"
+                            ></div>
+                            <span class="text-gray-700"
+                              >End-to-end encryption</span
+                            >
+                          </div>
+                          <div class="flex items-center">
+                            <div
+                              class="w-2 h-2 rounded-full bg-blue-500 mr-3"
+                            ></div>
+                            <span class="text-gray-700"
+                              >Regular security audits</span
+                            >
+                          </div>
+                          <div class="flex items-center">
+                            <div
+                              class="w-2 h-2 rounded-full bg-blue-500 mr-3"
+                            ></div>
+                            <span class="text-gray-700"
+                              >Access controls & permissions</span
+                            >
+                          </div>
+                          <div class="flex items-center">
+                            <div
+                              class="w-2 h-2 rounded-full bg-blue-500 mr-3"
+                            ></div>
+                            <span class="text-gray-700"
+                              >Secure data centers</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Your Rights -->
+                <section id="your-rights" class="privacy-section mb-12">
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">5</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        Your Rights
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed mb-6">
+                        You have the right to request access to, correction of,
+                        or deletion of your personal data. You can also object
+                        to the processing of your data. Please contact us to
+                        make such a request.
+                      </p>
+
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                        >
+                          <h4
+                            class="font-bold text-gray-900 mb-2 flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 text-blue-600 mr-2"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                              <path
+                                fill-rule="evenodd"
+                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                            Right to Access
+                          </h4>
+                          <p class="text-sm text-gray-600">
+                            Request a copy of all personal data we hold about
+                            you.
+                          </p>
+                        </div>
+
+                        <div
+                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                        >
+                          <h4
+                            class="font-bold text-gray-900 mb-2 flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 text-blue-600 mr-2"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                            Right to Correction
+                          </h4>
+                          <p class="text-sm text-gray-600">
+                            Update or correct inaccurate personal information.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Contact Us -->
+                <section id="contact" class="privacy-section">
+                  <div class="flex items-start mb-6">
+                    <div
+                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                    >
+                      <span class="text-xl font-bold text-blue-600">6</span>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                        Contact Us
+                      </h2>
+                      <p class="text-gray-700 leading-relaxed mb-6">
+                        If you have any questions or concerns about this privacy
+                        policy, please do not hesitate to contact us.
+                      </p>
+
+                      <div
+                        class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
+                      >
+                        <h4 class="font-bold text-gray-900 mb-4">
+                          Get in Touch
+                        </h4>
+                        <div class="space-y-4">
+                          <div class="flex items-center">
+                            <div
+                              class="w-10 h-10 rounded-lg bg-blue-200 flex items-center justify-center mr-4"
+                            >
+                              <svg
+                                class="w-5 h-5 text-blue-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                                />
+                                <path
+                                  d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p class="text-sm text-gray-600">Email</p>
+                              <a
+                                href="mailto:me.sharma.amrit@gmail.com"
+                                class="font-medium text-blue-600 hover:text-blue-700"
+                              >
+                                me.sharma.amrit@gmail.com
+                              </a>
+                            </div>
+                          </div>
+
+                          <div class="flex items-center">
+                            <div
+                              class="w-10 h-10 rounded-lg bg-blue-200 flex items-center justify-center mr-4"
+                            >
+                              <svg
+                                class="w-5 h-5 text-blue-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p class="text-sm text-gray-600">Phone</p>
+                              <p class="font-medium text-gray-900">
+                                +91 9817044885
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-blue-200">
+                          <p class="text-sm text-gray-600">
+                            We typically respond to privacy-related inquiries
+                            within 24-48 hours.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </main>
 
-    <footer class="bg-gray-100 text-gray-600 py-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-        <p class="mb-3">
-          © 2025 Student Tracker |
-          <a href="/term_condition.html" class="hover:text-blue-600"
-            >Terms & Conditions</a
-          >
-          |
-          <a href="/privacy.html" class="hover:text-blue-600">Privacy Policy</a>
-        </p>
-        <div class="mb-3">
+    <!-- Footer -->
+    <footer
+      class="bg-gradient-to-b from-blue-50 to-white text-gray-600 py-12 border-t border-blue-100"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
           <a
-            href="https://www.instagram.com/warrior_amrit/"
-            target="_blank"
-            class="hover:text-blue-600 mx-2"
-            >Instagram</a
+            href="/"
+            class="inline-block text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent mb-6 quicksand"
           >
-          |
-          <a
-            href="https://github.com/CodeByAmrit/"
-            target="_blank"
-            class="hover:text-blue-600 mx-2"
-            >GitHub</a
-          >
+            StudentTracker
+          </a>
+
+          <div class="flex flex-wrap justify-center gap-8 mb-8">
+            <a
+              href="/"
+              class="text-sm hover:text-blue-600 transition-colors duration-300"
+              >Home</a
+            >
+            <a
+              href="/login"
+              class="text-sm hover:text-blue-600 transition-colors duration-300"
+              >Login</a
+            >
+            <a
+              href="/signup"
+              class="text-sm hover:text-blue-600 transition-colors duration-300"
+              >Sign Up</a
+            >
+            <a
+              href="/term_condition"
+              class="text-sm hover:text-blue-600 transition-colors duration-300"
+              >Terms & Conditions</a
+            >
+            <a href="/privacy" class="text-sm font-medium text-blue-600"
+              >Privacy Policy</a
+            >
+          </div>
+
+          <div class="flex justify-center space-x-6 mb-8">
+            <a
+              href="https://www.instagram.com/warrior_amrit/"
+              target="_blank"
+              class="text-gray-400 hover:text-blue-600 transition-colors duration-300"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://github.com/CodeByAmrit/"
+              target="_blank"
+              class="text-gray-400 hover:text-blue-600 transition-colors duration-300"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                />
+              </svg>
+            </a>
+          </div>
+
+          <div class="border-t border-blue-200 pt-8">
+            <p class="mb-4">© 2025 Student Tracker. All rights reserved.</p>
+            <p class="text-sm">
+              Committed to protecting student data privacy with enterprise-grade
+              security.
+            </p>
+          </div>
         </div>
-        <p>
-          Contact:
-          <a href="mailto:me.sharma.amrit@gmail.com" class="hover:text-blue-600"
-            >me.sharma.amrit@gmail.com</a
-          >
-          | +91 9817044885
-        </p>
       </div>
     </footer>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"
-      nonce="<%= nonce %>"
-    ></script>
+    <!-- JavaScript for Progress Bar -->
+    <script nonce="<%= nonce %>">
+      document.addEventListener('DOMContentLoaded', function () {
+        // Progress bar
+        const progressBar = document.getElementById('progress-bar');
+        const sections = document.querySelectorAll('.privacy-section');
+
+        function updateProgressBar() {
+          const scrollTop = window.pageYOffset;
+          const docHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const scrollPercent = scrollTop / docHeight;
+
+          if (progressBar) {
+            progressBar.style.width = scrollPercent * 100 + '%';
+          }
+
+          // Highlight active section in nav
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
+              const id = section.getAttribute('id');
+              const navLink = document.querySelector(`a[href="#${id}"]`);
+
+              document.querySelectorAll('nav a').forEach((link) => {
+                link.classList.remove('text-blue-600', 'bg-blue-50');
+              });
+
+              if (navLink) {
+                navLink.classList.add('text-blue-600', 'bg-blue-50');
+              }
+            }
+          });
+        }
+
+        window.addEventListener('scroll', updateProgressBar);
+        updateProgressBar();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 120,
+                behavior: 'smooth',
+              });
+            }
+          });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector(
+          '[data-collapse-toggle="navbar-default"]'
+        );
+        const mobileMenu = document.getElementById('navbar-default');
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+          });
+        }
+      });
+    </script>
   </body>
 </html>

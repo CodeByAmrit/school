@@ -52,8 +52,6 @@
       nonce="nonce-ozfWMSeQ06g862KcEoWVKg=="
     ></script> -->
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="preload" as="script" href="/js/index.js" />
-    <script src="/js/index.js" nonce="<%= nonce %>"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -210,13 +208,13 @@
 
             <div class="flex space-x-4 justify-center lg:justify-start">
               <a
-                href="/privacy.html"
+                href="/privacy"
                 class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
               >
                 Privacy Policy
               </a>
               <a
-                href="/term_condition.html"
+                href="/term_condition"
                 class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
               >
                 Terms
@@ -416,14 +414,18 @@
           <div
             class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
           >
-            <div class="text-3xl md:text-4xl font-bold mb-1">38,916,000+</div>
+            <div class="text-3xl md:text-4xl font-bold mb-1" id="student">
+              38,916,000+
+            </div>
             <div>Students</div>
           </div>
 
           <div
             class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
           >
-            <div class="text-3xl md:text-4xl font-bold mb-1">677,000+</div>
+            <div class="text-3xl md:text-4xl font-bold mb-1" id="teacher">
+              677,000+
+            </div>
             <div>Teachers</div>
           </div>
         </div>
@@ -797,12 +799,12 @@
               <h4 class="font-bold text-gray-800 mb-2">Legal</h4>
               <div class="space-y-1">
                 <a
-                  href="/privacy.html"
+                  href="/privacy"
                   class="block text-sm hover:text-blue-600 transition-colors"
                   >Privacy Policy</a
                 >
                 <a
-                  href="/term_condition.html"
+                  href="/term_condition"
                   class="block text-sm hover:text-blue-600 transition-colors"
                   >Terms & Conditions</a
                 >
@@ -855,7 +857,6 @@
         </div>
       </div>
     </footer>
-
-    <script src="flowbite/flowbite.min.js" nonce="<%= nonce %>"></script>
+    <script src="/js/index.js" nonce="<%= nonce %>"></script>
   </body>
 </html>

@@ -1,12 +1,3 @@
-// window.addEventListener('scroll', function () {
-//   const navbar = document.getElementById('customNav');
-//   if (window.scrollY > 0) {
-//     navbar.classList.add('scrolledMenu');
-//   } else {
-//     navbar.classList.remove('scrolledMenu');
-//   }
-// });
-
 async function getTotalStudents() {
   try {
     const response = await fetch(`/total-students`, {
@@ -25,9 +16,9 @@ async function getTotalStudents() {
 async function updateStudentCount() {
   const total_data = await getTotalStudents();
   document.getElementById('student').innerText =
-    total_data.total_students.toString() + '+ Students';
+    total_data.total_students.toString() + '+';
   document.getElementById('teacher').innerText =
-    total_data.total_teachers.toString() + '+ Teachers';
+    total_data.total_teachers.toString() + '+';
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -452,7 +452,11 @@ router.get('/teacher/profile/:id', async (req, res) => {
       ? `data:image/png;base64,${teacher.school_logo.toString('base64')}`
       : null;
 
-    res.render('teacher_profile', { teacher, base64Image, nonce: res.locals.nonce });
+    res.render('teacher_profile', {
+      teacher,
+      base64Image,
+      nonce: res.locals.nonce,
+    });
   } catch (error) {
     console.error('Error fetching teacher details:', error);
     res.status(500).send('Internal Server Error');
@@ -1087,6 +1091,10 @@ router.get('/delete/:id', checkAuth, deleteStudent);
 
 router.get('/', (req, res) => {
   res.render('landing', { nonce: res.locals.nonce });
+});
+
+router.get('/term_condition', (req, res) => {
+  res.render('term_condition', { nonce: res.locals.nonce });
 });
 
 router.get('/privacy', (req, res) => {
