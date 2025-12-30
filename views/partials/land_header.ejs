@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Tracker - School Management System</title>
+
+    <meta
+      name="description"
+      content="Student Tracker is an advanced school management system that helps schools manage student records, attendance, and academic performance efficiently. Try Student Tracker today!"
+    />
+
+    <meta
+      name="keywords"
+      content="student tracker, school management system, student management, attendance system, student records, academic performance, school software"
+    />
+
+    <meta name="author" content="Amrit" />
+
+    <meta
+      property="og:title"
+      content="Student Tracker - School Management System"
+    />
+    <meta
+      property="og:description"
+      content="A powerful school management solution to track student data, attendance, and academic performance with ease."
+    />
+    <meta
+      property="og:image"
+      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
+    />
+    <meta property="og:url" content="https://edu.codebyamrit.co.in" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Student Tracker - School Management System"
+    />
+    <meta
+      name="twitter:description"
+      content="Manage student records, attendance, and academic performance with ease."
+    />
+    <meta
+      name="twitter:image"
+      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
+    />
+    <meta name="twitter:site" content="@codebyamrit" />
+
+    <!-- <script
+      src="https://cdn.tailwindcss.com"
+      nonce="nonce-ozfWMSeQ06g862KcEoWVKg=="
+    ></script> -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Quicksand:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+    <style>
+      * {
+        font-family: "Quicksand" !important;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          135deg,
+          #1e3a8a 0%,
+          #2563eb 50%,
+          #3b82f6 100%
+        );
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .quicksand {
+        font-family: "Quicksand", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <nav class="fixed w-full bg-white shadow-sm z-50">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
+      >
+        <a
+          href="/"
+          class="text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent"
+        >
+          StudentTracker
+        </a>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <a
+            href="/about"
+            class="text-[#3182ce] hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            >About Us</a
+          >
+          <a
+            href="/security"
+            class="text-[#3182ce] hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            >Security</a
+          >
+          <a
+            href="/privacy"
+            class="text-[#3182ce] hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            >Privacy</a
+          >
+          <a
+            href="/login"
+            class="text-[#3182ce] hover:text-blue-600 px-3 py-2 text-sm font-medium"
+            >Login</a
+          >
+          <a
+            href="/signup"
+            class="bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
+          >
+            Sign Up
+          </a>
+        </div>
+
+        <div class="md:hidden">
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-default"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="hidden w-full md:hidden" id="navbar-default">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="/login"
+            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Login</a
+          >
+          <a
+            href="/signup"
+            class="block bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-3 py-2 rounded-md text-base font-medium"
+            >Sign Up</a
+          >
+        </div>
+      </div>
+    </nav>

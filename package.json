@@ -13,7 +13,7 @@
     "start:pm2": "pm2 start ./bin/www --name studenttracker --env production"
   },
   "lint-staged": {
-    "*.{js,json,css,scss,md,ejs,html}": [
+    "*.{js,json,css,scss,md,html}": [
       "prettier --write"
     ]
   },
@@ -58,6 +58,17 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
+    "prettier-plugin-ejs": "^1.0.3",
     "tailwindcss": "^4.1.18"
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.ejs",
+        "options": {
+          "parser": "html"
+        }
+      }
+    ]
   }
 }

@@ -1,862 +1,559 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Tracker - School Management System</title>
+<%- include('partials/land_header') %>
 
-    <meta
-      name="description"
-      content="Student Tracker is an advanced school management system that helps schools manage student records, attendance, and academic performance efficiently. Try Student Tracker today!"
-    />
+<section class="relative pt-24 pb-20 text-white z-20 bg-white">
+  <div
+    class="absolute inset-0 z-0 transform -skew-y-6 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] -mt-10"
+  ></div>
 
-    <meta
-      name="keywords"
-      content="student tracker, school management system, student management, attendance system, student records, academic performance, school software"
-    />
-
-    <meta name="author" content="Amrit" />
-
-    <meta
-      property="og:title"
-      content="Student Tracker - School Management System"
-    />
-    <meta
-      property="og:description"
-      content="A powerful school management solution to track student data, attendance, and academic performance with ease."
-    />
-    <meta
-      property="og:image"
-      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
-    />
-    <meta property="og:url" content="https://edu.codebyamrit.co.in" />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Student Tracker - School Management System"
-    />
-    <meta
-      name="twitter:description"
-      content="Manage student records, attendance, and academic performance with ease."
-    />
-    <meta
-      name="twitter:image"
-      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
-    />
-    <meta name="twitter:site" content="@codebyamrit" />
-
-    <!-- <script
-      src="https://cdn.tailwindcss.com"
-      nonce="nonce-ozfWMSeQ06g862KcEoWVKg=="
-    ></script> -->
-    <link rel="stylesheet" href="/css/style.css" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Quicksand:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      @@
-      -77,7
-      +82,6
-      @@
-      href="/icons/favicon-16x16.png"
-    />
-    <link rel="manifest" href="/icons/site.webmanifest" />
-    <style>
-      * {
-        font-family: 'Quicksand' !important;
-      }
-      .hero-gradient {
-        background: linear-gradient(
-          135deg,
-          #1e3a8a 0%,
-          #2563eb 50%,
-          #3b82f6 100%
-        );
-      }
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-          0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
-      .quicksand {
-        font-family: 'Quicksand', sans-serif;
-      }
-    </style>
-  </head>
-
-  <body class="bg-gray-50">
-    <nav class="fixed w-full bg-white shadow-sm z-50 mt-10">
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
-      >
-        <a
-          href="/"
-          class="text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent"
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-8">
+      <div class="text-center lg:text-left">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          Track and Manage Student Data Easily
+        </h1>
+        <ul
+          class="space-y-3 mb-8 text-center mx-auto lg:text-left lg:block lg:mx-0"
         >
-          StudentTracker
-        </a>
-
-        <div class="hidden md:flex items-center space-x-4">
-          <a
-            href="/login"
-            class="text-[#3182ce] hover:text-blue-600 px-3 py-2 text-sm font-medium"
-            >Login</a
-          >
-          <a
-            href="/signup"
-            class="bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >
-            Sign Up
-          </a>
-        </div>
-
-        <div class="md:hidden">
-          <button
-            data-collapse-toggle="navbar-default"
-            type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            aria-controls="navbar-default"
-            aria-expanded="false"
-          >
-            <span class="sr-only">Open main menu</span>
+          <li class="flex items-center justify-center lg:justify-start">
             <svg
-              class="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 17 14"
+              class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
+              fill="currentColor"
+              viewBox="0 0 20 20"
             >
               <path
-                stroke="currentColor"
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <span>Aligned with Educational Standards</span>
+          </li>
+          <li class="flex items-center justify-center lg:justify-start">
+            <svg
+              class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <span>Empowers Teachers with Comprehensive Insights</span>
+          </li>
+        </ul>
+
+        <div class="flex space-x-4 justify-center lg:justify-start">
+          <a
+            href="/privacy"
+            class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="/term_condition"
+            class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
+          >
+            Terms
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 sm:gap-y-0">
+        <div class="relative pt-20">
+          <img
+            src="/image/student.svg"
+            alt="student"
+            class="absolute -top-8 left-1/2 h-60 w-60 -translate-x-1/2 z-20"
+          />
+
+          <div
+            class="bg-white backdrop-blur-sm rounded-lg shadow-xl p-6 pt-24 text-gray-800 flex flex-col items-center text-center"
+          >
+            <h3 class="font-bold text-lg mb-2">Track Your Progress</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              Manage your learning journey with personalized tools.
+            </p>
+            <a
+              href="/login"
+              class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
+            >
+              Login as Student
+            </a>
+          </div>
+        </div>
+
+        <div class="relative pt-20">
+          <img
+            src="/image/teacher.svg"
+            alt="teacher"
+            class="absolute -top-8 left-1/2 h-60 w-60 -translate-x-1/2 z-20"
+          />
+
+          <div
+            class="bg-white backdrop-blur-sm rounded-lg shadow-xl p-6 pt-24 text-gray-800 flex flex-col items-center text-center"
+          >
+            <h3 class="font-bold text-lg mb-2">Instructor & Admin Tools</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              Manage classes and students with automated reports.
+            </p>
+            <a
+              href="/login"
+              class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
+            >
+              Login as Teacher
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solutions Section - Redesigned with Blue Theme -->
+<section class="py-16 sm:py-20 bg-gradient-to-b from-white to-blue-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        A Complete Solution for Modern Schools
+      </h2>
+      <p class="max-w-3xl mx-auto text-gray-600">
+        From data management and academic tracking to parent communication,
+        we've got you covered.
+      </p>
+    </div>
+
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 text-center"
+    >
+      <div class="group">
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
+        >
+          <div class="relative inline-block mb-4">
+            <img src="/animate/database.gif" alt="database" class="w-16 h-16" />
+            <div
+              class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+            ></div>
+          </div>
+          <p
+            class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
+          >
+            Data Management
+          </p>
+        </div>
+      </div>
+      <div class="group">
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
+        >
+          <div class="relative inline-block mb-4">
+            <img
+              src="/animate/checklist.gif"
+              alt="checklist"
+              class="w-16 h-16"
+            />
+            <div
+              class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+            ></div>
+          </div>
+          <p
+            class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
+          >
+            Academic Insights
+          </p>
+        </div>
+      </div>
+      <div class="group">
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
+        >
+          <div class="relative inline-block mb-4">
+            <img
+              src="/animate/encryption.gif"
+              alt="encryption"
+              class="w-16 h-16"
+            />
+            <div
+              class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+            ></div>
+          </div>
+          <p
+            class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
+          >
+            Secure & Private
+          </p>
+        </div>
+      </div>
+      <div class="group">
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
+        >
+          <div class="relative inline-block mb-4">
+            <img src="/animate/calendar.gif" alt="calendar" class="w-16 h-16" />
+            <div
+              class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+            ></div>
+          </div>
+          <p
+            class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
+          >
+            Attendance & Grades
+          </p>
+        </div>
+      </div>
+      <div class="group">
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
+        >
+          <div class="relative inline-block mb-4">
+            <img src="/animate/family.gif" alt="family" class="w-16 h-16" />
+            <div
+              class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+            ></div>
+          </div>
+          <p
+            class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
+          >
+            Parent Engagement
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section - Redesigned with Blue Theme -->
+<section
+  class="py-12 bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white relative overflow-hidden"
+>
+  <div class="absolute inset-0 bg-[url('/animate/dots.svg')] opacity-10"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h3 class="text-2xl md:text-3xl font-bold mb-8">
+      Preparing the Students of Tomorrow
+    </h3>
+
+    <div
+      class="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8 w-full"
+    >
+      <div
+        class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
+      >
+        <div class="text-3xl md:text-4xl font-bold mb-1" id="student">
+          38,916,000+
+        </div>
+        <div>Students</div>
+      </div>
+
+      <div
+        class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
+      >
+        <div class="text-3xl md:text-4xl font-bold mb-1" id="teacher">
+          677,000+
+        </div>
+        <div>Teachers</div>
+      </div>
+    </div>
+
+    <p class="text-lg md:text-xl opacity-95 font-semibold">
+      Tens of thousands of schools rely on us every year.
+    </p>
+  </div>
+</section>
+
+<!-- Benefits Section - Redesigned with Blue Theme -->
+<section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        Why You'll Love
+        <span
+          class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
+          >Student Tracker</span
+        >
+      </h2>
+      <p class="max-w-2xl mx-auto text-gray-600">
+        Discover how our platform transforms education management for schools,
+        teachers, and students alike.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
+      >
+        <div class="p-6 text-center">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
+          >
+            <img
+              src="/animate/neural-network.gif"
+              alt="neural network"
+              class="w-16 h-16"
+            />
+          </div>
+          <h3
+            class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
+          >
+            Comprehensive Curriculum
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Equip students with essential skills crafted by experts for every
+            learning level.
+          </p>
+        </div>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
+      >
+        <div class="p-6 text-center">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
+          >
+            <img src="/animate/graduate.gif" alt="graduate" class="w-16 h-16" />
+          </div>
+          <h3
+            class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
+          >
+            Interactive Learning
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Motivate students with engaging activities and progress tracking.
+          </p>
+        </div>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
+      >
+        <div class="p-6 text-center">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
+          >
+            <img
+              src="/animate/online-lesson.gif"
+              alt="online lesson"
+              class="w-16 h-16"
+            />
+          </div>
+          <h3
+            class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
+          >
+            Customizable Platform
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Tailor the system with your own modules for cross-disciplinary
+            learning.
+          </p>
+        </div>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
+      >
+        <div class="p-6 text-center">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
+          >
+            <img src="/animate/score.gif" alt="score" class="w-16 h-16" />
+          </div>
+          <h3
+            class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
+          >
+            Test Readiness
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Help students excel on standardized tests with tailored preparation
+            tools.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section - Already Redesigned -->
+<section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+      Discover Our
+      <span
+        class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
+        >Powerful Features</span
+      >
+    </h2>
+
+    <!-- Feature 1: AI Assistant -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-12"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
+        <div class="text-center md:text-left">
+          <div
+            class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
+          >
+            <div
+              class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
+            ></div>
+            <span class="text-sm font-semibold text-blue-600">AI-POWERED</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            AI Teacher Assistant
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Leverage our built-in AI assistant to streamline your workflow. Get
+            help with lesson plans, generate quiz questions, or find creative
+            ideas for your classroom. It's like having a personal teaching
+            assistant available 24/7.
+          </p>
+          <a
+            href="/signup"
+            class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            Get Started
+            <svg
+              class="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M1 1h15M1 7h15M1 13h15"
-              />
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
             </svg>
-          </button>
+          </a>
+        </div>
+        <div class="relative">
+          <div
+            class="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-2xl transform -rotate-3"
+          ></div>
+          <img
+            src="/animate/neural-network.gif"
+            alt="AI Assistant"
+            class="relative rounded-xl shadow-xl mx-auto"
+          />
         </div>
       </div>
-      <div class="hidden w-full md:hidden" id="navbar-default">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a
-            href="/login"
-            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
-            >Login</a
+    </div>
+
+    <!-- Feature 2: Automated Reports -->
+    <div
+      class="bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-12"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
+        <div class="order-2 md:order-1">
+          <div class="relative">
+            <div
+              class="absolute -inset-4 bg-gradient-to-l from-blue-100 to-blue-50 rounded-2xl transform rotate-3"
+            ></div>
+            <img
+              src="/animate/report.gif"
+              alt="Automated Reports"
+              class="relative rounded-xl shadow-xl mx-auto"
+            />
+          </div>
+        </div>
+        <div class="text-center md:text-left order-1 md:order-2">
+          <div
+            class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
           >
+            <div
+              class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
+            ></div>
+            <span class="text-sm font-semibold text-blue-600">AUTOMATION</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            Automated Report Cards & Certificates
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Say goodbye to tedious paperwork. Generate beautiful,
+            professional-looking report cards, academic certificates, and other
+            documents in just a few clicks. Our system automatically pulls
+            student data, saving you hours of work.
+          </p>
           <a
             href="/signup"
-            class="block bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-3 py-2 rounded-md text-base font-medium"
-            >Sign Up</a
+            class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
           >
-        </div>
-      </div>
-    </nav>
-
-    <section class="relative pt-24 pb-20 text-white z-20 bg-white -mt-10">
-      <div
-        class="absolute inset-0 z-0 transform -skew-y-6 bg-gradient-to-br from-[#63b3ed] to-[#3182ce]"
-      ></div>
-
-      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-8">
-          <div class="text-center lg:text-left">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Track and Manage Student Data Easily
-            </h1>
-            <ul
-              class="space-y-3 mb-8 text-center mx-auto lg:text-left lg:block lg:mx-0"
+            Explore Features
+            <svg
+              class="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <li class="flex items-center justify-center lg:justify-start">
-                <svg
-                  class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>Aligned with Educational Standards</span>
-              </li>
-              <li class="flex items-center justify-center lg:justify-start">
-                <svg
-                  class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>Empowers Teachers with Comprehensive Insights</span>
-              </li>
-            </ul>
-
-            <div class="flex space-x-4 justify-center lg:justify-start">
-              <a
-                href="/privacy"
-                class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="/term_condition"
-                class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
-              >
-                Terms
-              </a>
-            </div>
-          </div>
-
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 sm:gap-y-0"
-          >
-            <div class="relative pt-20">
-              <img
-                src="/image/student.svg"
-                alt="student"
-                class="absolute -top-8 left-1/2 h-60 w-60 -translate-x-1/2 z-20"
-              />
-
-              <div
-                class="bg-white backdrop-blur-sm rounded-lg shadow-xl p-6 pt-24 text-gray-800 flex flex-col items-center text-center"
-              >
-                <h3 class="font-bold text-lg mb-2">Track Your Progress</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                  Manage your learning journey with personalized tools.
-                </p>
-                <a
-                  href="/login"
-                  class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
-                >
-                  Login as Student
-                </a>
-              </div>
-            </div>
-
-            <div class="relative pt-20">
-              <img
-                src="/image/teacher.svg"
-                alt="teacher"
-                class="absolute -top-8 left-1/2 h-60 w-60 -translate-x-1/2 z-20"
-              />
-
-              <div
-                class="bg-white backdrop-blur-sm rounded-lg shadow-xl p-6 pt-24 text-gray-800 flex flex-col items-center text-center"
-              >
-                <h3 class="font-bold text-lg mb-2">Instructor & Admin Tools</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                  Manage classes and students with automated reports.
-                </p>
-                <a
-                  href="/login"
-                  class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
-                >
-                  Login as Teacher
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Solutions Section - Redesigned with Blue Theme -->
-    <section class="py-16 sm:py-20 bg-gradient-to-b from-white to-blue-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
-            A Complete Solution for Modern Schools
-          </h2>
-          <p class="max-w-3xl mx-auto text-gray-600">
-            From data management and academic tracking to parent communication,
-            we've got you covered.
-          </p>
-        </div>
-
-        <div
-          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 text-center"
-        >
-          <div class="group">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
-            >
-              <div class="relative inline-block mb-4">
-                <img
-                  src="/animate/database.gif"
-                  alt="database"
-                  class="w-16 h-16"
-                />
-                <div
-                  class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                ></div>
-              </div>
-              <p
-                class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
-              >
-                Data Management
-              </p>
-            </div>
-          </div>
-          <div class="group">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
-            >
-              <div class="relative inline-block mb-4">
-                <img
-                  src="/animate/checklist.gif"
-                  alt="checklist"
-                  class="w-16 h-16"
-                />
-                <div
-                  class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                ></div>
-              </div>
-              <p
-                class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
-              >
-                Academic Insights
-              </p>
-            </div>
-          </div>
-          <div class="group">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
-            >
-              <div class="relative inline-block mb-4">
-                <img
-                  src="/animate/encryption.gif"
-                  alt="encryption"
-                  class="w-16 h-16"
-                />
-                <div
-                  class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                ></div>
-              </div>
-              <p
-                class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
-              >
-                Secure & Private
-              </p>
-            </div>
-          </div>
-          <div class="group">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
-            >
-              <div class="relative inline-block mb-4">
-                <img
-                  src="/animate/calendar.gif"
-                  alt="calendar"
-                  class="w-16 h-16"
-                />
-                <div
-                  class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                ></div>
-              </div>
-              <p
-                class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
-              >
-                Attendance & Grades
-              </p>
-            </div>
-          </div>
-          <div class="group">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50 group-hover:border-blue-200 transition-all duration-300 group-hover:shadow-md"
-            >
-              <div class="relative inline-block mb-4">
-                <img src="/animate/family.gif" alt="family" class="w-16 h-16" />
-                <div
-                  class="absolute -inset-2 bg-blue-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                ></div>
-              </div>
-              <p
-                class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors"
-              >
-                Parent Engagement
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats Section - Redesigned with Blue Theme -->
-    <section
-      class="py-12 bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white relative overflow-hidden"
-    >
-      <div
-        class="absolute inset-0 bg-[url('/animate/dots.svg')] opacity-10"
-      ></div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h3 class="text-2xl md:text-3xl font-bold mb-8">
-          Preparing the Students of Tomorrow
-        </h3>
-
-        <div
-          class="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8 w-full"
-        >
-          <div
-            class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
-          >
-            <div class="text-3xl md:text-4xl font-bold mb-1" id="student">
-              38,916,000+
-            </div>
-            <div>Students</div>
-          </div>
-
-          <div
-            class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl"
-          >
-            <div class="text-3xl md:text-4xl font-bold mb-1" id="teacher">
-              677,000+
-            </div>
-            <div>Teachers</div>
-          </div>
-        </div>
-
-        <p class="text-lg md:text-xl opacity-95 font-semibold">
-          Tens of thousands of schools rely on us every year.
-        </p>
-      </div>
-    </section>
-
-    <!-- Benefits Section - Redesigned with Blue Theme -->
-    <section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
-            Why You'll Love
-            <span
-              class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
-              >Student Tracker</span
-            >
-          </h2>
-          <p class="max-w-2xl mx-auto text-gray-600">
-            Discover how our platform transforms education management for
-            schools, teachers, and students alike.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
-          >
-            <div class="p-6 text-center">
-              <div
-                class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
-              >
-                <img
-                  src="/animate/neural-network.gif"
-                  alt="neural network"
-                  class="w-16 h-16"
-                />
-              </div>
-              <h3
-                class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
-              >
-                Comprehensive Curriculum
-              </h3>
-              <p class="text-gray-600 text-sm">
-                Equip students with essential skills crafted by experts for
-                every learning level.
-              </p>
-            </div>
-          </div>
-          <div
-            class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
-          >
-            <div class="p-6 text-center">
-              <div
-                class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
-              >
-                <img
-                  src="/animate/graduate.gif"
-                  alt="graduate"
-                  class="w-16 h-16"
-                />
-              </div>
-              <h3
-                class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
-              >
-                Interactive Learning
-              </h3>
-              <p class="text-gray-600 text-sm">
-                Motivate students with engaging activities and progress
-                tracking.
-              </p>
-            </div>
-          </div>
-          <div
-            class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
-          >
-            <div class="p-6 text-center">
-              <div
-                class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
-              >
-                <img
-                  src="/animate/online-lesson.gif"
-                  alt="online lesson"
-                  class="w-16 h-16"
-                />
-              </div>
-              <h3
-                class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
-              >
-                Customizable Platform
-              </h3>
-              <p class="text-gray-600 text-sm">
-                Tailor the system with your own modules for cross-disciplinary
-                learning.
-              </p>
-            </div>
-          </div>
-          <div
-            class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden feature-card transition-all duration-300 hover:border-blue-200 group"
-          >
-            <div class="p-6 text-center">
-              <div
-                class="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-50"
-              >
-                <img src="/animate/score.gif" alt="score" class="w-16 h-16" />
-              </div>
-              <h3
-                class="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"
-              >
-                Test Readiness
-              </h3>
-              <p class="text-gray-600 text-sm">
-                Help students excel on standardized tests with tailored
-                preparation tools.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section - Already Redesigned -->
-    <section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-          Discover Our
-          <span
-            class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
-            >Powerful Features</span
-          >
-        </h2>
-
-        <!-- Feature 1: AI Assistant -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-12"
-        >
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
-            <div class="text-center md:text-left">
-              <div
-                class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
-              >
-                <div
-                  class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
-                ></div>
-                <span class="text-sm font-semibold text-blue-600"
-                  >AI-POWERED</span
-                >
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                AI Teacher Assistant
-              </h3>
-              <p class="text-gray-600 mb-6">
-                Leverage our built-in AI assistant to streamline your workflow.
-                Get help with lesson plans, generate quiz questions, or find
-                creative ideas for your classroom. It's like having a personal
-                teaching assistant available 24/7.
-              </p>
-              <a
-                href="/signup"
-                class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Get Started
-                <svg
-                  class="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  ></path>
-                </svg>
-              </a>
-            </div>
-            <div class="relative">
-              <div
-                class="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-2xl transform -rotate-3"
-              ></div>
-              <img
-                src="/animate/neural-network.gif"
-                alt="AI Assistant"
-                class="relative rounded-xl shadow-xl mx-auto"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Feature 2: Automated Reports -->
-        <div
-          class="bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-12"
-        >
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
-            <div class="order-2 md:order-1">
-              <div class="relative">
-                <div
-                  class="absolute -inset-4 bg-gradient-to-l from-blue-100 to-blue-50 rounded-2xl transform rotate-3"
-                ></div>
-                <img
-                  src="/animate/report.gif"
-                  alt="Automated Reports"
-                  class="relative rounded-xl shadow-xl mx-auto"
-                />
-              </div>
-            </div>
-            <div class="text-center md:text-left order-1 md:order-2">
-              <div
-                class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
-              >
-                <div
-                  class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
-                ></div>
-                <span class="text-sm font-semibold text-blue-600"
-                  >AUTOMATION</span
-                >
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                Automated Report Cards & Certificates
-              </h3>
-              <p class="text-gray-600 mb-6">
-                Say goodbye to tedious paperwork. Generate beautiful,
-                professional-looking report cards, academic certificates, and
-                other documents in just a few clicks. Our system automatically
-                pulls student data, saving you hours of work.
-              </p>
-              <a
-                href="/signup"
-                class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Explore Features
-                <svg
-                  class="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  ></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Feature 3: Student Profiles -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden"
-        >
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
-            <div class="text-center md:text-left">
-              <div
-                class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
-              >
-                <div
-                  class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
-                ></div>
-                <span class="text-sm font-semibold text-blue-600"
-                  >COMPREHENSIVE</span
-                >
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                Student Profiles
-              </h3>
-              <p class="text-gray-600 mb-6">
-                Keep all student information in one organized place. Track
-                academic performance, attendance, and manage important files and
-                documents for each student. Get a holistic view of every
-                student's progress at a glance.
-              </p>
-              <a
-                href="/signup"
-                class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Sign Up Now
-                <svg
-                  class="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  ></path>
-                </svg>
-              </a>
-            </div>
-            <div class="relative">
-              <div
-                class="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-2xl transform -rotate-3"
-              ></div>
-              <img
-                src="/animate/grades.gif"
-                alt="Student Profiles"
-                class="relative rounded-xl shadow-xl mx-auto"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer - Enhanced with Blue Theme -->
-    <footer
-      class="bg-gradient-to-b from-blue-50 to-white text-gray-600 py-12 border-t border-blue-100"
-    >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-          <a
-            href="/"
-            class="inline-block text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent mb-6"
-          >
-            StudentTracker
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
+            </svg>
           </a>
-
-          <div class="flex flex-wrap justify-center gap-8 mb-8">
-            <div class="text-center">
-              <h4 class="font-bold text-gray-800 mb-2">Product</h4>
-              <div class="space-y-1">
-                <a
-                  href="/features"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Features</a
-                >
-                <a
-                  href="/pricing"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Pricing</a
-                >
-                <a
-                  href="/demo"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Request Demo</a
-                >
-              </div>
-            </div>
-
-            <div class="text-center">
-              <h4 class="font-bold text-gray-800 mb-2">Company</h4>
-              <div class="space-y-1">
-                <a
-                  href="/about"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >About Us</a
-                >
-                <a
-                  href="/contact"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Contact</a
-                >
-                <a
-                  href="/careers"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Careers</a
-                >
-              </div>
-            </div>
-
-            <div class="text-center">
-              <h4 class="font-bold text-gray-800 mb-2">Legal</h4>
-              <div class="space-y-1">
-                <a
-                  href="/privacy"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Privacy Policy</a
-                >
-                <a
-                  href="/term_condition"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Terms & Conditions</a
-                >
-                <a
-                  href="/security"
-                  class="block text-sm hover:text-blue-600 transition-colors"
-                  >Security</a
-                >
-              </div>
-            </div>
-          </div>
-
-          <div class="flex justify-center space-x-6 mb-8">
-            <a
-              href="https://www.instagram.com/warrior_amrit/"
-              target="_blank"
-              class="text-gray-500 hover:text-blue-600 transition-colors"
-            >
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"
-                />
-              </svg>
-            </a>
-            <a
-              href="https://github.com/CodeByAmrit/"
-              target="_blank"
-              class="text-gray-500 hover:text-blue-600 transition-colors"
-            >
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                />
-              </svg>
-            </a>
-          </div>
-
-          <div class="border-t border-blue-200 pt-8">
-            <p class="mb-4">© 2025 Student Tracker. All rights reserved.</p>
-            <p class="text-sm">
-              Contact:
-              <a
-                href="mailto:me.sharma.amrit@gmail.com"
-                class="hover:text-blue-600 transition-colors"
-                >me.sharma.amrit@gmail.com</a
-              >
-              | +91 9817044885
-            </p>
-          </div>
         </div>
       </div>
-    </footer>
-    <script src="/js/index.js" nonce="<%= nonce %>"></script>
-  </body>
-</html>
+    </div>
+
+    <!-- Feature 3: Student Profiles -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center p-8">
+        <div class="text-center md:text-left">
+          <div
+            class="inline-flex items-center justify-center md:justify-start space-x-2 mb-4"
+          >
+            <div
+              class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
+            ></div>
+            <span class="text-sm font-semibold text-blue-600"
+              >COMPREHENSIVE</span
+            >
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            Student Profiles
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Keep all student information in one organized place. Track academic
+            performance, attendance, and manage important files and documents
+            for each student. Get a holistic view of every student's progress at
+            a glance.
+          </p>
+          <a
+            href="/signup"
+            class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            Sign Up Now
+            <svg
+              class="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        <div class="relative">
+          <div
+            class="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-2xl transform -rotate-3"
+          ></div>
+          <img
+            src="/animate/grades.gif"
+            alt="Student Profiles"
+            class="relative rounded-xl shadow-xl mx-auto"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/land_footer') %>
