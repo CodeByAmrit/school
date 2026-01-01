@@ -2,29 +2,33 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["create-docker-image"]
+    tags:
+      - "v*.*.*"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 — Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2 — Login to DockerHub
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 3 — Setup Buildx (for caching + multi-platform)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 4 — Build and Push
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "MAJOR_MINOR=${VERSION%.*}" >> $GITHUB_OUTPUT
+
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v6
         with:
@@ -33,7 +37,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:${{ steps.version.outputs.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:${{ steps.version.outputs.MAJOR_MINOR }}
             ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:${{ github.run_number }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
