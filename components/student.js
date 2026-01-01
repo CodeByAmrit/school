@@ -426,9 +426,9 @@ async function teacherLogin(req, res) {
     const teacher = rows[0];
 
     // Secure password comparison
-    // if (!bcrypt.compareSync(password, teacher.password)) {
-    //   return res.status(403).json({ status: 'Invalid Password' });
-    // }
+    if (!bcrypt.compareSync(password, teacher.password)) {
+      return res.status(403).json({ status: 'Invalid Password' });
+    }
 
     // JWT Payload
     const payload = {
