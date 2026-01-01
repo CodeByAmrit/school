@@ -6,147 +6,144 @@
   >
     <p class="pt-5 text-2xl">Students Details</p>
 
-    <form action="/search" method="get">
-      <%- include('./search.ejs') %>
+    <form action="/search" method="get"><%- include('./search.ejs') %></form>
 
-      <!-- <p class=" my-3 text-xl">Edit Profiles</p> -->
+    <!-- <p class=" my-3 text-xl">Edit Profiles</p> -->
 
-      <div class="py-4 flex justify-start gap-4">
-        <button
-          id="dropdownActionButton"
-          data-dropdown-toggle="dropdownAction"
-          class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          type="button"
+    <div class="py-4 flex justify-start gap-4">
+      <button
+        id="dropdownActionButton"
+        data-dropdown-toggle="dropdownAction"
+        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        type="button"
+      >
+        <span class="sr-only">Action button</span>
+        Download
+        <svg
+          class="w-2.5 h-2.5 ms-2.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
         >
-          <span class="sr-only">Action button</span>
-          Download
-          <svg
-            class="w-2.5 h-2.5 ms-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div
+        id="dropdownAction"
+        class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
+      >
+        <div class="py-1">
+          <a
+            id="selected_excel_file_button"
+            class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
-          </svg>
-        </button>
-        <!-- Dropdown menu -->
-        <div
-          id="dropdownAction"
-          class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <div class="py-1">
-            <a
-              id="selected_excel_file_button"
-              class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
-              <img src="/image/excel.svg" alt="excel" width="26px" />
-              Get Excel File
-            </a>
-          </div>
-        </div>
-
-        <button
-          id="dropdownActionButton2"
-          data-dropdown-toggle="dropdownAction2"
-          class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          type="button"
-        >
-          <span class="sr-only">Action button</span>
-          Action
-          <svg
-            class="w-2.5 h-2.5 ms-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
-          </svg>
-        </button>
-        <!-- Dropdown menu -->
-        <div
-          id="dropdownAction2"
-          class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <ul
-            class="py-1 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownActionButton2"
-          >
-            <li>
-              <a
-                href="#"
-                id="promote-button"
-                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Promote</a
-              >
-            </li>
-
-            <li>
-              <a
-                href="#"
-                id="demote-button"
-                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Demote</a
-              >
-            </li>
-          </ul>
-          <div class="py-1">
-            <a
-              id="selected_id_card_button"
-              class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >ID Card</a
-            >
-          </div>
-          <div class="py-1">
-            <a
-              id="selected_Certificate_button"
-              class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Felicitation Ceremony Certificate</a
-            >
-          </div>
+            <img src="/image/excel.svg" alt="excel" width="26px" />
+            Get Excel File
+          </a>
         </div>
       </div>
 
-      <div
-        class="relative w-full overflow-x-auto shadow-md sm:rounded-lg flex-1"
+      <button
+        id="dropdownActionButton2"
+        data-dropdown-toggle="dropdownAction2"
+        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        type="button"
       >
-        <table
-          class="select-none w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-          id="student-table"
+        <span class="sr-only">Action button</span>
+        Action
+        <svg
+          class="w-2.5 h-2.5 ms-2.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
         >
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div
+        id="dropdownAction2"
+        class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
+      >
+        <ul
+          class="py-1 text-sm text-gray-700 dark:text-gray-200"
+          aria-labelledby="dropdownActionButton2"
+        >
+          <li>
+            <a
+              href="#"
+              id="promote-button"
+              class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >Promote</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="#"
+              id="demote-button"
+              class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >Demote</a
+            >
+          </li>
+        </ul>
+        <div class="py-1">
+          <a
+            id="selected_id_card_button"
+            class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            >ID Card</a
           >
-            <tr>
-              <!-- Select All Checkbox -->
-              <th scope="col" class="px-3 py-3">
-                <input
-                  type="checkbox"
-                  id="checkbox-all-search"
-                  class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </th>
-              <!-- <th scope="col" class="px-3 py-3">
+        </div>
+        <div class="py-1">
+          <a
+            id="selected_Certificate_button"
+            class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            >Felicitation Ceremony Certificate</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg flex-1">
+      <table
+        class="select-none w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        id="student-table"
+      >
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <!-- Select All Checkbox -->
+            <th scope="col" class="px-3 py-3">
+              <input
+                type="checkbox"
+                id="checkbox-all-search"
+                class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+            </th>
+            <!-- <th scope="col" class="px-3 py-3">
                                     Roll No
                                 </th> -->
-              <th scope="col" class="px-3 py-3">Name</th>
-              <th scope="col" class="px-6 py-3">Class</th>
-              <th scope="col" class="px-6 py-3">Session</th>
-              <th scope="col" class="px-6 py-3">Action</th>
-              <!-- <th scope="col" class="px-6 py-3">
+            <th scope="col" class="px-3 py-3">Name</th>
+            <th scope="col" class="px-6 py-3">Class</th>
+            <th scope="col" class="px-6 py-3">Session</th>
+            <th scope="col" class="px-6 py-3">Action</th>
+            <!-- <th scope="col" class="px-6 py-3">
                                     Marks
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -155,166 +152,162 @@
                                 <th scope="col" class="px-6 py-3">
                                     Delete
                                 </th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <% if (studentlist.length> 0) { %> <%
-            studentlist.forEach((student)=> { %>
-            <tr
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
-            >
-              <!-- Checkbox for each row -->
-              <td class="px-3 py-3">
-                <input
-                  type="checkbox"
-                  class="border-1 student-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  data-id="<%= student.school_id %>"
-                />
-              </td>
-              <!-- <th scope="row"
+          </tr>
+        </thead>
+        <tbody>
+          <% if (studentlist.length> 0) { %> <% studentlist.forEach((student)=>
+          { %>
+          <tr
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+          >
+            <!-- Checkbox for each row -->
+            <td class="px-3 py-3">
+              <input
+                type="checkbox"
+                class="border-1 student-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                data-id="<%= student.school_id %>"
+              />
+            </td>
+            <!-- <th scope="row"
                                             class="px-3 py-3 font-medium  whitespace-nowrap dark:text-white">
                                             
                                             
                                         </th> -->
-              <td
-                class="px-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-5"
+            <td
+              class="px-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-5"
+            >
+              <div class="w-10 h-10 overflow-hidden rounded-full">
+                <img
+                  class="object-cover w-full h-full"
+                  src="<%= student.image %>"
+                  alt="<%= student.school_id %>"
+                />
+              </div>
+              <div class="flex flex-col justify-center">
+                <div><%= student.name %></div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  S/O <%= student.father_name %>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4"><%= student.class %></td>
+            <td class="px-6 py-4"><%= student.session %></td>
+
+            <td class="px-6 py-4 flex justify-start items-center">
+              <button
+                id="apple-ipad-air-dropdown-<%= student.school_id %>"
+                data-dropdown-toggle="apple-ipad-air-<%= student.school_id %>"
+                class="w-auto inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                type="button"
               >
-                <div class="w-10 h-10 overflow-hidden rounded-full">
-                  <img
-                    class="object-cover w-full h-full"
-                    src="<%= student.image %>"
-                    alt="<%= student.school_id %>"
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewbox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
                   />
-                </div>
-                <div class="flex flex-col justify-center">
-                  <div><%= student.name %></div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    S/O <%= student.father_name %>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4"><%= student.class %></td>
-              <td class="px-6 py-4"><%= student.session %></td>
-
-              <td class="px-6 py-4 flex justify-start items-center">
-                <button
-                  id="apple-ipad-air-dropdown-<%= student.school_id %>"
-                  data-dropdown-toggle="apple-ipad-air-<%= student.school_id %>"
-                  class="w-auto inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                  type="button"
-                >
-                  <svg
-                    class="w-5 h-5"
-                    aria-hidden="true"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-                    />
-                  </svg>
-                </button>
-                <div
-                  id="apple-ipad-air-<%= student.school_id %>"
-                  class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                >
-                  <ul
-                    class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="apple-ipad-air-dropdown-<%= student.school_id %>"
-                  >
-                    <li>
-                      <a
-                        href="/student/edit/<%= student.school_id %>"
-                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Edit Profile</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="/student/get_marks/<%= student.school_id %>"
-                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Edit Marks</a
-                      >
-                    </li>
-                  </ul>
-
-                  <ul
-                    class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="apple-ipad-air-dropdown-<%= student.school_id %>"
-                  >
-                    <li>
-                      <a
-                        href="/generate-report/<%= student.school_id %>"
-                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Create Report Card</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="/generate-certificate/<%= student.school_id %>"
-                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Generate Certificate</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="/api/students/get/virual-card/<%= student.school_id %>"
-                        target="_blank"
-                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Virtual ID Card
-                      </a>
-                    </li>
-                  </ul>
-                  <div class="py-1">
-                    <a
-                      href="/files/one/<%= student.school_id %>"
-                      class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >Files</a
-                    >
-                  </div>
-                  <div class="py-1">
-                    <form
-                      id="move-to-leaved-form-<%= student.school_id %>"
-                      action="/student/mark-left/<%= student.school_id %>"
-                      method="POST"
-                    >
-                      <input type="hidden" name="reason" value="Graduated" />
-                      <!-- or make it a textarea if needed -->
-                      <button
-                        type="submit"
-                        class="w-full text-left block py-2 px-4 text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-600 dark:text-red-400 dark:hover:text-white"
-                      >
-                        Move to Leaved Students
-                      </button>
-                    </form>
-                  </div>
-                  <div class="py-1">
-                    <a
-                      href="/delete/<%= student.school_id %>"
-                      id="delete-link-<%= student.school_id %>"
-                      class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >Delete</a
-                    >
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <% }); %> <% } else { %>
-            <tr>
-              <td
-                colspan="8"
-                class="border px-4 py-2 text-center text-gray-500"
+                </svg>
+              </button>
+              <div
+                id="apple-ipad-air-<%= student.school_id %>"
+                class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
               >
-                No students available.
-              </td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </form>
+                <ul
+                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="apple-ipad-air-dropdown-<%= student.school_id %>"
+                >
+                  <li>
+                    <a
+                      href="/student/edit/<%= student.school_id %>"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Edit Profile</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="/student/get_marks/<%= student.school_id %>"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Edit Marks</a
+                    >
+                  </li>
+                </ul>
+
+                <ul
+                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="apple-ipad-air-dropdown-<%= student.school_id %>"
+                >
+                  <li>
+                    <a
+                      href="/generate-report/<%= student.school_id %>"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Create Report Card</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="/generate-certificate/<%= student.school_id %>"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Generate Certificate</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="/api/students/get/virual-card/<%= student.school_id %>"
+                      target="_blank"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Virtual ID Card
+                    </a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a
+                    href="/files/one/<%= student.school_id %>"
+                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >Files</a
+                  >
+                </div>
+                <div class="py-1">
+                  <form
+                    id="move-to-leaved-form-<%= student.school_id %>"
+                    action="/student/mark-left/<%= student.school_id %>"
+                    method="POST"
+                  >
+                    <input type="hidden" name="reason" value="Graduated" />
+                    <!-- or make it a textarea if needed -->
+                    <button
+                      type="submit"
+                      class="w-full text-left block py-2 px-4 text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-600 dark:text-red-400 dark:hover:text-white"
+                    >
+                      Move to Leaved Students
+                    </button>
+                  </form>
+                </div>
+                <div class="py-1">
+                  <a
+                    href="/delete/<%= student.school_id %>"
+                    id="delete-link-<%= student.school_id %>"
+                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >Delete</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="8" class="border px-4 py-2 text-center text-gray-500">
+              No students available.
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

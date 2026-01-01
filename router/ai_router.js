@@ -1,13 +1,13 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const aiController = require('../components/ai_controller');
+const aiController = require("../components/ai_controller");
 
-const checkAuth = require('../services/checkauth');
-const { check } = require('express-validator');
+const checkAuth = require("../services/checkauth");
+const { check } = require("express-validator");
 
 router.use(checkAuth);
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const message = req.body.message;
   // console.log(message);return;
   const reply = await aiController.run(message);

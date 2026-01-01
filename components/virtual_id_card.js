@@ -1,10 +1,10 @@
-const { PDFDocument, rgb } = require('pdf-lib');
-const fontkit = require('@pdf-lib/fontkit'); // Import fontkit
-const sharp = require('sharp');
-const { getConnection } = require('../models/getConnection');
-const fs = require('fs');
-const path = require('path');
-const ExcelJS = require('exceljs');
+const { PDFDocument, rgb } = require("pdf-lib");
+const fontkit = require("@pdf-lib/fontkit"); // Import fontkit
+const sharp = require("sharp");
+const { getConnection } = require("../models/getConnection");
+const fs = require("fs");
+const path = require("path");
+const ExcelJS = require("exceljs");
 
 async function generateVirtualIdCard(req, res, next) {
   const studentId = req.params.school_id;
@@ -14,21 +14,21 @@ async function generateVirtualIdCard(req, res, next) {
     connection = await getConnection();
 
     const [[student]] = await connection.execute(
-      'SELECT name, class, dob, mobile_no, school_id, corresponding_address, mobile_no, session, admission_no FROM students WHERE school_id = ?',
-      [studentId]
+      "SELECT name, class, dob, mobile_no, school_id, corresponding_address, mobile_no, session, admission_no FROM students WHERE school_id = ?",
+      [studentId],
     );
 
     const [[photo]] = await connection.execute(
-      'SELECT image FROM photo WHERE id = ?',
-      [studentId]
+      "SELECT image FROM photo WHERE id = ?",
+      [studentId],
     );
     const [[schoolLogo]] = await connection.execute(
-      'SELECT school_logo FROM teacher WHERE id = ?',
-      [schoolData._id]
+      "SELECT school_logo FROM teacher WHERE id = ?",
+      [schoolData._id],
     );
 
     // Load the certificate template
-    const templatePath = path.join(__dirname, '../template/id-card.pdf');
+    const templatePath = path.join(__dirname, "../template/id-card.pdf");
     const templateBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
 
@@ -43,12 +43,12 @@ async function generateVirtualIdCard(req, res, next) {
               input: Buffer.from(
                 `<svg>
                     <rect x="0" y="0" width="300" height="380" rx="20" ry="20"/>
-                    </svg>`
+                    </svg>`,
               ),
-              blend: 'dest-in',
+              blend: "dest-in",
             },
           ])
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedImage = await pdfDoc.embedPng(pngBuffer);
 
@@ -57,7 +57,7 @@ async function generateVirtualIdCard(req, res, next) {
           y: 31,
         });
       } catch (error) {
-        console.error('Error embedding student image:', error);
+        console.error("Error embedding student image:", error);
       }
     }
     if (schoolLogo.school_logo.length > 0) {
@@ -65,7 +65,7 @@ async function generateVirtualIdCard(req, res, next) {
         const pngBuffer = await sharp(Buffer.from(schoolLogo.school_logo))
           .resize(160, 160)
 
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedImage = await pdfDoc.embedPng(pngBuffer);
 
@@ -74,7 +74,7 @@ async function generateVirtualIdCard(req, res, next) {
           y: 445,
         });
       } catch (error) {
-        console.error('Error embedding student image:', error);
+        console.error("Error embedding student image:", error);
       }
     }
 
@@ -84,21 +84,21 @@ async function generateVirtualIdCard(req, res, next) {
       y: 537,
       size: 55,
       color: rgb(0.101, 0.337, 0.859),
-      font: pdfDoc.embedStandardFont('Helvetica-Bold'),
+      font: pdfDoc.embedStandardFont("Helvetica-Bold"),
     });
     firstPage.drawText(schoolData.school_address, {
       x: 254,
       y: 500,
       size: 20,
       color: rgb(0, 0, 0),
-      font: pdfDoc.embedStandardFont('Helvetica-Bold'),
+      font: pdfDoc.embedStandardFont("Helvetica-Bold"),
     });
     firstPage.drawText(`Ph - ${schoolData.school_phone}`, {
       x: 254,
       y: 473,
       size: 20,
       color: rgb(0, 0, 0),
-      font: pdfDoc.embedStandardFont('Helvetica-Bold'),
+      font: pdfDoc.embedStandardFont("Helvetica-Bold"),
     });
 
     // student details
@@ -142,7 +142,7 @@ async function generateVirtualIdCard(req, res, next) {
       size: 26,
       color: rgb(0, 0, 0),
     });
-    let text_id = `${student.session.replace('-', '')}${studentId}`;
+    let text_id = `${student.session.replace("-", "")}${studentId}`;
     firstPage.drawText(text_id, {
       x: 673,
       y: yStudent,
@@ -151,13 +151,13 @@ async function generateVirtualIdCard(req, res, next) {
     });
     yStudent -= 72;
     const addressLines = student.corresponding_address
-      .split(' ')
+      .split(" ")
       .reduce((acc, word, index) => {
         if (index % 6 === 0) acc.push([]);
         acc[acc.length - 1].push(word);
         return acc;
       }, [])
-      .map((line) => line.join(' '));
+      .map((line) => line.join(" "));
 
     let yAddress = 66;
     addressLines.forEach((line) => {
@@ -172,14 +172,14 @@ async function generateVirtualIdCard(req, res, next) {
 
     // Save the PDF and send it to the client
     const pdfBytes = await pdfDoc.save();
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
-      'Content-Disposition',
-      `inline; filename=ID-Card-${text_id}.pdf`
+      "Content-Disposition",
+      `inline; filename=ID-Card-${text_id}.pdf`,
     );
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
     console.log(error);
@@ -196,22 +196,22 @@ async function generateVirtualIdCards_with_session(req, res, next) {
 
     // Fetch all students associated with the teacher and session
     const [students] = await connection.execute(
-      'SELECT school_id, name, class, dob, mobile_no, session, admission_no, corresponding_address FROM students WHERE teacher_id = ? AND session = ?',
-      [req.user._id, session]
+      "SELECT school_id, name, class, dob, mobile_no, session, admission_no, corresponding_address FROM students WHERE teacher_id = ? AND session = ?",
+      [req.user._id, session],
     );
 
     if (students.length === 0) {
-      return res.status(404).send('No students found for the given session.');
+      return res.status(404).send("No students found for the given session.");
     }
 
     // Fetch school logo
     const [[schoolLogo]] = await connection.execute(
-      'SELECT school_logo FROM teacher WHERE id = ?',
-      [req.user._id]
+      "SELECT school_logo FROM teacher WHERE id = ?",
+      [req.user._id],
     );
 
     // Load the certificate template
-    const templatePath = path.join(__dirname, '../template/id-card.pdf');
+    const templatePath = path.join(__dirname, "../template/id-card.pdf");
     const templateBytes = fs.readFileSync(templatePath);
     const templatePDF = await PDFDocument.load(templateBytes);
 
@@ -228,8 +228,8 @@ async function generateVirtualIdCards_with_session(req, res, next) {
 
       // Fetch student photo
       const [[photo]] = await connection.execute(
-        'SELECT image FROM photo WHERE id = ?',
-        [student.school_id]
+        "SELECT image FROM photo WHERE id = ?",
+        [student.school_id],
       );
 
       if (photo && photo.image) {
@@ -241,17 +241,17 @@ async function generateVirtualIdCards_with_session(req, res, next) {
                 input: Buffer.from(
                   `<svg>
                     <rect x="0" y="0" width="300" height="380" rx="20" ry="20"/>
-                    </svg>`
+                    </svg>`,
                 ),
-                blend: 'dest-in',
+                blend: "dest-in",
               },
             ])
-            .toFormat('png')
+            .toFormat("png")
             .toBuffer();
           const embeddedImage = await pdfDoc.embedPng(pngBuffer);
           newPage.drawImage(embeddedImage, { x: 42, y: 31 });
         } catch (error) {
-          console.error('Error embedding student image:', error);
+          console.error("Error embedding student image:", error);
         }
       }
 
@@ -259,12 +259,12 @@ async function generateVirtualIdCards_with_session(req, res, next) {
         try {
           const pngBuffer = await sharp(Buffer.from(schoolLogo.school_logo))
             .resize(160, 160)
-            .toFormat('png')
+            .toFormat("png")
             .toBuffer();
           const embeddedImage = await pdfDoc.embedPng(pngBuffer);
           newPage.drawImage(embeddedImage, { x: 42, y: 445 });
         } catch (error) {
-          console.error('Error embedding school logo:', error);
+          console.error("Error embedding school logo:", error);
         }
       }
 
@@ -274,7 +274,7 @@ async function generateVirtualIdCards_with_session(req, res, next) {
         y: 537,
         size: 55,
         color: rgb(0.101, 0.337, 0.859),
-        font: pdfDoc.embedStandardFont('Helvetica-Bold'),
+        font: pdfDoc.embedStandardFont("Helvetica-Bold"),
       });
       newPage.drawText(schoolData.school_address, {
         x: 254,
@@ -327,7 +327,7 @@ async function generateVirtualIdCards_with_session(req, res, next) {
         color: rgb(0, 0, 0),
       });
 
-      let text_id = `${student.session.replace('-', '')}${student.school_id}`;
+      let text_id = `${student.session.replace("-", "")}${student.school_id}`;
       newPage.drawText(text_id, {
         x: 673,
         y: 109,
@@ -338,18 +338,18 @@ async function generateVirtualIdCards_with_session(req, res, next) {
 
     // Save the PDF and send it to the client
     const pdfBytes = await pdfDoc.save();
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
-      'Content-Disposition',
-      `inline; filename=ID-Cards-${session}.pdf`
+      "Content-Disposition",
+      `inline; filename=ID-Cards-${session}.pdf`,
     );
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    console.error('Error generating ID cards:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error generating ID cards:", error);
+    res.status(500).send("Internal Server Error");
   }
 }
 
@@ -360,7 +360,7 @@ async function selectedVirtualIdCard(req, res) {
   if (!Array.isArray(studentIds) || studentIds.length === 0) {
     return res
       .status(400)
-      .json({ message: 'Invalid or empty student ID list.' });
+      .json({ message: "Invalid or empty student ID list." });
   }
 
   let connection;
@@ -368,28 +368,28 @@ async function selectedVirtualIdCard(req, res) {
     connection = await getConnection();
 
     // Fix SQL query for IN clause
-    const placeholders = studentIds.map(() => '?').join(',');
+    const placeholders = studentIds.map(() => "?").join(",");
     const [students] = await connection.execute(
       `SELECT school_id, name, class, dob, mobile_no, session, admission_no, corresponding_address 
              FROM students 
              WHERE teacher_id = ? AND school_id IN (${placeholders})`,
-      [req.user._id, ...studentIds]
+      [req.user._id, ...studentIds],
     );
 
     if (students.length === 0) {
       return res
         .status(404)
-        .json({ message: 'No students found for the given IDs.' });
+        .json({ message: "No students found for the given IDs." });
     }
 
     // Fetch school logo
     const [[schoolLogo]] = await connection.execute(
-      'SELECT school_logo FROM teacher WHERE id = ?',
-      [req.user._id]
+      "SELECT school_logo FROM teacher WHERE id = ?",
+      [req.user._id],
     );
 
     // Load the certificate template
-    const templatePath = path.join(__dirname, '../template/id-card.pdf');
+    const templatePath = path.join(__dirname, "../template/id-card.pdf");
     const templateBytes = fs.readFileSync(templatePath);
     const templatePDF = await PDFDocument.load(templateBytes);
 
@@ -403,8 +403,8 @@ async function selectedVirtualIdCard(req, res) {
 
       // Fetch student photo
       const [[photo]] = await connection.execute(
-        'SELECT image FROM photo WHERE id = ?',
-        [student.school_id]
+        "SELECT image FROM photo WHERE id = ?",
+        [student.school_id],
       );
 
       if (photo && photo.image) {
@@ -414,17 +414,17 @@ async function selectedVirtualIdCard(req, res) {
             .composite([
               {
                 input: Buffer.from(
-                  '<svg><rect x="0" y="0" width="300" height="380" rx="20" ry="20"/></svg>'
+                  '<svg><rect x="0" y="0" width="300" height="380" rx="20" ry="20"/></svg>',
                 ),
-                blend: 'dest-in',
+                blend: "dest-in",
               },
             ])
-            .toFormat('png')
+            .toFormat("png")
             .toBuffer();
           const embeddedImage = await pdfDoc.embedPng(pngBuffer);
           newPage.drawImage(embeddedImage, { x: 42, y: 31 });
         } catch (error) {
-          console.error('Error embedding student image:', error);
+          console.error("Error embedding student image:", error);
         }
       }
 
@@ -432,12 +432,12 @@ async function selectedVirtualIdCard(req, res) {
         try {
           const pngBuffer = await sharp(Buffer.from(schoolLogo.school_logo))
             .resize(160, 160)
-            .toFormat('png')
+            .toFormat("png")
             .toBuffer();
           const embeddedImage = await pdfDoc.embedPng(pngBuffer);
           newPage.drawImage(embeddedImage, { x: 42, y: 445 });
         } catch (error) {
-          console.error('Error embedding school logo:', error);
+          console.error("Error embedding school logo:", error);
         }
       }
 
@@ -447,7 +447,7 @@ async function selectedVirtualIdCard(req, res) {
         y: 537,
         size: 55,
         color: rgb(0.101, 0.337, 0.859),
-        font: pdfDoc.embedStandardFont('Helvetica-Bold'),
+        font: pdfDoc.embedStandardFont("Helvetica-Bold"),
       });
       newPage.drawText(schoolData.school_address, {
         x: 254,
@@ -500,7 +500,7 @@ async function selectedVirtualIdCard(req, res) {
         color: rgb(0, 0, 0),
       });
 
-      let text_id = `${student.session.replace('-', '')}${student.school_id}`;
+      let text_id = `${student.session.replace("-", "")}${student.school_id}`;
       newPage.drawText(text_id, {
         x: 673,
         y: 109,
@@ -511,15 +511,15 @@ async function selectedVirtualIdCard(req, res) {
 
     // Save the PDF and send it to the client
     const pdfBytes = await pdfDoc.save();
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename=ID-Card-range.pdf`);
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename=ID-Card-range.pdf`);
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    console.error('Error generating ID cards:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error generating ID cards:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   } finally {
     if (connection) connection.release();
   }
@@ -530,43 +530,43 @@ async function selectedCeremonyCertificate(req, res) {
   if (!Array.isArray(studentIds) || studentIds.length === 0) {
     return res
       .status(400)
-      .json({ message: 'Invalid or empty student ID list.' });
+      .json({ message: "Invalid or empty student ID list." });
   }
 
   let connection;
   try {
     connection = await getConnection();
-    const placeholders = studentIds.map(() => '?').join(',');
+    const placeholders = studentIds.map(() => "?").join(",");
     const [students] = await connection.execute(
       `SELECT school_id, name, gender, father_name, mother_name, teacher_id 
              FROM students WHERE school_id IN (${placeholders})`,
-      [...studentIds]
+      [...studentIds],
     );
 
     if (students.length === 0) {
       return res
         .status(404)
-        .json({ message: 'No students found for the given IDs.' });
+        .json({ message: "No students found for the given IDs." });
     }
 
     const [[schoolLogoRow]] = await connection.execute(
-      'SELECT school_logo FROM teacher WHERE id = ?',
-      [students[0].teacher_id]
+      "SELECT school_logo FROM teacher WHERE id = ?",
+      [students[0].teacher_id],
     );
 
-    const templatePath = path.join(__dirname, '../template/ceremony.pdf');
+    const templatePath = path.join(__dirname, "../template/ceremony.pdf");
     const templateBytes = fs.readFileSync(templatePath);
     const templatePdf = await PDFDocument.load(templateBytes);
     const pdfDoc = await PDFDocument.create();
 
-    pdfDoc.setTitle('Felicitation Certificates');
-    pdfDoc.setAuthor('Bajrang Vidya Mandir');
-    pdfDoc.setSubject('Certificate of Participation');
-    pdfDoc.setProducer('PDF-LIB');
-    pdfDoc.setCreator('Amrit');
+    pdfDoc.setTitle("Felicitation Certificates");
+    pdfDoc.setAuthor("Bajrang Vidya Mandir");
+    pdfDoc.setSubject("Certificate of Participation");
+    pdfDoc.setProducer("PDF-LIB");
+    pdfDoc.setCreator("Amrit");
 
     pdfDoc.registerFontkit(fontkit);
-    const fontPath = path.join(__dirname, '../template/ceremony.ttf');
+    const fontPath = path.join(__dirname, "../template/ceremony.ttf");
     const fontBytes = fs.readFileSync(fontPath);
     const boldFont = await pdfDoc.embedFont(fontBytes, { subset: true });
 
@@ -578,18 +578,19 @@ async function selectedCeremonyCertificate(req, res) {
 
       const capitalizeName = (name) =>
         name
-          .split(' ')
+          .split(" ")
           .map(
-            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            (word) =>
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
           )
-          .join(' ');
+          .join(" ");
 
       const nameText = capitalizeName(student.name);
 
       const parent = `${
-        student.gender === 'MALE' ? 'S/O' : 'D/O'
+        student.gender === "MALE" ? "S/O" : "D/O"
       } Shri. ${capitalizeName(student.father_name)} & Smt. ${capitalizeName(
-        student.mother_name
+        student.mother_name,
       )}`;
 
       currentPage.drawText(nameText, {
@@ -620,18 +621,18 @@ async function selectedCeremonyCertificate(req, res) {
     }
 
     const pdfBytes = await pdfDoc.save();
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
-      'Content-Disposition',
-      'inline; filename=Ceremony_Certificates.pdf'
+      "Content-Disposition",
+      "inline; filename=Ceremony_Certificates.pdf",
     );
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    console.error('Error generating certificates:', error);
-    res.status(500).json({ message: 'Failed to generate certificates.' });
+    console.error("Error generating certificates:", error);
+    res.status(500).json({ message: "Failed to generate certificates." });
   } finally {
     if (connection) await connection.release();
   }
@@ -642,30 +643,30 @@ async function create_excel_selected(req, res) {
   if (!Array.isArray(studentIds) || studentIds.length === 0) {
     return res
       .status(400)
-      .json({ message: 'Invalid or empty student ID list.' });
+      .json({ message: "Invalid or empty student ID list." });
   }
 
   let connection;
   try {
     connection = await getConnection();
-    const placeholders = studentIds.map(() => '?').join(',');
+    const placeholders = studentIds.map(() => "?").join(",");
     const [students] = await connection.execute(
       `SELECT school_id, name, father_name, mother_name, session, class
              FROM students WHERE school_id IN (${placeholders})`,
-      [...studentIds]
+      [...studentIds],
     );
 
     const [subjects_rows] = await connection.execute(
       `SELECT subject FROM student_marks WHERE student_id = ?`,
-      [students[0].school_id]
+      [students[0].school_id],
     );
 
     // Remove duplicates using Set
     let subjects = [
-      'SR NO',
-      'NAME',
-      'FATHER NAME',
-      'MOTHER NAME',
+      "SR NO",
+      "NAME",
+      "FATHER NAME",
+      "MOTHER NAME",
       ...new Set(subjects_rows.map((sub) => sub.subject)),
     ];
 
@@ -674,7 +675,7 @@ async function create_excel_selected(req, res) {
     if (students.length === 0) {
       return res
         .status(404)
-        .json({ message: 'No students found for the given IDs.' });
+        .json({ message: "No students found for the given IDs." });
     }
 
     // Create an Excel workbook
@@ -682,38 +683,37 @@ async function create_excel_selected(req, res) {
     const worksheet = workbook.addWorksheet(`${students[0].class}`);
 
     // Merged Header
-    worksheet.mergeCells('A1:L1');
-    worksheet.getCell(
-      'A1'
-    ).value = `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
-    worksheet.getCell('A1').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
+    worksheet.mergeCells("A1:L1");
+    worksheet.getCell("A1").value =
+      `               Annual Exam , ${students[0].session}                                                                  CLASS - ${students[0].class}`;
+    worksheet.getCell("A1").alignment = {
+      horizontal: "center",
+      vertical: "middle",
     };
-    worksheet.getCell('A1').font = { bold: true, size: 20 };
-    worksheet.getCell('A1').height = 25;
+    worksheet.getCell("A1").font = { bold: true, size: 20 };
+    worksheet.getCell("A1").height = 25;
 
-    worksheet.getCell('A1').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: '2E2E2E' },
+    worksheet.getCell("A1").fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "2E2E2E" },
     };
 
-    worksheet.getCell('A1').font = {
+    worksheet.getCell("A1").font = {
       bold: true,
       size: 14,
-      color: { argb: 'FFFFFF' },
+      color: { argb: "FFFFFF" },
     };
 
     const headerRow = worksheet.addRow(subjects);
     headerRow.font = { bold: true };
-    headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    headerRow.alignment = { horizontal: "center", vertical: "middle" };
 
     headerRow.eachCell((cell) => {
       cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'E6E6E6' },
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "E6E6E6" },
       };
     });
 
@@ -731,17 +731,17 @@ async function create_excel_selected(req, res) {
       row.height = 20;
       row.eachCell((cell) => {
         cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
         };
       });
     });
 
     // Set column widths and alignments
     worksheet.getColumn(1).width = 6; // Small width for Sr No
-    worksheet.getColumn(1).alignment = { horizontal: 'center' }; // Sr No centered
+    worksheet.getColumn(1).alignment = { horizontal: "center" }; // Sr No centered
 
     // Auto-fit column width for Name, Father Name, and Mother Name
     [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach((colIndex) => {
@@ -750,20 +750,20 @@ async function create_excel_selected(req, res) {
 
     // Set correct headers
     res.setHeader(
-      'Content-Disposition',
-      'attachment; filename=Class_list.xlsx'
+      "Content-Disposition",
+      "attachment; filename=Class_list.xlsx",
     );
     res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     );
 
     // Write Excel file to response stream
     await workbook.xlsx.write(res);
     res.end();
   } catch (error) {
-    console.error('Error Creating Excel:', error);
-    res.status(500).json({ message: 'Failed to Create Excel.' });
+    console.error("Error Creating Excel:", error);
+    res.status(500).json({ message: "Failed to Create Excel." });
   } finally {
     if (connection) await connection.release();
   }

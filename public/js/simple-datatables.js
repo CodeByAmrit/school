@@ -5,15 +5,15 @@
  * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
  */
 !(function (t) {
-  if ('object' == typeof exports && 'undefined' != typeof module)
+  if ("object" == typeof exports && "undefined" != typeof module)
     module.exports = t();
-  else if ('function' == typeof define && define.amd) define([], t);
+  else if ("function" == typeof define && define.amd) define([], t);
   else {
-    ('undefined' != typeof window
+    ("undefined" != typeof window
       ? window
-      : 'undefined' != typeof global
+      : "undefined" != typeof global
         ? global
-        : 'undefined' != typeof self
+        : "undefined" != typeof self
           ? self
           : this
     ).simpleDatatables = t();
@@ -23,11 +23,11 @@
     function n(o, r) {
       if (!s[o]) {
         if (!e[o]) {
-          var l = 'function' == typeof require && require;
+          var l = "function" == typeof require && require;
           if (!r && l) return l(o, !0);
           if (a) return a(o, !0);
           var d = new Error("Cannot find module '" + o + "'");
-          throw ((d.code = 'MODULE_NOT_FOUND'), d);
+          throw ((d.code = "MODULE_NOT_FOUND"), d);
         }
         var c = (s[o] = { exports: {} });
         e[o][0].call(
@@ -40,13 +40,13 @@
           t,
           e,
           s,
-          i
+          i,
         );
       }
       return s[o].exports;
     }
     for (
-      var a = 'function' == typeof require && require, o = 0;
+      var a = "function" == typeof require && require, o = 0;
       o < i.length;
       o++
     )
@@ -58,9 +58,9 @@
         function (t, e, s) {
           (function (t) {
             (function () {
-              'use strict';
+              "use strict";
               const e = (t) =>
-                  '[object Object]' === Object.prototype.toString.call(t),
+                  "[object Object]" === Object.prototype.toString.call(t),
                 i = (t) => {
                   let s = !1;
                   try {
@@ -72,33 +72,33 @@
                 },
                 n = (t, e) => {
                   const s = document.createElement(t);
-                  if (e && 'object' == typeof e)
+                  if (e && "object" == typeof e)
                     for (const t in e)
-                      'html' === t
+                      "html" === t
                         ? (s.innerHTML = e[t])
                         : s.setAttribute(t, e[t]);
                   return s;
                 },
                 a = (t) =>
-                  ['#text', '#comment'].includes(t.nodeName)
+                  ["#text", "#comment"].includes(t.nodeName)
                     ? t.data
                     : t.childNodes
-                      ? t.childNodes.map((t) => a(t)).join('')
-                      : '',
+                      ? t.childNodes.map((t) => a(t)).join("")
+                      : "",
                 o = (t) => {
-                  if (null == t) return '';
-                  if (t.hasOwnProperty('text') || t.hasOwnProperty('data')) {
+                  if (null == t) return "";
+                  if (t.hasOwnProperty("text") || t.hasOwnProperty("data")) {
                     const e = t;
                     return e.text ?? o(e.data);
                   }
-                  return t.hasOwnProperty('nodeName') ? a(t) : String(t);
+                  return t.hasOwnProperty("nodeName") ? a(t) : String(t);
                 },
                 r = function (t) {
                   return t
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;');
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;");
                 },
                 l = function (t, e) {
                   let s = 0,
@@ -115,15 +115,15 @@
                   t
                     ? t
                         .trim()
-                        .split(' ')
+                        .split(" ")
                         .map((t) => `.${t}`)
-                        .join('')
+                        .join("")
                     : null,
                 h = (t, e) => {
-                  const s = e?.split(' ').some((e) => !t.classList.contains(e));
+                  const s = e?.split(" ").some((e) => !t.classList.contains(e));
                   return !s;
                 },
-                u = (t, e) => (t ? (e ? `${t} ${e}` : t) : e || '');
+                u = (t, e) => (t ? (e ? `${t} ${e}` : t) : e || "");
               var p = function () {
                 return (
                   (p =
@@ -150,7 +150,7 @@
                       (i[n] = e[n]));
                 return t.concat(i || Array.prototype.slice.call(e));
               }
-              'function' == typeof SuppressedError && SuppressedError;
+              "function" == typeof SuppressedError && SuppressedError;
               var m = (function () {
                 function t(t) {
                   void 0 === t && (t = {});
@@ -183,7 +183,7 @@
                   s.some(function (e) {
                     var s, i;
                     return (
-                      'function' ==
+                      "function" ==
                         typeof (null ===
                           (i =
                             null ===
@@ -200,20 +200,20 @@
               function b(t, e, s) {
                 var i;
                 return (
-                  '#text' === t.nodeName
+                  "#text" === t.nodeName
                     ? (i = s.document.createTextNode(t.data))
-                    : '#comment' === t.nodeName
+                    : "#comment" === t.nodeName
                       ? (i = s.document.createComment(t.data))
                       : (e
                           ? ((i = s.document.createElementNS(
-                              'http://www.w3.org/2000/svg',
-                              t.nodeName
+                              "http://www.w3.org/2000/svg",
+                              t.nodeName,
                             )),
-                            'foreignObject' === t.nodeName && (e = !1))
-                          : 'svg' === t.nodeName.toLowerCase()
+                            "foreignObject" === t.nodeName && (e = !1))
+                          : "svg" === t.nodeName.toLowerCase()
                             ? ((i = s.document.createElementNS(
-                                'http://www.w3.org/2000/svg',
-                                'svg'
+                                "http://www.w3.org/2000/svg",
+                                "svg",
                               )),
                               (e = !0))
                             : (i = s.document.createElement(t.nodeName)),
@@ -231,21 +231,21 @@
                           (t.value &&
                             g(
                               i,
-                              'HTMLButtonElement',
-                              'HTMLDataElement',
-                              'HTMLInputElement',
-                              'HTMLLIElement',
-                              'HTMLMeterElement',
-                              'HTMLOptionElement',
-                              'HTMLProgressElement',
-                              'HTMLParamElement'
+                              "HTMLButtonElement",
+                              "HTMLDataElement",
+                              "HTMLInputElement",
+                              "HTMLLIElement",
+                              "HTMLMeterElement",
+                              "HTMLOptionElement",
+                              "HTMLProgressElement",
+                              "HTMLParamElement",
                             ) &&
                             (i.value = t.value),
                           t.checked &&
-                            g(i, 'HTMLInputElement') &&
+                            g(i, "HTMLInputElement") &&
                             (i.checked = t.checked),
                           t.selected &&
-                            g(i, 'HTMLOptionElement') &&
+                            g(i, "HTMLOptionElement") &&
                             (i.selected = t.selected))),
                   i
                 );
@@ -269,29 +269,29 @@
                 if (s.preDiffApply(l)) return !0;
                 switch (o) {
                   case s._const.addAttribute:
-                    if (!i || !g(i, 'Element')) return !1;
+                    if (!i || !g(i, "Element")) return !1;
                     i.setAttribute(e[s._const.name], e[s._const.value]);
                     break;
                   case s._const.modifyAttribute:
-                    if (!i || !g(i, 'Element')) return !1;
+                    if (!i || !g(i, "Element")) return !1;
                     (i.setAttribute(e[s._const.name], e[s._const.newValue]),
-                      g(i, 'HTMLInputElement') &&
-                        'value' === e[s._const.name] &&
+                      g(i, "HTMLInputElement") &&
+                        "value" === e[s._const.name] &&
                         (i.value = e[s._const.newValue]));
                     break;
                   case s._const.removeAttribute:
-                    if (!i || !g(i, 'Element')) return !1;
+                    if (!i || !g(i, "Element")) return !1;
                     i.removeAttribute(e[s._const.name]);
                     break;
                   case s._const.modifyTextElement:
-                    if (!i || !g(i, 'Text')) return !1;
+                    if (!i || !g(i, "Text")) return !1;
                     (s.textDiff(
                       i,
                       i.data,
                       e[s._const.oldValue],
-                      e[s._const.newValue]
+                      e[s._const.newValue],
                     ),
-                      g(i.parentNode, 'HTMLTextAreaElement') &&
+                      g(i.parentNode, "HTMLTextAreaElement") &&
                         (i.parentNode.value = e[s._const.newValue]));
                     break;
                   case s._const.modifyValue:
@@ -299,12 +299,12 @@
                     i.value = e[s._const.newValue];
                     break;
                   case s._const.modifyComment:
-                    if (!i || !g(i, 'Comment')) return !1;
+                    if (!i || !g(i, "Comment")) return !1;
                     s.textDiff(
                       i,
                       i.data,
                       e[s._const.oldValue],
-                      e[s._const.newValue]
+                      e[s._const.newValue],
                     );
                     break;
                   case s._const.modifyChecked:
@@ -317,8 +317,8 @@
                     break;
                   case s._const.replaceElement:
                     var d =
-                      'svg' === e[s._const.newValue].nodeName.toLowerCase() ||
-                      'http://www.w3.org/2000/svg' ===
+                      "svg" === e[s._const.newValue].nodeName.toLowerCase() ||
+                      "http://www.w3.org/2000/svg" ===
                         i.parentNode.namespaceURI;
                     i.parentNode.replaceChild(b(e[s._const.newValue], d, s), i);
                     break;
@@ -337,21 +337,21 @@
                     break;
                   case s._const.addElement:
                     var c = (u = r.slice()).splice(u.length - 1, 1)[0];
-                    if (!g((i = v(t, u)), 'Element')) return !1;
+                    if (!g((i = v(t, u)), "Element")) return !1;
                     i.insertBefore(
                       b(
                         e[s._const.element],
-                        'http://www.w3.org/2000/svg' === i.namespaceURI,
-                        s
+                        "http://www.w3.org/2000/svg" === i.namespaceURI,
+                        s,
                       ),
-                      i.childNodes[c] || null
+                      i.childNodes[c] || null,
                     );
                     break;
                   case s._const.removeTextElement:
                     if (!i || 3 !== i.nodeType) return !1;
                     var h = i.parentNode;
                     (h.removeChild(i),
-                      g(h, 'HTMLTextAreaElement') && (h.value = ''));
+                      g(h, "HTMLTextAreaElement") && (h.value = ""));
                     break;
                   case s._const.addTextElement:
                     var u;
@@ -362,11 +362,11 @@
                     )
                       return !1;
                     (i.insertBefore(n, i.childNodes[c] || null),
-                      g(i.parentNode, 'HTMLTextAreaElement') &&
+                      g(i.parentNode, "HTMLTextAreaElement") &&
                         (i.parentNode.value = e[s._const.value]));
                     break;
                   default:
-                    console.log('unknown action');
+                    console.log("unknown action");
                 }
                 return (
                   s.postDiffApply({ diff: l.diff, node: l.node, newNode: n }),
@@ -381,18 +381,18 @@
                   var e = [];
                   return (
                     e.push(t.nodeName),
-                    '#text' !== t.nodeName &&
-                      '#comment' !== t.nodeName &&
+                    "#text" !== t.nodeName &&
+                      "#comment" !== t.nodeName &&
                       t.attributes &&
                       (t.attributes.class &&
                         e.push(
-                          ''
-                            .concat(t.nodeName, '.')
-                            .concat(t.attributes.class.replace(/ /g, '.'))
+                          ""
+                            .concat(t.nodeName, ".")
+                            .concat(t.attributes.class.replace(/ /g, ".")),
                         ),
                       t.attributes.id &&
                         e.push(
-                          ''.concat(t.nodeName, '#').concat(t.attributes.id)
+                          "".concat(t.nodeName, "#").concat(t.attributes.id),
                         )),
                     e
                   );
@@ -432,22 +432,22 @@
                   );
                 },
                 x = function (t) {
-                  if (Object.prototype.hasOwnProperty.call(t, 'data'))
+                  if (Object.prototype.hasOwnProperty.call(t, "data"))
                     return {
-                      nodeName: '#text' === t.nodeName ? '#text' : '#comment',
+                      nodeName: "#text" === t.nodeName ? "#text" : "#comment",
                       data: t.data,
                     };
                   var e = { nodeName: t.nodeName };
                   return (
-                    Object.prototype.hasOwnProperty.call(t, 'attributes') &&
+                    Object.prototype.hasOwnProperty.call(t, "attributes") &&
                       (e.attributes = p({}, t.attributes)),
-                    Object.prototype.hasOwnProperty.call(t, 'checked') &&
+                    Object.prototype.hasOwnProperty.call(t, "checked") &&
                       (e.checked = t.checked),
-                    Object.prototype.hasOwnProperty.call(t, 'value') &&
+                    Object.prototype.hasOwnProperty.call(t, "value") &&
                       (e.value = t.value),
-                    Object.prototype.hasOwnProperty.call(t, 'selected') &&
+                    Object.prototype.hasOwnProperty.call(t, "selected") &&
                       (e.selected = t.selected),
-                    Object.prototype.hasOwnProperty.call(t, 'childNodes') &&
+                    Object.prototype.hasOwnProperty.call(t, "childNodes") &&
                       (e.childNodes = t.childNodes.map(function (t) {
                         return x(t);
                       })),
@@ -456,14 +456,14 @@
                 },
                 O = function (t, e) {
                   if (
-                    !['nodeName', 'value', 'checked', 'selected', 'data'].every(
+                    !["nodeName", "value", "checked", "selected", "data"].every(
                       function (s) {
                         return t[s] === e[s];
-                      }
+                      },
                     )
                   )
                     return !1;
-                  if (Object.prototype.hasOwnProperty.call(t, 'data'))
+                  if (Object.prototype.hasOwnProperty.call(t, "data"))
                     return !0;
                   if (Boolean(t.attributes) !== Boolean(e.attributes))
                     return !1;
@@ -494,23 +494,23 @@
                 E = function (t, e, s, i, n) {
                   if ((void 0 === n && (n = !1), !t || !e)) return !1;
                   if (t.nodeName !== e.nodeName) return !1;
-                  if (['#text', '#comment'].includes(t.nodeName))
+                  if (["#text", "#comment"].includes(t.nodeName))
                     return !!n || t.data === e.data;
                   if (t.nodeName in s) return !0;
                   if (t.attributes && e.attributes) {
                     if (t.attributes.id) {
                       if (t.attributes.id !== e.attributes.id) return !1;
                       if (
-                        ''.concat(t.nodeName, '#').concat(t.attributes.id) in s
+                        "".concat(t.nodeName, "#").concat(t.attributes.id) in s
                       )
                         return !0;
                     }
                     if (
                       t.attributes.class &&
                       t.attributes.class === e.attributes.class &&
-                      ''
-                        .concat(t.nodeName, '.')
-                        .concat(t.attributes.class.replace(/ /g, '.')) in s
+                      ""
+                        .concat(t.nodeName, ".")
+                        .concat(t.attributes.class.replace(/ /g, ".")) in s
                     )
                       return !0;
                   }
@@ -598,7 +598,6 @@
                           : (l = !0);
                       };
                     !l;
-
                   )
                     d();
                   return ((t.subsets = o), (t.subsetsAge = 100), o);
@@ -654,12 +653,12 @@
                           (n.attributes || (n.attributes = {}),
                             (n.attributes[e[s._const.name]] =
                               e[s._const.value]),
-                            'checked' === e[s._const.name]
+                            "checked" === e[s._const.name]
                               ? (n.checked = !0)
-                              : 'selected' === e[s._const.name]
+                              : "selected" === e[s._const.name]
                                 ? (n.selected = !0)
-                                : 'INPUT' === n.nodeName &&
-                                  'value' === e[s._const.name] &&
+                                : "INPUT" === n.nodeName &&
+                                  "value" === e[s._const.name] &&
                                   (n.value = e[s._const.value]));
                           break;
                         case s._const.modifyAttribute:
@@ -669,17 +668,17 @@
                           (delete n.attributes[e[s._const.name]],
                             0 === Object.keys(n.attributes).length &&
                               delete n.attributes,
-                            'checked' === e[s._const.name]
+                            "checked" === e[s._const.name]
                               ? (n.checked = !1)
-                              : 'selected' === e[s._const.name]
+                              : "selected" === e[s._const.name]
                                 ? delete n.selected
-                                : 'INPUT' === n.nodeName &&
-                                  'value' === e[s._const.name] &&
+                                : "INPUT" === n.nodeName &&
+                                  "value" === e[s._const.name] &&
                                   delete n.value);
                           break;
                         case s._const.modifyTextElement:
                           ((n.data = e[s._const.newValue]),
-                            'TEXTAREA' === a.nodeName &&
+                            "TEXTAREA" === a.nodeName &&
                               (a.value = e[s._const.newValue]));
                           break;
                         case s._const.modifyValue:
@@ -773,7 +772,7 @@
                         case s._const.addElement:
                           var u = (d = e[s._const.route].slice()).splice(
                             d.length - 1,
-                            1
+                            1,
                           )[0];
                           ((n =
                             null === (i = S(t, d)) || void 0 === i
@@ -803,7 +802,7 @@
                           break;
                         case s._const.removeTextElement:
                           (a.childNodes.splice(o, 1),
-                            'TEXTAREA' === a.nodeName && delete a.value,
+                            "TEXTAREA" === a.nodeName && delete a.value,
                             a.subsets &&
                               a.subsets.forEach(function (t) {
                                 t.oldValue > o
@@ -828,15 +827,15 @@
                         case s._const.addTextElement:
                           var p = (d = e[s._const.route].slice()).splice(
                             d.length - 1,
-                            1
+                            1,
                           )[0];
-                          ((l = { nodeName: '#text', data: e[s._const.value] }),
+                          ((l = { nodeName: "#text", data: e[s._const.value] }),
                             (n = S(t, d).node).childNodes ||
                               (n.childNodes = []),
                             p >= n.childNodes.length
                               ? n.childNodes.push(l)
                               : n.childNodes.splice(p, 0, l),
-                            'TEXTAREA' === n.nodeName &&
+                            "TEXTAREA" === n.nodeName &&
                               (n.value = e[s._const.newValue]),
                             n.subsets &&
                               n.subsets.forEach(function (t) {
@@ -855,7 +854,7 @@
                               }));
                           break;
                         default:
-                          console.log('unknown action');
+                          console.log("unknown action");
                       }
                       (n.subsets &&
                         ((n.subsets = n.subsets.filter(function (t) {
@@ -876,7 +875,7 @@
                 void 0 === e && (e = { valueDiffing: !0 });
                 var s = { nodeName: t.nodeName };
                 return (
-                  g(t, 'Text', 'Comment')
+                  g(t, "Text", "Comment")
                     ? (s.data = t.data)
                     : (t.attributes &&
                         t.attributes.length > 0 &&
@@ -895,23 +894,23 @@
                             return s.childNodes.push(T(t, e));
                           })),
                       e.valueDiffing &&
-                        (g(t, 'HTMLTextAreaElement') && (s.value = t.value),
-                        g(t, 'HTMLInputElement') &&
-                        ['radio', 'checkbox'].includes(t.type.toLowerCase()) &&
+                        (g(t, "HTMLTextAreaElement") && (s.value = t.value),
+                        g(t, "HTMLInputElement") &&
+                        ["radio", "checkbox"].includes(t.type.toLowerCase()) &&
                         void 0 !== t.checked
                           ? (s.checked = t.checked)
                           : g(
                               t,
-                              'HTMLButtonElement',
-                              'HTMLDataElement',
-                              'HTMLInputElement',
-                              'HTMLLIElement',
-                              'HTMLMeterElement',
-                              'HTMLOptionElement',
-                              'HTMLProgressElement',
-                              'HTMLParamElement'
+                              "HTMLButtonElement",
+                              "HTMLDataElement",
+                              "HTMLInputElement",
+                              "HTMLLIElement",
+                              "HTMLMeterElement",
+                              "HTMLOptionElement",
+                              "HTMLProgressElement",
+                              "HTMLParamElement",
                             ) && (s.value = t.value),
-                        g(t, 'HTMLOptionElement') &&
+                        g(t, "HTMLOptionElement") &&
                           (s.selected = t.selected))),
                   s
                 );
@@ -921,9 +920,9 @@
                 L = /\s([^'"/\s><]+?)[\s/>]|([^\s=]+)=\s?(".*?"|'.*?')/g;
               function P(t) {
                 return t
-                  .replace(/&lt;/g, '<')
-                  .replace(/&gt;/g, '>')
-                  .replace(/&amp;/g, '&');
+                  .replace(/&lt;/g, "<")
+                  .replace(/&gt;/g, ">")
+                  .replace(/&amp;/g, "&");
               }
               var R = {
                   area: !0,
@@ -944,22 +943,22 @@
                   wbr: !0,
                 },
                 H = function (t, e) {
-                  var s = { nodeName: '', attributes: {} },
+                  var s = { nodeName: "", attributes: {} },
                     i = !1,
                     n = t.match(/<\/?([^\s]+?)[/\s>]/);
                   if (
                     n &&
                     ((s.nodeName =
-                      e || 'svg' === n[1] ? n[1] : n[1].toUpperCase()),
-                    (R[n[1]] || '/' === t.charAt(t.length - 2)) && (i = !0),
-                    s.nodeName.startsWith('!--'))
+                      e || "svg" === n[1] ? n[1] : n[1].toUpperCase()),
+                    (R[n[1]] || "/" === t.charAt(t.length - 2)) && (i = !0),
+                    s.nodeName.startsWith("!--"))
                   ) {
-                    var a = t.indexOf('--\x3e');
+                    var a = t.indexOf("--\x3e");
                     return {
-                      type: 'comment',
+                      type: "comment",
                       node: {
-                        nodeName: '#comment',
-                        data: -1 !== a ? t.slice(4, a) : '',
+                        nodeName: "#comment",
+                        data: -1 !== a ? t.slice(4, a) : "",
                       },
                       voidElement: i,
                     };
@@ -969,8 +968,8 @@
                     else if (r[0].trim())
                       if (r[1]) {
                         var d = r[1].trim(),
-                          c = [d, ''];
-                        (d.indexOf('=') > -1 && (c = d.split('=')),
+                          c = [d, ""];
+                        (d.indexOf("=") > -1 && (c = d.split("=")),
                           (s.attributes[c[0]] = c[1]),
                           o.lastIndex--);
                       } else
@@ -978,7 +977,7 @@
                           (s.attributes[r[2]] = r[3]
                             .trim()
                             .substring(1, r[3].length - 1));
-                  return { type: 'tag', node: s, voidElement: i };
+                  return { type: "tag", node: s, voidElement: i };
                 },
                 I = function (t, e) {
                   void 0 === e && (e = { valueDiffing: !0, caseSensitive: !1 });
@@ -987,47 +986,47 @@
                     n = -1,
                     a = [],
                     o = !1;
-                  if (0 !== t.indexOf('<')) {
-                    var r = t.indexOf('<');
+                  if (0 !== t.indexOf("<")) {
+                    var r = t.indexOf("<");
                     i.push({
-                      nodeName: '#text',
+                      nodeName: "#text",
                       data: -1 === r ? t : t.substring(0, r),
                     });
                   }
                   return (
                     t.replace(A, function (r, l) {
-                      var d = '/' !== r.charAt(1),
-                        c = r.startsWith('\x3c!--'),
+                      var d = "/" !== r.charAt(1),
+                        c = r.startsWith("\x3c!--"),
                         h = l + r.length,
                         u = t.charAt(h);
                       if (c) {
                         var p = H(r, e.caseSensitive).node;
-                        if (n < 0) return (i.push(p), '');
+                        if (n < 0) return (i.push(p), "");
                         var f = a[n];
                         return (
                           f &&
                             p.nodeName &&
                             (f.node.childNodes || (f.node.childNodes = []),
                             f.node.childNodes.push(p)),
-                          ''
+                          ""
                         );
                       }
                       if (d) {
                         if (
-                          ('svg' ===
+                          ("svg" ===
                             (s = H(r, e.caseSensitive || o)).node.nodeName &&
                             (o = !0),
                           n++,
-                          !s.voidElement && u && '<' !== u)
+                          !s.voidElement && u && "<" !== u)
                         ) {
                           s.node.childNodes || (s.node.childNodes = []);
-                          var m = P(t.slice(h, t.indexOf('<', h)));
+                          var m = P(t.slice(h, t.indexOf("<", h)));
                           (s.node.childNodes.push({
-                            nodeName: '#text',
+                            nodeName: "#text",
                             data: m,
                           }),
                             e.valueDiffing &&
-                              'TEXTAREA' === s.node.nodeName &&
+                              "TEXTAREA" === s.node.nodeName &&
                               (s.node.value = m));
                         }
                         0 === n && s.node.nodeName && i.push(s.node);
@@ -1048,15 +1047,15 @@
                               s.node.nodeName.toUpperCase() ===
                                 r.slice(2, -1).toUpperCase())) &&
                           --n > -1 &&
-                          ('svg' === s.node.nodeName && (o = !1), (s = a[n])),
-                        '<' !== u && u)
+                          ("svg" === s.node.nodeName && (o = !1), (s = a[n])),
+                        "<" !== u && u)
                       ) {
                         var b = -1 === n ? i : a[n].node.childNodes || [],
-                          v = t.indexOf('<', h);
+                          v = t.indexOf("<", h);
                         ((m = P(t.slice(h, -1 === v ? void 0 : v))),
-                          b.push({ nodeName: '#text', data: m }));
+                          b.push({ nodeName: "#text", data: m }));
                       }
-                      return '';
+                      return "";
                     }),
                     i[0]
                   );
@@ -1065,30 +1064,30 @@
                   function t(t, e, s) {
                     ((this.options = s),
                       (this.t1 =
-                        'undefined' != typeof Element && g(t, 'Element')
+                        "undefined" != typeof Element && g(t, "Element")
                           ? T(t, this.options)
-                          : 'string' == typeof t
+                          : "string" == typeof t
                             ? I(t, this.options)
                             : JSON.parse(JSON.stringify(t))),
                       (this.t2 =
-                        'undefined' != typeof Element && g(e, 'Element')
+                        "undefined" != typeof Element && g(e, "Element")
                           ? T(e, this.options)
-                          : 'string' == typeof e
+                          : "string" == typeof e
                             ? I(e, this.options)
                             : JSON.parse(JSON.stringify(e))),
                       (this.diffcount = 0),
                       (this.foundAll = !1),
                       this.debug &&
                         ((this.t1Orig =
-                          'undefined' != typeof Element && g(t, 'Element')
+                          "undefined" != typeof Element && g(t, "Element")
                             ? T(t, this.options)
-                            : 'string' == typeof t
+                            : "string" == typeof t
                               ? I(t, this.options)
                               : JSON.parse(JSON.stringify(t))),
                         (this.t2Orig =
-                          'undefined' != typeof Element && g(e, 'Element')
+                          "undefined" != typeof Element && g(e, "Element")
                             ? T(e, this.options)
-                            : 'string' == typeof e
+                            : "string" == typeof e
                               ? I(e, this.options)
                               : JSON.parse(JSON.stringify(e)))),
                       (this.tracker = new C()));
@@ -1106,14 +1105,14 @@
                           this.diffcount > this.options.diffcap)
                         )
                           throw new Error(
-                            'surpassed diffcap:'
-                              .concat(JSON.stringify(this.t1Orig), ' -> ')
-                              .concat(JSON.stringify(this.t2Orig))
+                            "surpassed diffcap:"
+                              .concat(JSON.stringify(this.t1Orig), " -> ")
+                              .concat(JSON.stringify(this.t2Orig)),
                           );
                         (0 === (s = this.findNextDiff(t, e, [])).length &&
                           (O(t, e) ||
                             (this.foundAll
-                              ? console.error('Could not find remaining diffs!')
+                              ? console.error("Could not find remaining diffs!")
                               : ((this.foundAll = !0),
                                 N(t),
                                 (s = this.findNextDiff(t, e, []))))),
@@ -1142,7 +1141,7 @@
                           return ((t.outerDone = !0), i);
                         t.outerDone = !0;
                       }
-                      if (Object.prototype.hasOwnProperty.call(t, 'data'))
+                      if (Object.prototype.hasOwnProperty.call(t, "data"))
                         return [];
                       if (!t.innerDone) {
                         if ((i = this.findInnerDiff(t, e, s)).length > 0)
@@ -1167,13 +1166,13 @@
                       if (t.nodeName !== e.nodeName) {
                         if (!s.length)
                           throw new Error(
-                            'Top level nodes have to be of the same kind.'
+                            "Top level nodes have to be of the same kind.",
                           );
                         return [
                           new m()
                             .setValue(
                               this.options._const.action,
-                              this.options._const.replaceElement
+                              this.options._const.replaceElement,
                             )
                             .setValue(this.options._const.oldValue, x(t))
                             .setValue(this.options._const.newValue, x(e))
@@ -1185,29 +1184,29 @@
                         this.options.diffcap <
                           Math.abs(
                             (t.childNodes || []).length -
-                              (e.childNodes || []).length
+                              (e.childNodes || []).length,
                           )
                       )
                         return [
                           new m()
                             .setValue(
                               this.options._const.action,
-                              this.options._const.replaceElement
+                              this.options._const.replaceElement,
                             )
                             .setValue(this.options._const.oldValue, x(t))
                             .setValue(this.options._const.newValue, x(e))
                             .setValue(this.options._const.route, s),
                         ];
                       if (
-                        Object.prototype.hasOwnProperty.call(t, 'data') &&
+                        Object.prototype.hasOwnProperty.call(t, "data") &&
                         t.data !== e.data
                       )
-                        return '#text' === t.nodeName
+                        return "#text" === t.nodeName
                           ? [
                               new m()
                                 .setValue(
                                   this.options._const.action,
-                                  this.options._const.modifyTextElement
+                                  this.options._const.modifyTextElement,
                                 )
                                 .setValue(this.options._const.route, s)
                                 .setValue(this.options._const.oldValue, t.data)
@@ -1217,7 +1216,7 @@
                               new m()
                                 .setValue(
                                   this.options._const.action,
-                                  this.options._const.modifyComment
+                                  this.options._const.modifyComment,
                                 )
                                 .setValue(this.options._const.route, s)
                                 .setValue(this.options._const.oldValue, t.data)
@@ -1241,14 +1240,14 @@
                                 new m()
                                   .setValue(
                                     this.options._const.action,
-                                    this.options._const.removeAttribute
+                                    this.options._const.removeAttribute,
                                   )
                                   .setValue(this.options._const.route, s)
                                   .setValue(this.options._const.name, i)
                                   .setValue(
                                     this.options._const.value,
-                                    t.attributes[i]
-                                  )
+                                    t.attributes[i],
+                                  ),
                               )
                             : (a.splice(r, 1),
                               t.attributes[i] !== e.attributes[i] &&
@@ -1256,18 +1255,18 @@
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.modifyAttribute
+                                      this.options._const.modifyAttribute,
                                     )
                                     .setValue(this.options._const.route, s)
                                     .setValue(this.options._const.name, i)
                                     .setValue(
                                       this.options._const.oldValue,
-                                      t.attributes[i]
+                                      t.attributes[i],
                                     )
                                     .setValue(
                                       this.options._const.newValue,
-                                      e.attributes[i]
-                                    )
+                                      e.attributes[i],
+                                    ),
                                 )));
                       for (o = a.length, l = 0; l < o; l++)
                         ((i = a[l]),
@@ -1275,14 +1274,14 @@
                             new m()
                               .setValue(
                                 this.options._const.action,
-                                this.options._const.addAttribute
+                                this.options._const.addAttribute,
                               )
                               .setValue(this.options._const.route, s)
                               .setValue(this.options._const.name, i)
                               .setValue(
                                 this.options._const.value,
-                                e.attributes[i]
-                              )
+                                e.attributes[i],
+                              ),
                           ));
                       return d;
                     }),
@@ -1315,106 +1314,112 @@
                           p = n[h];
                         (o &&
                           (u && !p
-                            ? '#text' === u.nodeName
+                            ? "#text" === u.nodeName
                               ? (r.push(
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.removeTextElement
+                                      this.options._const.removeTextElement,
                                     )
                                     .setValue(
                                       this.options._const.route,
-                                      s.concat(l)
+                                      s.concat(l),
                                     )
-                                    .setValue(this.options._const.value, u.data)
+                                    .setValue(
+                                      this.options._const.value,
+                                      u.data,
+                                    ),
                                 ),
                                 (l -= 1))
                               : (r.push(
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.removeElement
+                                      this.options._const.removeElement,
                                     )
                                     .setValue(
                                       this.options._const.route,
-                                      s.concat(l)
+                                      s.concat(l),
                                     )
-                                    .setValue(this.options._const.element, x(u))
+                                    .setValue(
+                                      this.options._const.element,
+                                      x(u),
+                                    ),
                                 ),
                                 (l -= 1))
                             : p &&
                               !u &&
-                              ('#text' === p.nodeName
+                              ("#text" === p.nodeName
                                 ? r.push(
                                     new m()
                                       .setValue(
                                         this.options._const.action,
-                                        this.options._const.addTextElement
+                                        this.options._const.addTextElement,
                                       )
                                       .setValue(
                                         this.options._const.route,
-                                        s.concat(l)
+                                        s.concat(l),
                                       )
                                       .setValue(
                                         this.options._const.value,
-                                        p.data
-                                      )
+                                        p.data,
+                                      ),
                                   )
                                 : r.push(
                                     new m()
                                       .setValue(
                                         this.options._const.action,
-                                        this.options._const.addElement
+                                        this.options._const.addElement,
                                       )
                                       .setValue(
                                         this.options._const.route,
-                                        s.concat(l)
+                                        s.concat(l),
                                       )
                                       .setValue(
                                         this.options._const.element,
-                                        x(p)
-                                      )
+                                        x(p),
+                                      ),
                                   ))),
                           u &&
                             p &&
                             (!this.options.maxChildCount ||
                             a < this.options.maxChildCount
                               ? (r = r.concat(
-                                  this.findNextDiff(u, p, s.concat(l))
+                                  this.findNextDiff(u, p, s.concat(l)),
                                 ))
                               : O(u, p) ||
                                 (i.length > n.length
-                                  ? ('#text' === u.nodeName
+                                  ? ("#text" === u.nodeName
                                       ? r.push(
                                           new m()
                                             .setValue(
                                               this.options._const.action,
                                               this.options._const
-                                                .removeTextElement
+                                                .removeTextElement,
                                             )
                                             .setValue(
                                               this.options._const.route,
-                                              s.concat(l)
+                                              s.concat(l),
                                             )
                                             .setValue(
                                               this.options._const.value,
-                                              u.data
-                                            )
+                                              u.data,
+                                            ),
                                         )
                                       : r.push(
                                           new m()
                                             .setValue(
                                               this.options._const.action,
-                                              this.options._const.removeElement
+                                              this.options._const.removeElement,
                                             )
                                             .setValue(
                                               this.options._const.element,
-                                              x(u)
+                                              x(u),
                                             )
                                             .setValue(
                                               this.options._const.route,
-                                              s.concat(l)
-                                            )
+                                              s.concat(l),
+                                            ),
                                         ),
                                     i.splice(h, 1),
                                     (h -= 1),
@@ -1425,15 +1430,15 @@
                                         new m()
                                           .setValue(
                                             this.options._const.action,
-                                            this.options._const.addElement
+                                            this.options._const.addElement,
                                           )
                                           .setValue(
                                             this.options._const.element,
-                                            x(p)
+                                            x(p),
                                           )
                                           .setValue(
                                             this.options._const.route,
-                                            s.concat(l)
+                                            s.concat(l),
                                           ),
                                       ])),
                                       i.splice(h, 0, x(p)),
@@ -1442,19 +1447,19 @@
                                         new m()
                                           .setValue(
                                             this.options._const.action,
-                                            this.options._const.replaceElement
+                                            this.options._const.replaceElement,
                                           )
                                           .setValue(
                                             this.options._const.oldValue,
-                                            x(u)
+                                            x(u),
                                           )
                                           .setValue(
                                             this.options._const.newValue,
-                                            x(p)
+                                            x(p),
                                           )
                                           .setValue(
                                             this.options._const.route,
-                                            s.concat(l)
+                                            s.concat(l),
                                           ),
                                       ])))),
                           (l += 1));
@@ -1466,7 +1471,7 @@
                       e,
                       s,
                       i,
-                      n
+                      n,
                     ) {
                       for (
                         var a,
@@ -1511,14 +1516,13 @@
                       )
                         if (!n || (!0 !== h[v] && !0 !== u[v]))
                           if (!0 === h[w])
-                            if ('#text' === (l = p[w]).nodeName)
-                              if ('#text' === f[v].nodeName) {
+                            if ("#text" === (l = p[w]).nodeName)
+                              if ("#text" === f[v].nodeName) {
                                 if (l.data !== f[v].data) {
                                   for (
                                     var _ = w;
                                     p.length > _ + 1 &&
-                                    '#text' === p[_ + 1].nodeName;
-
+                                    "#text" === p[_ + 1].nodeName;
                                   )
                                     if (((_ += 1), f[v].data === p[_].data)) {
                                       d = !0;
@@ -1529,20 +1533,20 @@
                                       new m()
                                         .setValue(
                                           this.options._const.action,
-                                          this.options._const.modifyTextElement
+                                          this.options._const.modifyTextElement,
                                         )
                                         .setValue(
                                           this.options._const.route,
-                                          i.concat(w)
+                                          i.concat(w),
                                         )
                                         .setValue(
                                           this.options._const.oldValue,
-                                          l.data
+                                          l.data,
                                         )
                                         .setValue(
                                           this.options._const.newValue,
-                                          f[v].data
-                                        )
+                                          f[v].data,
+                                        ),
                                     );
                                 }
                               } else
@@ -1550,13 +1554,16 @@
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.removeTextElement
+                                      this.options._const.removeTextElement,
                                     )
                                     .setValue(
                                       this.options._const.route,
-                                      i.concat(w)
+                                      i.concat(w),
                                     )
-                                    .setValue(this.options._const.value, l.data)
+                                    .setValue(
+                                      this.options._const.value,
+                                      l.data,
+                                    ),
                                 ),
                                   h.splice(w, 1),
                                   p.splice(w, 1),
@@ -1569,35 +1576,35 @@
                                     new m()
                                       .setValue(
                                         this.options._const.action,
-                                        this.options._const.replaceElement
+                                        this.options._const.replaceElement,
                                       )
                                       .setValue(
                                         this.options._const.oldValue,
-                                        x(l)
+                                        x(l),
                                       )
                                       .setValue(
                                         this.options._const.newValue,
-                                        x(f[v])
+                                        x(f[v]),
                                       )
                                       .setValue(
                                         this.options._const.route,
-                                        i.concat(w)
-                                      )
+                                        i.concat(w),
+                                      ),
                                   )
                                 : (b.push(
                                     new m()
                                       .setValue(
                                         this.options._const.action,
-                                        this.options._const.removeElement
+                                        this.options._const.removeElement,
                                       )
                                       .setValue(
                                         this.options._const.route,
-                                        i.concat(w)
+                                        i.concat(w),
                                       )
                                       .setValue(
                                         this.options._const.element,
-                                        x(l)
-                                      )
+                                        x(l),
+                                      ),
                                   ),
                                   h.splice(w, 1),
                                   p.splice(w, 1),
@@ -1605,22 +1612,25 @@
                                   (w -= 1),
                                   (v -= 1));
                           else if (!0 === u[v])
-                            '#text' === (l = f[v]).nodeName
+                            "#text" === (l = f[v]).nodeName
                               ? (b.push(
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.addTextElement
+                                      this.options._const.addTextElement,
                                     )
                                     .setValue(
                                       this.options._const.route,
-                                      i.concat(w)
+                                      i.concat(w),
                                     )
-                                    .setValue(this.options._const.value, l.data)
+                                    .setValue(
+                                      this.options._const.value,
+                                      l.data,
+                                    ),
                                 ),
                                 h.splice(w, 0, !0),
                                 p.splice(w, 0, {
-                                  nodeName: '#text',
+                                  nodeName: "#text",
                                   data: l.data,
                                 }),
                                 (g = Math.min(h.length, u.length)))
@@ -1628,13 +1638,16 @@
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.addElement
+                                      this.options._const.addElement,
                                     )
                                     .setValue(
                                       this.options._const.route,
-                                      i.concat(w)
+                                      i.concat(w),
                                     )
-                                    .setValue(this.options._const.element, x(l))
+                                    .setValue(
+                                      this.options._const.element,
+                                      x(l),
+                                    ),
                                 ),
                                 h.splice(w, 0, !0),
                                 p.splice(w, 0, x(l)),
@@ -1645,7 +1658,7 @@
                               ((r = s[h[w]]),
                               (o = Math.min(
                                 r.newValue,
-                                p.length - r.length
+                                p.length - r.length,
                               )) !== r.oldValue)
                             ) {
                               a = !1;
@@ -1657,15 +1670,15 @@
                                   new m()
                                     .setValue(
                                       this.options._const.action,
-                                      this.options._const.relocateGroup
+                                      this.options._const.relocateGroup,
                                     )
                                     .setValue(
                                       this.options._const.groupLength,
-                                      r.length
+                                      r.length,
                                     )
                                     .setValue(
                                       this.options._const.from,
-                                      r.oldValue
+                                      r.oldValue,
                                     )
                                     .setValue(this.options._const.to, o)
                                     .setValue(this.options._const.route, i),
@@ -1682,47 +1695,47 @@
                             new m()
                               .setValue(
                                 this.options._const.action,
-                                this.options._const.modifySelected
+                                this.options._const.modifySelected,
                               )
                               .setValue(
                                 this.options._const.oldValue,
-                                t.selected
+                                t.selected,
                               )
                               .setValue(
                                 this.options._const.newValue,
-                                e.selected
+                                e.selected,
                               )
-                              .setValue(this.options._const.route, s)
+                              .setValue(this.options._const.route, s),
                           ),
                         (t.value || e.value) &&
                           t.value !== e.value &&
-                          'OPTION' !== t.nodeName &&
+                          "OPTION" !== t.nodeName &&
                           i.push(
                             new m()
                               .setValue(
                                 this.options._const.action,
-                                this.options._const.modifyValue
+                                this.options._const.modifyValue,
                               )
                               .setValue(
                                 this.options._const.oldValue,
-                                t.value || ''
+                                t.value || "",
                               )
                               .setValue(
                                 this.options._const.newValue,
-                                e.value || ''
+                                e.value || "",
                               )
-                              .setValue(this.options._const.route, s)
+                              .setValue(this.options._const.route, s),
                           ),
                         t.checked !== e.checked &&
                           i.push(
                             new m()
                               .setValue(
                                 this.options._const.action,
-                                this.options._const.modifyChecked
+                                this.options._const.modifyChecked,
                               )
                               .setValue(this.options._const.oldValue, t.checked)
                               .setValue(this.options._const.newValue, e.checked)
-                              .setValue(this.options._const.route, s)
+                              .setValue(this.options._const.route, s),
                           ),
                         i
                       );
@@ -1747,7 +1760,7 @@
                   compress: !1,
                   _const: !1,
                   document:
-                    !('undefined' == typeof window || !window.document) &&
+                    !("undefined" == typeof window || !window.document) &&
                     window.document,
                   components: [],
                 },
@@ -1764,37 +1777,37 @@
                       !t._const)
                     ) {
                       var e = [
-                          'addAttribute',
-                          'modifyAttribute',
-                          'removeAttribute',
-                          'modifyTextElement',
-                          'relocateGroup',
-                          'removeElement',
-                          'addElement',
-                          'removeTextElement',
-                          'addTextElement',
-                          'replaceElement',
-                          'modifyValue',
-                          'modifyChecked',
-                          'modifySelected',
-                          'modifyComment',
-                          'action',
-                          'route',
-                          'oldValue',
-                          'newValue',
-                          'element',
-                          'group',
-                          'groupLength',
-                          'from',
-                          'to',
-                          'name',
-                          'value',
-                          'data',
-                          'attributes',
-                          'nodeName',
-                          'childNodes',
-                          'checked',
-                          'selected',
+                          "addAttribute",
+                          "modifyAttribute",
+                          "removeAttribute",
+                          "modifyTextElement",
+                          "relocateGroup",
+                          "removeElement",
+                          "addElement",
+                          "removeTextElement",
+                          "addTextElement",
+                          "replaceElement",
+                          "modifyValue",
+                          "modifyChecked",
+                          "modifySelected",
+                          "modifyComment",
+                          "action",
+                          "route",
+                          "oldValue",
+                          "newValue",
+                          "element",
+                          "group",
+                          "groupLength",
+                          "from",
+                          "to",
+                          "name",
+                          "value",
+                          "data",
+                          "attributes",
+                          "nodeName",
+                          "childNodes",
+                          "checked",
+                          "selected",
                         ],
                         s = {};
                       (t.compress
@@ -1868,7 +1881,7 @@
                                     w(t, e, s));
                                   break;
                                 default:
-                                  console.log('unknown action');
+                                  console.log("unknown action");
                               }
                             })(t, e, s);
                           }));
@@ -1892,9 +1905,9 @@
                     scrollY: r,
                     type: l,
                   },
-                  { noColumnWidths: d, unhideHeader: c }
+                  { noColumnWidths: d, unhideHeader: c },
                 ) => ({
-                  nodeName: 'TR',
+                  nodeName: "TR",
                   childNodes: t
                     .map((t, h) => {
                       const p = e[h] || {
@@ -1910,16 +1923,16 @@
                           o &&
                           (!r.length || c) &&
                           (p.filter
-                            ? (f['data-filterable'] = 'true')
-                            : (f['data-sortable'] = 'true')),
+                            ? (f["data-filterable"] = "true")
+                            : (f["data-sortable"] = "true")),
                         p.headerClass && (f.class = u(f.class, p.headerClass)),
                         s.sort && s.sort.column === h)
                       ) {
                         const t =
-                          'asc' === s.sort.dir ? i.ascending : i.descending;
+                          "asc" === s.sort.dir ? i.ascending : i.descending;
                         ((f.class = u(f.class, t)),
-                          (f['aria-sort'] =
-                            'asc' === s.sort.dir ? 'ascending' : 'descending'));
+                          (f["aria-sort"] =
+                            "asc" === s.sort.dir ? "ascending" : "descending"));
                       } else
                         s.filters[h] && (f.class = u(f.class, i.filterActive));
                       if (s.widths[h] && !d) {
@@ -1927,27 +1940,27 @@
                         f.style = u(f.style, t);
                       }
                       if (r.length && !c) {
-                        const t = 'padding-bottom: 0;padding-top: 0;border: 0;';
+                        const t = "padding-bottom: 0;padding-top: 0;border: 0;";
                         f.style = u(f.style, t);
                       }
                       const m =
-                        'html' === t.type
+                        "html" === t.type
                           ? t.data
                           : [
                               {
-                                nodeName: '#text',
+                                nodeName: "#text",
                                 data: t.text ?? String(t.data),
                               },
                             ];
                       return {
-                        nodeName: 'TH',
+                        nodeName: "TH",
                         attributes: f,
                         childNodes:
                           (!a && !r.length) || c
                             ? p.sortable && o
                               ? [
                                   {
-                                    nodeName: 'BUTTON',
+                                    nodeName: "BUTTON",
                                     attributes: {
                                       class: p.filter ? i.filter : i.sorter,
                                     },
@@ -1955,7 +1968,7 @@
                                   },
                                 ]
                               : m
-                            : [{ nodeName: '#text', data: '' }],
+                            : [{ nodeName: "#text", data: "" }],
                       };
                     })
                     .filter((t) => t),
@@ -1981,20 +1994,20 @@
                   },
                   { noColumnWidths: v, unhideHeader: w, renderHeader: _ },
                   y,
-                  D
+                  D,
                 ) => {
                   const M = {
-                    nodeName: 'TABLE',
+                    nodeName: "TABLE",
                     attributes: { ...t },
                     childNodes: [
                       {
-                        nodeName: 'TBODY',
+                        nodeName: "TBODY",
                         childNodes: s.map(({ row: t, index: e }) => {
                           const s = {
-                            nodeName: 'TR',
+                            nodeName: "TR",
                             attributes: {
                               ...t.attributes,
-                              'data-index': String(e),
+                              "data-index": String(e),
                             },
                             childNodes: t.cells
                               .map((t, s) => {
@@ -2006,14 +2019,14 @@
                                 };
                                 if (a.hidden) return;
                                 const r = {
-                                  nodeName: 'TD',
+                                  nodeName: "TD",
                                   attributes: t.attributes
                                     ? { ...t.attributes }
                                     : {},
                                   childNodes:
-                                    'html' === a.type
+                                    "html" === a.type
                                       ? t.data
-                                      : [{ nodeName: '#text', data: o(t) }],
+                                      : [{ nodeName: "#text", data: o(t) }],
                                 };
                                 if (
                                   (d ||
@@ -2022,23 +2035,23 @@
                                     v ||
                                     (r.attributes.style = u(
                                       r.attributes.style,
-                                      `width: ${n.widths[s]}%;`
+                                      `width: ${n.widths[s]}%;`,
                                     )),
                                   a.cellClass &&
                                     (r.attributes.class = u(
                                       r.attributes.class,
-                                      a.cellClass
+                                      a.cellClass,
                                     )),
                                   a.render)
                                 ) {
                                   const i = a.render(t.data, r, e, s);
                                   if (i) {
-                                    if ('string' != typeof i) return i;
+                                    if ("string" != typeof i) return i;
                                     {
                                       const t = I(`<td>${i}</td>`);
                                       1 === t.childNodes.length &&
-                                      ['#text', '#comment'].includes(
-                                        t.childNodes[0].nodeName
+                                      ["#text", "#comment"].includes(
+                                        t.childNodes[0].nodeName,
                                       )
                                         ? (r.childNodes[0].data = i)
                                         : (r.childNodes = t.childNodes);
@@ -2053,19 +2066,19 @@
                             (e === a &&
                               (s.attributes.class = u(
                                 s.attributes.class,
-                                r.cursor
+                                r.cursor,
                               )),
                             g)
                           ) {
                             const i = g(t, s, e);
                             if (i) {
-                              if ('string' != typeof i) return i;
+                              if ("string" != typeof i) return i;
                               {
                                 const t = I(`<tr>${i}</tr>`);
                                 !t.childNodes ||
                                 (1 === t.childNodes.length &&
-                                  ['#text', '#comment'].includes(
-                                    t.childNodes[0].nodeName
+                                  ["#text", "#comment"].includes(
+                                    t.childNodes[0].nodeName,
                                   ))
                                   ? (s.childNodes[0].data = i)
                                   : (s.childNodes = t.childNodes);
@@ -2086,23 +2099,23 @@
                       i,
                       n,
                       { classes: r, hiddenHeader: l, sortable: p, scrollY: f },
-                      { noColumnWidths: v, unhideHeader: w }
+                      { noColumnWidths: v, unhideHeader: w },
                     );
                     if (d || _) {
-                      const e = { nodeName: 'THEAD', childNodes: [t] };
+                      const e = { nodeName: "THEAD", childNodes: [t] };
                       ((!f.length && !l) ||
                         w ||
-                        (e.attributes = { style: 'height: 0px;' }),
+                        (e.attributes = { style: "height: 0px;" }),
                         M.childNodes.unshift(e));
                     }
                     if (c) {
                       const e = {
-                        nodeName: 'TFOOT',
+                        nodeName: "TFOOT",
                         childNodes: [d ? structuredClone(t) : t],
                       };
                       ((!f.length && !l) ||
                         w ||
-                        (e.attributes = { style: 'height: 0px;' }),
+                        (e.attributes = { style: "height: 0px;" }),
                         M.childNodes.push(e));
                     }
                   }
@@ -2116,49 +2129,49 @@
               function z(t) {
                 return t &&
                   t.__esModule &&
-                  Object.prototype.hasOwnProperty.call(t, 'default')
+                  Object.prototype.hasOwnProperty.call(t, "default")
                   ? t.default
                   : t;
               }
-              'undefined' != typeof globalThis
+              "undefined" != typeof globalThis
                 ? globalThis
-                : 'undefined' != typeof window
+                : "undefined" != typeof window
                   ? window
-                  : void 0 !== t || ('undefined' != typeof self && self);
+                  : void 0 !== t || ("undefined" != typeof self && self);
               var U = z(
                   ({ exports: {} }.exports = (function () {
                     var t = 6e4,
                       e = 36e5,
-                      s = 'millisecond',
-                      i = 'second',
-                      n = 'minute',
-                      a = 'hour',
-                      o = 'day',
-                      r = 'week',
-                      l = 'month',
-                      d = 'quarter',
-                      c = 'year',
-                      h = 'date',
-                      u = 'Invalid Date',
+                      s = "millisecond",
+                      i = "second",
+                      n = "minute",
+                      a = "hour",
+                      o = "day",
+                      r = "week",
+                      l = "month",
+                      d = "quarter",
+                      c = "year",
+                      h = "date",
+                      u = "Invalid Date",
                       p =
                         /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,
                       f =
                         /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,
                       m = {
-                        name: 'en',
+                        name: "en",
                         weekdays:
-                          'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split(
-                            '_'
+                          "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split(
+                            "_",
                           ),
                         months:
-                          'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-                            '_'
+                          "January_February_March_April_May_June_July_August_September_October_November_December".split(
+                            "_",
                           ),
                         ordinal: function (t) {
-                          var e = ['th', 'st', 'nd', 'rd'],
+                          var e = ["th", "st", "nd", "rd"],
                             s = t % 100;
                           return (
-                            '[' + t + (e[(s - 20) % 10] || e[s] || e[0]) + ']'
+                            "[" + t + (e[(s - 20) % 10] || e[s] || e[0]) + "]"
                           );
                         },
                       },
@@ -2166,7 +2179,7 @@
                         var i = String(t);
                         return !i || i.length >= e
                           ? t
-                          : '' + Array(e + 1 - i.length).join(s) + t;
+                          : "" + Array(e + 1 - i.length).join(s) + t;
                       },
                       b = {
                         s: g,
@@ -2176,10 +2189,10 @@
                             i = Math.floor(s / 60),
                             n = s % 60;
                           return (
-                            (e <= 0 ? '+' : '-') +
-                            g(i, 2, '0') +
-                            ':' +
-                            g(n, 2, '0')
+                            (e <= 0 ? "+" : "-") +
+                            g(i, 2, "0") +
+                            ":" +
+                            g(n, 2, "0")
                           );
                         },
                         m: function t(e, s) {
@@ -2209,29 +2222,29 @@
                               ms: s,
                               Q: d,
                             }[t] ||
-                            String(t || '')
+                            String(t || "")
                               .toLowerCase()
-                              .replace(/s$/, '')
+                              .replace(/s$/, "")
                           );
                         },
                         u: function (t) {
                           return void 0 === t;
                         },
                       },
-                      v = 'en',
+                      v = "en",
                       w = {};
                     w[v] = m;
-                    var _ = '$isDayjsObject',
+                    var _ = "$isDayjsObject",
                       y = function (t) {
                         return t instanceof x || !(!t || !t[_]);
                       },
                       D = function t(e, s, i) {
                         var n;
                         if (!e) return v;
-                        if ('string' == typeof e) {
+                        if ("string" == typeof e) {
                           var a = e.toLowerCase();
                           (w[a] && (n = a), s && ((w[a] = s), (n = a)));
-                          var o = e.split('-');
+                          var o = e.split("-");
                           if (!n && o.length > 1) return t(o[0]);
                         } else {
                           var r = e.name;
@@ -2241,7 +2254,7 @@
                       },
                       M = function (t, e) {
                         if (y(t)) return t.clone();
-                        var s = 'object' == typeof e ? e : {};
+                        var s = "object" == typeof e ? e : {};
                         return ((s.date = t), (s.args = arguments), new x(s));
                       },
                       N = b;
@@ -2271,11 +2284,11 @@
                               if (null === e) return new Date(NaN);
                               if (N.u(e)) return new Date();
                               if (e instanceof Date) return new Date(e);
-                              if ('string' == typeof e && !/Z$/i.test(e)) {
+                              if ("string" == typeof e && !/Z$/i.test(e)) {
                                 var i = e.match(p);
                                 if (i) {
                                   var n = i[2] - 1 || 0,
-                                    a = (i[7] || '0').substring(0, 3);
+                                    a = (i[7] || "0").substring(0, 3);
                                   return s
                                     ? new Date(
                                         Date.UTC(
@@ -2285,8 +2298,8 @@
                                           i[4] || 0,
                                           i[5] || 0,
                                           i[6] || 0,
-                                          a
-                                        )
+                                          a,
+                                        ),
                                       )
                                     : new Date(
                                         i[1],
@@ -2295,7 +2308,7 @@
                                         i[4] || 0,
                                         i[5] || 0,
                                         i[6] || 0,
-                                        a
+                                        a,
                                       );
                                 }
                               }
@@ -2348,7 +2361,7 @@
                                   s.$u
                                     ? Date.UTC(s.$y, e, t)
                                     : new Date(s.$y, e, t),
-                                  s
+                                  s,
                                 );
                                 return d ? i : i.endOf(o);
                               },
@@ -2358,15 +2371,15 @@
                                     .toDate()
                                     [
                                       t
-                                    ].apply(s.toDate('s'), (d ? [0, 0, 0, 0] : [23,
+                                    ].apply(s.toDate("s"), (d ? [0, 0, 0, 0] : [23,
                                             59, 59, 999]).slice(e)),
-                                  s
+                                  s,
                                 );
                               },
                               m = this.$W,
                               g = this.$M,
                               b = this.$D,
-                              v = 'set' + (this.$u ? 'UTC' : '');
+                              v = "set" + (this.$u ? "UTC" : "");
                             switch (u) {
                               case c:
                                 return d ? p(1, 0) : p(31, 11);
@@ -2378,13 +2391,13 @@
                                 return p(d ? b - _ : b + (6 - _), g);
                               case o:
                               case h:
-                                return f(v + 'Hours', 0);
+                                return f(v + "Hours", 0);
                               case a:
-                                return f(v + 'Minutes', 1);
+                                return f(v + "Minutes", 1);
                               case n:
-                                return f(v + 'Seconds', 2);
+                                return f(v + "Seconds", 2);
                               case i:
-                                return f(v + 'Milliseconds', 3);
+                                return f(v + "Milliseconds", 3);
                               default:
                                 return this.clone();
                             }
@@ -2395,16 +2408,16 @@
                           (g.$set = function (t, e) {
                             var r,
                               d = N.p(t),
-                              u = 'set' + (this.$u ? 'UTC' : ''),
+                              u = "set" + (this.$u ? "UTC" : ""),
                               p = ((r = {}),
-                              (r[o] = u + 'Date'),
-                              (r[h] = u + 'Date'),
-                              (r[l] = u + 'Month'),
-                              (r[c] = u + 'FullYear'),
-                              (r[a] = u + 'Hours'),
-                              (r[n] = u + 'Minutes'),
-                              (r[i] = u + 'Seconds'),
-                              (r[s] = u + 'Milliseconds'),
+                              (r[o] = u + "Date"),
+                              (r[h] = u + "Date"),
+                              (r[l] = u + "Month"),
+                              (r[c] = u + "FullYear"),
+                              (r[a] = u + "Hours"),
+                              (r[n] = u + "Minutes"),
+                              (r[i] = u + "Seconds"),
+                              (r[s] = u + "Milliseconds"),
                               r)[d],
                               f = d === o ? this.$D + (e - this.$W) : e;
                             if (d === l || d === c) {
@@ -2413,7 +2426,7 @@
                                 m.init(),
                                 (this.$d = m.set(
                                   h,
-                                  Math.min(this.$D, m.daysInMonth())
+                                  Math.min(this.$D, m.daysInMonth()),
                                 ).$d));
                             } else p && this.$d[p](f);
                             return (this.init(), this);
@@ -2433,7 +2446,7 @@
                                 var e = M(u);
                                 return N.w(
                                   e.date(e.date() + Math.round(t * s)),
-                                  u
+                                  u,
                                 );
                               };
                             if (p === l) return this.set(l, this.$M + s);
@@ -2456,7 +2469,7 @@
                             var e = this,
                               s = this.$locale();
                             if (!this.isValid()) return s.invalidDate || u;
-                            var i = t || 'YYYY-MM-DDTHH:mm:ssZ',
+                            var i = t || "YYYY-MM-DDTHH:mm:ssZ",
                               n = N.z(this),
                               a = this.$H,
                               o = this.$m,
@@ -2470,12 +2483,12 @@
                                 );
                               },
                               p = function (t) {
-                                return N.s(a % 12 || 12, t, '0');
+                                return N.s(a % 12 || 12, t, "0");
                               },
                               m =
                                 c ||
                                 function (t, e, s) {
-                                  var i = t < 12 ? 'AM' : 'PM';
+                                  var i = t < 12 ? "AM" : "PM";
                                   return s ? i.toLowerCase() : i;
                                 };
                             return i.replace(f, function (t, i) {
@@ -2483,58 +2496,58 @@
                                 i ||
                                 (function (t) {
                                   switch (t) {
-                                    case 'YY':
+                                    case "YY":
                                       return String(e.$y).slice(-2);
-                                    case 'YYYY':
-                                      return N.s(e.$y, 4, '0');
-                                    case 'M':
+                                    case "YYYY":
+                                      return N.s(e.$y, 4, "0");
+                                    case "M":
                                       return r + 1;
-                                    case 'MM':
-                                      return N.s(r + 1, 2, '0');
-                                    case 'MMM':
+                                    case "MM":
+                                      return N.s(r + 1, 2, "0");
+                                    case "MMM":
                                       return h(s.monthsShort, r, d, 3);
-                                    case 'MMMM':
+                                    case "MMMM":
                                       return h(d, r);
-                                    case 'D':
+                                    case "D":
                                       return e.$D;
-                                    case 'DD':
-                                      return N.s(e.$D, 2, '0');
-                                    case 'd':
+                                    case "DD":
+                                      return N.s(e.$D, 2, "0");
+                                    case "d":
                                       return String(e.$W);
-                                    case 'dd':
+                                    case "dd":
                                       return h(s.weekdaysMin, e.$W, l, 2);
-                                    case 'ddd':
+                                    case "ddd":
                                       return h(s.weekdaysShort, e.$W, l, 3);
-                                    case 'dddd':
+                                    case "dddd":
                                       return l[e.$W];
-                                    case 'H':
+                                    case "H":
                                       return String(a);
-                                    case 'HH':
-                                      return N.s(a, 2, '0');
-                                    case 'h':
+                                    case "HH":
+                                      return N.s(a, 2, "0");
+                                    case "h":
                                       return p(1);
-                                    case 'hh':
+                                    case "hh":
                                       return p(2);
-                                    case 'a':
+                                    case "a":
                                       return m(a, o, !0);
-                                    case 'A':
+                                    case "A":
                                       return m(a, o, !1);
-                                    case 'm':
+                                    case "m":
                                       return String(o);
-                                    case 'mm':
-                                      return N.s(o, 2, '0');
-                                    case 's':
+                                    case "mm":
+                                      return N.s(o, 2, "0");
+                                    case "s":
                                       return String(e.$s);
-                                    case 'ss':
-                                      return N.s(e.$s, 2, '0');
-                                    case 'SSS':
-                                      return N.s(e.$ms, 3, '0');
-                                    case 'Z':
+                                    case "ss":
+                                      return N.s(e.$s, 2, "0");
+                                    case "SSS":
+                                      return N.s(e.$ms, 3, "0");
+                                    case "Z":
                                       return n;
                                   }
                                   return null;
                                 })(t) ||
-                                n.replace(':', '')
+                                n.replace(":", "")
                               );
                             });
                           }),
@@ -2617,14 +2630,14 @@
                     return (
                       (M.prototype = O),
                       [
-                        ['$ms', s],
-                        ['$s', i],
-                        ['$m', n],
-                        ['$H', a],
-                        ['$W', o],
-                        ['$M', l],
-                        ['$y', c],
-                        ['$D', h],
+                        ["$ms", s],
+                        ["$s", i],
+                        ["$m", n],
+                        ["$H", a],
+                        ["$W", o],
+                        ["$M", l],
+                        ["$y", c],
+                        ["$D", h],
                       ].forEach(function (t) {
                         O[t[1]] = function (e) {
                           return this.$g(e, t[0], t[1]);
@@ -2643,17 +2656,17 @@
                       (M.p = {}),
                       M
                     );
-                  })())
+                  })()),
                 ),
                 J = z(
                   ({ exports: {} }.exports = (function () {
                     var t = {
-                        LTS: 'h:mm:ss A',
-                        LT: 'h:mm A',
-                        L: 'MM/DD/YYYY',
-                        LL: 'MMMM D, YYYY',
-                        LLL: 'MMMM D, YYYY h:mm A',
-                        LLLL: 'dddd, MMMM D, YYYY h:mm A',
+                        LTS: "h:mm:ss A",
+                        LT: "h:mm A",
+                        L: "MM/DD/YYYY",
+                        LL: "MMMM D, YYYY",
+                        LLL: "MMMM D, YYYY h:mm A",
+                        LLLL: "dddd, MMMM D, YYYY h:mm A",
                       },
                       e =
                         /(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|YYYY|YY?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g,
@@ -2673,13 +2686,13 @@
                         /[+-]\d\d:?(\d\d)?|Z/,
                         function (t) {
                           (this.zone || (this.zone = {})).offset = (function (
-                            t
+                            t,
                           ) {
                             if (!t) return 0;
-                            if ('Z' === t) return 0;
+                            if ("Z" === t) return 0;
                             var e = t.match(/([+-]|\d\d)/g),
                               s = 60 * e[1] + (+e[2] || 0);
-                            return 0 === s ? 0 : '+' === e[0] ? -s : s;
+                            return 0 === s ? 0 : "+" === e[0] ? -s : s;
                           })(t);
                         },
                       ],
@@ -2696,7 +2709,7 @@
                               s = n > 12;
                               break;
                             }
-                        } else s = t === (e ? 'pm' : 'PM');
+                        } else s = t === (e ? "pm" : "PM");
                         return s;
                       },
                       h = {
@@ -2730,16 +2743,16 @@
                             this.milliseconds = +t;
                           },
                         ],
-                        s: [i, r('seconds')],
-                        ss: [i, r('seconds')],
-                        m: [i, r('minutes')],
-                        mm: [i, r('minutes')],
-                        H: [i, r('hours')],
-                        h: [i, r('hours')],
-                        HH: [i, r('hours')],
-                        hh: [i, r('hours')],
-                        D: [i, r('day')],
-                        DD: [s, r('day')],
+                        s: [i, r("seconds")],
+                        ss: [i, r("seconds")],
+                        m: [i, r("minutes")],
+                        mm: [i, r("minutes")],
+                        H: [i, r("hours")],
+                        h: [i, r("hours")],
+                        HH: [i, r("hours")],
+                        hh: [i, r("hours")],
+                        D: [i, r("day")],
+                        DD: [s, r("day")],
                         Do: [
                           n,
                           function (t) {
@@ -2747,19 +2760,19 @@
                               s = t.match(/\d+/);
                             if (((this.day = s[0]), e))
                               for (var i = 1; i <= 31; i += 1)
-                                e(i).replace(/\[|\]/g, '') === t &&
+                                e(i).replace(/\[|\]/g, "") === t &&
                                   (this.day = i);
                           },
                         ],
-                        M: [i, r('month')],
-                        MM: [s, r('month')],
+                        M: [i, r("month")],
+                        MM: [s, r("month")],
                         MMM: [
                           n,
                           function (t) {
-                            var e = d('months'),
+                            var e = d("months"),
                               s =
                                 (
-                                  d('monthsShort') ||
+                                  d("monthsShort") ||
                                   e.map(function (t) {
                                     return t.slice(0, 3);
                                   })
@@ -2771,19 +2784,19 @@
                         MMMM: [
                           n,
                           function (t) {
-                            var e = d('months').indexOf(t) + 1;
+                            var e = d("months").indexOf(t) + 1;
                             if (e < 1) throw new Error();
                             this.month = e % 12 || e;
                           },
                         ],
-                        Y: [/[+-]?\d+/, r('year')],
+                        Y: [/[+-]?\d+/, r("year")],
                         YY: [
                           s,
                           function (t) {
                             this.year = o(t);
                           },
                         ],
-                        YYYY: [/\d{4}/, r('year')],
+                        YYYY: [/\d{4}/, r("year")],
                         Z: l,
                         ZZ: l,
                       };
@@ -2803,10 +2816,10 @@
                                   /(\[[^\]]+])|(MMMM|MM|DD|dddd)/g,
                                   function (t, e, s) {
                                     return e || s.slice(1);
-                                  }
+                                  },
                                 )
                               );
-                            }
+                            },
                           )).match(e),
                           r = o.length,
                           l = 0;
@@ -2819,18 +2832,18 @@
                           p = c && c[1];
                         o[l] = p
                           ? { regex: u, parser: p }
-                          : d.replace(/^\[|\]$/g, '');
+                          : d.replace(/^\[|\]$/g, "");
                       }
                       return function (t) {
                         for (var e = {}, s = 0, i = 0; s < r; s += 1) {
                           var n = o[s];
-                          if ('string' == typeof n) i += n.length;
+                          if ("string" == typeof n) i += n.length;
                           else {
                             var a = n.regex,
                               l = n.parser,
                               d = t.slice(i),
                               c = a.exec(d)[0];
-                            (l.call(e, c), (t = t.replace(c, '')));
+                            (l.call(e, c), (t = t.replace(c, "")));
                           }
                         }
                         return (
@@ -2859,7 +2872,7 @@
                           o = t.args;
                         this.$u = i;
                         var r = o[1];
-                        if ('string' == typeof r) {
+                        if ("string" == typeof r) {
                           var l = !0 === o[2],
                             d = !0 === o[3],
                             c = l || d,
@@ -2869,8 +2882,8 @@
                             !l && h && (a = s.Ls[h]),
                             (this.$d = (function (t, e, s) {
                               try {
-                                if (['x', 'X'].indexOf(e) > -1)
-                                  return new Date(('X' === e ? 1e3 : 1) * t);
+                                if (["x", "X"].indexOf(e) > -1)
+                                  return new Date(("X" === e ? 1e3 : 1) * t);
                                 var i = u(e)(t),
                                   n = i.year,
                                   a = i.month,
@@ -2898,21 +2911,21 @@
                                         b,
                                         v,
                                         w,
-                                        _ + 60 * h.offset * 1e3
-                                      )
+                                        _ + 60 * h.offset * 1e3,
+                                      ),
                                     )
                                   : s
                                     ? new Date(Date.UTC(m, g, f, b, v, w, _))
                                     : new Date(m, g, f, b, v, w, _);
                               } catch (t) {
-                                return new Date('');
+                                return new Date("");
                               }
                             })(e, r, i)),
                             this.init(),
                             h && !0 !== h && (this.$L = this.locale(h).$L),
                             c &&
                               e != this.format(r) &&
-                              (this.$d = new Date('')),
+                              (this.$d = new Date("")),
                             (a = {}));
                         } else if (r instanceof Array)
                           for (var p = r.length, f = 1; f <= p; f += 1) {
@@ -2922,28 +2935,28 @@
                               ((this.$d = m.$d), (this.$L = m.$L), this.init());
                               break;
                             }
-                            f === p && (this.$d = new Date(''));
+                            f === p && (this.$d = new Date(""));
                           }
                         else n.call(this, t);
                       };
                     };
-                  })())
+                  })()),
                 );
               U.extend(J);
               const W = (t, e) => {
                   let s;
                   if (e)
                     switch (e) {
-                      case 'ISO_8601':
+                      case "ISO_8601":
                         s = t;
                         break;
-                      case 'RFC_2822':
-                        s = U(t.slice(5), 'DD MMM YYYY HH:mm:ss ZZ').unix();
+                      case "RFC_2822":
+                        s = U(t.slice(5), "DD MMM YYYY HH:mm:ss ZZ").unix();
                         break;
-                      case 'MYSQL':
-                        s = U(t, 'YYYY-MM-DD hh:mm:ss').unix();
+                      case "MYSQL":
+                        s = U(t, "YYYY-MM-DD hh:mm:ss").unix();
                         break;
-                      case 'UNIX':
+                      case "UNIX":
                         s = U(t).unix();
                         break;
                       default:
@@ -2954,47 +2967,47 @@
                 Q = (t, e) => {
                   if (
                     t?.constructor === Object &&
-                    Object.prototype.hasOwnProperty.call(t, 'data') &&
+                    Object.prototype.hasOwnProperty.call(t, "data") &&
                     !Object.keys(t).find(
                       (t) =>
-                        !['text', 'order', 'data', 'attributes'].includes(t)
+                        !["text", "order", "data", "attributes"].includes(t),
                     )
                   )
                     return t;
                   const s = { data: t };
                   switch (e.type) {
-                    case 'string':
-                      'string' != typeof t &&
+                    case "string":
+                      "string" != typeof t &&
                         ((s.text = String(s.data)), (s.order = s.text));
                       break;
-                    case 'date':
+                    case "date":
                       e.format && (s.order = W(String(s.data), e.format));
                       break;
-                    case 'number':
+                    case "number":
                       ((s.text = String(s.data)),
                         (s.data = parseFloat(s.data)),
                         (s.order = s.data));
                       break;
-                    case 'html': {
+                    case "html": {
                       const t = Array.isArray(s.data)
-                        ? { nodeName: 'TD', childNodes: s.data }
+                        ? { nodeName: "TD", childNodes: s.data }
                         : I(`<td>${String(s.data)}</td>`);
                       s.data = t.childNodes || [];
                       const e = a(t);
                       ((s.text = e), (s.order = e));
                       break;
                     }
-                    case 'boolean':
-                      ('string' == typeof s.data &&
+                    case "boolean":
+                      ("string" == typeof s.data &&
                         (s.data = s.data.toLowerCase().trim()),
-                        (s.data = !['false', !1, null, void 0, 0].includes(
-                          s.data
+                        (s.data = !["false", !1, null, void 0, 0].includes(
+                          s.data,
                         )),
                         (s.order = s.data ? 1 : 0),
                         (s.text = String(s.data)));
                       break;
-                    case 'other':
-                      ((s.text = ''), (s.order = 0));
+                    case "other":
+                      ((s.text = ""), (s.order = 0));
                       break;
                     default:
                       s.text = JSON.stringify(s.data);
@@ -3005,27 +3018,27 @@
                   if (
                     t instanceof Object &&
                     t.constructor === Object &&
-                    t.hasOwnProperty('data') &&
-                    ('string' == typeof t.text || 'string' == typeof t.data)
+                    t.hasOwnProperty("data") &&
+                    ("string" == typeof t.text || "string" == typeof t.data)
                   )
                     return t;
                   const e = { data: t };
-                  if ('string' == typeof t) {
+                  if ("string" == typeof t) {
                     if (t.length) {
                       const s = I(`<th>${t}</th>`);
                       if (
                         s.childNodes &&
                         (1 !== s.childNodes.length ||
-                          '#text' !== s.childNodes[0].nodeName)
+                          "#text" !== s.childNodes[0].nodeName)
                       ) {
-                        ((e.data = s.childNodes), (e.type = 'html'));
+                        ((e.data = s.childNodes), (e.type = "html"));
                         const t = a(s);
                         e.text = t;
                       }
                     }
                   } else
                     [null, void 0].includes(t)
-                      ? (e.text = '')
+                      ? (e.text = "")
                       : (e.text = JSON.stringify(t));
                   return e;
                 },
@@ -3033,7 +3046,7 @@
                   const o = { data: [], headings: [] };
                   if (t.headings) o.headings = t.headings.map((t) => X(t));
                   else if (e?.tHead)
-                    o.headings = Array.from(e.tHead.querySelectorAll('th')).map(
+                    o.headings = Array.from(e.tHead.querySelectorAll("th")).map(
                       (t, e) => {
                         const o = ((t) => {
                           const e = T(t, { valueDiffing: !1 });
@@ -3042,11 +3055,11 @@
                             (s =
                               !e.childNodes ||
                               (1 === e.childNodes.length &&
-                                '#text' === e.childNodes[0].nodeName)
-                                ? { data: t.innerText, type: 'string' }
+                                "#text" === e.childNodes[0].nodeName)
+                                ? { data: t.innerText, type: "string" }
                                 : {
                                     data: e.childNodes,
-                                    type: 'html',
+                                    type: "html",
                                     text: a(e),
                                   }),
                             (s.attributes = e.attributes),
@@ -3062,41 +3075,41 @@
                           });
                         const r = s[e];
                         return (
-                          ('false' !==
+                          ("false" !==
                             t.dataset.sortable?.trim().toLowerCase() &&
-                            'false' !== t.dataset.sort?.trim().toLowerCase()) ||
+                            "false" !== t.dataset.sort?.trim().toLowerCase()) ||
                             (r.sortable = !1),
-                          'false' ===
+                          "false" ===
                             t.dataset.searchable?.trim().toLowerCase() &&
                             (r.searchable = !1),
-                          ('true' !== t.dataset.hidden?.trim().toLowerCase() &&
-                            'true' !==
-                              t.getAttribute('hidden')?.trim().toLowerCase()) ||
+                          ("true" !== t.dataset.hidden?.trim().toLowerCase() &&
+                            "true" !==
+                              t.getAttribute("hidden")?.trim().toLowerCase()) ||
                             (r.hidden = !0),
                           [
-                            'number',
-                            'string',
-                            'html',
-                            'date',
-                            'boolean',
-                            'other',
+                            "number",
+                            "string",
+                            "html",
+                            "date",
+                            "boolean",
+                            "other",
                           ].includes(t.dataset.type) &&
                             ((r.type = t.dataset.type),
-                            'date' === r.type &&
+                            "date" === r.type &&
                               t.dataset.format &&
                               (r.format = t.dataset.format)),
                           o
                         );
-                      }
+                      },
                     );
                   else if (t.data?.length) {
                     const e = t.data[0],
                       s = Array.isArray(e) ? e : e.cells;
-                    o.headings = s.map((t) => X(''));
+                    o.headings = s.map((t) => X(""));
                   } else
                     e?.tBodies.length &&
                       (o.headings = Array.from(e.tBodies[0].rows[0].cells).map(
-                        (t) => X('')
+                        (t) => X(""),
                       ));
                   for (let t = 0; t < o.headings.length; t++)
                     s[t] ||
@@ -3108,16 +3121,16 @@
                       });
                   if (t.data) {
                     const e = o.headings.map((t) =>
-                      t.data ? String(t.data) : t.text
+                      t.data ? String(t.data) : t.text,
                     );
                     o.data = t.data.map((t) => {
                       let i, n;
                       return (
                         Array.isArray(t)
                           ? ((i = {}), (n = t))
-                          : t.hasOwnProperty('cells') &&
+                          : t.hasOwnProperty("cells") &&
                               Object.keys(t).every((t) =>
-                                ['cells', 'attributes'].includes(t)
+                                ["cells", "attributes"].includes(t),
                               )
                             ? ((i = t.attributes), (n = t.cells))
                             : ((i = {}),
@@ -3139,15 +3152,15 @@
                             : ((t, e) => {
                                 let s;
                                 switch (e.type) {
-                                  case 'string':
+                                  case "string":
                                     s = { data: t.innerText };
                                     break;
-                                  case 'date': {
+                                  case "date": {
                                     const i = t.innerText;
                                     s = { data: i, order: W(i, e.format) };
                                     break;
                                   }
-                                  case 'number': {
+                                  case "number": {
                                     const e = parseFloat(t.innerText);
                                     s = {
                                       data: e,
@@ -3156,18 +3169,18 @@
                                     };
                                     break;
                                   }
-                                  case 'boolean': {
+                                  case "boolean": {
                                     const e = ![
-                                      'false',
-                                      '0',
-                                      'null',
-                                      'undefined',
+                                      "false",
+                                      "0",
+                                      "null",
+                                      "undefined",
                                     ].includes(
-                                      t.innerText.toLowerCase().trim()
+                                      t.innerText.toLowerCase().trim(),
                                     );
                                     s = {
                                       data: e,
-                                      text: e ? '1' : '0',
+                                      text: e ? "1" : "0",
                                       order: e ? 1 : 0,
                                     };
                                     break;
@@ -3196,7 +3209,7 @@
                     o.data.length &&
                     o.data[0].cells.length !== o.headings.length
                   )
-                    throw new Error('Data heading length mismatch.');
+                    throw new Error("Data heading length mismatch.");
                   return o;
                 };
               class G {
@@ -3215,9 +3228,9 @@
                   ) {
                     const t = c(this.dt.options.classes.cursor),
                       e = this.dt.dom.querySelector(`tr${t}`);
-                    e && e.scrollIntoView({ block: 'nearest' });
+                    e && e.scrollIntoView({ block: "nearest" });
                   }
-                  this.dt.emit('datatable.cursormove', this.cursor, e);
+                  this.dt.emit("datatable.cursormove", this.cursor, e);
                 }
                 add(t) {
                   if (!Array.isArray(t) || t.length < 1) return;
@@ -3234,7 +3247,7 @@
                 remove(t) {
                   if (!Array.isArray(t)) return this.remove([t]);
                   ((this.dt.data.data = this.dt.data.data.filter(
-                    (e, s) => !t.includes(s)
+                    (e, s) => !t.includes(s),
                   )),
                     this.dt.data.data.length || (this.dt.hasRows = !1),
                     this.dt.update(!0));
@@ -3291,7 +3304,7 @@
                           (t.render && (r.render = t.render),
                             t.format
                               ? (r.format = t.format)
-                              : 'date' === t.type && (r.format = s),
+                              : "date" === t.type && (r.format = s),
                             t.cellClass && (r.cellClass = t.cellClass),
                             t.headerClass && (r.headerClass = t.headerClass),
                             t.locale && (r.locale = t.locale),
@@ -3321,17 +3334,17 @@
                         (t) =>
                           t || {
                             type: e,
-                            format: 'date' === e ? s : void 0,
+                            format: "date" === e ? s : void 0,
                             sortable: !0,
                             searchable: !0,
-                          }
+                          },
                       )),
                       [i, { filters: a, sort: n, widths: [] }]
                     );
                   })(
                     this.dt.options.columns,
                     this.dt.options.type,
-                    this.dt.options.format
+                    this.dt.options.format,
                   );
                 }
                 get(t) {
@@ -3353,10 +3366,10 @@
                 }
                 order(t) {
                   ((this.dt.data.headings = t.map(
-                    (t) => this.dt.data.headings[t]
+                    (t) => this.dt.data.headings[t],
                   )),
                     this.dt.data.data.forEach(
-                      (e) => (e.cells = t.map((t) => e.cells[t]))
+                      (e) => (e.cells = t.map((t) => e.cells[t])),
                     ),
                     (this.settings = t.map((t) => this.settings[t])),
                     this.dt.update());
@@ -3366,7 +3379,7 @@
                     t.length &&
                       (t.forEach((t) => {
                         (this.settings[t] ||
-                          (this.settings[t] = { type: 'string' }),
+                          (this.settings[t] = { type: "string" }),
                           (this.settings[t].hidden = !0));
                       }),
                       this.dt.update()));
@@ -3376,7 +3389,7 @@
                     t.length &&
                       (t.forEach((t) => {
                         (this.settings[t] ||
-                          (this.settings[t] = { type: 'string', sortable: !0 }),
+                          (this.settings[t] = { type: "string", sortable: !0 }),
                           delete this.settings[t].hidden);
                       }),
                       this.dt.update()));
@@ -3400,7 +3413,7 @@
                       e.cells = e.cells.concat([Q(t.data[s], t)]);
                     }),
                     (this.settings[e] = {
-                      type: t.type || 'string',
+                      type: t.type || "string",
                       sortable: !0,
                       searchable: !0,
                     }),
@@ -3431,11 +3444,11 @@
                 remove(t) {
                   (Array.isArray(t) || (t = [t]),
                     (this.dt.data.headings = this.dt.data.headings.filter(
-                      (e, s) => !t.includes(s)
+                      (e, s) => !t.includes(s),
                     )),
                     this.dt.data.data.forEach(
                       (e) =>
-                        (e.cells = e.cells.filter((e, s) => !t.includes(s)))
+                        (e.cells = e.cells.filter((e, s) => !t.includes(s))),
                     ),
                     this.dt.update(!0));
                 }
@@ -3446,7 +3459,7 @@
                   if (s) {
                     let e = !1;
                     i = this.settings[t].filter.find(
-                      (t) => !!e || (t === s && (e = !0), !1)
+                      (t) => !!e || (t === s && (e = !0), !1),
                     );
                   } else {
                     const e = this.settings[t].filter;
@@ -3457,29 +3470,29 @@
                     : s && (this._state.filters[t] = void 0),
                     (this.dt._currentPage = 1),
                     this.dt.update(),
-                    e || this.dt.emit('datatable.filter', t, i));
+                    e || this.dt.emit("datatable.filter", t, i));
                 }
                 sort(t, e = void 0, s = !1) {
                   const i = this.settings[t];
-                  if ((s || this.dt.emit('datatable.sorting', t, e), !e)) {
+                  if ((s || this.dt.emit("datatable.sorting", t, e), !e)) {
                     const s =
                         !(!this._state.sort || this._state.sort.column !== t) &&
                         this._state.sort?.dir,
-                      n = i?.sortSequence || ['asc', 'desc'];
+                      n = i?.sortSequence || ["asc", "desc"];
                     if (s) {
                       const t = n.indexOf(s);
                       e =
                         -1 === t
-                          ? n[0] || 'asc'
+                          ? n[0] || "asc"
                           : t === n.length - 1
                             ? n[0]
                             : n[t + 1];
-                    } else e = n.length ? n[0] : 'asc';
+                    } else e = n.length ? n[0] : "asc";
                   }
                   const n =
-                    !!['string', 'html'].includes(i.type) &&
+                    !!["string", "html"].includes(i.type) &&
                     new Intl.Collator(i.locale || this.dt.options.locale, {
-                      usage: 'sort',
+                      usage: "sort",
                       numeric: i.numeric || this.dt.options.numeric,
                       caseFirst: i.caseFirst || this.dt.options.caseFirst,
                       ignorePunctuation:
@@ -3491,7 +3504,7 @@
                       r = i.cells[t];
                     let l = a.order ?? o(a),
                       d = r.order ?? o(r);
-                    if ('desc' === e) {
+                    if ("desc" === e) {
                       const t = l;
                       ((l = d), (d = t));
                     }
@@ -3506,15 +3519,15 @@
                     (this._state.sort = { column: t, dir: e }),
                     this.dt._searchQueries.length
                       ? (this.dt.multiSearch(this.dt._searchQueries),
-                        this.dt.emit('datatable.sort', t, e))
+                        this.dt.emit("datatable.sort", t, e))
                       : s ||
                         ((this.dt._currentPage = 1),
                         this.dt.update(),
-                        this.dt.emit('datatable.sort', t, e)));
+                        this.dt.emit("datatable.sort", t, e)));
                 }
                 _measureWidths() {
                   const t = this.dt.data.headings.filter(
-                    (t, e) => !this.settings[e]?.hidden
+                    (t, e) => !this.settings[e]?.hidden,
                   );
                   if (
                     (this.dt.options.scrollY.length ||
@@ -3527,14 +3540,14 @@
                       (this.dt.options.scrollY.length && (t.unhideHeader = !0),
                         this.dt.headerDOM &&
                           this.dt.headerDOM.parentElement.removeChild(
-                            this.dt.headerDOM
+                            this.dt.headerDOM,
                           ),
                         (t.noColumnWidths = !0),
                         this.dt._renderTable(t));
                       const e = Array.from(
                         this.dt.dom
-                          .querySelector('thead, tfoot')
-                          ?.firstElementChild?.querySelectorAll('th') || []
+                          .querySelector("thead, tfoot")
+                          ?.firstElementChild?.querySelectorAll("th") || [],
                       );
                       let s = 0;
                       const i = this.dt.data.headings.map((t, i) => {
@@ -3548,8 +3561,8 @@
                       ((t.renderHeader = !0), this.dt._renderTable(t));
                       const e = Array.from(
                         this.dt.dom
-                          .querySelector('thead, tfoot')
-                          ?.firstElementChild?.querySelectorAll('th') || []
+                          .querySelector("thead, tfoot")
+                          ?.firstElementChild?.querySelectorAll("th") || [],
                       );
                       let s = 0;
                       const i = this.dt.data.headings.map((t, i) => {
@@ -3566,33 +3579,33 @@
               }
               const tt = {
                   sortable: !0,
-                  locale: 'en',
+                  locale: "en",
                   numeric: !0,
-                  caseFirst: 'false',
+                  caseFirst: "false",
                   searchable: !0,
-                  sensitivity: 'base',
+                  sensitivity: "base",
                   ignorePunctuation: !0,
                   destroyable: !0,
-                  searchItemSeparator: '',
-                  searchQuerySeparator: ' ',
+                  searchItemSeparator: "",
+                  searchQuerySeparator: " ",
                   searchAnd: !1,
                   data: {},
-                  type: 'html',
-                  format: 'YYYY-MM-DD',
+                  type: "html",
+                  format: "YYYY-MM-DD",
                   columns: [],
                   paging: !0,
                   perPage: 10,
                   perPageSelect: [5, 10, 15, 20, 25],
                   nextPrev: !0,
                   firstLast: !1,
-                  prevText: '‹',
-                  nextText: '›',
-                  firstText: '«',
-                  lastText: '»',
-                  ellipsisText: '…',
+                  prevText: "‹",
+                  nextText: "›",
+                  firstText: "«",
+                  lastText: "»",
+                  ellipsisText: "…",
                   truncatePager: !0,
                   pagerDelta: 2,
-                  scrollY: '',
+                  scrollY: "",
                   fixedColumns: !0,
                   fixedHeight: !1,
                   footer: !1,
@@ -3606,49 +3619,49 @@
                   tableRender: !1,
                   diffDomOptions: { valueDiffing: !1 },
                   labels: {
-                    placeholder: 'Search...',
-                    searchTitle: 'Search within table',
-                    perPage: 'entries per page',
-                    pageTitle: 'Page {page}',
-                    noRows: 'No entries found',
-                    noResults: 'No results match your search query',
-                    info: 'Showing {start} to {end} of {rows} entries',
+                    placeholder: "Search...",
+                    searchTitle: "Search within table",
+                    perPage: "entries per page",
+                    pageTitle: "Page {page}",
+                    noRows: "No entries found",
+                    noResults: "No results match your search query",
+                    info: "Showing {start} to {end} of {rows} entries",
                   },
                   template: (t, e) =>
-                    `<div class='${t.classes.top}'>\n    ${t.paging && t.perPageSelect ? `<div class='${t.classes.dropdown}'>\n            <label>\n                <select class='${t.classes.selector}' name="per-page"></select> ${t.labels.perPage}\n            </label>\n        </div>` : ''}\n    ${t.searchable ? `<div class='${t.classes.search}'>\n            <input class='${t.classes.input}' placeholder='${t.labels.placeholder}' type='search' name="search" title='${t.labels.searchTitle}'${e.id ? ` aria-controls="${e.id}"` : ''}>\n        </div>` : ''}\n</div>\n<div class='${t.classes.container}'${t.scrollY.length ? ` style='height: ${t.scrollY}; overflow-Y: auto;'` : ''}></div>\n<div class='${t.classes.bottom}'>\n    ${t.paging ? `<div class='${t.classes.info}'></div>` : ''}\n    <nav class='${t.classes.pagination}'></nav>\n</div>`,
+                    `<div class='${t.classes.top}'>\n    ${t.paging && t.perPageSelect ? `<div class='${t.classes.dropdown}'>\n            <label>\n                <select class='${t.classes.selector}' name="per-page"></select> ${t.labels.perPage}\n            </label>\n        </div>` : ""}\n    ${t.searchable ? `<div class='${t.classes.search}'>\n            <input class='${t.classes.input}' placeholder='${t.labels.placeholder}' type='search' name="search" title='${t.labels.searchTitle}'${e.id ? ` aria-controls="${e.id}"` : ""}>\n        </div>` : ""}\n</div>\n<div class='${t.classes.container}'${t.scrollY.length ? ` style='height: ${t.scrollY}; overflow-Y: auto;'` : ""}></div>\n<div class='${t.classes.bottom}'>\n    ${t.paging ? `<div class='${t.classes.info}'></div>` : ""}\n    <nav class='${t.classes.pagination}'></nav>\n</div>`,
                   classes: {
-                    active: 'datatable-active',
-                    ascending: 'datatable-ascending',
-                    bottom: 'datatable-bottom',
-                    container: 'datatable-container',
-                    cursor: 'datatable-cursor',
-                    descending: 'datatable-descending',
-                    disabled: 'datatable-disabled',
-                    dropdown: 'datatable-dropdown',
-                    ellipsis: 'datatable-ellipsis',
-                    filter: 'datatable-filter',
-                    filterActive: 'datatable-filter-active',
-                    empty: 'datatable-empty',
-                    headercontainer: 'datatable-headercontainer',
-                    hidden: 'datatable-hidden',
-                    info: 'datatable-info',
-                    input: 'datatable-input',
-                    loading: 'datatable-loading',
-                    pagination: 'datatable-pagination',
-                    paginationList: 'datatable-pagination-list',
-                    paginationListItem: 'datatable-pagination-list-item',
+                    active: "datatable-active",
+                    ascending: "datatable-ascending",
+                    bottom: "datatable-bottom",
+                    container: "datatable-container",
+                    cursor: "datatable-cursor",
+                    descending: "datatable-descending",
+                    disabled: "datatable-disabled",
+                    dropdown: "datatable-dropdown",
+                    ellipsis: "datatable-ellipsis",
+                    filter: "datatable-filter",
+                    filterActive: "datatable-filter-active",
+                    empty: "datatable-empty",
+                    headercontainer: "datatable-headercontainer",
+                    hidden: "datatable-hidden",
+                    info: "datatable-info",
+                    input: "datatable-input",
+                    loading: "datatable-loading",
+                    pagination: "datatable-pagination",
+                    paginationList: "datatable-pagination-list",
+                    paginationListItem: "datatable-pagination-list-item",
                     paginationListItemLink:
-                      'datatable-pagination-list-item-link',
-                    search: 'datatable-search',
-                    selector: 'datatable-selector',
-                    sorter: 'datatable-sorter',
-                    table: 'datatable-table',
-                    top: 'datatable-top',
-                    wrapper: 'datatable-wrapper',
+                      "datatable-pagination-list-item-link",
+                    search: "datatable-search",
+                    selector: "datatable-selector",
+                    sorter: "datatable-sorter",
+                    table: "datatable-table",
+                    top: "datatable-top",
+                    wrapper: "datatable-wrapper",
                   },
                 },
                 et = (t, e, s, i = {}) => ({
-                  nodeName: 'LI',
+                  nodeName: "LI",
                   attributes: {
                     class:
                       i.active && !i.hidden
@@ -3659,62 +3672,62 @@
                   },
                   childNodes: [
                     {
-                      nodeName: 'BUTTON',
+                      nodeName: "BUTTON",
                       attributes: {
-                        'data-page': String(t),
+                        "data-page": String(t),
                         class: s.classes.paginationListItemLink,
-                        'aria-label': s.labels.pageTitle.replace(
-                          '{page}',
-                          String(t)
+                        "aria-label": s.labels.pageTitle.replace(
+                          "{page}",
+                          String(t),
                         ),
                       },
-                      childNodes: [{ nodeName: '#text', data: e }],
+                      childNodes: [{ nodeName: "#text", data: e }],
                     },
                   ],
                 }),
                 st = {
                   classes: {
-                    row: 'datatable-editor-row',
-                    form: 'datatable-editor-form',
-                    item: 'datatable-editor-item',
-                    menu: 'datatable-editor-menu',
-                    save: 'datatable-editor-save',
-                    block: 'datatable-editor-block',
-                    cancel: 'datatable-editor-cancel',
-                    close: 'datatable-editor-close',
-                    inner: 'datatable-editor-inner',
-                    input: 'datatable-editor-input',
-                    label: 'datatable-editor-label',
-                    modal: 'datatable-editor-modal',
-                    action: 'datatable-editor-action',
-                    header: 'datatable-editor-header',
-                    wrapper: 'datatable-editor-wrapper',
-                    editable: 'datatable-editor-editable',
-                    container: 'datatable-editor-container',
-                    separator: 'datatable-editor-separator',
+                    row: "datatable-editor-row",
+                    form: "datatable-editor-form",
+                    item: "datatable-editor-item",
+                    menu: "datatable-editor-menu",
+                    save: "datatable-editor-save",
+                    block: "datatable-editor-block",
+                    cancel: "datatable-editor-cancel",
+                    close: "datatable-editor-close",
+                    inner: "datatable-editor-inner",
+                    input: "datatable-editor-input",
+                    label: "datatable-editor-label",
+                    modal: "datatable-editor-modal",
+                    action: "datatable-editor-action",
+                    header: "datatable-editor-header",
+                    wrapper: "datatable-editor-wrapper",
+                    editable: "datatable-editor-editable",
+                    container: "datatable-editor-container",
+                    separator: "datatable-editor-separator",
                   },
                   labels: {
-                    closeX: 'x',
-                    editCell: 'Edit Cell',
-                    editRow: 'Edit Row',
-                    removeRow: 'Remove Row',
-                    reallyRemove: 'Are you sure?',
-                    reallyCancel: 'Do you really want to cancel?',
-                    save: 'Save',
-                    cancel: 'Cancel',
+                    closeX: "x",
+                    editCell: "Edit Cell",
+                    editRow: "Edit Row",
+                    removeRow: "Remove Row",
+                    reallyRemove: "Are you sure?",
+                    reallyCancel: "Do you really want to cancel?",
+                    save: "Save",
+                    cancel: "Cancel",
                   },
                   cancelModal: (t) => confirm(t.options.labels.reallyCancel),
                   inline: !0,
                   hiddenColumns: !1,
                   contextMenu: !0,
-                  clickEvent: 'dblclick',
+                  clickEvent: "dblclick",
                   excludeColumns: [],
                   menuItems: [
                     {
                       text: (t) => t.options.labels.editCell,
                       action: (t, e) => {
                         if (!(t.event.target instanceof Element)) return;
-                        const s = t.event.target.closest('td');
+                        const s = t.event.target.closest("td");
                         return t.editCell(s);
                       },
                     },
@@ -3722,7 +3735,7 @@
                       text: (t) => t.options.labels.editRow,
                       action: (t, e) => {
                         if (!(t.event.target instanceof Element)) return;
-                        const s = t.event.target.closest('tr');
+                        const s = t.event.target.closest("tr");
                         return t.editRow(s);
                       },
                     },
@@ -3734,7 +3747,7 @@
                           t.event.target instanceof Element &&
                           confirm(t.options.labels.reallyRemove)
                         ) {
-                          const e = t.event.target.closest('tr');
+                          const e = t.event.target.closest("tr");
                           t.removeRow(e);
                         }
                       },
@@ -3766,7 +3779,7 @@
                 init() {
                   this.initialized ||
                     (this.options.classes.editable
-                      ?.split(' ')
+                      ?.split(" ")
                       .forEach((t) => this.dt.wrapperDOM.classList.add(t)),
                     this.options.inline &&
                       ((this.originalRowRender = this.dt.options.rowRender),
@@ -3779,36 +3792,36 @@
                         );
                       })),
                     this.options.contextMenu &&
-                      ((this.containerDOM = n('div', {
+                      ((this.containerDOM = n("div", {
                         id: this.options.classes.container,
                       })),
-                      (this.wrapperDOM = n('div', {
+                      (this.wrapperDOM = n("div", {
                         class: this.options.classes.wrapper,
                       })),
-                      (this.menuDOM = n('ul', {
+                      (this.menuDOM = n("ul", {
                         class: this.options.classes.menu,
                       })),
                       this.options.menuItems &&
                         this.options.menuItems.length &&
                         this.options.menuItems.forEach((t) => {
-                          const e = n('li', {
+                          const e = n("li", {
                             class: t.separator
                               ? this.options.classes.separator
                               : this.options.classes.item,
                           });
                           if (!t.separator) {
-                            const s = n('a', {
+                            const s = n("a", {
                               class: this.options.classes.action,
-                              href: t.url || '#',
+                              href: t.url || "#",
                               html:
-                                'function' == typeof t.text
+                                "function" == typeof t.text
                                   ? t.text(this)
                                   : t.text,
                             });
                             (e.appendChild(s),
                               t.action &&
-                                'function' == typeof t.action &&
-                                s.addEventListener('click', (e) => {
+                                "function" == typeof t.action &&
+                                s.addEventListener("click", (e) => {
                                   (e.preventDefault(), t.action(this, e));
                                 }));
                           }
@@ -3824,7 +3837,7 @@
                     (this.editingCell = !1),
                     this.bindEvents(),
                     setTimeout(() => {
-                      ((this.initialized = !0), this.dt.emit('editable.init'));
+                      ((this.initialized = !0), this.dt.emit("editable.init"));
                     }, 10));
                 }
                 bindEvents() {
@@ -3834,9 +3847,9 @@
                   }),
                     this.dt.dom.addEventListener(
                       this.options.clickEvent,
-                      this.events.click
+                      this.events.click,
                     ),
-                    document.addEventListener('keydown', this.events.keydown),
+                    document.addEventListener("keydown", this.events.keydown),
                     this.options.contextMenu &&
                       ((this.events.context = this.context.bind(this)),
                       (this.events.updateMenu = this.updateMenu.bind(this)),
@@ -3849,21 +3862,21 @@
                         };
                       })(() => this.events.updateMenu(), 50)),
                       this.dt.dom.addEventListener(
-                        'contextmenu',
-                        this.events.context
+                        "contextmenu",
+                        this.events.context,
                       ),
                       document.addEventListener(
-                        'click',
-                        this.events.dismissMenu
+                        "click",
+                        this.events.dismissMenu,
                       ),
-                      window.addEventListener('resize', this.events.reset),
-                      window.addEventListener('scroll', this.events.reset)));
+                      window.addEventListener("resize", this.events.reset),
+                      window.addEventListener("scroll", this.events.reset)));
                 }
                 context(t) {
                   const e = t.target;
                   if (!(e instanceof Element)) return;
                   this.event = t;
-                  const s = e.closest('tbody td');
+                  const s = e.closest("tbody td");
                   if (!this.disabled && s) {
                     t.preventDefault();
                     let e = t.pageX,
@@ -3884,48 +3897,50 @@
                         e = this.modalDOM
                           ? this.modalDOM.querySelector(`input${t}[type=text]`)
                           : this.dt.wrapperDOM.querySelector(
-                              `input${t}[type=text]`
+                              `input${t}[type=text]`,
                             );
                       this.saveCell(e.value);
                     } else if (!this.editing) {
-                      const s = e.closest('tbody td');
+                      const s = e.closest("tbody td");
                       s && (this.editCell(s), t.preventDefault());
                     }
                 }
                 keydown(t) {
                   const e = c(this.options.classes.input);
                   if (this.modalDOM) {
-                    if ('Escape' === t.key)
+                    if ("Escape" === t.key)
                       this.options.cancelModal(this) && this.closeModal();
-                    else if ('Enter' === t.key)
+                    else if ("Enter" === t.key)
                       if (this.editingCell) {
                         const t = this.modalDOM.querySelector(
-                          `input${e}[type=text]`
+                          `input${e}[type=text]`,
                         );
                         this.saveCell(t.value);
                       } else {
                         const t = Array.from(
-                          this.modalDOM.querySelectorAll(`input${e}[type=text]`)
+                          this.modalDOM.querySelectorAll(
+                            `input${e}[type=text]`,
+                          ),
                         ).map((t) => t.value.trim());
                         this.saveRow(t, this.data.row);
                       }
                   } else if (this.editing && this.data)
-                    if ('Enter' === t.key) {
+                    if ("Enter" === t.key) {
                       if (this.editingCell) {
                         const t = this.dt.wrapperDOM.querySelector(
-                          `input${e}[type=text]`
+                          `input${e}[type=text]`,
                         );
                         this.saveCell(t.value);
                       } else if (this.editingRow) {
                         const t = Array.from(
                           this.dt.wrapperDOM.querySelectorAll(
-                            `input${e}[type=text]`
-                          )
+                            `input${e}[type=text]`,
+                          ),
                         ).map((t) => t.value.trim());
                         this.saveRow(t, this.data.row);
                       }
                     } else
-                      'Escape' === t.key &&
+                      "Escape" === t.key &&
                         (this.editingCell
                           ? this.saveCell(this.data.content)
                           : this.editingRow &&
@@ -3961,22 +3976,22 @@
                       `<div class='${this.options.classes.header}'>`,
                       `<h4>${this.options.labels.editCell}</h4>`,
                       `<button class='${this.options.classes.close}' type='button' data-editor-cancel>${this.options.labels.closeX}</button>`,
-                      ' </div>',
+                      " </div>",
                       `<div class='${this.options.classes.block}'>`,
                       `<form class='${this.options.classes.form}'>`,
                       `<div class='${this.options.classes.row}'>`,
                       `<label class='${this.options.classes.label}'>${r(s)}</label>`,
                       `<input class='${this.options.classes.input}' value='${r(o(t))}' type='text'>`,
-                      '</div>',
+                      "</div>",
                       `<div class='${this.options.classes.row}'>`,
                       `<button class='${this.options.classes.cancel}' type='button' data-editor-cancel>${this.options.labels.cancel}</button>`,
                       `<button class='${this.options.classes.save}' type='button' data-editor-save>${this.options.labels.save}</button>`,
-                      '</div>',
-                      '</form>',
-                      '</div>',
-                      '</div>',
-                    ].join(''),
-                    a = n('div', {
+                      "</div>",
+                      "</form>",
+                      "</div>",
+                      "</div>",
+                    ].join(""),
+                    a = n("div", {
                       class: this.options.classes.modal,
                       html: i,
                     });
@@ -3985,13 +4000,13 @@
                     d = a.querySelector(`input${l}[type=text]`);
                   (d.focus(),
                     (d.selectionStart = d.selectionEnd = d.value.length),
-                    a.addEventListener('click', (t) => {
+                    a.addEventListener("click", (t) => {
                       const e = t.target;
                       e instanceof Element &&
-                        (e.hasAttribute('data-editor-cancel')
+                        (e.hasAttribute("data-editor-cancel")
                           ? (t.preventDefault(),
                             this.options.cancelModal(this) && this.closeModal())
-                          : e.hasAttribute('data-editor-save') &&
+                          : e.hasAttribute("data-editor-save") &&
                             (t.preventDefault(), this.saveCell(d.value)));
                     }));
                 }
@@ -4002,19 +4017,19 @@
                       this.dt.options.type,
                     i = t.trim();
                   let n;
-                  if ('number' === s) n = { data: parseFloat(i) };
-                  else if ('boolean' === s)
-                    n = ['', 'false', '0'].includes(i)
-                      ? { data: !1, text: 'false', order: 0 }
-                      : { data: !0, text: 'true', order: 1 };
-                  else if ('html' === s)
+                  if ("number" === s) n = { data: parseFloat(i) };
+                  else if ("boolean" === s)
+                    n = ["", "false", "0"].includes(i)
+                      ? { data: !1, text: "false", order: 0 }
+                      : { data: !0, text: "true", order: 1 };
+                  else if ("html" === s)
                     n = {
-                      data: [{ nodeName: '#text', data: t }],
+                      data: [{ nodeName: "#text", data: t }],
                       text: t,
                       order: t,
                     };
-                  else if ('string' === s) n = { data: t };
-                  else if ('date' === s) {
+                  else if ("string" === s) n = { data: t };
+                  else if ("date" === s) {
                     const e =
                       this.dt.columns.settings[this.data.columnIndex].format ||
                       this.dt.options.format;
@@ -4030,10 +4045,10 @@
                     this.dt.update(!0),
                     (this.editing = !1),
                     (this.editingCell = !1),
-                    this.dt.emit('editable.save.cell', t, e, a, o));
+                    this.dt.emit("editable.save.cell", t, e, a, o));
                 }
                 editRow(t) {
-                  if (!t || 'TR' !== t.nodeName || this.editing) return;
+                  if (!t || "TR" !== t.nodeName || this.editing) return;
                   const e = parseInt(t.dataset.index, 10),
                     s = this.dt.data.data[e];
                   ((this.data = { row: s.cells, rowIndex: e }),
@@ -4051,18 +4066,18 @@
                       `<div class='${this.options.classes.header}'>`,
                       `<h4>${this.options.labels.editRow}</h4>`,
                       `<button class='${this.options.classes.close}' type='button' data-editor-cancel>${this.options.labels.closeX}</button>`,
-                      ' </div>',
+                      " </div>",
                       `<div class='${this.options.classes.block}'>`,
                       `<form class='${this.options.classes.form}'>`,
                       `<div class='${this.options.classes.row}'>`,
                       `<button class='${this.options.classes.cancel}' type='button' data-editor-cancel>${this.options.labels.cancel}</button>`,
                       `<button class='${this.options.classes.save}' type='button' data-editor-save>${this.options.labels.save}</button>`,
-                      '</div>',
-                      '</form>',
-                      '</div>',
-                      '</div>',
-                    ].join(''),
-                    s = n('div', {
+                      "</div>",
+                      "</form>",
+                      "</div>",
+                      "</div>",
+                    ].join(""),
+                    s = n("div", {
                       class: this.options.classes.modal,
                       html: e,
                     }),
@@ -4080,16 +4095,16 @@
                         this.dt.data.headings[e].text ||
                         String(this.dt.data.headings[e].data);
                       a.insertBefore(
-                        n('div', {
+                        n("div", {
                           class: this.options.classes.row,
                           html: [
                             `<div class='${this.options.classes.row}'>`,
                             `<label class='${this.options.classes.label}'>${r(s)}</label>`,
                             `<input class='${this.options.classes.input}' value='${r(o(t))}' type='text'>`,
-                            '</div>',
-                          ].join(''),
+                            "</div>",
+                          ].join(""),
                         }),
-                        a.lastElementChild
+                        a.lastElementChild,
                       );
                     }
                   }),
@@ -4097,12 +4112,12 @@
                     this.openModal());
                   const l = c(this.options.classes.input),
                     d = Array.from(a.querySelectorAll(`input${l}[type=text]`));
-                  s.addEventListener('click', (t) => {
+                  s.addEventListener("click", (t) => {
                     const e = t.target;
                     if (e instanceof Element)
-                      if (e.hasAttribute('data-editor-cancel'))
+                      if (e.hasAttribute("data-editor-cancel"))
                         this.options.cancelModal(this) && this.closeModal();
-                      else if (e.hasAttribute('data-editor-save')) {
+                      else if (e.hasAttribute("data-editor-save")) {
                         const t = d.map((t) => t.value.trim());
                         this.saveRow(t, this.data.row);
                       }
@@ -4124,19 +4139,19 @@
                           this.dt.options.type,
                         a = t[s++];
                       let o;
-                      if ('number' === n) o = { data: parseFloat(a) };
-                      else if ('boolean' === n)
-                        o = ['', 'false', '0'].includes(a)
-                          ? { data: !1, text: 'false', order: 0 }
-                          : { data: !0, text: 'true', order: 1 };
-                      else if ('html' === n)
+                      if ("number" === n) o = { data: parseFloat(a) };
+                      else if ("boolean" === n)
+                        o = ["", "false", "0"].includes(a)
+                          ? { data: !1, text: "false", order: 0 }
+                          : { data: !0, text: "true", order: 1 };
+                      else if ("html" === n)
                         o = {
-                          data: [{ nodeName: '#text', data: a }],
+                          data: [{ nodeName: "#text", data: a }],
                           text: a,
                           order: a,
                         };
-                      else if ('string' === n) o = { data: a };
-                      else if ('date' === n) {
+                      else if ("string" === n) o = { data: a };
+                      else if ("date" === n) {
                         const t =
                           this.dt.columns.settings[i].format ||
                           this.dt.options.format;
@@ -4150,7 +4165,7 @@
                     this.dt.update(!0),
                     this.closeModal(),
                     (this.editing = !1),
-                    this.dt.emit('editable.save.row', n, s, e));
+                    this.dt.emit("editable.save.row", n, s, e));
                 }
                 openModal() {
                   this.modalDOM && document.body.appendChild(this.modalDOM);
@@ -4166,7 +4181,7 @@
                         !1));
                 }
                 removeRow(t) {
-                  if (!t || 'TR' !== t.nodeName || this.editing) return;
+                  if (!t || "TR" !== t.nodeName || this.editing) return;
                   const e = parseInt(t.dataset.index, 10);
                   (this.dt.rows.remove(e), this.closeMenu());
                 }
@@ -4196,39 +4211,39 @@
                       e = this.modalDOM
                         ? this.modalDOM.querySelector(`input${t}[type=text]`)
                         : this.dt.wrapperDOM.querySelector(
-                            `input${t}[type=text]`
+                            `input${t}[type=text]`,
                           );
                     this.saveCell(e.value);
                   }
                   (document.body.appendChild(this.containerDOM),
                     (this.menuOpen = !0),
-                    this.dt.emit('editable.context.open'));
+                    this.dt.emit("editable.context.open"));
                 }
                 closeMenu() {
                   this.menuOpen &&
                     ((this.menuOpen = !1),
                     document.body.removeChild(this.containerDOM),
-                    this.dt.emit('editable.context.close'));
+                    this.dt.emit("editable.context.close"));
                 }
                 destroy() {
                   (this.dt.dom.removeEventListener(
                     this.options.clickEvent,
-                    this.events.click
+                    this.events.click,
                   ),
                     this.dt.dom.removeEventListener(
-                      'contextmenu',
-                      this.events.context
+                      "contextmenu",
+                      this.events.context,
                     ),
                     document.removeEventListener(
-                      'click',
-                      this.events.dismissMenu
+                      "click",
+                      this.events.dismissMenu,
                     ),
                     document.removeEventListener(
-                      'keydown',
-                      this.events.keydown
+                      "keydown",
+                      this.events.keydown,
                     ),
-                    window.removeEventListener('resize', this.events.reset),
-                    window.removeEventListener('scroll', this.events.reset),
+                    window.removeEventListener("resize", this.events.reset),
+                    window.removeEventListener("scroll", this.events.reset),
                     document.body.contains(this.containerDOM) &&
                       document.body.removeChild(this.containerDOM),
                     this.options.inline &&
@@ -4247,9 +4262,9 @@
                             })(this.data.columnIndex, this.dt.columns.settings)
                           ].childNodes = [
                             {
-                              nodeName: 'INPUT',
+                              nodeName: "INPUT",
                               attributes: {
-                                type: 'text',
+                                type: "text",
                                 value: this.data.content,
                                 class: this.options.classes.input,
                               },
@@ -4261,10 +4276,10 @@
                             this.options.excludeColumns.includes(n) ||
                               (e.childNodes[i].childNodes = [
                                 {
-                                  nodeName: 'INPUT',
+                                  nodeName: "INPUT",
                                   attributes: {
-                                    type: 'text',
-                                    value: r(a.text || String(a.data) || ''),
+                                    type: "text",
+                                    value: r(a.text || String(a.data) || ""),
                                     class: this.options.classes.input,
                                   },
                                 },
@@ -4276,12 +4291,12 @@
               }
               const nt = {
                 classes: {
-                  button: 'datatable-column-filter-button',
-                  menu: 'datatable-column-filter-menu',
-                  container: 'datatable-column-filter-container',
-                  wrapper: 'datatable-column-filter-wrapper',
+                  button: "datatable-column-filter-button",
+                  menu: "datatable-column-filter-menu",
+                  container: "datatable-column-filter-container",
+                  wrapper: "datatable-column-filter-wrapper",
                 },
-                labels: { button: 'Filter columns within the table' },
+                labels: { button: "Filter columns within the table" },
                 hiddenColumns: [],
               };
               class at {
@@ -4306,9 +4321,9 @@
                   const t = c(this.options.classes.button);
                   let e = this.dt.wrapperDOM.querySelector(t);
                   if (!e) {
-                    e = n('button', {
+                    e = n("button", {
                       class: this.options.classes.button,
-                      html: '▦',
+                      html: "▦",
                     });
                     const t = c(this.dt.options.classes.search),
                       s = this.dt.wrapperDOM.querySelector(t);
@@ -4316,22 +4331,22 @@
                       (this.addedButtonDOM = !0));
                   }
                   ((this.buttonDOM = e),
-                    (this.containerDOM = n('div', {
+                    (this.containerDOM = n("div", {
                       id: this.options.classes.container,
                     })),
-                    (this.wrapperDOM = n('div', {
+                    (this.wrapperDOM = n("div", {
                       class: this.options.classes.wrapper,
                     })),
-                    (this.menuDOM = n('ul', {
+                    (this.menuDOM = n("ul", {
                       class: this.options.classes.menu,
                       html: this.dt.data.headings
                         .map((t, e) => {
                           const s = this.dt.columns.settings[e];
                           return this.options.hiddenColumns.includes(e)
-                            ? ''
-                            : `<li data-column="${e}">\n                        <input type="checkbox" value="${t.text || t.data}" ${s.hidden ? '' : "checked=''"}>\n                        <label>\n                            ${t.text || t.data}\n                        </label>\n                    </li>`;
+                            ? ""
+                            : `<li data-column="${e}">\n                        <input type="checkbox" value="${t.text || t.data}" ${s.hidden ? "" : "checked=''"}>\n                        <label>\n                            ${t.text || t.data}\n                        </label>\n                    </li>`;
                         })
-                        .join(''),
+                        .join(""),
                     })),
                     this.wrapperDOM.appendChild(this.menuDOM),
                     this.containerDOM.appendChild(this.wrapperDOM),
@@ -4343,23 +4358,23 @@
                   (this.addedButtonDOM &&
                     this.buttonDOM.parentElement &&
                     this.buttonDOM.parentElement.removeChild(this.buttonDOM),
-                    document.removeEventListener('click', this.events.click));
+                    document.removeEventListener("click", this.events.click));
                 }
                 _bind() {
                   ((this.events = { click: this._click.bind(this) }),
-                    document.addEventListener('click', this.events.click));
+                    document.addEventListener("click", this.events.click));
                 }
                 _openMenu() {
                   (document.body.appendChild(this.containerDOM),
                     this._measureSpace(),
                     (this.menuOpen = !0),
-                    this.dt.emit('columnFilter.menu.open'));
+                    this.dt.emit("columnFilter.menu.open"));
                 }
                 _closeMenu() {
                   this.menuOpen &&
                     ((this.menuOpen = !1),
                     document.body.removeChild(this.containerDOM),
-                    this.dt.emit('columnFilter.menu.close'));
+                    this.dt.emit("columnFilter.menu.close"));
                 }
                 _measureSpace() {
                   const t = window.scrollX || window.pageXOffset,
@@ -4387,7 +4402,7 @@
                       const t = c(this.options.classes.menu),
                         s = e.closest(`${t} > li`);
                       if (!s) return;
-                      const i = s.querySelector('input[type=checkbox]');
+                      const i = s.querySelector("input[type=checkbox]");
                       i.contains(e) || (i.checked = !i.checked);
                       const n = Number(s.dataset.column);
                       i.checked
@@ -4431,10 +4446,10 @@
                 wrapperDOM;
                 constructor(t, e = {}) {
                   const s =
-                    'string' == typeof t ? document.querySelector(t) : t;
+                    "string" == typeof t ? document.querySelector(t) : t;
                   s instanceof HTMLTableElement
                     ? (this.dom = s)
-                    : ((this.dom = document.createElement('table')),
+                    : ((this.dom = document.createElement("table")),
                       s.appendChild(this.dom));
                   const i = { ...tt.diffDomOptions, ...e.diffDomOptions },
                     n = { ...tt.labels, ...e.labels },
@@ -4448,7 +4463,7 @@
                   }),
                     (this._initialHTML = this.options.destroyable
                       ? s.outerHTML
-                      : ''),
+                      : ""),
                     this.options.tabIndex
                       ? (this.dom.tabIndex = this.options.tabIndex)
                       : this.options.rowNavigation &&
@@ -4473,24 +4488,24 @@
                     return !1;
                   ((this._virtualDOM = T(
                     this.dom,
-                    this.options.diffDomOptions || {}
+                    this.options.diffDomOptions || {},
                   )),
                     (this._tableAttributes = {
                       ...this._virtualDOM.attributes,
                     }),
                     (this._tableFooters =
                       this._virtualDOM.childNodes?.filter(
-                        (t) => 'TFOOT' === t.nodeName
+                        (t) => "TFOOT" === t.nodeName,
                       ) ?? []),
                     (this._tableCaptions =
                       this._virtualDOM.childNodes?.filter(
-                        (t) => 'CAPTION' === t.nodeName
+                        (t) => "CAPTION" === t.nodeName,
                       ) ?? []),
                     void 0 !== this.options.caption &&
                       this._tableCaptions.push({
-                        nodeName: 'CAPTION',
+                        nodeName: "CAPTION",
                         childNodes: [
-                          { nodeName: '#text', data: this.options.caption },
+                          { nodeName: "#text", data: this.options.caption },
                         ],
                       }),
                     (this.rows = new G(this)),
@@ -4500,20 +4515,20 @@
                       this.dom,
                       this.columns.settings,
                       this.options.type,
-                      this.options.format
+                      this.options.format,
                     )),
                     this._render(),
                     setTimeout(() => {
-                      (this.emit('datatable.init'), (this.initialized = !0));
+                      (this.emit("datatable.init"), (this.initialized = !0));
                     }, 10));
                 }
                 _render() {
-                  ((this.wrapperDOM = n('div', {
+                  ((this.wrapperDOM = n("div", {
                     class: `${this.options.classes.wrapper} ${this.options.classes.loading}`,
                   })),
                     (this.wrapperDOM.innerHTML = this.options.template(
                       this.options,
-                      this.dom
+                      this.dom,
                     )));
                   const t = c(this.options.classes.selector),
                     e = this.wrapperDOM.querySelector(`select${t}`);
@@ -4536,10 +4551,10 @@
                       t instanceof HTMLElement &&
                         ((t.innerHTML = `<ul class="${this.options.classes.paginationList}"></ul>`),
                         this._pagerDOMs.push(t.firstElementChild));
-                    }
+                    },
                   ),
                     (this._virtualPagerDOM = {
-                      nodeName: 'UL',
+                      nodeName: "UL",
                       attributes: {
                         class: this.options.classes.paginationList,
                       },
@@ -4548,29 +4563,29 @@
                   ((this._label = this.wrapperDOM.querySelector(a)),
                     this.dom.parentElement.replaceChild(
                       this.wrapperDOM,
-                      this.dom
+                      this.dom,
                     ),
                     this.containerDOM.appendChild(this.dom),
                     (this._rect = this.dom.getBoundingClientRect()),
                     this._fixHeight(),
                     this.options.header ||
-                      this.wrapperDOM.classList.add('no-header'),
+                      this.wrapperDOM.classList.add("no-header"),
                     this.options.footer ||
-                      this.wrapperDOM.classList.add('no-footer'),
+                      this.wrapperDOM.classList.add("no-footer"),
                     this.options.sortable &&
-                      this.wrapperDOM.classList.add('sortable'),
+                      this.wrapperDOM.classList.add("sortable"),
                     this.options.searchable &&
-                      this.wrapperDOM.classList.add('searchable'),
+                      this.wrapperDOM.classList.add("searchable"),
                     this.options.fixedHeight &&
-                      this.wrapperDOM.classList.add('fixed-height'),
+                      this.wrapperDOM.classList.add("fixed-height"),
                     this.options.fixedColumns &&
-                      this.wrapperDOM.classList.add('fixed-columns'),
+                      this.wrapperDOM.classList.add("fixed-columns"),
                     this._bindEvents(),
                     this.columns._state.sort &&
                       this.columns.sort(
                         this.columns._state.sort.column,
                         this.columns._state.sort.dir,
-                        !0
+                        !0,
                       ),
                     this.update(!0));
                 }
@@ -4595,10 +4610,10 @@
                     this.options,
                     t,
                     this._tableFooters,
-                    this._tableCaptions
+                    this._tableCaptions,
                   );
                   if (this.options.tableRender) {
-                    const t = this.options.tableRender(this.data, s, 'main');
+                    const t = this.options.tableRender(this.data, s, "main");
                     t && (s = t);
                   }
                   const i = this._dd.diff(this._virtualDOM, s);
@@ -4628,12 +4643,12 @@
                     this._label && this.options.labels.info.length)
                   ) {
                     const t = this.options.labels.info
-                      .replace('{start}', String(i))
-                      .replace('{end}', String(n))
-                      .replace('{page}', String(this._currentPage))
-                      .replace('{pages}', String(this.totalPages))
-                      .replace('{rows}', String(e));
-                    this._label.innerHTML = e ? t : '';
+                      .replace("{start}", String(i))
+                      .replace("{end}", String(n))
+                      .replace("{page}", String(this._currentPage))
+                      .replace("{pages}", String(this.totalPages))
+                      .replace("{rows}", String(e));
+                    this._label.innerHTML = e ? t : "";
                   }
                   if (
                     (1 == this._currentPage && this._fixHeight(),
@@ -4641,7 +4656,7 @@
                       this._currentPage &&
                       (!this.rows.cursor ||
                         !this.pages[this._currentPage - 1].find(
-                          (t) => t.index === this.rows.cursor
+                          (t) => t.index === this.rows.cursor,
                         )))
                   ) {
                     const e = this.pages[this._currentPage - 1];
@@ -4662,7 +4677,7 @@
                       a.push(et(e, n.prevText, n, { hidden: t }));
                     }
                     let o = [...Array(i).keys()].map((t) =>
-                      et(t + 1, String(t + 1), n, { active: t === s - 1 })
+                      et(t + 1, String(t + 1), n, { active: t === s - 1 }),
                     );
                     if (
                       (n.truncatePager &&
@@ -4687,29 +4702,29 @@
                           return (
                             c.forEach((e) => {
                               const s = parseInt(
-                                e.childNodes[0].attributes['data-page'],
-                                10
+                                e.childNodes[0].attributes["data-page"],
+                                10,
                               );
                               if (h) {
                                 const e = parseInt(
-                                  h.childNodes[0].attributes['data-page'],
-                                  10
+                                  h.childNodes[0].attributes["data-page"],
+                                  10,
                                 );
                                 if (s - e == 2) u.push(t[e]);
                                 else if (s - e != 1) {
                                   const t = {
-                                    nodeName: 'LI',
+                                    nodeName: "LI",
                                     attributes: {
                                       class: `${a.paginationListItem} ${a.ellipsis} ${a.disabled}`,
                                     },
                                     childNodes: [
                                       {
-                                        nodeName: 'BUTTON',
+                                        nodeName: "BUTTON",
                                         attributes: {
                                           class: a.paginationListItemLink,
                                         },
                                         childNodes: [
-                                          { nodeName: '#text', data: o },
+                                          { nodeName: "#text", data: o },
                                         ],
                                       },
                                     ],
@@ -4731,7 +4746,7 @@
                     return (
                       n.firstLast && a.push(et(i, n.lastText, n)),
                       {
-                        nodeName: 'UL',
+                        nodeName: "UL",
                         attributes: { class: n.classes.paginationList },
                         childNodes: o.length > 1 ? a : [],
                       }
@@ -4741,7 +4756,7 @@
                     this.onLastPage,
                     this._currentPage,
                     this.totalPages,
-                    this.options
+                    this.options,
                   );
                   if (this.options.pagerRender) {
                     const e = this.options.pagerRender(
@@ -4751,7 +4766,7 @@
                         this._currentPage,
                         this.totalPages,
                       ],
-                      t
+                      t,
                     );
                     e && (t = e);
                   }
@@ -4764,22 +4779,22 @@
                 _renderSeparateHeader() {
                   const t = this.dom.parentElement;
                   (this.headerDOM ||
-                    ((this.headerDOM = document.createElement('div')),
-                    (this._virtualHeaderDOM = { nodeName: 'DIV' })),
+                    ((this.headerDOM = document.createElement("div")),
+                    (this._virtualHeaderDOM = { nodeName: "DIV" })),
                     t.parentElement.insertBefore(this.headerDOM, t));
                   let e = {
-                    nodeName: 'TABLE',
+                    nodeName: "TABLE",
                     attributes: this._tableAttributes,
                     childNodes: [
                       {
-                        nodeName: 'THEAD',
+                        nodeName: "THEAD",
                         childNodes: [
                           F(
                             this.data.headings,
                             this.columns.settings,
                             this.columns._state,
                             this.options,
-                            { unhideHeader: !0 }
+                            { unhideHeader: !0 },
                           ),
                         ],
                       },
@@ -4788,15 +4803,15 @@
                   if (
                     ((e.attributes.class = u(
                       e.attributes.class,
-                      this.options.classes.table
+                      this.options.classes.table,
                     )),
                     this.options.tableRender)
                   ) {
-                    const t = this.options.tableRender(this.data, e, 'header');
+                    const t = this.options.tableRender(this.data, e, "header");
                     t && (e = t);
                   }
                   const s = {
-                      nodeName: 'DIV',
+                      nodeName: "DIV",
                       attributes: {
                         class: this.options.classes.headercontainer,
                       },
@@ -4816,7 +4831,7 @@
                       (this._virtualHeaderDOM = t));
                   }
                   t.scrollHeight > t.clientHeight &&
-                    (t.style.overflowY = 'scroll');
+                    (t.style.overflowY = "scroll");
                 }
                 _bindEvents() {
                   if (this.options.perPageSelect) {
@@ -4825,21 +4840,21 @@
                     e &&
                       e instanceof HTMLSelectElement &&
                       e.addEventListener(
-                        'change',
+                        "change",
                         () => {
                           ((this.options.perPage = parseInt(e.value, 10)),
                             this.update(),
                             this._fixHeight(),
                             this.emit(
-                              'datatable.perpage',
-                              this.options.perPage
+                              "datatable.perpage",
+                              this.options.perPage,
                             ));
                         },
-                        !1
+                        !1,
                       );
                   }
                   (this.options.searchable &&
-                    this.wrapperDOM.addEventListener('input', (t) => {
+                    this.wrapperDOM.addEventListener("input", (t) => {
                       const e = c(this.options.classes.input),
                         s = t.target;
                       if (!(s instanceof HTMLInputElement && s.matches(e)))
@@ -4855,7 +4870,7 @@
                                 t.dataset.querySeparator ||
                                 this.options.searchQuerySeparator
                                   ? t.value.split(
-                                      this.options.searchQuerySeparator
+                                      this.options.searchQuerySeparator,
                                     )
                                   : [t.value];
                             e
@@ -4881,100 +4896,100 @@
                       } else this.multiSearch(i);
                     }),
                     this.wrapperDOM.addEventListener(
-                      'click',
+                      "click",
                       (t) => {
-                        const e = t.target.closest('a, button');
+                        const e = t.target.closest("a, button");
                         if (e)
-                          if (e.hasAttribute('data-page'))
+                          if (e.hasAttribute("data-page"))
                             (this.page(
-                              parseInt(e.getAttribute('data-page'), 10)
+                              parseInt(e.getAttribute("data-page"), 10),
                             ),
                               t.preventDefault());
                           else if (h(e, this.options.classes.sorter)) {
                             const s = Array.from(
-                                e.parentElement.parentElement.children
+                                e.parentElement.parentElement.children,
                               ).indexOf(e.parentElement),
                               i = l(s, this.columns.settings);
                             (this.columns.sort(i), t.preventDefault());
                           } else if (h(e, this.options.classes.filter)) {
                             const s = Array.from(
-                                e.parentElement.parentElement.children
+                                e.parentElement.parentElement.children,
                               ).indexOf(e.parentElement),
                               i = l(s, this.columns.settings);
                             (this.columns.filter(i), t.preventDefault());
                           }
                       },
-                      !1
+                      !1,
                     ),
                     this.options.rowNavigation
-                      ? (this.dom.addEventListener('keydown', (t) => {
-                          if ('ArrowUp' === t.key) {
+                      ? (this.dom.addEventListener("keydown", (t) => {
+                          if ("ArrowUp" === t.key) {
                             let e;
                             (t.preventDefault(),
                               t.stopPropagation(),
                               this.pages[this._currentPage - 1].find(
                                 (t) =>
-                                  t.index === this.rows.cursor || ((e = t), !1)
+                                  t.index === this.rows.cursor || ((e = t), !1),
                               ),
                               e
                                 ? this.rows.setCursor(e.index)
                                 : this.onFirstPage ||
                                   this.page(this._currentPage - 1, !0));
-                          } else if ('ArrowDown' === t.key) {
+                          } else if ("ArrowDown" === t.key) {
                             let e;
                             (t.preventDefault(), t.stopPropagation());
                             const s = this.pages[this._currentPage - 1].find(
                               (t) =>
                                 !!e ||
-                                (t.index === this.rows.cursor && (e = !0), !1)
+                                (t.index === this.rows.cursor && (e = !0), !1),
                             );
                             s
                               ? this.rows.setCursor(s.index)
                               : this.onLastPage ||
                                 this.page(this._currentPage + 1);
                           } else
-                            ['Enter', ' '].includes(t.key) &&
+                            ["Enter", " "].includes(t.key) &&
                               this.emit(
-                                'datatable.selectrow',
+                                "datatable.selectrow",
                                 this.rows.cursor,
-                                t
+                                t,
                               );
                         }),
-                        this.dom.addEventListener('mousedown', (t) => {
+                        this.dom.addEventListener("mousedown", (t) => {
                           const e = t.target;
                           if (
                             e instanceof Element &&
-                            this.dom.matches(':focus')
+                            this.dom.matches(":focus")
                           ) {
                             const s = Array.from(
-                              this.dom.querySelectorAll('tbody > tr')
+                              this.dom.querySelectorAll("tbody > tr"),
                             ).find((t) => t.contains(e));
                             s &&
                               s instanceof HTMLElement &&
                               this.emit(
-                                'datatable.selectrow',
+                                "datatable.selectrow",
                                 parseInt(s.dataset.index, 10),
-                                t
+                                t,
                               );
                           }
                         }))
-                      : this.dom.addEventListener('mousedown', (t) => {
+                      : this.dom.addEventListener("mousedown", (t) => {
                           const e = t.target;
                           if (!(e instanceof Element)) return;
                           const s = Array.from(
-                            this.dom.querySelectorAll('tbody > tr')
+                            this.dom.querySelectorAll("tbody > tr"),
                           ).find((t) => t.contains(e));
                           s &&
                             s instanceof HTMLElement &&
                             this.emit(
-                              'datatable.selectrow',
+                              "datatable.selectrow",
                               parseInt(s.dataset.index, 10),
-                              t
+                              t,
                             );
                         }),
                     window.addEventListener(
-                      'resize',
-                      this._listeners.onResize
+                      "resize",
+                      this._listeners.onResize,
                     ));
                 }
                 _onResize() {
@@ -4984,19 +4999,19 @@
                 destroy() {
                   if (this.options.destroyable) {
                     if (this.wrapperDOM.parentElement) {
-                      const t = n('div');
+                      const t = n("div");
                       ((t.innerHTML = this._initialHTML),
                         this.wrapperDOM.parentElement.replaceChild(
                           t.firstElementChild,
-                          this.wrapperDOM
+                          this.wrapperDOM,
                         ));
                     } else
                       this.options.classes.table
-                        ?.split(' ')
+                        ?.split(" ")
                         .forEach((t) => this.wrapperDOM.classList.remove(t));
                     (window.removeEventListener(
-                      'resize',
-                      this._listeners.onResize
+                      "resize",
+                      this._listeners.onResize,
                     ),
                       (this.initialized = !1));
                   }
@@ -5007,13 +5022,13 @@
                     (this.hasRows = Boolean(this.data.data.length)),
                     (this.hasHeadings = Boolean(this.data.headings.length))),
                     this.options.classes.empty
-                      ?.split(' ')
+                      ?.split(" ")
                       .forEach((t) => this.wrapperDOM.classList.remove(t)),
                     this._paginate(),
                     this._renderPage(),
                     this._renderPagers(),
                     this.options.scrollY.length && this._renderSeparateHeader(),
-                    this.emit('datatable.update'));
+                    this.emit("datatable.update"));
                 }
                 _paginate() {
                   let t = this.data.data.map((t, e) => ({ row: t, index: e }));
@@ -5021,14 +5036,14 @@
                     this._searchQueries.length &&
                       ((t = []),
                       this._searchData.forEach((e) =>
-                        t.push({ index: e, row: this.data.data[e] })
+                        t.push({ index: e, row: this.data.data[e] }),
                       )),
                     this.columns._state.filters.length &&
                       this.columns._state.filters.forEach((e, s) => {
                         e &&
                           (t = t.filter((t) => {
                             const i = t.row.cells[s];
-                            return 'function' == typeof e
+                            return "function" == typeof e
                               ? e(i.data)
                               : o(i) === e;
                           }));
@@ -5038,7 +5053,7 @@
                           .map((e, s) =>
                             s % this.options.perPage == 0
                               ? t.slice(s, s + this.options.perPage)
-                              : null
+                              : null,
                           )
                           .filter((t) => t))
                       : (this.pages = [t]),
@@ -5060,12 +5075,12 @@
                       (this._searchQueries = []),
                       (this._searchData = []),
                       this.update(),
-                      this.emit('datatable.search', '', []),
-                      this.wrapperDOM.classList.remove('search-results'),
+                      this.emit("datatable.search", "", []),
+                      this.wrapperDOM.classList.remove("search-results"),
                       !1
                     );
                   (this.multiSearch([{ terms: [t], columns: e || void 0 }]),
-                    this.emit('datatable.search', t, this._searchData));
+                    this.emit("datatable.search", t, this._searchData));
                 }
                 multiSearch(t) {
                   if (!this.hasRows) return !1;
@@ -5079,8 +5094,8 @@
                   if (((this._searchQueries = e), !e.length))
                     return (
                       this.update(),
-                      this.emit('datatable.multisearch', e, this._searchData),
-                      this.wrapperDOM.classList.remove('search-results'),
+                      this.emit("datatable.multisearch", e, this._searchData),
+                      this.wrapperDOM.classList.remove("search-results"),
                       !1
                     );
                   const s = e.map((t) =>
@@ -5094,20 +5109,20 @@
                       let i = t.terms;
                       const n = e.sensitivity || this.options.sensitivity;
                       return (
-                        ['base', 'accent'].includes(n) &&
+                        ["base", "accent"].includes(n) &&
                           (i = i.map((t) => t.toLowerCase())),
-                        ['base', 'case'].includes(n) &&
+                        ["base", "case"].includes(n) &&
                           (i = i.map((t) =>
-                            t.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+                            t.normalize("NFD").replace(/\p{Diacritic}/gu, ""),
                           )),
                         (e.ignorePunctuation ??
                           this.options.ignorePunctuation) &&
                           (i = i.map((t) =>
-                            t.replace(/[.,/#!$%^&*;:{}=-_`~()]/g, '')
+                            t.replace(/[.,/#!$%^&*;:{}=-_`~()]/g, ""),
                           )),
                         i
                       );
-                    })
+                    }),
                   );
                   (this.data.data.forEach((t, e) => {
                     const i = t.cells.map((t, e) => {
@@ -5115,15 +5130,15 @@
                       const i = this.columns.settings[e];
                       if (s.length) {
                         const t = i.sensitivity || this.options.sensitivity;
-                        (['base', 'accent'].includes(t) &&
+                        (["base", "accent"].includes(t) &&
                           (s = s.toLowerCase()),
-                          ['base', 'case'].includes(t) &&
+                          ["base", "case"].includes(t) &&
                             (s = s
-                              .normalize('NFD')
-                              .replace(/\p{Diacritic}/gu, '')),
+                              .normalize("NFD")
+                              .replace(/\p{Diacritic}/gu, "")),
                           (i.ignorePunctuation ??
                             this.options.ignorePunctuation) &&
-                            (s = s.replace(/[.,/#!$%^&*;:{}=-_`~()]/g, '')));
+                            (s = s.replace(/[.,/#!$%^&*;:{}=-_`~()]/g, "")));
                       }
                       const n =
                         i.searchItemSeparator ||
@@ -5133,16 +5148,16 @@
                     s.every((t) =>
                       t.find(
                         (t, e) =>
-                          !!t && t.find((t) => i[e].find((e) => e.includes(t)))
-                      )
+                          !!t && t.find((t) => i[e].find((e) => e.includes(t))),
+                      ),
                     ) && this._searchData.push(e);
                   }),
-                    this.wrapperDOM.classList.add('search-results'),
+                    this.wrapperDOM.classList.add("search-results"),
                     this._searchData.length
                       ? this.update()
-                      : (this.wrapperDOM.classList.remove('search-results'),
+                      : (this.wrapperDOM.classList.remove("search-results"),
                         this.setMessage(this.options.labels.noResults)),
-                    this.emit('datatable.multisearch', e, this._searchData));
+                    this.emit("datatable.multisearch", e, this._searchData));
                 }
                 page(t, e = !1) {
                   return (
@@ -5151,14 +5166,14 @@
                     !(t > this.pages.length || t < 0) &&
                       (this._renderPage(e),
                       this._renderPagers(),
-                      void this.emit('datatable.page', t)))
+                      void this.emit("datatable.page", t)))
                   );
                 }
                 insert(t) {
                   let s = [];
                   if (Array.isArray(t)) {
                     const e = this.data.headings.map((t) =>
-                      t.data ? String(t.data) : t.text
+                      t.data ? String(t.data) : t.text,
                     );
                     t.forEach((t, i) => {
                       const n = [];
@@ -5171,7 +5186,7 @@
                             0 !== i ||
                             ((n[e.length] = Q(
                               s,
-                              this.columns.settings[e.length]
+                              this.columns.settings[e.length],
                             )),
                             e.push(t),
                             this.data.headings.push(X(t)));
@@ -5192,7 +5207,7 @@
                               {
                                 attributes: e,
                                 cells: s.map((t, e) =>
-                                  Q(t, this.columns.settings[e])
+                                  Q(t, this.columns.settings[e]),
                                 ),
                               }
                             );
@@ -5202,7 +5217,7 @@
                             void 0,
                             this.columns.settings,
                             this.options.type,
-                            this.options.format
+                            this.options.format,
                           )));
                   (s.length && s.forEach((t) => this.data.data.push(t)),
                     (this.hasHeadings = Boolean(this.data.headings.length)),
@@ -5210,7 +5225,7 @@
                       this.columns.sort(
                         this.columns._state.sort.column,
                         this.columns._state.sort.dir,
-                        !0
+                        !0,
                       ),
                     this.update(!0));
                 }
@@ -5218,17 +5233,17 @@
                   if (this.options.searchable) {
                     const t = c(this.options.classes.input);
                     (Array.from(this.wrapperDOM.querySelectorAll(t)).forEach(
-                      (t) => (t.value = '')
+                      (t) => (t.value = ""),
                     ),
                       (this._searchQueries = []));
                   }
                   ((this._currentPage = 1),
                     (this.onFirstPage = !0),
                     this.update(!0),
-                    this.emit('datatable.refresh'));
+                    this.emit("datatable.refresh"));
                 }
                 print() {
-                  const t = n('table');
+                  const t = n("table");
                   let e = B(
                     this._tableAttributes,
                     this.data.headings,
@@ -5239,13 +5254,13 @@
                     this.options,
                     { noColumnWidths: !0, unhideHeader: !0 },
                     this._tableFooters,
-                    this._tableCaptions
+                    this._tableCaptions,
                   );
                   if (this.options.tableRender) {
-                    const t = this.options.tableRender(this.data, e, 'print');
+                    const t = this.options.tableRender(this.data, e, "print");
                     t && (e = t);
                   }
-                  const s = this._dd.diff({ nodeName: 'TABLE' }, e);
+                  const s = this._dd.diff({ nodeName: "TABLE" }, e);
                   this._dd.apply(t, s);
                   const i = window.open();
                   (i.document.body.appendChild(t), i.print());
@@ -5253,43 +5268,43 @@
                 setMessage(t) {
                   const e =
                     this.data.headings.filter(
-                      (t, e) => !this.columns.settings[e]?.hidden
+                      (t, e) => !this.columns.settings[e]?.hidden,
                     ).length || 1;
                   (this.options.classes.empty
-                    ?.split(' ')
+                    ?.split(" ")
                     .forEach((t) => this.wrapperDOM.classList.add(t)),
-                    this._label && (this._label.innerHTML = ''),
+                    this._label && (this._label.innerHTML = ""),
                     (this.totalPages = 0),
                     this._renderPagers());
                   let s = {
-                    nodeName: 'TABLE',
+                    nodeName: "TABLE",
                     attributes: this._tableAttributes,
                     childNodes: [
                       {
-                        nodeName: 'THEAD',
+                        nodeName: "THEAD",
                         childNodes: [
                           F(
                             this.data.headings,
                             this.columns.settings,
                             this.columns._state,
                             this.options,
-                            {}
+                            {},
                           ),
                         ],
                       },
                       {
-                        nodeName: 'TBODY',
+                        nodeName: "TBODY",
                         childNodes: [
                           {
-                            nodeName: 'TR',
+                            nodeName: "TR",
                             childNodes: [
                               {
-                                nodeName: 'TD',
+                                nodeName: "TD",
                                 attributes: {
                                   class: this.options.classes.empty,
                                   colspan: String(e),
                                 },
-                                childNodes: [{ nodeName: '#text', data: t }],
+                                childNodes: [{ nodeName: "#text", data: t }],
                               },
                             ],
                           },
@@ -5302,11 +5317,11 @@
                     this._tableCaptions.forEach((t) => s.childNodes.push(t)),
                     (s.attributes.class = u(
                       s.attributes.class,
-                      this.options.classes.table
+                      this.options.classes.table,
                     )),
                     this.options.tableRender)
                   ) {
-                    const t = this.options.tableRender(this.data, s, 'message');
+                    const t = this.options.tableRender(this.data, s, "message");
                     t && (s = t);
                   }
                   const i = this._dd.diff(this._virtualDOM, s);
@@ -5331,7 +5346,7 @@
                   return (
                     t.initialized
                       ? s.init()
-                      : t.on('datatable.init', () => s.init()),
+                      : t.on("datatable.init", () => s.init()),
                     s
                   );
                 }),
@@ -5339,8 +5354,8 @@
                   let s;
                   if (!e(t)) return !1;
                   const i = {
-                    lineDelimiter: '\n',
-                    columnDelimiter: ',',
+                    lineDelimiter: "\n",
+                    columnDelimiter: ",",
                     removeDoubleQuotes: !1,
                     ...t,
                   };
@@ -5353,7 +5368,7 @@
                           ((s.headings = t[0].split(i.columnDelimiter)),
                           i.removeDoubleQuotes &&
                             (s.headings = s.headings.map((t) =>
-                              t.trim().replace(/(^"|"$)/g, '')
+                              t.trim().replace(/(^"|"$)/g, ""),
                             )),
                           t.shift()),
                         t.forEach((t, e) => {
@@ -5362,7 +5377,7 @@
                           n.length &&
                             n.forEach((t) => {
                               (i.removeDoubleQuotes &&
-                                (t = t.trim().replace(/(^"|"$)/g, '')),
+                                (t = t.trim().replace(/(^"|"$)/g, "")),
                                 s.data[e].push(t));
                             });
                         })),
@@ -5375,7 +5390,7 @@
                 (s.convertJSON = function (t) {
                   let s;
                   if (!e(t)) return !1;
-                  const n = { data: '', ...t };
+                  const n = { data: "", ...t };
                   if (n.data.length || e(n.data)) {
                     const t = !!i(n.data) && JSON.parse(n.data);
                     if (
@@ -5402,8 +5417,8 @@
                   const i = {
                       download: !0,
                       skipColumn: [],
-                      lineDelimiter: '\n',
-                      columnDelimiter: ',',
+                      lineDelimiter: "\n",
+                      columnDelimiter: ",",
                       ...s,
                     },
                     n = (e) =>
@@ -5418,7 +5433,7 @@
                       r = [];
                       for (let e = 0; e < i.selection.length; e++)
                         r = r.concat(
-                          t.pages[i.selection[e] - 1].map((t) => t.row)
+                          t.pages[i.selection[e] - 1].map((t) => t.row),
                         );
                     } else r = t.pages[i.selection - 1].map((t) => t.row);
                   else r = t.data.data;
@@ -5427,23 +5442,23 @@
                     ((l[0] = a),
                     (l = l.concat(
                       r.map((t) =>
-                        t.cells.filter((t, e) => n(e)).map((t) => o(t))
-                      )
+                        t.cells.filter((t, e) => n(e)).map((t) => o(t)),
+                      ),
                     )),
                     l.length)
                   ) {
-                    let t = '';
+                    let t = "";
                     if (
                       (l.forEach((e) => {
                         (e.forEach((e) => {
-                          ('string' == typeof e &&
+                          ("string" == typeof e &&
                             (e = (e = (e = (e = (e = e.trim()).replace(
                               /\s{2,}/g,
-                              ' '
-                            )).replace(/\n/g, '  ')).replace(
+                              " ",
+                            )).replace(/\n/g, "  ")).replace(
                               /"/g,
-                              '""'
-                            )).replace(/#/g, '%23')).includes(',') &&
+                              '""',
+                            )).replace(/#/g, "%23")).includes(",") &&
                             (e = `"${e}"`),
                             (t += e + i.columnDelimiter));
                         }),
@@ -5453,9 +5468,9 @@
                       (t = t.trim().substring(0, t.length - 1)),
                       i.download)
                     ) {
-                      const e = document.createElement('a');
+                      const e = document.createElement("a");
                       ((e.href = encodeURI(`data:text/csv;charset=utf-8,${t}`)),
-                        (e.download = `${i.filename || 'datatable_export'}.csv`),
+                        (e.download = `${i.filename || "datatable_export"}.csv`),
                         document.body.appendChild(e),
                         e.click(),
                         document.body.removeChild(e));
@@ -5483,12 +5498,12 @@
                       a = [];
                       for (let e = 0; e < i.selection.length; e++)
                         a = a.concat(
-                          t.pages[i.selection[e] - 1].map((t) => t.row)
+                          t.pages[i.selection[e] - 1].map((t) => t.row),
                         );
                     } else a = t.pages[i.selection - 1].map((t) => t.row);
                   else a = t.data.data;
                   const r = a.map((t) =>
-                      t.cells.filter((t, e) => n(e)).map((t) => o(t))
+                      t.cells.filter((t, e) => n(e)).map((t) => o(t)),
                     ),
                     l = t.data.headings
                       .filter((t, e) => n(e))
@@ -5504,12 +5519,12 @@
                     const e = JSON.stringify(t, i.replacer, i.space);
                     if (i.download) {
                       const t = new Blob([e], {
-                          type: 'data:application/json;charset=utf-8',
+                          type: "data:application/json;charset=utf-8",
                         }),
                         s = URL.createObjectURL(t),
-                        n = document.createElement('a');
+                        n = document.createElement("a");
                       ((n.href = s),
-                        (n.download = `${i.filename || 'datatable_export'}.json`),
+                        (n.download = `${i.filename || "datatable_export"}.json`),
                         document.body.appendChild(n),
                         n.click(),
                         document.body.removeChild(n),
@@ -5525,7 +5540,7 @@
                   const i = {
                       download: !0,
                       skipColumn: [],
-                      tableName: 'myTable',
+                      tableName: "myTable",
                       ...s,
                     },
                     n = (e) =>
@@ -5536,12 +5551,12 @@
                     if (Array.isArray(i.selection))
                       for (let e = 0; e < i.selection.length; e++)
                         a = a.concat(
-                          t.pages[i.selection[e] - 1].map((t) => t.row)
+                          t.pages[i.selection[e] - 1].map((t) => t.row),
                         );
                     else a = t.pages[i.selection - 1].map((t) => t.row);
                   else a = t.data.data;
                   const r = a.map((t) =>
-                      t.cells.filter((t, e) => n(e)).map((t) => o(t))
+                      t.cells.filter((t, e) => n(e)).map((t) => o(t)),
                     ),
                     l = t.data.headings
                       .filter((t, e) => n(e))
@@ -5553,24 +5568,24 @@
                         t += `\`${e}\`,`;
                       }),
                       (t = t.trim().substring(0, t.length - 1)),
-                      (t += ') VALUES '),
+                      (t += ") VALUES "),
                       r.forEach((e) => {
-                        ((t += '('),
+                        ((t += "("),
                           e.forEach((e) => {
-                            t += 'string' == typeof e ? `"${e}",` : `${e},`;
+                            t += "string" == typeof e ? `"${e}",` : `${e},`;
                           }),
                           (t = t.trim().substring(0, t.length - 1)),
-                          (t += '),'));
+                          (t += "),"));
                       }),
                       (t = t.trim().substring(0, t.length - 1)),
-                      (t += ';'),
+                      (t += ";"),
                       i.download &&
                         (t = `data:application/sql;charset=utf-8,${t}`),
                       i.download)
                     ) {
-                      const e = document.createElement('a');
+                      const e = document.createElement("a");
                       ((e.href = encodeURI(t)),
-                        (e.download = `${i.filename || 'datatable_export'}.sql`),
+                        (e.download = `${i.filename || "datatable_export"}.sql`),
                         document.body.appendChild(e),
                         e.click(),
                         document.body.removeChild(e));
@@ -5585,8 +5600,8 @@
                   const i = {
                       download: !0,
                       skipColumn: [],
-                      lineDelimiter: '\n',
-                      columnDelimiter: ',',
+                      lineDelimiter: "\n",
+                      columnDelimiter: ",",
                       ...s,
                     },
                     n = (e) =>
@@ -5601,7 +5616,7 @@
                       r = [];
                       for (let e = 0; e < i.selection.length; e++)
                         r = r.concat(
-                          t.pages[i.selection[e] - 1].map((t) => t.row)
+                          t.pages[i.selection[e] - 1].map((t) => t.row),
                         );
                     } else r = t.pages[i.selection - 1].map((t) => t.row);
                   else r = t.data.data;
@@ -5610,23 +5625,23 @@
                     ((l[0] = a),
                     (l = l.concat(
                       r.map((t) =>
-                        t.cells.filter((t, e) => n(e)).map((t) => o(t))
-                      )
+                        t.cells.filter((t, e) => n(e)).map((t) => o(t)),
+                      ),
                     )),
                     l.length)
                   ) {
-                    let t = '';
+                    let t = "";
                     if (
                       (l.forEach((e) => {
                         (e.forEach((e) => {
-                          ('string' == typeof e &&
+                          ("string" == typeof e &&
                             (e = (e = (e = (e = (e = e.trim()).replace(
                               /\s{2,}/g,
-                              ' '
-                            )).replace(/\n/g, '  ')).replace(
+                              " ",
+                            )).replace(/\n/g, "  ")).replace(
                               /"/g,
-                              '""'
-                            )).replace(/#/g, '%23')).includes(',') &&
+                              '""',
+                            )).replace(/#/g, "%23")).includes(",") &&
                             (e = `"${e}"`),
                             (t += e + i.columnDelimiter));
                         }),
@@ -5637,9 +5652,9 @@
                       i.download && (t = `data:text/csv;charset=utf-8,${t}`),
                       i.download)
                     ) {
-                      const e = document.createElement('a');
+                      const e = document.createElement("a");
                       ((e.href = encodeURI(t)),
-                        (e.download = `${i.filename || 'datatable_export'}.txt`),
+                        (e.download = `${i.filename || "datatable_export"}.txt`),
                         document.body.appendChild(e),
                         e.click(),
                         document.body.removeChild(e));
@@ -5655,27 +5670,27 @@
                   return (
                     t.initialized
                       ? s.init()
-                      : t.on('datatable.init', () => s.init()),
+                      : t.on("datatable.init", () => s.init()),
                     s
                   );
                 }));
             }).call(this);
           }).call(
             this,
-            'undefined' != typeof global
+            "undefined" != typeof global
               ? global
-              : 'undefined' != typeof self
+              : "undefined" != typeof self
                 ? self
-                : 'undefined' != typeof window
+                : "undefined" != typeof window
                   ? window
-                  : {}
+                  : {},
           );
         },
         {},
       ],
     },
     {},
-    [1]
+    [1],
   )(1);
 });
 //# sourceMappingURL=/sm/bc04f1bfefe0eb235b4002ce90d0e098bc435d0324746e6bddb7716edd802dca.map

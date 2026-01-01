@@ -1,100 +1,361 @@
 <aside
   id="logo-sidebar"
-  class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+  class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-gradient-to-b from-blue-50 to-white border-r border-blue-100"
   aria-label="Sidebar"
 >
   <!-- Logo Section -->
-  <div class="px-3 py-4 flex justify-center items-center">
+  <div
+    class="px-4 py-6 flex justify-center items-center border-b border-blue-100 bg-white"
+  >
     <a href="/" class="flex items-center">
-      <img src="/image/main.svg" alt="Logo" class="h-8 mr-3" />
       <span
-        class="self-center text-blue-600 text-xl font-semibold whitespace-nowrap dark:text-white"
-        >StreamVision</span
+        class="self-center text-xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent whitespace-nowrap"
+        >StudentTracker</span
       >
     </a>
   </div>
 
-  <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-    <ul class="space-y-2 font-medium">
-      <!-- Add New Student Button -->
-      <li class="px-2 pt-4 pb-2">
-        <a
-          href="/student/new"
-          class="flex items-center justify-center w-full p-3 text-sm text-white rounded-lg bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          <i class="fas fa-user-plus w-5 h-5 mr-3"></i>
-          <span>New Student</span>
-        </a>
-      </li>
+  <div
+    class="h-full px-3 pb-4 overflow-y-auto bg-gradient-to-b from-blue-50 to-white"
+  >
+    <!-- Add New Student Button -->
+    <div class="px-2 pt-6 pb-4">
+      <a
+        href="/student/new"
+        class="group relative flex items-center justify-center gap-3 w-full px-6 py-4 text-sm font-medium text-white rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] transform"
+      >
+        <!-- Animated Plus Icon -->
+        <div class="relative">
+          <div
+            class="absolute -inset-2 bg-white/20 rounded-full group-hover:scale-110 transition-transform duration-300"
+          ></div>
+          <i
+            class="fas fa-user-plus flex items-center justify-center text-base relative z-10"
+          ></i>
+        </div>
+        <span class="leading-none font-semibold">Add New Student</span>
+      </a>
+    </div>
 
-      <!-- Main Navigation -->
+    <!-- Main Navigation -->
+    <ul class="space-y-1 font-medium">
       <li>
         <a
           href="/dashboard"
-          class="flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
         >
-          <i
-            class="fas fa-chart-pie w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-          ></i>
-          <span class="ms-3">Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/students"
-          class="flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-        >
-          <i
-            class="fa-solid fa-user w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-          ></i>
-          <span class="flex-1 ms-3 whitespace-nowrap">Students</span>
-          <span
-            class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-blue-500 rounded-full"
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
           >
-            <%= total_students || 0 %>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/students/leaved"
-          class="flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-        >
+            <i class="fas fa-chart-pie text-blue-600 text-sm"></i>
+          </div>
+
+          <span class="font-medium">Dashboard</span>
+
+          <!-- Hover Indicator -->
           <i
-            class="fas fa-user-slash w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
           ></i>
-          <span class="flex-1 ms-3 whitespace-nowrap">Leaved Students</span>
         </a>
       </li>
 
-      <!-- Divider -->
-      <li class="py-2">
-        <hr class="border-t border-gray-200 dark:border-gray-600" />
+      <li>
+        <a
+          href="/students"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
+        >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div class="relative">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+            >
+              <i class="fa-solid fa-user text-blue-600 text-sm"></i>
+            </div>
+            <!-- Notification Badge -->
+            <div
+              class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center shadow-md"
+            >
+              <span class="text-xs font-bold text-white">
+                <%= total_students || 0 %>
+              </span>
+            </div>
+          </div>
+
+          <span class="font-medium">All Students</span>
+
+          <!-- Hover Indicator -->
+          <i
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
+          ></i>
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="/students/leaved"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
+        >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+          >
+            <i class="fas fa-user-slash text-blue-600 text-sm"></i>
+          </div>
+
+          <span class="font-medium">Leaved Students</span>
+
+          <!-- Hover Indicator -->
+          <i
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
+          ></i>
+        </a>
+      </li>
+
+      <!-- Divider with Label -->
+      <li class="pt-6 pb-2">
+        <div class="px-4">
+          <div class="flex items-center">
+            <div
+              class="flex-1 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent"
+            ></div>
+            <span
+              class="px-3 text-xs font-medium text-blue-500 bg-blue-50 rounded-full"
+              >MANAGEMENT</span
+            >
+            <div
+              class="flex-1 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent"
+            ></div>
+          </div>
+        </div>
       </li>
 
       <!-- Secondary Navigation -->
       <li>
         <a
           href="/files"
-          class="flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
         >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+          >
+            <i class="fas fa-folder-open text-blue-600 text-sm"></i>
+          </div>
+
+          <span class="font-medium">File Manager</span>
+
+          <!-- Hover Indicator -->
           <i
-            class="fas fa-folder-open w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
           ></i>
-          <span class="flex-1 ms-3 whitespace-nowrap">File Manager</span>
         </a>
       </li>
+
       <li>
         <a
           href="/ai/chat"
-          class="flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
         >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div class="relative">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+            >
+              <i class="fas fa-robot text-blue-600 text-sm"></i>
+            </div>
+            <!-- AI Badge -->
+            <div class="absolute -top-1 -right-1">
+              <span
+                class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+              >
+                AI
+              </span>
+            </div>
+          </div>
+
+          <span class="font-medium">AI Assistant</span>
+
+          <!-- Hover Indicator -->
           <i
-            class="fas fa-robot w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
           ></i>
-          <span class="flex-1 ms-3 whitespace-nowrap">AI Chat</span>
+        </a>
+      </li>
+
+      <!-- Additional Features -->
+      <li>
+        <a
+          href="/reports"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
+        >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+          >
+            <i class="fas fa-chart-bar text-blue-600 text-sm"></i>
+          </div>
+
+          <span class="font-medium">Reports</span>
+
+          <!-- Hover Indicator -->
+          <i
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
+          ></i>
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="/certificates"
+          class="group relative flex items-center p-4 text-gray-700 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600 transition-all duration-300"
+        >
+          <!-- Active Indicator -->
+          <div
+            class="absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Container -->
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-white border border-blue-200 flex items-center justify-center mr-3 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
+          >
+            <i class="fas fa-award text-blue-600 text-sm"></i>
+          </div>
+
+          <span class="font-medium">Certificates</span>
+
+          <!-- Hover Indicator -->
+          <i
+            class="fas fa-chevron-right text-blue-400 ml-auto text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
+          ></i>
         </a>
       </li>
     </ul>
+
+    <!-- User Profile Section -->
+    <div
+      class="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-100 bg-white"
+    >
+      <div class="flex items-center">
+        <!-- Avatar -->
+        <div
+          class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center mr-3"
+        >
+          <span class="text-white font-bold text-sm">U</span>
+        </div>
+
+        <!-- User Info -->
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 truncate">User</p>
+          <p class="text-xs text-blue-600 font-medium truncate">Teacher</p>
+        </div>
+
+        <!-- Dropdown Button -->
+        <button
+          id="userMenuButton"
+          type="button"
+          class="p-2 rounded-lg hover:bg-blue-50 transition-colors duration-300"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fas fa-chevron-down text-blue-400 text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Dropdown Menu -->
+      <div
+        id="user-menu"
+        class="hidden mt-3 space-y-1"
+        role="menu"
+        aria-label="User menu"
+      >
+        <a
+          href="/teacher/profile/2"
+          class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-blue-50 transition-colors duration-300"
+          role="menuitem"
+        >
+          <i class="fas fa-user-circle text-blue-500 mr-2 text-sm"></i>
+          Profile
+        </a>
+
+        <a
+          href="/change-password"
+          class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-blue-50 transition-colors duration-300"
+          role="menuitem"
+        >
+          <i class="fas fa-cog text-blue-500 mr-2 text-sm"></i>
+          Settings
+        </a>
+
+        <div class="border-t border-blue-100 pt-1">
+          <a
+            href="/logout"
+            class="flex items-center px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-300"
+            role="menuitem"
+          >
+            <i class="fas fa-sign-out-alt mr-2 text-sm"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </aside>
+
+<style>
+  /* Custom scrollbar for sidebar */
+  #logo-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  #logo-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 2px;
+  }
+
+  #logo-sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #63b3ed, #3182ce);
+    border-radius: 2px;
+  }
+
+  #logo-sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #3182ce, #2c5282);
+  }
+
+  /* Smooth transitions */
+  #logo-sidebar * {
+    transition: all 0.3s ease;
+  }
+</style>
+
+<script src="/js/navbar.js" nonce="<%= nonce %>" defer></script>

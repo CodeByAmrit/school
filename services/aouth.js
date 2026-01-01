@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const chabi = process.env.jwt_token;
@@ -17,7 +17,7 @@ function setUser(user) {
       school_phone: user.school_phone,
     },
     chabi,
-    { expiresIn: '24h' } // Token expires in 24 hours
+    { expiresIn: "24h" }, // Token expires in 24 hours
   );
 }
 

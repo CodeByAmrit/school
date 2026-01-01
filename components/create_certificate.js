@@ -1,9 +1,9 @@
-const { PDFDocument, rgb } = require('pdf-lib');
-const fontkit = require('@pdf-lib/fontkit'); // Import fontkit
-const sharp = require('sharp');
-const { getConnection } = require('../models/getConnection');
-const fs = require('fs');
-const path = require('path');
+const { PDFDocument, rgb } = require("pdf-lib");
+const fontkit = require("@pdf-lib/fontkit"); // Import fontkit
+const sharp = require("sharp");
+const { getConnection } = require("../models/getConnection");
+const fs = require("fs");
+const path = require("path");
 
 async function generate(req, res) {
   const studentId = req.params.school_id;
@@ -18,11 +18,11 @@ async function generate(req, res) {
              FROM students s 
              LEFT JOIN photo p ON s.school_id = p.id 
              WHERE s.school_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     if (studentResults.length === 0) {
-      return res.status(404).send('Student not found.');
+      return res.status(404).send("Student not found.");
     }
 
     const student = studentResults[0];
@@ -32,7 +32,7 @@ async function generate(req, res) {
       `SELECT sm.subject, sm.marks, sm.term 
              FROM student_marks sm 
              WHERE sm.student_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     // Organize marks by term
@@ -46,8 +46,8 @@ async function generate(req, res) {
 
     // Fetch maximum marks for the student's class
     const [maxMarksRows] = await connection.execute(
-      'SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?',
-      [student.class]
+      "SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?",
+      [student.class],
     );
 
     // Organize max marks by term
@@ -64,7 +64,7 @@ async function generate(req, res) {
       `SELECT term, grand_total, total_max_marks, percentage 
              FROM StudentPerformance 
              WHERE school_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     const performanceByTerm = {};
@@ -78,26 +78,26 @@ async function generate(req, res) {
 
     // Fetch attendance and status for the student
     const [[student_attendance_status]] = await connection.execute(
-      'SELECT attendance, status FROM student_attendance_status WHERE student_id = ?',
-      [studentId]
+      "SELECT attendance, status FROM student_attendance_status WHERE student_id = ?",
+      [studentId],
     );
 
     // Fetch attendance and status for the student
     const [grade_remarks] = await connection.execute(
-      'SELECT * FROM student_grade_remarks WHERE student_id = ?',
-      [studentId]
+      "SELECT * FROM student_grade_remarks WHERE student_id = ?",
+      [studentId],
     );
 
     // Load the certificate template
     const templatePath = path.join(
       __dirname,
-      '../template/certificate_template.pdf'
+      "../template/certificate_template.pdf",
     );
     const templateBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
 
     // Embed the bold font
-    const fontPath = path.join(__dirname, '../template/Inter_18pt-Bold.ttf');
+    const fontPath = path.join(__dirname, "../template/Inter_18pt-Bold.ttf");
     const boldFontBytes = fs.readFileSync(fontPath);
     pdfDoc.registerFontkit(fontkit);
     const boldFont = await pdfDoc.embedFont(boldFontBytes);
@@ -114,10 +114,10 @@ async function generate(req, res) {
       color: rgb(0, 0, 0),
     });
     // Add class and section with superscript for ordinal indicators
-    const classText = student.class.replace(/(\d+)(st|nd|rd|th)/, '$1');
+    const classText = student.class.replace(/(\d+)(st|nd|rd|th)/, "$1");
     const ordinalIndicator = student.class.match(/(\d+)(st|nd|rd|th)/)
       ? student.class.match(/(\d+)(st|nd|rd|th)/)[2]
-      : '';
+      : "";
     firstPage.drawText(classText, {
       x: 1021,
       y: 2725,
@@ -191,7 +191,7 @@ async function generate(req, res) {
       try {
         const pngBuffer = await sharp(Buffer.from(student.image))
           .resize(300, 380)
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedImage = await pdfDoc.embedPng(pngBuffer);
         const imageDims = embeddedImage.scale(1.2);
@@ -203,7 +203,7 @@ async function generate(req, res) {
           height: imageDims.height,
         });
       } catch (error) {
-        console.error('Error embedding student image:', error);
+        console.error("Error embedding student image:", error);
       }
     }
 
@@ -215,14 +215,14 @@ async function generate(req, res) {
 
     // Define the desired order of subjects
     const subjectOrder = [
-      'ENGLISH',
-      'HINDI',
-      'MATHEMATICS',
-      'SOCIAL SCIENCE/EVS',
-      'SCIENCE',
-      'COMPUTER',
-      'DRAWING',
-      'GENERAL KNOWLEDGE',
+      "ENGLISH",
+      "HINDI",
+      "MATHEMATICS",
+      "SOCIAL SCIENCE/EVS",
+      "SCIENCE",
+      "COMPUTER",
+      "DRAWING",
+      "GENERAL KNOWLEDGE",
     ];
 
     // Iterate over each term and add marks
@@ -263,7 +263,7 @@ async function generate(req, res) {
           const maxMarksForSubject =
             maxMarks[term] && maxMarks[term][mark.subject]
               ? maxMarks[term][mark.subject]
-              : 'N/A';
+              : "N/A";
           firstPage.drawText(maxMarksForSubject.toString(), {
             x: 857,
             y: yPosition,
@@ -282,7 +282,7 @@ async function generate(req, res) {
       const performance = performanceByTerm[term] || {};
 
       // Total Marks
-      firstPage.drawText(performance.grandTotal?.toString() || 'N/A', {
+      firstPage.drawText(performance.grandTotal?.toString() || "N/A", {
         x: startX,
         y: totalYPosition,
         size: 34,
@@ -294,7 +294,7 @@ async function generate(req, res) {
       const percentageYPosition = totalYPosition - 81; // Move down by 81
       const percentage = parseFloat(performance.percentage);
       const formattedPercentage = isNaN(percentage)
-        ? 'N/A'
+        ? "N/A"
         : `${percentage.toFixed(2)}%`;
       firstPage.drawText(formattedPercentage, {
         x: startX,
@@ -343,15 +343,15 @@ async function generate(req, res) {
 
     // Save the PDF and send it to the client
     const pdfBytes = await pdfDoc.save();
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename=certificate.pdf');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "inline; filename=certificate.pdf");
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    console.error('Error generating certificate:', error);
-    res.status(500).send('Error generating certificate.');
+    console.error("Error generating certificate:", error);
+    res.status(500).send("Error generating certificate.");
   } finally {
     if (connection) connection.release();
   }

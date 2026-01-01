@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getConnection } = require('../models/getConnection');
+const { getConnection } = require("../models/getConnection");
 
 router.get(
-  '/getLowestNStudentsBySubject/:subject_name/:n',
+  "/getLowestNStudentsBySubject/:subject_name/:n",
   async (req, res) => {
     try {
       const subjectName = req.params.subject_name;
@@ -11,7 +11,7 @@ router.get(
       if (isNaN(n) || n <= 0) {
         res
           .status(400)
-          .send('Invalid value for n. It must be a positive integer');
+          .send("Invalid value for n. It must be a positive integer");
         return;
       }
       const connection = await getConnection();
@@ -19,20 +19,20 @@ router.get(
       // Dynamically build the column name based on the subject
       let scoreColumn;
       switch (subjectName.toLowerCase()) {
-        case 'math':
-          scoreColumn = 'math_score';
+        case "math":
+          scoreColumn = "math_score";
           break;
-        case 'science':
-          scoreColumn = 'science_score';
+        case "science":
+          scoreColumn = "science_score";
           break;
-        case 'history':
-          scoreColumn = 'history_score';
+        case "history":
+          scoreColumn = "history_score";
           break;
-        case 'english':
-          scoreColumn = 'english_score';
+        case "english":
+          scoreColumn = "english_score";
           break;
         default:
-          res.status(400).send('Invalid subject name');
+          res.status(400).send("Invalid subject name");
           return;
       }
 
@@ -51,19 +51,19 @@ router.get(
       res.json(formattedResults); // Optional: Send to frontend
     } catch (error) {
       console.error(error);
-      res.status(500).send('Error retrieving data');
+      res.status(500).send("Error retrieving data");
     }
-  }
+  },
 );
 
-router.get('/getTopNStudentsBySubject/:subject_name/:n', async (req, res) => {
+router.get("/getTopNStudentsBySubject/:subject_name/:n", async (req, res) => {
   try {
     const subjectName = req.params.subject_name;
     const n = parseInt(req.params.n); // Parse n as an integer
     if (isNaN(n) || n <= 0) {
       res
         .status(400)
-        .send('Invalid value for n. It must be a positive integer');
+        .send("Invalid value for n. It must be a positive integer");
       return;
     }
 
@@ -72,20 +72,20 @@ router.get('/getTopNStudentsBySubject/:subject_name/:n', async (req, res) => {
     // Dynamically build the column name based on the subject
     let scoreColumn;
     switch (subjectName.toLowerCase()) {
-      case 'math':
-        scoreColumn = 'math_score';
+      case "math":
+        scoreColumn = "math_score";
         break;
-      case 'science':
-        scoreColumn = 'science_score';
+      case "science":
+        scoreColumn = "science_score";
         break;
-      case 'history':
-        scoreColumn = 'history_score';
+      case "history":
+        scoreColumn = "history_score";
         break;
-      case 'english':
-        scoreColumn = 'english_score';
+      case "english":
+        scoreColumn = "english_score";
         break;
       default:
-        res.status(400).send('Invalid subject name');
+        res.status(400).send("Invalid subject name");
         return;
     }
 
@@ -104,11 +104,11 @@ router.get('/getTopNStudentsBySubject/:subject_name/:n', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving data');
+    res.status(500).send("Error retrieving data");
   }
 });
 
-router.get('/getAverageScoreBySubject/:subject_name', async (req, res) => {
+router.get("/getAverageScoreBySubject/:subject_name", async (req, res) => {
   try {
     const subjectName = req.params.subject_name;
     const connection = await getConnection();
@@ -116,20 +116,20 @@ router.get('/getAverageScoreBySubject/:subject_name', async (req, res) => {
     // Dynamically build the column name based on the subject
     let scoreColumn;
     switch (subjectName.toLowerCase()) {
-      case 'math':
-        scoreColumn = 'math_score';
+      case "math":
+        scoreColumn = "math_score";
         break;
-      case 'science':
-        scoreColumn = 'science_score';
+      case "science":
+        scoreColumn = "science_score";
         break;
-      case 'history':
-        scoreColumn = 'history_score';
+      case "history":
+        scoreColumn = "history_score";
         break;
-      case 'english':
-        scoreColumn = 'english_score';
+      case "english":
+        scoreColumn = "english_score";
         break;
       default:
-        res.status(400).send('Invalid subject name');
+        res.status(400).send("Invalid subject name");
         return;
     }
 
@@ -146,16 +146,16 @@ router.get('/getAverageScoreBySubject/:subject_name', async (req, res) => {
     res.json(formattedResults);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving average score');
+    res.status(500).send("Error retrieving average score");
   }
 });
 
-router.get('/getAllClasses', async (req, res) => {
+router.get("/getAllClasses", async (req, res) => {
   try {
     const connection = await getConnection();
 
     const [classResults] = await connection.execute(
-      `SELECT DISTINCT class FROM student_scores`
+      `SELECT DISTINCT class FROM student_scores`,
     );
 
     connection.release();
@@ -166,18 +166,18 @@ router.get('/getAllClasses', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving class data');
+    res.status(500).send("Error retrieving class data");
   }
 });
 
-router.get('/getStudentByClass/:class_name', async (req, res) => {
+router.get("/getStudentByClass/:class_name", async (req, res) => {
   try {
     const className = req.params.class_name;
     const connection = await getConnection();
 
     const [studentResults] = await connection.execute(
       `SELECT student_id, name, class, math_score, science_score, history_score FROM student_scores WHERE class = ?`,
-      [className]
+      [className],
     );
 
     connection.release();
@@ -195,24 +195,24 @@ router.get('/getStudentByClass/:class_name', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving student data');
+    res.status(500).send("Error retrieving student data");
   }
 });
 
-router.get('/getStudentMarks/:student_id', async (req, res) => {
+router.get("/getStudentMarks/:student_id", async (req, res) => {
   try {
     const studentId = req.params.student_id;
     const connection = await getConnection();
 
     const [studentResults] = await connection.execute(
       `SELECT math_score, science_score, history_score, english_score FROM student_scores WHERE student_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     connection.release();
 
     if (studentResults.length === 0) {
-      res.status(404).send('Student not found');
+      res.status(404).send("Student not found");
       return;
     }
 
@@ -228,18 +228,18 @@ router.get('/getStudentMarks/:student_id', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving student data');
+    res.status(500).send("Error retrieving student data");
   }
 });
 
-router.get('/getStudentWithName/:name', async (req, res) => {
+router.get("/getStudentWithName/:name", async (req, res) => {
   try {
     const name = req.params.name;
     const connection = await getConnection();
 
     const [studentResults] = await connection.execute(
       `SELECT student_id, name, class, math_score, science_score, history_score FROM student_scores WHERE name = ?`,
-      [name]
+      [name],
     );
 
     connection.release();
@@ -257,16 +257,16 @@ router.get('/getStudentWithName/:name', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving student data');
+    res.status(500).send("Error retrieving student data");
   }
 });
 
-router.get('/getStudentAll', async (req, res) => {
+router.get("/getStudentAll", async (req, res) => {
   try {
     const connection = await getConnection();
 
     const [studentResults] = await connection.execute(
-      `SELECT student_id, name, class, math_score, science_score, history_score FROM student_scores` // Explicitly list columns!
+      `SELECT student_id, name, class, math_score, science_score, history_score FROM student_scores`, // Explicitly list columns!
     );
 
     connection.release();
@@ -284,7 +284,7 @@ router.get('/getStudentAll', async (req, res) => {
     res.json(formattedResults); // Optional: Send to frontend
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error retrieving student data');
+    res.status(500).send("Error retrieving student data");
   }
 });
 

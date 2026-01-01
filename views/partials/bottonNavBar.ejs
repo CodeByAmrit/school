@@ -1,99 +1,177 @@
 <div class="block md:hidden">
-    <div
-        class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600 scale-95">
-        <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
-            <a data-tooltip-target="tooltip-home" href="/dashboard"
-                class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-                <svg class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                </svg>
-                <span class="sr-only">Home</span>
-            </a>
-            <div id="tooltip-home" role="tooltip"
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                Home
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-            <a data-tooltip-target="tooltip-Students" href="/students"
-                class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-                <svg class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="m22.004,4.498c.001-.865-.525-1.61-1.34-1.898L14.199.319c-1.388-.491-2.916-.492-4.303-.006L3.353,2.603c-.818.286-1.346,1.03-1.346,1.896,0,.867.529,1.611,1.347,1.896l6.507,2.27c.689.24,1.414.361,2.138.361s1.448-.121,2.137-.361l5.864-2.045v4.379c0,.552.448,1,1,1s1-.448,1-1c0,0,.004-6.493.004-6.502Zm-7.209,6.056l3.205-1.118v.564c0,3.309-2.691,6-6,6s-6-2.691-6-6v-.563l3.203,1.118c1.799.627,3.794.627,5.592,0Zm4.205,13.446H5c-.318,0-.617-.151-.805-.407s-.244-.586-.15-.89c1.044-3.358,4.315-5.703,7.955-5.703s6.911,2.345,7.955,5.703c.094.303.039.634-.15.89s-.487.407-.805.407Z"/>
-                </svg>
-                <span class="sr-only">Students</span>
-            </a>
-            <div id="tooltip-Students" role="tooltip"
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                Students
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-            <div class="flex items-center justify-center">
-                <a data-tooltip-target="tooltip-new" href="/student/new"
-                    class="inline-flex items-center justify-center w-10 h-10 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
-                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 18 18">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 1v16M1 9h16" />
-                    </svg>
-                    <span class="sr-only">New Student</span>
-                </a>
-            </div>
-            <div id="tooltip-new" role="tooltip"
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                New Student
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-            <a data-tooltip-target="tooltip-settings" href="/api/students/accounts"
-                class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-                <svg class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="m18 13a3.987 3.987 0 0 0 -2 7.444v2.833a.721.721 0 0 0 1.231.51l.769-.768.769.768a.721.721 0 0 0 1.231-.51v-2.833a3.987 3.987 0 0 0 -2-7.444z" />
-                    <path d="m12 17a5.993 5.993 0 0 1 9-5.191v-6.809a5.006 5.006 0 0 0 -5-5h-8a5.006 5.006 0 0 0 -5 5v12a5.006 5.006 0 0 0 5 5h6v-.54a5.975 5.975 0 0 1 -2-4.46zm-4-13h8a1 1 0 0 1 0 2h-8a1 1 0 0 1 0-2zm0 4h8a1 1 0 0 1 0 2h-8a1 1 0 0 1 0-2zm3 6h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2z" />
-                </svg>
-                <span class="sr-only">Certificates</span>
-            </a>
-            <div id="tooltip-settings" role="tooltip"
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                Report Card
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-            <button type="button" aria-expanded="false" data-dropdown-toggle="dropdown-user-mobile"
-                class="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="<%= user.school_logo %>" alt="user photo">
-                <span class="sr-only">Profile</span>
-            </button>
-            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-                id="dropdown-user-mobile">
-                <div class="px-4 py-3" role="none">
-                    <p class="text-sm text-gray-900 dark:text-white" role="none">
-                        <%= `${user.first_name} ${user.last_name}` %>
-                    </p>
-                    <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                        <%= user.email %>
-                    </p>
-                </div>
-                <ul class="py-1" role="none">
-                    <li>
-                        <a href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/teacher/profile/<%= user._id %>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem">Settings</a>
-                    </li>
-                    <li>
-                        <a href="/logout"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem">Sign out</a>
-                    </li>
-                </ul>
-            </div>
-
+  <div
+    class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600 scale-95"
+  >
+    <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
+      <a
+        data-tooltip-target="tooltip-home"
+        href="/dashboard"
+        class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      >
+        <svg
+          class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+          />
+        </svg>
+        <span class="sr-only">Home</span>
+      </a>
+      <div
+        id="tooltip-home"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700"
+      >
+        Home
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+      <a
+        data-tooltip-target="tooltip-Students"
+        href="/students"
+        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      >
+        <svg
+          class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m22.004,4.498c.001-.865-.525-1.61-1.34-1.898L14.199.319c-1.388-.491-2.916-.492-4.303-.006L3.353,2.603c-.818.286-1.346,1.03-1.346,1.896,0,.867.529,1.611,1.347,1.896l6.507,2.27c.689.24,1.414.361,2.138.361s1.448-.121,2.137-.361l5.864-2.045v4.379c0,.552.448,1,1,1s1-.448,1-1c0,0,.004-6.493.004-6.502Zm-7.209,6.056l3.205-1.118v.564c0,3.309-2.691,6-6,6s-6-2.691-6-6v-.563l3.203,1.118c1.799.627,3.794.627,5.592,0Zm4.205,13.446H5c-.318,0-.617-.151-.805-.407s-.244-.586-.15-.89c1.044-3.358,4.315-5.703,7.955-5.703s6.911,2.345,7.955,5.703c.094.303.039.634-.15.89s-.487.407-.805.407Z"
+          />
+        </svg>
+        <span class="sr-only">Students</span>
+      </a>
+      <div
+        id="tooltip-Students"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700"
+      >
+        Students
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+      <div class="flex items-center justify-center">
+        <a
+          data-tooltip-target="tooltip-new"
+          href="/student/new"
+          class="inline-flex items-center justify-center w-10 h-10 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800"
+        >
+          <svg
+            class="w-4 h-4 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 18 18"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 1v16M1 9h16"
+            />
+          </svg>
+          <span class="sr-only">New Student</span>
+        </a>
+      </div>
+      <div
+        id="tooltip-new"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700"
+      >
+        New Student
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+      <a
+        data-tooltip-target="tooltip-settings"
+        href="/api/students/accounts"
+        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      >
+        <svg
+          class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m18 13a3.987 3.987 0 0 0 -2 7.444v2.833a.721.721 0 0 0 1.231.51l.769-.768.769.768a.721.721 0 0 0 1.231-.51v-2.833a3.987 3.987 0 0 0 -2-7.444z"
+          />
+          <path
+            d="m12 17a5.993 5.993 0 0 1 9-5.191v-6.809a5.006 5.006 0 0 0 -5-5h-8a5.006 5.006 0 0 0 -5 5v12a5.006 5.006 0 0 0 5 5h6v-.54a5.975 5.975 0 0 1 -2-4.46zm-4-13h8a1 1 0 0 1 0 2h-8a1 1 0 0 1 0-2zm0 4h8a1 1 0 0 1 0 2h-8a1 1 0 0 1 0-2zm3 6h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2z"
+          />
+        </svg>
+        <span class="sr-only">Certificates</span>
+      </a>
+      <div
+        id="tooltip-settings"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700"
+      >
+        Report Card
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+      <button
+        type="button"
+        aria-expanded="false"
+        data-dropdown-toggle="dropdown-user-mobile"
+        class="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      >
+        <span class="sr-only">Open user menu</span>
+        <img
+          class="w-8 h-8 rounded-full"
+          src="<%= user.school_logo %>"
+          alt="user photo"
+        />
+        <span class="sr-only">Profile</span>
+      </button>
+      <div
+        class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+        id="dropdown-user-mobile"
+      >
+        <div class="px-4 py-3" role="none">
+          <p class="text-sm text-gray-900 dark:text-white" role="none">
+            <%= `${user.first_name} ${user.last_name}` %>
+          </p>
+          <p
+            class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+            role="none"
+          >
+            <%= user.email %>
+          </p>
         </div>
+        <ul class="py-1" role="none">
+          <li>
+            <a
+              href="#"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+              role="menuitem"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="/teacher/profile/<%= user._id %>"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+              role="menuitem"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a
+              href="/logout"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+              role="menuitem"
+              >Sign out</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 </div>

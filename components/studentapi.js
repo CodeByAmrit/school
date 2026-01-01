@@ -1,8 +1,8 @@
-const bcrypt = require('bcrypt');
-const { setUser } = require('../services/aouth');
-const { getConnection } = require('../models/getConnection');
-const fs = require('fs');
-const { PDFDocument, rgb } = require('pdf-lib');
+const bcrypt = require("bcrypt");
+const { setUser } = require("../services/aouth");
+const { getConnection } = require("../models/getConnection");
+const fs = require("fs");
+const { PDFDocument, rgb } = require("pdf-lib");
 
 const saltRounds = 10;
 
@@ -13,13 +13,13 @@ async function getAllStudentsByTeacherId(req, res) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      'SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE teacher_id = ?',
-      [teacherId]
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE teacher_id = ?",
+      [teacherId],
     );
     return res.json({ data: rows });
   } catch (error) {
-    console.error(error, 'SEND JSON');
-    res.json({ data: 'Fail to get students' });
+    console.error(error, "SEND JSON");
+    res.json({ data: "Fail to get students" });
   } finally {
     if (connection) {
       await connection.release();
@@ -34,13 +34,13 @@ async function getAllStudent_to_Render(req, res, next) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      'SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE teacher_id = ?',
-      [teacherId]
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE teacher_id = ?",
+      [teacherId],
     );
     req.studentList = { data: rows };
     next();
   } catch (error) {
-    console.error(error, 'SEND JSON');
+    console.error(error, "SEND JSON");
     req.studentList = undefined;
     next();
   } finally {
@@ -57,14 +57,14 @@ async function getStudentWithPhoto(req, res, next) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      'SELECT * FROM students WHERE teacher_id = ?',
-      [teacherId]
+      "SELECT * FROM students WHERE teacher_id = ?",
+      [teacherId],
     );
 
     // Convert photo BLOBs to Base64 strings
     const students = rows.map((student) => {
       if (student.photo) {
-        student.photo = Buffer.from(student.photo, 'binary').toString('base64');
+        student.photo = Buffer.from(student.photo, "binary").toString("base64");
       }
       return student;
     });
@@ -72,7 +72,7 @@ async function getStudentWithPhoto(req, res, next) {
     req.studentList = { data: students };
     next();
   } catch (error) {
-    console.error(error, 'SEND JSON');
+    console.error(error, "SEND JSON");
     req.studentList = undefined;
     next();
   } finally {
@@ -89,13 +89,13 @@ async function getAllStudentsByStudentId(req, res) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      'SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE student_id = ?',
-      [studentId]
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE student_id = ?",
+      [studentId],
     );
     return res.json({ data: rows });
   } catch (error) {
-    console.error(error, 'SEND JSON');
-    res.json({ data: 'Fail to get students' });
+    console.error(error, "SEND JSON");
+    res.json({ data: "Fail to get students" });
   } finally {
     if (connection) {
       await connection.release();
@@ -108,7 +108,7 @@ async function generateCertificate(req, res, next) {
   let student = req.onestudent.data[0];
 
   try {
-    const templateBytes = fs.readFileSync('certificate_template.pdf');
+    const templateBytes = fs.readFileSync("certificate_template.pdf");
     const pdfDoc = await PDFDocument.load(templateBytes);
 
     // Get the first page of the template
@@ -151,8 +151,8 @@ async function generateCertificate(req, res, next) {
     });
     const today = new Date();
 
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
     const year = today.getFullYear();
 
     const formattedDate = `${day}/${month}/${year}`;
@@ -168,7 +168,7 @@ async function generateCertificate(req, res, next) {
 
     // Insert the photo if available
     if (student.photo) {
-      const photoBytes = Buffer.from(student.photo, 'base64');
+      const photoBytes = Buffer.from(student.photo, "base64");
       const photoImage = await pdfDoc.embedPng(photoBytes);
       page.drawImage(photoImage, {
         x: 1913,
@@ -183,16 +183,16 @@ async function generateCertificate(req, res, next) {
 
     // Set the correct headers
     res.setHeader(
-      'Content-Disposition',
-      `inline; filename=certificate_${student.full_name}.pdf`
+      "Content-Disposition",
+      `inline; filename=certificate_${student.full_name}.pdf`,
     );
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Length', pdfBytes.length);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", pdfBytes.length);
 
     // Send the PDF file
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    console.error('Error generating certificate:', error);
+    console.error("Error generating certificate:", error);
     next(error);
   }
 }
@@ -204,13 +204,13 @@ async function getStudentById_render(req, res, next) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      'SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section, photo FROM students WHERE student_id = ?',
-      [studentId]
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section, photo FROM students WHERE student_id = ?",
+      [studentId],
     );
     // Convert photo BLOBs to Base64 strings
     const students = rows.map((student) => {
       if (student.photo) {
-        student.photo = Buffer.from(student.photo, 'binary').toString('base64');
+        student.photo = Buffer.from(student.photo, "binary").toString("base64");
       }
       return student;
     });
@@ -218,7 +218,7 @@ async function getStudentById_render(req, res, next) {
     req.onestudent = { data: students };
     next();
   } catch (error) {
-    console.error(error, 'SEND JSON');
+    console.error(error, "SEND JSON");
     req.onestudent = null;
     next();
   } finally {
@@ -274,7 +274,7 @@ async function insertStudent(req, res) {
     !school_class ||
     !section
   ) {
-    return res.status(400).json({ message: 'All fields are required' });
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   let connection;
@@ -308,11 +308,11 @@ async function insertStudent(req, res) {
         school_class,
         section,
         userPhoto,
-      ]
+      ],
     );
 
     res.status(201).json({
-      message: 'Student created successfully',
+      message: "Student created successfully",
       studentId: result.insertId,
     });
   } catch (error) {
@@ -331,7 +331,7 @@ async function deleteStudent(req, res) {
 
   // Ensure all required fields are defined
   if (!studentId) {
-    return res.status(400).json({ message: 'Student ID required' });
+    return res.status(400).json({ message: "Student ID required" });
   }
 
   let connection;
@@ -341,21 +341,21 @@ async function deleteStudent(req, res) {
     try {
       await connection.execute(
         `DELETE from studentDocument where student_id = ?`,
-        [studentId]
+        [studentId],
       );
     } catch (error) {
-      console.log('studentDocument', error);
+      console.log("studentDocument", error);
     }
 
     // Insert the new student into the database
     const [result] = await connection.execute(
       `DELETE from students where student_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     res
       .status(200)
-      .json({ message: 'Student Deleted successfully', studentId: result });
+      .json({ message: "Student Deleted successfully", studentId: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.sqlMessage });
@@ -372,7 +372,7 @@ async function deletePDF(req, res) {
 
   // Ensure all required fields are defined
   if (!studentId) {
-    return res.status(400).json({ message: 'Student ID required' });
+    return res.status(400).json({ message: "Student ID required" });
   }
 
   let connection;
@@ -381,12 +381,12 @@ async function deletePDF(req, res) {
 
     await connection.execute(
       `DELETE from studentDocument where student_id = ?`,
-      [studentId]
+      [studentId],
     );
 
     res
       .status(201)
-      .json({ message: 'PDF Deleted successfully', studentId: result });
+      .json({ message: "PDF Deleted successfully", studentId: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.sqlMessage });
@@ -404,16 +404,16 @@ async function teacherLogin(req, res) {
     connection = await getConnection();
 
     const [rows] = await connection.execute(
-      'SELECT * FROM teacher WHERE email = ?',
-      [email]
+      "SELECT * FROM teacher WHERE email = ?",
+      [email],
     );
     if (rows.length === 0) {
-      return res.json({ status: 'Invalid email' });
+      return res.json({ status: "Invalid email" });
     }
     const teacher = rows[0];
     const passwordMatch = await bcrypt.compare(password, teacher.password);
     if (!passwordMatch) {
-      return res.json({ status: 'Invalid Password' });
+      return res.json({ status: "Invalid Password" });
     }
     // res.removeHeader(Authorization)
     const payload = {
@@ -424,12 +424,12 @@ async function teacherLogin(req, res) {
     }; // Return the logged-in teacher's details
 
     const token = setUser(payload);
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       // httpOnly: true,
       // secure: true, // Set to true if using https
       // sameSite: 'Strict'
     });
-    res.redirect('/profile');
+    res.redirect("/profile");
   } catch (error) {
     res.json({ status: error.sqlMessage });
   } finally {
@@ -484,7 +484,7 @@ async function updateStudentDetails(req, res) {
     !studentClass ||
     !section
   ) {
-    return res.status(400).json({ message: 'All fields are required' });
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
@@ -512,7 +512,7 @@ async function updateStudentDetails(req, res) {
           sanitize(section),
           studentPhoto,
           studentId,
-        ]
+        ],
       );
     } else {
       const [result] = await connection.execute(
@@ -536,16 +536,16 @@ async function updateStudentDetails(req, res) {
           sanitize(studentClass),
           sanitize(section),
           studentId,
-        ]
+        ],
       );
     }
     return res
       .status(200)
       .send(
-        `<script>alert('Sutdent data Updated Sucessfully'); window.location.href = '/profile';</script>`
+        `<script>alert('Sutdent data Updated Sucessfully'); window.location.href = '/profile';</script>`,
       );
   } catch (error) {
-    console.error(error, 'UPDATE ERROR');
+    console.error(error, "UPDATE ERROR");
     res.json({ message: error.sqlMessage });
   } finally {
     if (connection) {
@@ -561,14 +561,14 @@ async function getPdfWithPDF(req, res) {
   try {
     connection = await getConnection();
 
-    const sql = 'SELECT document FROM studentDocument WHERE student_id = ?';
+    const sql = "SELECT document FROM studentDocument WHERE student_id = ?";
     const [results] = await connection.execute(sql, [student_id]);
     if (results.length > 0) {
       const document = results[0].document;
-      res.contentType('application/pdf');
+      res.contentType("application/pdf");
       res.send(document);
     } else {
-      res.status(404).send('Document not found');
+      res.status(404).send("Document not found");
     }
   } catch (error) {
     console.log(error);
@@ -583,7 +583,7 @@ async function insertPDF(req, res) {
   if (!pdf_from_body || !student_id) {
     res
       .status(400)
-      .json({ result: 'Invalid request, missing PDF or student_id' });
+      .json({ result: "Invalid request, missing PDF or student_id" });
     return;
   }
 
@@ -592,21 +592,21 @@ async function insertPDF(req, res) {
 
     // Check if the record already exists
     const checkSql =
-      'SELECT COUNT(*) as count FROM studentDocument WHERE student_id = ?';
+      "SELECT COUNT(*) as count FROM studentDocument WHERE student_id = ?";
     const [checkResult] = await connection.execute(checkSql, [student_id]);
 
     if (checkResult[0].count > 0) {
       // Record exists, update it
       const updateSql =
-        'UPDATE studentDocument SET document = ? WHERE student_id = ?';
+        "UPDATE studentDocument SET document = ? WHERE student_id = ?";
       await connection.execute(updateSql, [pdf_from_body, student_id]);
-      res.status(200).json({ result: 'Document updated successfully' });
+      res.status(200).json({ result: "Document updated successfully" });
     } else {
       // Record does not exist, insert new record
       const insertSql =
-        'INSERT INTO studentDocument (student_id, document) VALUES (?, ?)';
+        "INSERT INTO studentDocument (student_id, document) VALUES (?, ?)";
       await connection.execute(insertSql, [student_id, pdf_from_body]);
-      res.status(200).json({ result: 'Document uploaded successfully' });
+      res.status(200).json({ result: "Document uploaded successfully" });
     }
   } catch (error) {
     console.log(error);
@@ -614,7 +614,7 @@ async function insertPDF(req, res) {
   } finally {
     if (connection) {
       await connection.release();
-      console.log('disconnect');
+      console.log("disconnect");
     }
   }
 }

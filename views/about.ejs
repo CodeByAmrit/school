@@ -1,176 +1,327 @@
 <%- include('partials/land_header') %>
 
-    <!-- Header -->
-    <header class="pt-28 pb-16 relative overflow-hidden">
-      <div
-        class="absolute inset-0 bg-gradient-to-br from-blue-100/20 to-blue-50/20"
-      ></div>
-      <div
-        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"
-      ></div>
+<!-- Header -->
+<header class="pt-28 pb-16 relative overflow-hidden">
+  <div
+    class="absolute inset-0 bg-gradient-to-br from-blue-100/20 to-blue-50/20"
+  ></div>
+  <div
+    class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+  ></div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div
-              class="inline-flex items-center justify-center lg:justify-start space-x-2 mb-6"
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div
+          class="inline-flex items-center justify-center lg:justify-start space-x-2 mb-6"
+        >
+          <div
+            class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
+          ></div>
+          <span class="text-sm font-semibold text-blue-600">OUR STORY</span>
+        </div>
+
+        <h1
+          class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 quicksand"
+        >
+          Empowering
+          <span
+            class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
+          >
+            Educators
+          </span>
+        </h1>
+
+        <p class="text-xl text-gray-600 mb-8">
+          We believe teachers should spend less time on paperwork and more time
+          doing what they love—teaching. StudentTracker transforms how educators
+          manage student information, making administrative tasks simpler and
+          more efficient.
+        </p>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div
+            class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
+          >
+            <div class="text-2xl font-bold text-blue-600 mb-1">1000+</div>
+            <div class="text-sm text-gray-600">Educators</div>
+          </div>
+          <div
+            class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
+          >
+            <div class="text-2xl font-bold text-blue-600 mb-1">85%</div>
+            <div class="text-sm text-gray-600">Time Saved</div>
+          </div>
+          <div
+            class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
+          >
+            <div class="text-2xl font-bold text-blue-600 mb-1">24/7</div>
+            <div class="text-sm text-gray-600">Support</div>
+          </div>
+          <div
+            class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
+          >
+            <div class="text-2xl font-bold text-blue-600 mb-1">100%</div>
+            <div class="text-sm text-gray-600">Secure</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="/signup"
+            class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            Start Free Trial
+            <svg
+              class="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <div
-                class="w-3 h-3 rounded-full bg-gradient-to-r from-[#63b3ed] to-[#3182ce]"
-              ></div>
-              <span class="text-sm font-semibold text-blue-600">OUR STORY</span>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
+            </svg>
+          </a>
+          <a
+            href="#features"
+            class="inline-flex items-center px-6 py-3 border border-blue-300 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-300"
+          >
+            Explore Features
+          </a>
+        </div>
+      </div>
 
-            <h1
-              class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 quicksand"
-            >
-              Empowering
-              <span
-                class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
-              >
-                Educators
-              </span>
-            </h1>
-
-            <p class="text-xl text-gray-600 mb-8">
-              We believe teachers should spend less time on paperwork and more
-              time doing what they love—teaching. StudentTracker transforms how
-              educators manage student information, making administrative tasks
-              simpler and more efficient.
-            </p>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div
-                class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
-              >
-                <div class="text-2xl font-bold text-blue-600 mb-1">1000+</div>
-                <div class="text-sm text-gray-600">Educators</div>
-              </div>
-              <div
-                class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
-              >
-                <div class="text-2xl font-bold text-blue-600 mb-1">85%</div>
-                <div class="text-sm text-gray-600">Time Saved</div>
-              </div>
-              <div
-                class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
-              >
-                <div class="text-2xl font-bold text-blue-600 mb-1">24/7</div>
-                <div class="text-sm text-gray-600">Support</div>
-              </div>
-              <div
-                class="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100"
-              >
-                <div class="text-2xl font-bold text-blue-600 mb-1">100%</div>
-                <div class="text-sm text-gray-600">Secure</div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap gap-4">
-              <a
-                href="/signup"
-                class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Start Free Trial
-                <svg
-                  class="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+      <!-- Illustration -->
+      <div class="relative">
+        <div
+          class="absolute -inset-8 bg-gradient-to-r from-blue-100 to-blue-50 rounded-3xl transform -rotate-6"
+        ></div>
+        <div
+          class="relative bg-white rounded-2xl shadow-xl border border-blue-100 p-8"
+        >
+          <div class="relative h-64 mb-6">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="relative">
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full opacity-20 growing-circle"
+                ></div>
+                <div
+                  class="relative w-48 h-48 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center float-animation"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  ></path>
-                </svg>
+                  <svg
+                    class="w-32 h-32 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M12 14l9-5-9-5-9 5 9 5z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M12 14l9-5-9-5-9 5 9 5z"
+                      opacity="0.5"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M12 14v6l9-5M12 20l-9-5"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <h3 class="font-bold text-gray-900 mb-2">Built for Teachers</h3>
+            <p class="text-gray-600 text-sm">
+              Designed with educator feedback to solve real classroom challenges
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="pb-16 fade-in-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <!-- Sticky Navigation -->
+      <div class="lg:col-span-1">
+        <div class="sticky-nav">
+          <div
+            class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6"
+          >
+            <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+              <svg
+                class="w-5 h-5 mr-2 text-blue-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              About StudentTracker
+            </h3>
+            <nav class="space-y-2">
+              <a
+                href="#mission"
+                class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
+              >
+                <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
+                Our Mission
+              </a>
+              <a
+                href="#story"
+                class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
+              >
+                <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
+                Our Story
               </a>
               <a
                 href="#features"
-                class="inline-flex items-center px-6 py-3 border border-blue-300 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-300"
+                class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
               >
-                Explore Features
+                <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
+                What We Offer
               </a>
-            </div>
-          </div>
+              <a
+                href="#commitment"
+                class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
+              >
+                <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
+                Our Commitment
+              </a>
+              <a
+                href="#founder"
+                class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
+              >
+                <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
+                Meet the Founder
+              </a>
+            </nav>
 
-          <!-- Illustration -->
-          <div class="relative">
-            <div
-              class="absolute -inset-8 bg-gradient-to-r from-blue-100 to-blue-50 rounded-3xl transform -rotate-6"
-            ></div>
-            <div
-              class="relative bg-white rounded-2xl shadow-xl border border-blue-100 p-8"
-            >
-              <div class="relative h-64 mb-6">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="relative">
-                    <div
-                      class="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full opacity-20 growing-circle"
-                    ></div>
-                    <div
-                      class="relative w-48 h-48 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center float-animation"
-                    >
-                      <svg
-                        class="w-32 h-32 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M12 14l9-5-9-5-9 5 9 5z"
-                        ></path>
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M12 14l9-5-9-5-9 5 9 5z"
-                          opacity="0.5"
-                        ></path>
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M12 14v6l9-5M12 20l-9-5"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="text-center">
-                <h3 class="font-bold text-gray-900 mb-2">Built for Teachers</h3>
-                <p class="text-gray-600 text-sm">
-                  Designed with educator feedback to solve real classroom
-                  challenges
+            <!-- Educator Quote -->
+            <div class="mt-6 pt-6 border-t border-blue-100">
+              <div class="text-sm text-gray-600 mb-3">What teachers say:</div>
+              <div class="bg-blue-50 rounded-xl p-4">
+                <p class="text-sm text-gray-700 italic mb-2">
+                  "StudentTracker gave me back 10 hours a week to focus on what
+                  really matters—my students."
+                </p>
+                <p class="text-xs text-gray-600">
+                  — Vikram Mor, Principal, Bajrang Vidya Mandir
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="pb-16 fade-in-up">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <!-- Sticky Navigation -->
-          <div class="lg:col-span-1">
-            <div class="sticky-nav">
-              <div
-                class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6"
+          <!-- Quick Links -->
+          <div
+            class="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl border border-blue-200 p-6"
+          >
+            <h4 class="font-bold text-gray-900 mb-4 flex items-center">
+              <svg
+                class="w-5 h-5 text-blue-600 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
-                <h3
-                  class="text-lg font-bold text-gray-900 mb-4 flex items-center"
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Learn More
+            </h4>
+            <div class="space-y-3">
+              <a
+                href="/security"
+                class="flex items-center p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition-colors duration-300"
+              >
+                <div
+                  class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
                 >
                   <svg
-                    class="w-5 h-5 mr-2 text-blue-500"
+                    class="w-4 h-4 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">Security</p>
+                  <p class="text-xs text-gray-600">How we protect your data</p>
+                </div>
+              </a>
+
+              <a
+                href="/privacy"
+                class="flex items-center p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition-colors duration-300"
+              >
+                <div
+                  class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                >
+                  <svg
+                    class="w-4 h-4 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">
+                    Privacy Policy
+                  </p>
+                  <p class="text-xs text-gray-600">Your data rights</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="lg:col-span-3">
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden"
+        >
+          <div class="p-6 md:p-10">
+            <!-- Mission & Vision -->
+            <section id="mission" class="about-section mb-12">
+              <div class="flex items-start mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -180,155 +331,81 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                  About StudentTracker
-                </h3>
-                <nav class="space-y-2">
-                  <a
-                    href="#mission"
-                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
-                  >
-                    <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
-                    Our Mission
-                  </a>
-                  <a
-                    href="#story"
-                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
-                  >
-                    <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
-                    Our Story
-                  </a>
-                  <a
-                    href="#features"
-                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
-                  >
-                    <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
-                    What We Offer
-                  </a>
-                  <a
-                    href="#commitment"
-                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
-                  >
-                    <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
-                    Our Commitment
-                  </a>
-                  <a
-                    href="#founder"
-                    class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium flex items-center"
-                  >
-                    <div class="w-2 h-2 rounded-full bg-blue-200 mr-3"></div>
-                    Meet the Founder
-                  </a>
-                </nav>
-
-                <!-- Educator Quote -->
-                <div class="mt-6 pt-6 border-t border-blue-100">
-                  <div class="text-sm text-gray-600 mb-3">
-                    What teachers say:
-                  </div>
-                  <div class="bg-blue-50 rounded-xl p-4">
-                    <p class="text-sm text-gray-700 italic mb-2">
-                      "StudentTracker gave me back 10 hours a week to focus on
-                      what really matters—my students."
-                    </p>
-                    <p class="text-xs text-gray-600">
-                      — Vikram Mor, Principal, Bajrang Vidya Mandir
-                    </p>
-                  </div>
                 </div>
-              </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    Our Mission & Vision
+                  </h2>
 
-              <!-- Quick Links -->
-              <div
-                class="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl border border-blue-200 p-6"
-              >
-                <h4 class="font-bold text-gray-900 mb-4 flex items-center">
-                  <svg
-                    class="w-5 h-5 text-blue-600 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  Learn More
-                </h4>
-                <div class="space-y-3">
-                  <a
-                    href="/security"
-                    class="flex items-center p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition-colors duration-300"
-                  >
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div
-                      class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                      class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
                     >
-                      <svg
-                        class="w-4 h-4 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-medium text-gray-900">Security</p>
-                      <p class="text-xs text-gray-600">
-                        How we protect your data
+                      <div class="flex items-center mb-4">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-white border border-blue-200 flex items-center justify-center mr-4"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900">Our Mission</h3>
+                      </div>
+                      <p class="text-gray-700">
+                        To empower educators by simplifying complex
+                        administrative tasks, allowing them to focus more on
+                        teaching and student development.
                       </p>
                     </div>
-                  </a>
 
-                  <a
-                    href="/privacy"
-                    class="flex items-center p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition-colors duration-300"
-                  >
                     <div
-                      class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                      class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
                     >
-                      <svg
-                        class="w-4 h-4 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-medium text-gray-900">
-                        Privacy Policy
+                      <div class="flex items-center mb-4">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-white border border-blue-200 flex items-center justify-center mr-4"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path
+                              fill-rule="evenodd"
+                              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900">Our Vision</h3>
+                      </div>
+                      <p class="text-gray-700">
+                        To provide an intuitive, secure, and all-in-one digital
+                        platform for managing student information, bridging the
+                        gap between data management and effective education.
                       </p>
-                      <p class="text-xs text-gray-600">Your data rights</p>
                     </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </div>
 
-          <!-- Content -->
-          <div class="lg:col-span-3">
-            <div
-              class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden"
-            >
-              <div class="p-6 md:p-10">
-                <!-- Mission & Vision -->
-                <section id="mission" class="about-section mb-12">
-                  <div class="flex items-start mb-6">
-                    <div
-                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
-                    >
+                  <div class="bg-white border border-blue-200 rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                      At StudentTracker, we believe that every minute saved from
+                      paperwork is a minute gained for meaningful teaching.
+                      We're here to handle the administrative burden so you can
+                      focus on what truly matters—inspiring young minds.
+                    </p>
+                    <div class="flex items-center text-blue-600">
                       <svg
-                        class="w-6 h-6 text-blue-600"
+                        class="w-5 h-5 mr-2"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -338,662 +415,516 @@
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </div>
-                    <div>
-                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                        Our Mission & Vision
-                      </h2>
-
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div
-                          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
-                        >
-                          <div class="flex items-center mb-4">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-white border border-blue-200 flex items-center justify-center mr-4"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <h3 class="font-bold text-gray-900">Our Mission</h3>
-                          </div>
-                          <p class="text-gray-700">
-                            To empower educators by simplifying complex
-                            administrative tasks, allowing them to focus more on
-                            teaching and student development.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200"
-                        >
-                          <div class="flex items-center mb-4">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-white border border-blue-200 flex items-center justify-center mr-4"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <h3 class="font-bold text-gray-900">Our Vision</h3>
-                          </div>
-                          <p class="text-gray-700">
-                            To provide an intuitive, secure, and all-in-one
-                            digital platform for managing student information,
-                            bridging the gap between data management and
-                            effective education.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="bg-white border border-blue-200 rounded-xl p-6"
+                      <span class="font-medium"
+                        >Less paperwork, more teaching.</span
                       >
-                        <p class="text-gray-700 mb-4">
-                          At StudentTracker, we believe that every minute saved
-                          from paperwork is a minute gained for meaningful
-                          teaching. We're here to handle the administrative
-                          burden so you can focus on what truly
-                          matters—inspiring young minds.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Our Story -->
+            <section id="story" class="about-section mb-12">
+              <div class="flex items-start mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    Our Story
+                  </h2>
+
+                  <div
+                    class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 mb-6"
+                  >
+                    <div class="flex items-start">
+                      <div
+                        class="w-12 h-12 rounded-lg bg-blue-200 flex items-center justify-center mr-4 flex-shrink-0"
+                      >
+                        <svg
+                          class="w-6 h-6 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 class="font-bold text-gray-900 mb-2">
+                          From a Simple Question to a Powerful Solution
+                        </h3>
+                        <p class="text-gray-700">
+                          StudentTracker began with a simple observation:
+                          teachers were spending more time on administrative
+                          tasks than on actual teaching. Our founder, Amrit, saw
+                          brilliant educators overwhelmed by paperwork,
+                          scattered files, and manual record-keeping.
                         </p>
-                        <div class="flex items-center text-blue-600">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-blue-200 rounded-xl p-5">
+                      <h4
+                        class="font-bold text-gray-900 mb-3 flex items-center"
+                      >
+                        <svg
+                          class="w-5 h-5 text-blue-600 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        The Inspiration
+                      </h4>
+                      <p class="text-gray-600 text-sm">
+                        Watching teachers struggle with time-consuming
+                        administrative work inspired us to create a better way.
+                        We asked: "What if teachers had one secure place to
+                        manage everything?"
+                      </p>
+                    </div>
+
+                    <div class="bg-white border border-blue-200 rounded-xl p-5">
+                      <h4
+                        class="font-bold text-gray-900 mb-3 flex items-center"
+                      >
+                        <svg
+                          class="w-5 h-5 text-blue-600 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        The Journey
+                      </h4>
+                      <p class="text-gray-600 text-sm">
+                        We started with basic student profiles and grew into a
+                        comprehensive platform. Every feature was developed
+                        based on real teacher feedback and classroom needs.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- What We Offer -->
+            <section id="features" class="about-section mb-12">
+              <div class="flex items-start mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    What We Offer
+                  </h2>
+                  <p class="text-gray-700 leading-relaxed mb-6">
+                    StudentTracker transforms how you manage student
+                    information. Here's how we solve common classroom
+                    challenges:
+                  </p>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                        >
                           <svg
-                            class="w-5 h-5 mr-2"
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
+                            />
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-gray-900">
+                          Comprehensive Student Profiles
+                        </h4>
+                      </div>
+                      <p class="text-gray-600 text-sm">
+                        Effortlessly create, update, and manage detailed student
+                        records, including personal information, photos, and
+                        contact details—all in one organized place.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29-3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                            />
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-gray-900">
+                          Academic & Marks Management
+                        </h4>
+                      </div>
+                      <p class="text-gray-600 text-sm">
+                        Track student grades, marks for different terms, and
+                        performance over time with our intuitive interface. No
+                        more spreadsheets or paper records.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
                             <path
                               fill-rule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
                               clip-rule="evenodd"
                             />
                           </svg>
-                          <span class="font-medium"
-                            >Less paperwork, more teaching.</span
-                          >
                         </div>
+                        <h4 class="font-bold text-gray-900">
+                          Automated Certificate Generation
+                        </h4>
                       </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Our Story -->
-                <section id="story" class="about-section mb-12">
-                  <div class="flex items-start mb-6">
-                    <div
-                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
-                    >
-                      <svg
-                        class="w-6 h-6 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                        Our Story
-                      </h2>
-
-                      <div
-                        class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 mb-6"
-                      >
-                        <div class="flex items-start">
-                          <div
-                            class="w-12 h-12 rounded-lg bg-blue-200 flex items-center justify-center mr-4 flex-shrink-0"
-                          >
-                            <svg
-                              class="w-6 h-6 text-blue-600"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <div>
-                            <h3 class="font-bold text-gray-900 mb-2">
-                              From a Simple Question to a Powerful Solution
-                            </h3>
-                            <p class="text-gray-700">
-                              StudentTracker began with a simple observation:
-                              teachers were spending more time on administrative
-                              tasks than on actual teaching. Our founder, Amrit,
-                              saw brilliant educators overwhelmed by paperwork,
-                              scattered files, and manual record-keeping.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5"
-                        >
-                          <h4
-                            class="font-bold text-gray-900 mb-3 flex items-center"
-                          >
-                            <svg
-                              class="w-5 h-5 text-blue-600 mr-2"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                            The Inspiration
-                          </h4>
-                          <p class="text-gray-600 text-sm">
-                            Watching teachers struggle with time-consuming
-                            administrative work inspired us to create a better
-                            way. We asked: "What if teachers had one secure
-                            place to manage everything?"
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5"
-                        >
-                          <h4
-                            class="font-bold text-gray-900 mb-3 flex items-center"
-                          >
-                            <svg
-                              class="w-5 h-5 text-blue-600 mr-2"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                            The Journey
-                          </h4>
-                          <p class="text-gray-600 text-sm">
-                            We started with basic student profiles and grew into
-                            a comprehensive platform. Every feature was
-                            developed based on real teacher feedback and
-                            classroom needs.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- What We Offer -->
-                <section id="features" class="about-section mb-12">
-                  <div class="flex items-start mb-6">
-                    <div
-                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
-                    >
-                      <svg
-                        class="w-6 h-6 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                        What We Offer
-                      </h2>
-                      <p class="text-gray-700 leading-relaxed mb-6">
-                        StudentTracker transforms how you manage student
-                        information. Here's how we solve common classroom
-                        challenges:
+                      <p class="text-gray-600 text-sm">
+                        Instantly create professional certificates for
+                        achievements, annual events, and other recognitions.
+                        Customize templates and generate with just a few clicks.
                       </p>
+                    </div>
 
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
                         <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
                         >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              Comprehensive Student Profiles
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Effortlessly create, update, and manage detailed
-                            student records, including personal information,
-                            photos, and contact details—all in one organized
-                            place.
-                          </p>
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                              clip-rule="evenodd"
+                            />
+                            <path
+                              d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"
+                            />
+                          </svg>
                         </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
-                        >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29-3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              Academic & Marks Management
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Track student grades, marks for different terms, and
-                            performance over time with our intuitive interface.
-                            No more spreadsheets or paper records.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
-                        >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              Automated Certificate Generation
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Instantly create professional certificates for
-                            achievements, annual events, and other recognitions.
-                            Customize templates and generate with just a few
-                            clicks.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
-                        >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
-                                  clip-rule="evenodd"
-                                />
-                                <path
-                                  d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              Secure Document Hub
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Securely upload, store, and manage important student
-                            documents like reports, forms, and past records.
-                            Everything stays organized and accessible.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
-                        >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              AI-Powered Assistance
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Get quick insights and assistance with our
-                            integrated Google AI chat feature. Ask questions
-                            about your data and receive instant, helpful
-                            responses.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
-                        >
-                          <div class="flex items-center mb-3">
-                            <div
-                              class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
-                            >
-                              <svg
-                                class="w-5 h-5 text-blue-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <h4 class="font-bold text-gray-900">
-                              Data-Driven Insights
-                            </h4>
-                          </div>
-                          <p class="text-gray-600 text-sm">
-                            Visualize student data with dynamic charts and
-                            reports. Get class demographics, performance
-                            summaries, and trends at a glance to make informed
-                            decisions.
-                          </p>
-                        </div>
+                        <h4 class="font-bold text-gray-900">
+                          Secure Document Hub
+                        </h4>
                       </div>
+                      <p class="text-gray-600 text-sm">
+                        Securely upload, store, and manage important student
+                        documents like reports, forms, and past records.
+                        Everything stays organized and accessible.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
+                            />
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-gray-900">
+                          AI-Powered Assistance
+                        </h4>
+                      </div>
+                      <p class="text-gray-600 text-sm">
+                        Get quick insights and assistance with our integrated
+                        Google AI chat feature. Ask questions about your data
+                        and receive instant, helpful responses.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-white border border-blue-200 rounded-xl p-5 hover:border-blue-300 transition-colors duration-300"
+                    >
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3"
+                        >
+                          <svg
+                            class="w-5 h-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-gray-900">
+                          Data-Driven Insights
+                        </h4>
+                      </div>
+                      <p class="text-gray-600 text-sm">
+                        Visualize student data with dynamic charts and reports.
+                        Get class demographics, performance summaries, and
+                        trends at a glance to make informed decisions.
+                      </p>
                     </div>
                   </div>
-                </section>
+                </div>
+              </div>
+            </section>
 
-                <!-- Our Commitment -->
-                <section id="commitment" class="about-section mb-12">
-                  <div class="flex items-start mb-6">
+            <!-- Our Commitment -->
+            <section id="commitment" class="about-section mb-12">
+              <div class="flex items-start mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    Our Commitment to You
+                  </h2>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div
-                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                      class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
                     >
-                      <svg
-                        class="w-6 h-6 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                        Our Commitment to You
-                      </h2>
-
-                      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div
-                          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
-                        >
-                          <div
-                            class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
-                          >
-                            <svg
-                              class="w-6 h-6 text-blue-600"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                              <path
-                                fill-rule="evenodd"
-                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <h4 class="font-bold text-gray-900 mb-2">
-                            To Educators
-                          </h4>
-                          <p class="text-gray-700 text-sm">
-                            We listen to your feedback and continuously improve.
-                            We're your partners in education, dedicated to
-                            making your job easier and more rewarding.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
-                        >
-                          <div
-                            class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
-                          >
-                            <svg
-                              class="w-6 h-6 text-blue-600"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <h4 class="font-bold text-gray-900 mb-2">
-                            To Security
-                          </h4>
-                          <p class="text-gray-700 text-sm">
-                            Your students' data is protected with
-                            enterprise-grade security. We use encryption, secure
-                            protocols, and regular audits to ensure complete
-                            confidentiality.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
-                        >
-                          <div
-                            class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
-                          >
-                            <svg
-                              class="w-6 h-6 text-blue-600"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <h4 class="font-bold text-gray-900 mb-2">
-                            To Simplicity
-                          </h4>
-                          <p class="text-gray-700 text-sm">
-                            Powerful tools shouldn't be complicated. Our
-                            intuitive design requires minimal training, so you
-                            can focus on teaching, not learning software.
-                          </p>
-                        </div>
-                      </div>
-
                       <div
-                        class="bg-white border border-blue-200 rounded-xl p-6"
+                        class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
                       >
-                        <p class="text-gray-700 text-center">
-                          <span class="font-bold text-blue-600"
-                            >Our promise:</span
-                          >
-                          We will never stop working to make StudentTracker
-                          better for educators. Your success is our success.
-                        </p>
+                        <svg
+                          class="w-6 h-6 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                          <path
+                            fill-rule="evenodd"
+                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
                       </div>
+                      <h4 class="font-bold text-gray-900 mb-2">To Educators</h4>
+                      <p class="text-gray-700 text-sm">
+                        We listen to your feedback and continuously improve.
+                        We're your partners in education, dedicated to making
+                        your job easier and more rewarding.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
+                    >
+                      <div
+                        class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
+                      >
+                        <svg
+                          class="w-6 h-6 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <h4 class="font-bold text-gray-900 mb-2">To Security</h4>
+                      <p class="text-gray-700 text-sm">
+                        Your students' data is protected with enterprise-grade
+                        security. We use encryption, secure protocols, and
+                        regular audits to ensure complete confidentiality.
+                      </p>
+                    </div>
+
+                    <div
+                      class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 text-center"
+                    >
+                      <div
+                        class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-4"
+                      >
+                        <svg
+                          class="w-6 h-6 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <h4 class="font-bold text-gray-900 mb-2">
+                        To Simplicity
+                      </h4>
+                      <p class="text-gray-700 text-sm">
+                        Powerful tools shouldn't be complicated. Our intuitive
+                        design requires minimal training, so you can focus on
+                        teaching, not learning software.
+                      </p>
                     </div>
                   </div>
-                </section>
 
-                <!-- Meet the Founder -->
-                <section id="founder" class="about-section">
-                  <div class="flex items-start mb-6">
-                    <div
-                      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
-                    >
-                      <svg
-                        class="w-6 h-6 text-blue-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                        Meet the Founder
-                      </h2>
+                  <div class="bg-white border border-blue-200 rounded-xl p-6">
+                    <p class="text-gray-700 text-center">
+                      <span class="font-bold text-blue-600">Our promise:</span>
+                      We will never stop working to make StudentTracker better
+                      for educators. Your success is our success.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-                      <div
-                        class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 mb-6"
-                      >
-                        <div class="flex flex-col md:flex-row items-start">
-                          <div class="mb-4 md:mb-0 md:mr-6">
-                            <div
-                              class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 flex items-center justify-center mx-auto md:mx-0"
-                            >
-                              <span class="text-3xl font-bold text-white"
-                                >A</span
-                              >
-                            </div>
-                          </div>
-                          <div class="flex-1">
-                            <h3 class="font-bold text-gray-900 mb-2">
-                              Hi, I'm Amrit
-                            </h3>
-                            <p class="text-gray-700 mb-4">
-                              I created StudentTracker because I saw brilliant
-                              educators struggling with administrative burdens
-                              instead of focusing on what they do best—teaching.
-                              My passion for technology and education came
-                              together to build a solution that truly helps
-                              teachers.
-                            </p>
-                            <p class="text-gray-700 mb-4">
-                              Every feature in StudentTracker was inspired by
-                              real classroom challenges. I've worked closely
-                              with teachers to understand their needs and build
-                              tools that make a genuine difference in their
-                              daily work.
-                            </p>
-                            <div
-                              class="bg-white rounded-lg p-4 border border-blue-200"
-                            >
-                              <p class="text-gray-700 mb-2">
-                                <span class="font-bold text-blue-600"
-                                  >I'd love to hear from you!</span
-                                >
-                                Your feedback shapes our platform.
-                              </p>
-                              <a
-                                href="mailto:me.sharma.amrit@gmail.com"
-                                class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
-                              >
-                                <svg
-                                  class="w-5 h-5 mr-2"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
-                                  />
-                                  <path
-                                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-                                  />
-                                </svg>
-                                me.sharma.amrit@gmail.com
-                              </a>
-                            </div>
-                          </div>
+            <!-- Meet the Founder -->
+            <section id="founder" class="about-section">
+              <div class="flex items-start mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mr-4 flex-shrink-0"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    Meet the Founder
+                  </h2>
+
+                  <div
+                    class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 mb-6"
+                  >
+                    <div class="flex flex-col md:flex-row items-start">
+                      <div class="mb-4 md:mb-0 md:mr-6">
+                        <div
+                          class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 flex items-center justify-center mx-auto md:mx-0"
+                        >
+                          <span class="text-3xl font-bold text-white">A</span>
                         </div>
                       </div>
-
-                      <!-- Call to Action -->
-                      <div class="text-center">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">
-                          Ready to Transform How You Manage Student Data?
+                      <div class="flex-1">
+                        <h3 class="font-bold text-gray-900 mb-2">
+                          Hi, I'm Amrit
                         </h3>
-                        <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-                          Join thousands of educators who have already
-                          simplified their administrative work with
-                          StudentTracker.
+                        <p class="text-gray-700 mb-4">
+                          I created StudentTracker because I saw brilliant
+                          educators struggling with administrative burdens
+                          instead of focusing on what they do best—teaching. My
+                          passion for technology and education came together to
+                          build a solution that truly helps teachers.
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                          Every feature in StudentTracker was inspired by real
+                          classroom challenges. I've worked closely with
+                          teachers to understand their needs and build tools
+                          that make a genuine difference in their daily work.
                         </p>
                         <div
-                          class="flex flex-col sm:flex-row gap-4 justify-center"
+                          class="bg-white rounded-lg p-4 border border-blue-200"
                         >
+                          <p class="text-gray-700 mb-2">
+                            <span class="font-bold text-blue-600"
+                              >I'd love to hear from you!</span
+                            >
+                            Your feedback shapes our platform.
+                          </p>
                           <a
-                            href="/signup"
-                            class="inline-flex items-center justify-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-4 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+                            href="mailto:me.sharma.amrit@gmail.com"
+                            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
                           >
                             <svg
                               class="w-5 h-5 mr-2"
@@ -1001,111 +932,144 @@
                               viewBox="0 0 20 20"
                             >
                               <path
-                                fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
-                                clip-rule="evenodd"
+                                d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                              />
+                              <path
+                                d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
                               />
                             </svg>
-                            Start Your Free Trial
-                          </a>
-                          <a
-                            href="/login"
-                            class="inline-flex items-center justify-center px-8 py-4 border-2 border-blue-300 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-300"
-                          >
-                            Explore Demo Dashboard
+                            me.sharma.amrit@gmail.com
                           </a>
                         </div>
-                        <p class="text-sm text-gray-500 mt-4">
-                          No credit card required • Free setup assistance •
-                          Cancel anytime
-                        </p>
                       </div>
                     </div>
                   </div>
-                </section>
+
+                  <!-- Call to Action -->
+                  <div class="text-center">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                      Ready to Transform How You Manage Student Data?
+                    </h3>
+                    <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+                      Join thousands of educators who have already simplified
+                      their administrative work with StudentTracker.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                      <a
+                        href="/signup"
+                        class="inline-flex items-center justify-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-4 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        <svg
+                          class="w-5 h-5 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        Start Your Free Trial
+                      </a>
+                      <a
+                        href="/login"
+                        class="inline-flex items-center justify-center px-8 py-4 border-2 border-blue-300 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-300"
+                      >
+                        Explore Demo Dashboard
+                      </a>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">
+                      No credit card required • Free setup assistance • Cancel
+                      anytime
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </div>
-    </main>
+    </div>
+  </div>
+</main>
 
 <%- include('partials/land_footer') %>
 
-    <!-- JavaScript -->
-    <script nonce="<%= nonce %>">
-      document.addEventListener('DOMContentLoaded', function () {
-        // Mobile menu toggle
-        const mobileMenuButton = document.querySelector(
-          '[data-collapse-toggle="navbar-default"]'
-        );
-        const mobileMenu = document.getElementById('navbar-default');
+<!-- JavaScript -->
+<script nonce="<%= nonce %>">
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mobile menu toggle
+    const mobileMenuButton = document.querySelector(
+      '[data-collapse-toggle="navbar-default"]',
+    );
+    const mobileMenu = document.getElementById("navbar-default");
 
-        if (mobileMenuButton && mobileMenu) {
-          mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-          });
-        }
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-              window.scrollTo({
-                top: targetElement.offsetTop - 120,
-                behavior: 'smooth',
-              });
-            }
-          });
-        });
-
-        // Highlight active nav items
-        const sections = document.querySelectorAll('.about-section');
-
-        function highlightActiveSection() {
-          const scrollTop = window.pageYOffset;
-
-          sections.forEach((section) => {
-            const sectionTop = section.offsetTop - 150;
-            const sectionBottom = sectionTop + section.offsetHeight;
-
-            if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
-              const id = section.getAttribute('id');
-              const navLink = document.querySelector(`a[href="#${id}"]`);
-
-              document.querySelectorAll('nav a').forEach((link) => {
-                link.classList.remove('text-blue-600', 'bg-blue-50');
-                link.querySelector('.w-2').classList.remove('bg-blue-500');
-                link.querySelector('.w-2').classList.add('bg-blue-200');
-              });
-
-              if (navLink) {
-                navLink.classList.add('text-blue-600', 'bg-blue-50');
-                navLink.querySelector('.w-2').classList.remove('bg-blue-200');
-                navLink.querySelector('.w-2').classList.add('bg-blue-500');
-              }
-            }
-          });
-        }
-
-        window.addEventListener('scroll', highlightActiveSection);
-        highlightActiveSection();
-
-        // Add animation delay to floating elements
-        const floatElements = document.querySelectorAll('.float-animation');
-        floatElements.forEach((element, index) => {
-          element.style.animationDelay = `${index * 0.5}s`;
-        });
-
-        // Add growing circle animation
-        const growingCircles = document.querySelectorAll('.growing-circle');
-        growingCircles.forEach((circle, index) => {
-          circle.style.animationDelay = `${index * 0.7}s`;
-        });
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
       });
-    </script>
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href");
+        if (targetId === "#") return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 120,
+            behavior: "smooth",
+          });
+        }
+      });
+    });
+
+    // Highlight active nav items
+    const sections = document.querySelectorAll(".about-section");
+
+    function highlightActiveSection() {
+      const scrollTop = window.pageYOffset;
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 150;
+        const sectionBottom = sectionTop + section.offsetHeight;
+
+        if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
+          const id = section.getAttribute("id");
+          const navLink = document.querySelector(`a[href="#${id}"]`);
+
+          document.querySelectorAll("nav a").forEach((link) => {
+            link.classList.remove("text-blue-600", "bg-blue-50");
+            link.querySelector(".w-2").classList.remove("bg-blue-500");
+            link.querySelector(".w-2").classList.add("bg-blue-200");
+          });
+
+          if (navLink) {
+            navLink.classList.add("text-blue-600", "bg-blue-50");
+            navLink.querySelector(".w-2").classList.remove("bg-blue-200");
+            navLink.querySelector(".w-2").classList.add("bg-blue-500");
+          }
+        }
+      });
+    }
+
+    window.addEventListener("scroll", highlightActiveSection);
+    highlightActiveSection();
+
+    // Add animation delay to floating elements
+    const floatElements = document.querySelectorAll(".float-animation");
+    floatElements.forEach((element, index) => {
+      element.style.animationDelay = `${index * 0.5}s`;
+    });
+
+    // Add growing circle animation
+    const growingCircles = document.querySelectorAll(".growing-circle");
+    growingCircles.forEach((circle, index) => {
+      circle.style.animationDelay = `${index * 0.7}s`;
+    });
+  });
+</script>

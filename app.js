@@ -1,20 +1,20 @@
-const crypto = require('crypto');
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const compression = require('compression');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const morgan = require('morgan');
-const favicon = require('serve-favicon');
+const crypto = require("crypto");
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const compression = require("compression");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const morgan = require("morgan");
+const favicon = require("serve-favicon");
 
-const router = require('./router/route');
-const student = require('./router/student');
-const Gemini_router = require('./router/ai_router');
+const router = require("./router/route");
+const student = require("./router/student");
+const Gemini_router = require("./router/ai_router");
 // const authRoutes = require("./services/auth");
 // const webhook = require("./router/webhook");
-const { errorHandler, notFoundHandler } = require('./middleware/errorHandlers');
+const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 class App {
   constructor() {
@@ -25,15 +25,15 @@ class App {
   }
 
   configureMiddleware() {
-    this.app.set('trust proxy', 'loopback');
+    this.app.set("trust proxy", "loopback");
     this.app.use(helmet());
     this.app.use(compression());
 
     this.app.use((req, res, next) => {
-      res.locals.nonce = crypto.randomBytes(16).toString('hex');
+      res.locals.nonce = crypto.randomBytes(16).toString("hex");
       res.setHeader(
-        'Content-Security-Policy',
-        `script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; frame-src 'self' https://www.google.com;`
+        "Content-Security-Policy",
+        `script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; frame-src 'self' https://www.google.com;`,
       );
       next();
     });
@@ -46,44 +46,46 @@ class App {
     });
     this.app.use(limiter);
 
-    if (process.env.NODE_ENV !== 'production') {
-      this.app.use(morgan('combined'));
+    if (process.env.NODE_ENV !== "production") {
+      this.app.use(morgan("combined"));
     }
 
-    this.app.use(express.json({ limit: '10mb' }));
-    this.app.use(express.urlencoded({ limit: '10mb', extended: true }));
-    this.app.use(bodyParser.json({ limit: '10mb' }));
-    this.app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+    this.app.use(express.json({ limit: "10mb" }));
+    this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
+    this.app.use(bodyParser.json({ limit: "10mb" }));
+    this.app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
     this.app.use(cookieParser());
 
-    this.app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
-    this.app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
+    this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
+    this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
     this.app.use(
-      '/flowbite',
-      express.static(path.join(__dirname, 'node_modules/flowbite/dist'))
+      "/flowbite",
+      express.static(path.join(__dirname, "node_modules/flowbite/dist")),
     );
     this.app.use(
-      '/apexcharts',
-      express.static(path.join(__dirname, 'node_modules', 'apexcharts', 'dist'))
+      "/apexcharts",
+      express.static(
+        path.join(__dirname, "node_modules", "apexcharts", "dist"),
+      ),
     );
-    this.app.use('/output', express.static(path.join(__dirname, 'output')));
+    this.app.use("/output", express.static(path.join(__dirname, "output")));
     this.app.use(
-      express.static(path.join(__dirname, 'public'), {
-        setHeaders: (res) => res.setHeader('Access-Control-Allow-Origin', '*'),
-      })
+      express.static(path.join(__dirname, "public"), {
+        setHeaders: (res) => res.setHeader("Access-Control-Allow-Origin", "*"),
+      }),
     );
-    this.app.set('views', path.join(__dirname, 'views'));
+    this.app.set("views", path.join(__dirname, "views"));
 
-    this.app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+    this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
   }
 
   configureRoutes() {
     // this.app.use(authRoutes);
-    this.app.set('view engine', 'ejs');
-    this.app.use('/', router);
-    this.app.use('/api/students/', student);
+    this.app.set("view engine", "ejs");
+    this.app.use("/", router);
+    this.app.use("/api/students/", student);
     // this.app.use("/webhook", webhook);
-    this.app.use('/ai', Gemini_router);
+    this.app.use("/ai", Gemini_router);
   }
 
   configureErrorHandling() {

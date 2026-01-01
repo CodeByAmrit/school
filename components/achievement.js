@@ -1,26 +1,26 @@
-const { PDFDocument, rgb } = require('pdf-lib');
-const fontkit = require('@pdf-lib/fontkit'); // Import fontkit
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
-const { getConnection } = require('../models/getConnection');
+const { PDFDocument, rgb } = require("pdf-lib");
+const fontkit = require("@pdf-lib/fontkit"); // Import fontkit
+const sharp = require("sharp");
+const fs = require("fs");
+const path = require("path");
+const { getConnection } = require("../models/getConnection");
 
 async function generateCertificate(
   student,
   activity,
   date,
   type,
-  position = ''
+  position = "",
 ) {
-  if (type === 'juniors') {
+  if (type === "juniors") {
     try {
       // Load the certificate template
-      const templatePath = path.join(__dirname, '../template/kids.pdf');
+      const templatePath = path.join(__dirname, "../template/kids.pdf");
       const templateBytes = fs.readFileSync(templatePath);
       const pdfDoc = await PDFDocument.load(templateBytes);
       // Register fontkit with PDFDocument
       pdfDoc.registerFontkit(fontkit);
-      const fontPath = path.join(__dirname, '../template/Inter_18pt-Bold.ttf');
+      const fontPath = path.join(__dirname, "../template/Inter_18pt-Bold.ttf");
       const fontBytes = fs.readFileSync(fontPath);
       const boldFont = await pdfDoc.embedFont(fontBytes);
 
@@ -32,20 +32,20 @@ async function generateCertificate(
       const parentText = `Son/Daughter of ${student.father_name.toUpperCase()} & ${student.mother_name.toUpperCase()}`;
       const activityText = activity
         .toUpperCase()
-        .split(' ')
+        .split(" ")
         .reduce((acc, word) => {
           if (acc.length === 0) {
             return [word];
           }
           const lastLine = acc[acc.length - 1];
-          if ((lastLine + ' ' + word).length <= 82) {
-            acc[acc.length - 1] = lastLine + ' ' + word;
+          if ((lastLine + " " + word).length <= 82) {
+            acc[acc.length - 1] = lastLine + " " + word;
           } else {
             acc.push(word);
           }
           return acc;
         }, [])
-        .join('\n');
+        .join("\n");
 
       const nameTextWidth = boldFont.widthOfTextAtSize(nameText, 60);
       const activityTextWidth = boldFont.widthOfTextAtSize(activityText, 12);
@@ -83,8 +83,8 @@ async function generateCertificate(
       let connection = await getConnection();
 
       const [rows] = await connection.execute(
-        'SELECT school_logo FROM teacher WHERE id = ?',
-        [student.teacher_id]
+        "SELECT school_logo FROM teacher WHERE id = ?",
+        [student.teacher_id],
       );
       if (rows.length > 0 && rows[0].school_logo) {
         const schoolLogoBuffer = Buffer.from(rows[0].school_logo);
@@ -106,18 +106,18 @@ async function generateCertificate(
       const pdfBytes = await pdfDoc.save();
       return pdfBytes;
     } catch (error) {
-      console.error('Error generating certificate:', error);
-      throw new Error('Failed to generate certificate');
+      console.error("Error generating certificate:", error);
+      throw new Error("Failed to generate certificate");
     }
-  } else if (type === 'seniors') {
+  } else if (type === "seniors") {
     try {
       // Load the certificate template
-      const templatePath = path.join(__dirname, '../template/achievement.pdf');
+      const templatePath = path.join(__dirname, "../template/achievement.pdf");
       const templateBytes = fs.readFileSync(templatePath);
       const pdfDoc = await PDFDocument.load(templateBytes);
       // Register fontkit with PDFDocument
       pdfDoc.registerFontkit(fontkit);
-      const fontPath = path.join(__dirname, '../template/Inter_18pt-Bold.ttf');
+      const fontPath = path.join(__dirname, "../template/Inter_18pt-Bold.ttf");
       const fontBytes = fs.readFileSync(fontPath);
       const boldFont = await pdfDoc.embedFont(fontBytes);
 
@@ -131,20 +131,20 @@ async function generateCertificate(
       const mother_nameText = student.mother_name.toUpperCase();
       const activityText = activity
         .toUpperCase()
-        .split(' ')
+        .split(" ")
         .reduce((acc, word) => {
           if (acc.length === 0) {
             return [word];
           }
           const lastLine = acc[acc.length - 1];
-          if ((lastLine + ' ' + word).length <= 82) {
-            acc[acc.length - 1] = lastLine + ' ' + word;
+          if ((lastLine + " " + word).length <= 82) {
+            acc[acc.length - 1] = lastLine + " " + word;
           } else {
             acc.push(word);
           }
           return acc;
         }, [])
-        .join('\n');
+        .join("\n");
 
       const nameTextWidth = boldFont.widthOfTextAtSize(nameText, 24);
       const activityTextWidth = boldFont.widthOfTextAtSize(activityText, 12);
@@ -174,8 +174,8 @@ async function generateCertificate(
       let connection = await getConnection();
 
       const [rows] = await connection.execute(
-        'SELECT school_logo FROM teacher WHERE id = ?',
-        [student.teacher_id]
+        "SELECT school_logo FROM teacher WHERE id = ?",
+        [student.teacher_id],
       );
       if (rows.length > 0 && rows[0].school_logo) {
         const schoolLogoBuffer = Buffer.from(rows[0].school_logo);
@@ -197,7 +197,7 @@ async function generateCertificate(
       if (student.image) {
         const studentImageBuffer = await sharp(Buffer.from(student.image))
           .resize(100, 100)
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedStudentImage = await pdfDoc.embedPng(studentImageBuffer);
         firstPage.drawImage(embeddedStudentImage, {
@@ -212,19 +212,19 @@ async function generateCertificate(
       const pdfBytes = await pdfDoc.save();
       return pdfBytes;
     } catch (error) {
-      console.error('Error generating certificate:', error);
-      throw new Error('Failed to generate certificate');
+      console.error("Error generating certificate:", error);
+      throw new Error("Failed to generate certificate");
     }
-  } else if (type === 'achievement') {
+  } else if (type === "achievement") {
     try {
-      console.log('achievement');
+      console.log("achievement");
       // Load the certificate template
-      const templatePath = path.join(__dirname, '../template/annual.pdf');
+      const templatePath = path.join(__dirname, "../template/annual.pdf");
       const templateBytes = fs.readFileSync(templatePath);
       const pdfDoc = await PDFDocument.load(templateBytes);
       // Register fontkit with PDFDocument
       pdfDoc.registerFontkit(fontkit);
-      const fontPath = path.join(__dirname, '../template/oleo.ttf');
+      const fontPath = path.join(__dirname, "../template/oleo.ttf");
       const fontBytes = fs.readFileSync(fontPath);
       const boldFont = await pdfDoc.embedFont(fontBytes);
 
@@ -235,12 +235,12 @@ async function generateCertificate(
       const nameText =
         `S/O - D/O OF ${student.father_name} & ${student.mother_name}`.toUpperCase();
       const first = student.name
-        .split(' ')
+        .split(" ")
         .map(
           (element) =>
-            element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
+            element.charAt(0).toUpperCase() + element.slice(1).toLowerCase(),
         )
-        .join(' ');
+        .join(" ");
       // const father_nameText = student.father_name.toUpperCase();
       // const mother_nameText = student.mother_name.toUpperCase();
       const activityText = `Session ${student.session} in Class: ${
@@ -276,8 +276,8 @@ async function generateCertificate(
       let connection = await getConnection();
 
       const [rows] = await connection.execute(
-        'SELECT school_logo FROM teacher WHERE id = ?',
-        [student.teacher_id]
+        "SELECT school_logo FROM teacher WHERE id = ?",
+        [student.teacher_id],
       );
       if (rows.length > 0 && rows[0].school_logo) {
         const schoolLogoBuffer = Buffer.from(rows[0].school_logo);
@@ -299,7 +299,7 @@ async function generateCertificate(
       if (student.image) {
         const studentImageBuffer = await sharp(Buffer.from(student.image))
           .resize(100, 100)
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedStudentImage = await pdfDoc.embedPng(studentImageBuffer);
         firstPage.drawImage(embeddedStudentImage, {
@@ -314,26 +314,26 @@ async function generateCertificate(
       const pdfBytes = await pdfDoc.save();
       return pdfBytes;
     } catch (error) {
-      console.error('Error generating certificate:', error);
-      throw new Error('Failed to generate certificate');
+      console.error("Error generating certificate:", error);
+      throw new Error("Failed to generate certificate");
     }
-  } else if (type === 'ceremony') {
+  } else if (type === "ceremony") {
     try {
       // Load the certificate template
-      const templatePath = path.join(__dirname, '../template/ceremony.pdf');
+      const templatePath = path.join(__dirname, "../template/ceremony.pdf");
       const templateBytes = fs.readFileSync(templatePath);
       const pdfDoc = await PDFDocument.load(templateBytes);
 
       // Set metadata
-      pdfDoc.setTitle('Felicitation Certificate');
-      pdfDoc.setAuthor('Bajrang Vidya Mandir');
-      pdfDoc.setSubject('Certificate of Participation');
-      pdfDoc.setProducer('PDF-LIB');
-      pdfDoc.setCreator('Amrit');
+      pdfDoc.setTitle("Felicitation Certificate");
+      pdfDoc.setAuthor("Bajrang Vidya Mandir");
+      pdfDoc.setSubject("Certificate of Participation");
+      pdfDoc.setProducer("PDF-LIB");
+      pdfDoc.setCreator("Amrit");
 
       // Register fontkit with PDFDocument
       pdfDoc.registerFontkit(fontkit);
-      const fontPath = path.join(__dirname, '../template/ceremony.ttf');
+      const fontPath = path.join(__dirname, "../template/ceremony.ttf");
       const fontBytesCermony = fs.readFileSync(fontPath);
       const boldFont = await pdfDoc.embedFont(fontBytesCermony, {
         subset: true,
@@ -348,7 +348,7 @@ async function generateCertificate(
         `${student.name}`.slice(1).toLowerCase();
 
       var parent;
-      if (student.gender === 'MALE') {
+      if (student.gender === "MALE") {
         parent = `S/O Shri. ${
           student.father_name[0].toUpperCase() +
           student.father_name.slice(1).toLowerCase()
@@ -356,7 +356,7 @@ async function generateCertificate(
           student.mother_name[0].toUpperCase() +
           student.mother_name.slice(1).toLowerCase()
         }`;
-      } else if (student.gender === 'FEMALE') {
+      } else if (student.gender === "FEMALE") {
         parent = `D/O Shri. ${
           student.father_name[0].toUpperCase() +
           student.father_name.slice(1).toLowerCase()
@@ -388,8 +388,8 @@ async function generateCertificate(
       let connection = await getConnection();
 
       const [rows] = await connection.execute(
-        'SELECT school_logo FROM teacher WHERE id = ?',
-        [student.teacher_id]
+        "SELECT school_logo FROM teacher WHERE id = ?",
+        [student.teacher_id],
       );
       if (rows.length > 0 && rows[0].school_logo) {
         const schoolLogoBuffer = Buffer.from(rows[0].school_logo);
@@ -411,7 +411,7 @@ async function generateCertificate(
       if (student.image) {
         const studentImageBuffer = await sharp(Buffer.from(student.image))
           .resize(100, 100)
-          .toFormat('png')
+          .toFormat("png")
           .toBuffer();
         const embeddedStudentImage = await pdfDoc.embedPng(studentImageBuffer);
         firstPage.drawImage(embeddedStudentImage, {
@@ -426,8 +426,8 @@ async function generateCertificate(
       const pdfBytes = await pdfDoc.save();
       return pdfBytes;
     } catch (error) {
-      console.error('Error generating certificate:', error);
-      throw new Error('Failed to generate certificate');
+      console.error("Error generating certificate:", error);
+      throw new Error("Failed to generate certificate");
     }
   }
 }

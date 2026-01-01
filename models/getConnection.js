@@ -1,5 +1,5 @@
-const mysql = require('mysql2/promise');
-const dotenv = require('dotenv');
+const mysql = require("mysql2/promise");
+const dotenv = require("dotenv");
 
 // Load environment variables
 dotenv.config();
@@ -7,7 +7,7 @@ dotenv.config();
 // Decode SSL CA from Base64 (if used)
 let sslConfig = undefined;
 if (process.env.DB_CA) {
-  const caContent = Buffer.from(process.env.DB_CA, 'base64').toString('utf8');
+  const caContent = Buffer.from(process.env.DB_CA, "base64").toString("utf8");
   sslConfig = { ca: caContent };
 }
 
@@ -30,14 +30,14 @@ async function getConnection() {
     const connection = await pool.getConnection();
     return connection;
   } catch (error) {
-    console.error('❌ Database connection error:', error);
+    console.error("❌ Database connection error:", error);
     throw error;
   }
 }
 
-process.on('SIGINT', async () => {
+process.on("SIGINT", async () => {
   await pool.end();
-  console.log('Database pool closed.');
+  console.log("Database pool closed.");
   process.exit(0);
 });
 

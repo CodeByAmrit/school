@@ -4,31 +4,31 @@ Student Tracker is a comprehensive Student Management System designed for school
 
 ## 🚀 Features
 
--   **Teacher Dashboard**: Manage students, view statistics, and access all features from a central dashboard.
--   **Student Management**: Register new students, edit existing student information, and view a list of all students.
--   **Document Management**: Upload and manage student files such as documents, photos, and signatures.
--   **Certificate Generation**:
-    -   Generate **Annual Report Cards** in PDF format.
-    -   Create and download **Achievement Certificates**.
-    -   Issue **Virtual ID Cards**.
--   **AI Chat**: An integrated AI chat feature to assist teachers.
--   **Secure Authentication**: Secure login for teachers with password hashing.
+- **Teacher Dashboard**: Manage students, view statistics, and access all features from a central dashboard.
+- **Student Management**: Register new students, edit existing student information, and view a list of all students.
+- **Document Management**: Upload and manage student files such as documents, photos, and signatures.
+- **Certificate Generation**:
+  - Generate **Annual Report Cards** in PDF format.
+  - Create and download **Achievement Certificates**.
+  - Issue **Virtual ID Cards**.
+- **AI Chat**: An integrated AI chat feature to assist teachers.
+- **Secure Authentication**: Secure login for teachers with password hashing.
 
 ## 🛠️ Tech Stack
 
--   **Backend**: Node.js, Express.js
--   **Frontend**: EJS (Embedded JavaScript templates), Tailwind CSS, Flowbite
--   **Database**: MySQL (using the `mysql2` library)
--   **Authentication**: JWT (JSON Web Tokens) stored in cookies.
--   **File Handling**: `pdf-lib` for PDF generation, `multer` for file uploads.
--   **Security**: `helmet` for securing HTTP headers, `express-rate-limit` for rate limiting, and dynamic CSP nonces to prevent XSS attacks.
+- **Backend**: Node.js, Express.js
+- **Frontend**: EJS (Embedded JavaScript templates), Tailwind CSS, Flowbite
+- **Database**: MySQL (using the `mysql2` library)
+- **Authentication**: JWT (JSON Web Tokens) stored in cookies.
+- **File Handling**: `pdf-lib` for PDF generation, `multer` for file uploads.
+- **Security**: `helmet` for securing HTTP headers, `express-rate-limit` for rate limiting, and dynamic CSP nonces to prevent XSS attacks.
 
 ## ⚙️ Getting Started
 
 ### Prerequisites
 
--   [Node.js](https://nodejs.org/) (v18 or later)
--   [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) (v18 or later)
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 
 ### Local Development
 
@@ -104,9 +104,9 @@ You can also build the Docker image from the source code.
 
 This project uses **GitHub Actions** for continuous integration and deployment.
 
--   **Workflow**: `.github/workflows/docker-image.yml`
--   **Trigger**: The workflow is triggered on every `push` to the `create-docker-image` branch.
--   **Action**: It builds a new Docker image and pushes it to [Docker Hub](https://hub.docker.com/r/codebyamrit/student-tracker) with the tags `latest` and a build number (e.g., `123`).
+- **Workflow**: `.github/workflows/docker-image.yml`
+- **Trigger**: The workflow is triggered on every `push` to the `create-docker-image` branch.
+- **Action**: It builds a new Docker image and pushes it to [Docker Hub](https://hub.docker.com/r/codebyamrit/student-tracker) with the tags `latest` and a build number (e.g., `123`).
 
 This setup automates the process of creating a new Docker image whenever changes are pushed to the specified branch, ensuring that the latest version of the application is always ready for deployment.
 
