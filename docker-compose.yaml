@@ -1,6 +1,6 @@
 services:
   node:
-    image: codebyamrit/student-tracker:stable
+    image: codebyamrit/student-tracker:1.2.1
     container_name: school-node
     ports:
       - "8080:5000"
