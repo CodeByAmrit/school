@@ -336,3 +336,152 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+
+-- Add new settings tables
+
+-- Teacher/Admin Settings
+CREATE TABLE IF NOT EXISTS teacher_settings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    theme VARCHAR(20) DEFAULT 'light',
+    notifications_enabled BOOLEAN DEFAULT TRUE,
+    email_notifications BOOLEAN DEFAULT TRUE,
+    default_session VARCHAR(20) DEFAULT '2024-2025',
+    auto_save_draft BOOLEAN DEFAULT TRUE,
+    default_class VARCHAR(20),
+    date_format VARCHAR(20) DEFAULT 'dd-mm-yyyy',
+    items_per_page INT DEFAULT 20,
+    language VARCHAR(10) DEFAULT 'en',
+    timezone VARCHAR(50) DEFAULT 'Asia/Kolkata',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY (teacher_id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- School Configuration
+CREATE TABLE IF NOT EXISTS school_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    school_name VARCHAR(200) NOT NULL,
+    school_code VARCHAR(50),
+    school_address TEXT,
+    school_phone VARCHAR(20),
+    school_email VARCHAR(100),
+    principal_name VARCHAR(100),
+    affiliation_number VARCHAR(100),
+    board VARCHAR(100) DEFAULT 'CBSE',
+    establishment_year YEAR,
+    total_strength INT DEFAULT 0,
+    academic_start_month VARCHAR(20) DEFAULT 'April',
+    academic_end_month VARCHAR(20) DEFAULT 'March',
+    terms_per_year INT DEFAULT 3,
+    enable_attendance BOOLEAN DEFAULT TRUE,
+    enable_marks BOOLEAN DEFAULT TRUE,
+    enable_reports BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY (teacher_id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Class and Section Configuration
+CREATE TABLE IF NOT EXISTS class_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    class_name VARCHAR(40) NOT NULL,
+    sections VARCHAR(100) DEFAULT 'A,B,C,D',
+    max_students INT DEFAULT 40,
+    subjects TEXT, -- JSON array of subjects
+    class_teacher VARCHAR(100),
+    room_number VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Subject Configuration
+CREATE TABLE IF NOT EXISTS subject_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    class_name VARCHAR(40) NOT NULL,
+    subject_name VARCHAR(100) NOT NULL,
+    subject_code VARCHAR(20),
+    is_elective BOOLEAN DEFAULT FALSE,
+    max_marks INT DEFAULT 100,
+    passing_marks INT DEFAULT 33,
+    priority INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (teacher_id, class_name, subject_name),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Exam Configuration
+CREATE TABLE IF NOT EXISTS exam_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    term INT NOT NULL,
+    term_name VARCHAR(50),
+    start_date DATE,
+    end_date DATE,
+    weightage INT DEFAULT 100,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (teacher_id, term),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Backup Schedule
+CREATE TABLE IF NOT EXISTS backup_schedule (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    schedule_type ENUM('daily', 'weekly', 'monthly') DEFAULT 'weekly',
+    last_backup TIMESTAMP NULL,
+    next_backup TIMESTAMP NULL,
+    backup_location VARCHAR(20) DEFAULT 'local',
+    auto_backup BOOLEAN DEFAULT TRUE,
+    retention_days INT DEFAULT 30,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Audit Log
+CREATE TABLE IF NOT EXISTS audit_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    action_type VARCHAR(50) NOT NULL,
+    action_details TEXT,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+);
+
+-- Add school_logo column to school_config
+ALTER TABLE school_config 
+ADD COLUMN school_logo MEDIUMBLOB NULL AFTER school_email;
+
+-- Add email_verified column to teacher table
+ALTER TABLE teacher 
+ADD COLUMN email_verified BOOLEAN DEFAULT FALSE,
+ADD COLUMN last_login TIMESTAMP NULL,
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- Create indexes for better performance
+CREATE INDEX idx_teacher_id ON teacher_settings (teacher_id);
+CREATE INDEX idx_school_teacher_id ON school_config (teacher_id);
+CREATE INDEX idx_class_teacher_id ON class_config (teacher_id);
+CREATE INDEX idx_subject_teacher_id ON subject_config (teacher_id);
+CREATE INDEX idx_exam_teacher_id ON exam_config (teacher_id);
+
+-- Default settings for existing teachers
+INSERT INTO teacher_settings (teacher_id) 
+SELECT id FROM teacher 
+WHERE id NOT IN (SELECT teacher_id FROM teacher_settings);
+
+-- Default school config for existing teachers
+INSERT INTO school_config (teacher_id, school_name, school_address)
+SELECT id, school_name, school_address
+FROM teacher 
+WHERE id NOT IN (SELECT teacher_id FROM school_config);
