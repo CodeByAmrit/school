@@ -1977,6 +1977,10 @@ input:checked + .toggle-bg {
   margin-top: auto;
 }
 
+.mt-24 {
+  margin-top: 6rem;
+}
+
 .box-border {
   box-sizing: border-box;
 }

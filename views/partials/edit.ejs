@@ -168,10 +168,6 @@
                         class="object-cover w-full h-full"
                         src="<%= student.image %>"
                         alt="<%= student.name %>"
-                        onerror="
-                          this.src =
-                            'https://ui-avatars.com/api/?name=<%= student.name %>&background=63b3ed&color=fff&bold=true'
-                        "
                       />
                     </div>
                     <% if (index % 3 === 0) { %>
@@ -397,11 +393,6 @@
                             id="move-to-leaved-form-<%= student.school_id %>"
                             action="/student/mark-left/<%= student.school_id %>"
                             method="POST"
-                            onsubmit="
-                              return confirm(
-                                'Are you sure you want to move this student to leaved students?',
-                              );
-                            "
                           >
                             <input
                               type="hidden"
@@ -429,11 +420,6 @@
                           <a
                             href="/delete/<%= student.school_id %>"
                             id="delete-link-<%= student.school_id %>"
-                            onclick="
-                              return confirm(
-                                'Are you sure you want to delete this student? This action cannot be undone.',
-                              );
-                            "
                             class="flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                           >
                             <div
