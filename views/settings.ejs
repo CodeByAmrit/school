@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Student Management System</title>
+    <meta name="description" content="Manage your school settings, preferences, and configurations">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+        
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .settings-section {
+            transition: all 0.3s ease;
+        }
+        
+        .settings-section:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #0ea5e9;
+            color: #0ea5e9;
+            font-weight: 600;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #0ea5e9;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px #0ea5e9;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-panel shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+                            <i class="fas fa-cog text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">
+                            <span class="gradient-text">Settings</span> Panel
+                        </span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fas fa-moon hidden dark:block"></i>
+                        <i class="fas fa-sun block dark:hidden"></i>
+                    </button>
+                    <a href="/dashboard" class="px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                            System <span class="gradient-text">Settings</span>
+                        </h1>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">
+                            Configure your school management system preferences
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="save-all" class="px-6 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-medium hover:from-primary-600 hover:to-primary-700 transition-all shadow-md hover:shadow-lg">
+                            <i class="fas fa-save mr-2"></i>Save All Changes
+                        </button>
+                        <button id="reset-all" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                            <i class="fas fa-undo mr-2"></i>Reset to Default
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div class="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                            <%= settings.studentCount || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Total Students</div>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+                            <%= settings.classCount || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Active Classes</div>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                            <%= settings.teacherCount || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Teachers</div>
+                    </div>
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                            <%= settings.session || '2024-2025' %>
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Current Session</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tabs -->
+        <div class="mb-6">
+            <div class="glass-panel rounded-xl">
+                <div class="border-b border-gray-200 dark:border-gray-700">
+                    <nav class="flex overflow-x-auto -mb-px">
+                        <button data-tab="profile" class="tab-active py-4 px-6 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                            <i class="fas fa-user-cog mr-2"></i>Profile
+                        </button>
+                        <button data-tab="school" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-school mr-2"></i>School
+                        </button>
+                        <button data-tab="academic" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-graduation-cap mr-2"></i>Academic
+                        </button>
+                        <button data-tab="notifications" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-bell mr-2"></i>Notifications
+                        </button>
+                        <button data-tab="backup" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-database mr-2"></i>Backup
+                        </button>
+                        <button data-tab="security" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-shield-alt mr-2"></i>Security
+                        </button>
+                        <button data-tab="advanced" class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap">
+                            <i class="fas fa-sliders-h mr-2"></i>Advanced
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Settings Navigation -->
+            <div class="lg:col-span-1">
+                <div class="glass-panel rounded-2xl p-6 sticky top-24">
+                    <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-4">Quick Navigation</h3>
+                    <nav class="space-y-2">
+                        <a href="#profile" class="block p-3 rounded-xl bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-medium">
+                            <i class="fas fa-user-circle mr-3"></i>Teacher Profile
+                        </a>
+                        <a href="#school-info" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-info-circle mr-3"></i>School Information
+                        </a>
+                        <a href="#class-setup" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-chalkboard-teacher mr-3"></i>Class Setup
+                        </a>
+                        <a href="#subjects" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-book mr-3"></i>Subjects
+                        </a>
+                        <a href="#exams" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-file-alt mr-3"></i>Exam Settings
+                        </a>
+                        <a href="#preferences" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-cogs mr-3"></i>Preferences
+                        </a>
+                        <a href="#backup" class="block p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-cloud-upload-alt mr-3"></i>Data Backup
+                        </a>
+                    </nav>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold text-gray-900 dark:text-white mb-3">System Status</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Database</span>
+                                <span class="px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium">
+                                    <i class="fas fa-check-circle mr-1"></i>Connected
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Storage</span>
+                                <span class="text-sm font-medium text-gray-900 dark:text-white">
+                                    <%= settings.storageUsed || '0' %>/<%= settings.storageTotal || '100' %> MB
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Last Backup</span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">
+                                    <%= settings.lastBackup || 'Never' %>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <button id="system-check" class="w-full mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl text-gray-700 dark:text-gray-300 text-sm font-medium transition-colors">
+                            <i class="fas fa-sync-alt mr-2"></i>Run System Check
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Settings Forms -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Profile Settings -->
+                <div id="profile-tab" class="settings-content">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-user text-primary-600 dark:text-primary-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Teacher Profile</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Update your personal information</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="relative">
+                                <input type="text" id="first_name" value="<%= teacher.first_name || '' %>" 
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    First Name
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <input type="text" id="last_name" value="<%= teacher.last_name || '' %>"
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Last Name
+                                </label>
+                            </div>
+                            
+                            <div class="relative md:col-span-2">
+                                <input type="email" id="email" value="<%= teacher.email || '' %>"
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Email Address
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <input type="password" id="current_password" placeholder="••••••••"
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Current Password
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <input type="password" id="new_password" placeholder="••••••••"
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    New Password
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end">
+                            <button id="update-profile" class="px-6 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-medium hover:from-primary-600 hover:to-primary-700 transition-all">
+                                Update Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- School Settings -->
+                <div id="school-tab" class="settings-content hidden">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-school text-blue-600 dark:text-blue-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">School Information</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Update school details and configuration</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 gap-6">
+                            <!-- School Logo Upload -->
+                            <div class="text-center">
+                                <label for="school-logo" class="cursor-pointer">
+                                    <div class="relative mx-auto w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                        <img id="logo-preview" src="<%= schoolConfig.logo || '/images/default-school.png' %>" 
+                                             alt="School Logo" class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div class="text-center p-4">
+                                                <i class="fas fa-camera text-white text-2xl mb-2"></i>
+                                                <p class="text-white text-sm font-medium">Change Logo</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="school-logo" class="hidden" accept="image/*">
+                                </label>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="relative">
+                                    <input type="text" id="school_name" value="<%= schoolConfig.school_name || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        School Name
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="text" id="school_code" value="<%= schoolConfig.school_code || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        School Code
+                                    </label>
+                                </div>
+                                
+                                <div class="relative md:col-span-2">
+                                    <textarea id="school_address" rows="2"
+                                              class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all resize-none"><%= schoolConfig.school_address || '' %></textarea>
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        School Address
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="tel" id="school_phone" value="<%= schoolConfig.school_phone || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        Phone Number
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="email" id="school_email" value="<%= schoolConfig.school_email || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        School Email
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="text" id="principal_name" value="<%= schoolConfig.principal_name || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        Principal Name
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="text" id="affiliation_number" value="<%= schoolConfig.affiliation_number || '' %>"
+                                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        Affiliation Number
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end">
+                            <button id="update-school" class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all">
+                                Update School Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Settings -->
+                <div id="academic-tab" class="settings-content hidden">
+                    <div class="space-y-6">
+                        <!-- Class Configuration -->
+                        <div class="glass-panel rounded-2xl p-6 settings-section">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 flex items-center justify-center mr-4">
+                                        <i class="fas fa-chalkboard-teacher text-green-600 dark:text-green-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Class Configuration</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Manage classes and sections</p>
+                                    </div>
+                                </div>
+                                <button id="add-class" class="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>Add Class
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4" id="classes-container">
+                                <!-- Classes will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Subject Configuration -->
+                        <div class="glass-panel rounded-2xl p-6 settings-section">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/20 flex items-center justify-center mr-4">
+                                        <i class="fas fa-book text-purple-600 dark:text-purple-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Subject Configuration</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Manage subjects for each class</p>
+                                    </div>
+                                </div>
+                                <button id="add-subject" class="px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>Add Subject
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4" id="subjects-container">
+                                <!-- Subjects will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div id="notifications-tab" class="settings-content hidden">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-100 to-yellow-50 dark:from-yellow-900/30 dark:to-yellow-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-bell text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Notification Settings</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Configure how you receive notifications</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+                                <div>
+                                    <h4 class="font-medium text-gray-900 dark:text-white">Enable Notifications</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Receive system notifications</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="notifications-enabled" <%= teacherSettings.notifications_enabled ? 'checked' : '' %>>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+                                <div>
+                                    <h4 class="font-medium text-gray-900 dark:text-white">Email Notifications</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Receive notifications via email</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="email-notifications" <%= teacherSettings.email_notifications ? 'checked' : '' %>>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">Notification Types</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded text-primary-600" checked>
+                                        <span class="ml-3 text-gray-700 dark:text-gray-300">New student registrations</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded text-primary-600" checked>
+                                        <span class="ml-3 text-gray-700 dark:text-gray-300">Attendance alerts</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded text-primary-600" checked>
+                                        <span class="ml-3 text-gray-700 dark:text-gray-300">Exam schedule updates</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded text-primary-600">
+                                        <span class="ml-3 text-gray-700 dark:text-gray-300">System maintenance</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup Settings -->
+                <div id="backup-tab" class="settings-content hidden">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-50 dark:from-indigo-900/30 dark:to-indigo-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-database text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Data Backup</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Configure automatic backups and data management</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="relative">
+                                    <select id="backup-frequency" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly" selected>Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        Backup Frequency
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <select id="retention-period" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                        <option value="365">1 year</option>
+                                    </select>
+                                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                        Retention Period
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+                                <div>
+                                    <h4 class="font-medium text-gray-900 dark:text-white">Auto Backup</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Automatically backup data</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="auto-backup" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-medium text-gray-900 dark:text-white">Backup Now</h4>
+                                    <button id="manual-backup" class="px-4 py-2 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-colors">
+                                        <i class="fas fa-cloud-upload-alt mr-2"></i>Backup Now
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Last backup: <span id="last-backup-time" class="font-medium"><%= settings.lastBackup || 'Never' %></span>
+                                </p>
+                                <div class="mt-3">
+                                    <div class="flex items-center justify-between text-sm mb-1">
+                                        <span class="text-gray-600 dark:text-gray-400">Backup Progress</span>
+                                        <span id="backup-progress-text">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div id="backup-progress-bar" class="bg-green-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div id="security-tab" class="settings-content hidden">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-shield-alt text-red-600 dark:text-red-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Security Settings</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Configure security preferences and access</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Session Management</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700 dark:text-gray-300">Session Timeout</span>
+                                        <select class="px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg">
+                                            <option>15 minutes</option>
+                                            <option selected>30 minutes</option>
+                                            <option>1 hour</option>
+                                            <option>2 hours</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700 dark:text-gray-300">Max Login Attempts</span>
+                                        <input type="number" value="5" class="w-20 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Active Sessions</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-gray-800">
+                                        <div>
+                                            <div class="font-medium text-gray-900 dark:text-white">Current Device</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">Chrome on Windows • Just now</div>
+                                        </div>
+                                        <span class="px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs">Active</span>
+                                    </div>
+                                </div>
+                                <button class="w-full mt-3 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                    Logout Other Devices
+                                </button>
+                            </div>
+                            
+                            <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">Danger Zone</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">These actions are irreversible. Please proceed with caution.</p>
+                                <div class="space-y-3">
+                                    <button id="delete-account" class="w-full px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors">
+                                        <i class="fas fa-trash-alt mr-2"></i>Delete Account
+                                    </button>
+                                    <button id="export-data" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                        <i class="fas fa-download mr-2"></i>Export All Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings -->
+                <div id="advanced-tab" class="settings-content hidden">
+                    <div class="glass-panel rounded-2xl p-6 settings-section">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-900/30 dark:to-gray-800/20 flex items-center justify-center mr-4">
+                                <i class="fas fa-sliders-h text-gray-600 dark:text-gray-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Advanced Settings</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">System configuration and preferences</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="relative">
+                                <select id="theme" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <option value="light" <%= teacherSettings.theme === 'light' ? 'selected' : '' %>>Light Theme</option>
+                                    <option value="dark" <%= teacherSettings.theme === 'dark' ? 'selected' : '' %>>Dark Theme</option>
+                                    <option value="auto" <%= teacherSettings.theme === 'auto' ? 'selected' : '' %>>Auto (System)</option>
+                                </select>
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Theme
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <select id="language" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <option value="en" selected>English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                </select>
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Language
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <select id="timezone" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <option value="Asia/Kolkata" selected>India (IST)</option>
+                                    <option value="America/New_York">New York (EST)</option>
+                                    <option value="Europe/London">London (GMT)</option>
+                                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                                </select>
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Timezone
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <select id="date-format" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <option value="dd-mm-yyyy" <%= teacherSettings.date_format === 'dd-mm-yyyy' ? 'selected' : '' %>>DD-MM-YYYY</option>
+                                    <option value="mm-dd-yyyy" <%= teacherSettings.date_format === 'mm-dd-yyyy' ? 'selected' : '' %>>MM-DD-YYYY</option>
+                                    <option value="yyyy-mm-dd" <%= teacherSettings.date_format === 'yyyy-mm-dd' ? 'selected' : '' %>>YYYY-MM-DD</option>
+                                </select>
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Date Format
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <input type="number" id="items-per-page" value="<%= teacherSettings.items_per_page || 20 %>"
+                                       class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Items Per Page
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <select id="default-session" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                                    <% const sessions = ['2020-2021', '2021-2022', '2022-2023', '2023-2024', '2024-2025', '2025-2026']; %>
+                                    <% sessions.forEach(session => { %>
+                                        <option value="<%= session %>" <%= teacherSettings.default_session === session ? 'selected' : '' %>>
+                                            <%= session %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                                <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                                    Default Session
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end">
+                            <button id="update-advanced" class="px-6 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-medium hover:from-gray-600 hover:to-gray-700 transition-all">
+                                Save Advanced Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-3"></div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+        <div class="glass-panel rounded-2xl p-6 max-w-md w-full mx-4">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2" id="modal-title">Are you sure?</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6" id="modal-message">This action cannot be undone.</p>
+                <div class="flex space-x-3">
+                    <button id="modal-cancel" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        Cancel
+                    </button>
+                    <button id="modal-confirm" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-white font-medium">Processing...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/settings.js" nonce="<%= nonce %>"></script>
+</body>
+</html>
