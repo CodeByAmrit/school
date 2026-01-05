@@ -414,20 +414,21 @@ async function teacherLogin(req, res) {
     // Fetch user with LIMIT 1 for performance boost
     const [rows] = await connection.execute(
       "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1",
-      [email],
+      [email]
     );
 
     if (rows.length === 0) {
       // Delay response slightly to prevent email enumeration attacks
       await new Promise((resolve) => setTimeout(resolve, 500));
-      return res.status(401).json({ status: "Invalid email" });
+      return res.status(401).json({ status: "Invalid credentials" });
     }
 
     const teacher = rows[0];
 
     // Secure password comparison
-    if (!bcrypt.compareSync(password, teacher.password)) {
-      return res.status(403).json({ status: "Invalid Password" });
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      return res.status(401).json({ status: "Invalid credentials" });
     }
 
     // JWT Payload
@@ -481,6 +482,13 @@ async function teacherSignup(req, res) {
       .toBuffer();
   }
 
+  // Password policy: minimum 8 characters
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ status: "Password must be at least 8 characters long" });
+  }
+
   let connection;
   try {
     connection = await getConnection();
@@ -500,7 +508,7 @@ async function teacherSignup(req, res) {
         school_address,
         school_phone,
         school_logo,
-      ],
+      ]
     );
 
     // await sendWelcomeEmail(email, `${firstName} ${lastName}`);
@@ -799,18 +807,25 @@ async function changePassword(req, res) {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user._id; // Extracted from JWT token
 
+    // Password policy: minimum 8 characters
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json({ status: "Password must be at least 8 characters long" });
+    }
+
     connection = await getConnection();
 
     // Fetch the user's current hashed password from DB
     const [rows] = await connection.execute(
       "SELECT password FROM teacher WHERE id = ? LIMIT 1",
-      [userId],
+      [userId]
     );
 
     if (rows.length === 0) {
       return res
-        .status(404)
-        .json({ status: "error", message: "User not found" });
+        .status(401)
+        .json({ status: "error", message: "Invalid credentials" });
     }
 
     const user = rows[0];
@@ -819,8 +834,8 @@ async function changePassword(req, res) {
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res
-        .status(403)
-        .json({ status: "error", message: "Incorrect current password" });
+        .status(401)
+        .json({ status: "error", message: "Invalid credentials" });
     }
 
     // Hash new password before saving

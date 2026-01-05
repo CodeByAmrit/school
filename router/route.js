@@ -29,6 +29,8 @@ const {
 } = require("../components/create_certificate");
 const multer = require("multer");
 const { getConnection } = require("../models/getConnection");
+const { loginLimiter } = require("../middleware/security");
+const { body, validationResult } = require("express-validator");
 require("dotenv").config();
 
 // Configure multer
@@ -386,7 +388,21 @@ router.post("/signup", upload.single("school_logo"), async (req, res) => {
   }
 });
 
-router.post("/change-password", checkAuth, changePassword);
+router.post(
+  "/change-password",
+  checkAuth,
+  [
+    body("currentPassword", "Current password is required").notEmpty(),
+    body("newPassword", "New password must be at least 8 characters long").isLength({ min: 8 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    await changePassword(req, res);
+  }
+);
 
 router.get("/change-password", checkAuth, async (req, res) => {
   let school_logo_url = "/image/graduated.png";
@@ -404,16 +420,27 @@ router.get("/change-password", checkAuth, async (req, res) => {
   res.render("change-password", { user, total_students: studentsCount });
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const token = await teacherLogin(req, res); // Ensure only one response is sent
-  } catch (error) {
-    console.error("Login error:", error);
-
-    // Send an error response and return immediately
-    return res.status(401).send("Login Failed");
+router.post(
+  "/login",
+  loginLimiter,
+  [
+    body("email", "Invalid email address").isEmail(),
+    body("password", "Password is required").notEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    try {
+      const token = await teacherLogin(req, res); // Ensure only one response is sent
+    } catch (error) {
+      console.error("Login error:", error);
+      // Send an error response and return immediately
+      return res.status(401).send("Login Failed");
+    }
   }
-});
+);
 
 // Login page - Redirect if already authenticated
 router.get("/login", async (req, res, next) => {
