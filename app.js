@@ -12,6 +12,7 @@ const favicon = require("serve-favicon");
 const router = require("./router/route");
 const student = require("./router/student");
 const Gemini_router = require("./router/ai_router");
+const settingsRouter = require("./routes/settings");
 // const authRoutes = require("./services/auth");
 // const webhook = require("./router/webhook");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
@@ -84,6 +85,7 @@ class App {
     this.app.set("view engine", "ejs");
     this.app.use("/", router);
     this.app.use("/api/students/", student);
+    this.app.use("/settings", settingsRouter);
     // this.app.use("/webhook", webhook);
     this.app.use("/ai", Gemini_router);
   }
