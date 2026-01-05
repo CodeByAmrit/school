@@ -431,8 +431,8 @@ router.get("/signup", (req, res) => {
 });
 
 // Route to get teacher details
-router.get("/teacher/profile/:id", async (req, res) => {
-  const teacherId = req.params.id;
+router.get("/teacher/profile/", checkAuth, async (req, res) => {
+  const teacherId = req.user._id;
   let connection;
 
   try {

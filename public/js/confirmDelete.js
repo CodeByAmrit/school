@@ -304,103 +304,139 @@ function getSelectedStudents() {
   return selectedStudents;
 }
 
-// Quick view function
+const modal = document.getElementById("quick-view-modal");
+const modalContent = modal.querySelector(".relative");
+
+/* -----------------------------
+   OPEN QUICK VIEW
+----------------------------- */
 function quickViewStudent(studentId) {
-  const modal = document.getElementById("quick-view-modal");
-  const modalContent = modal.querySelector(".relative");
-
-  // In a real implementation, fetch student data via AJAX
-  // For now, show a placeholder
-  modalContent.innerHTML = `
-        <div class="p-6">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-xl font-bold text-gray-900">Student Quick View</h3>
-                <button onclick="document.getElementById('quick-view-modal').classList.add('hidden')" 
-                        class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="flex items-center space-x-4 mb-6">
-                <div class="w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-lg">
-                    <img src="https://ui-avatars.com/api/?name=Student+Name&background=63b3ed&color=fff&bold=true&size=80"
-                         alt="Student"
-                         class="object-cover w-full h-full">
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold text-gray-900">Loading...</h4>
-                    <p class="text-gray-600">ID: ${studentId}</p>
-                    <div class="flex items-center space-x-2 mt-2">
-                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                            Loading...
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center py-8">
-                <i class="fas fa-spinner fa-spin text-blue-500 text-2xl"></i>
-                <p class="text-gray-600 mt-2">Loading student details...</p>
-            </div>
-        </div>
-    `;
-
+  renderLoadingState(studentId);
   modal.classList.remove("hidden");
 
-  // Simulate AJAX call to fetch student data
+  // Simulate API call
   setTimeout(() => {
-    // In real implementation, fetch actual data
-    modalContent.innerHTML = `
-            <div class="p-6">
-                <div class="flex justify-between items-start mb-6">
-                    <h3 class="text-xl font-bold text-gray-900">Student Quick View</h3>
-                    <button onclick="document.getElementById('quick-view-modal').classList.add('hidden')" 
-                            class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="flex items-center space-x-4 mb-6">
-                    <div class="w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-lg">
-                        <img src="https://ui-avatars.com/api/?name=Student+${studentId}&background=63b3ed&color=fff&bold=true&size=80"
-                             alt="Student"
-                             class="object-cover w-full h-full">
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-bold text-gray-900">Student ${studentId}</h4>
-                        <p class="text-gray-600">ID: ${studentId}</p>
-                        <div class="flex items-center space-x-2 mt-2">
-                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                Active
-                            </span>
-                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                Class 10
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="p-4 bg-blue-50 rounded-xl">
-                        <p class="text-sm text-gray-600">Father's Name</p>
-                        <p class="font-medium text-gray-900">Parent Name</p>
-                    </div>
-                    <div class="p-4 bg-blue-50 rounded-xl">
-                        <p class="text-sm text-gray-600">Session</p>
-                        <p class="font-medium text-gray-900">2023-2024</p>
-                    </div>
-                </div>
-                <div class="flex justify-end space-x-3">
-                    <button onclick="document.getElementById('quick-view-modal').classList.add('hidden')"
-                            class="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium">
-                        Close
-                    </button>
-                    <a href="/student/edit/${studentId}"
-                       class="btn-gradient text-white font-medium rounded-xl px-6 py-2.5 inline-flex items-center">
-                        <i class="fas fa-edit mr-2"></i>
-                        Edit Profile
-                    </a>
-                </div>
-            </div>
-        `;
+    renderStudentData(studentId);
   }, 500);
 }
+
+/* -----------------------------
+   RENDER LOADING STATE
+----------------------------- */
+function renderLoadingState(studentId) {
+  modalContent.innerHTML = `
+    <div class="p-6">
+      <div class="flex justify-between items-start mb-6">
+        <h3 class="text-xl font-bold text-gray-900">Student Quick View</h3>
+        <button data-action="close-modal"
+          class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-lg">
+          <img src="https://ui-avatars.com/api/?name=Student+Name&background=63b3ed&color=fff&bold=true&size=80"
+               class="object-cover w-full h-full">
+        </div>
+        <div>
+          <h4 class="text-lg font-bold text-gray-900">Loading...</h4>
+          <p class="text-gray-600">ID: ${studentId}</p>
+        </div>
+      </div>
+
+      <div class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-blue-500 text-2xl"></i>
+        <p class="text-gray-600 mt-2">Loading student details...</p>
+      </div>
+    </div>
+  `;
+}
+
+/* -----------------------------
+   RENDER STUDENT DATA
+----------------------------- */
+function renderStudentData(studentId) {
+  modalContent.innerHTML = `
+    <div class="p-6">
+      <div class="flex justify-between items-start mb-6">
+        <h3 class="text-xl font-bold text-gray-900">Student Quick View</h3>
+        <button data-action="close-modal"
+          class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-lg">
+          <img src="https://ui-avatars.com/api/?name=Student+${studentId}&background=63b3ed&color=fff&bold=true&size=80"
+               class="object-cover w-full h-full">
+        </div>
+        <div>
+          <h4 class="text-lg font-bold text-gray-900">Student ${studentId}</h4>
+          <p class="text-gray-600">ID: ${studentId}</p>
+          <div class="flex gap-2 mt-2">
+            <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+              Active
+            </span>
+            <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+              Class 10
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <p class="text-sm text-gray-600">Father's Name</p>
+          <p class="font-medium text-gray-900">Parent Name</p>
+        </div>
+        <div class="p-4 bg-blue-50 rounded-xl">
+          <p class="text-sm text-gray-600">Session</p>
+          <p class="font-medium text-gray-900">2023–2024</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button data-action="close-modal"
+          class="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium">
+          Close
+        </button>
+
+        <a href="/student/edit/${studentId}"
+          class="btn-gradient text-white rounded-xl px-6 py-2.5 inline-flex items-center">
+          <i class="fas fa-edit mr-2"></i>
+          Edit Profile
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+/* -----------------------------
+   EVENT DELEGATION (GLOBAL)
+----------------------------- */
+modal.addEventListener("click", (e) => {
+  const action = e.target.closest("[data-action]")?.dataset.action;
+
+  if (action === "close-modal") {
+    closeModal();
+  }
+});
+
+/* -----------------------------
+   CLOSE MODAL
+----------------------------- */
+function closeModal() {
+  modal.classList.add("hidden");
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".quick-view-btn");
+  if (!btn) return;
+
+  quickViewStudent(btn.dataset.studentId);
+});
 
 // Your existing functions (keep them as they are)
 

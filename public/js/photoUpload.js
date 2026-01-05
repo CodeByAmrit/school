@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("student_form");
-  const saveButton = form.querySelector("button[type='button']");
+  const saveButton = form.querySelector("button[type='submit']");
   const loadingIcon = saveButton.querySelector("svg");
   const previewImage = document.getElementById("image-preview");
   const dropzoneFileInput = document.getElementById("dropzone-file");
@@ -171,11 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
       loadingIcon.classList.add("hidden"); // Hide the loading spinner
       buttonText.innerText = "Update Details"; // Reset the button text
     }
-  });
-
-  // Trigger form submission on save button click
-  saveButton.addEventListener("click", () => {
-    form.dispatchEvent(new Event("submit")); // Trigger the form submission
   });
 });
 

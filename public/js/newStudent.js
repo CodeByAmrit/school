@@ -19,10 +19,11 @@ document
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("student_form");
-  const saveButton = form.querySelector("button[type='button']");
+  const saveButton = form.querySelector("button[type='submit']");
   const loadingIcon = saveButton.querySelector("svg");
 
   form.addEventListener("submit", async (e) => {
+    console.log("Form submission triggered");
     e.preventDefault(); // Prevent default form submission
     saveButton.disabled = true; // Disable the button
     loadingIcon.classList.remove("hidden");
@@ -150,10 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     sendData();
-  });
-
-  saveButton.addEventListener("click", () => {
-    form.dispatchEvent(new Event("submit")); // Trigger form submission
   });
 });
 
