@@ -1,681 +1,834 @@
-<div class="p-4 sm:ml-64 dark:bg-gray-900">
-  <div class="w-full h-full mt-16 overflow-auto dark:bg-gray-900">
-    <% if (student==null){ %>
-    <h1 class="dark:text-white text-center text-3xl">Register New Student</h1>
-    <% } else{ %>
-    <!-- <h1 class="dark:text-white text-center text-3xl">Student Profile</h1> -->
+<div class="p-4 sm:ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div class="w-full h-full mt-16 overflow-auto">
+    <!-- Header Section -->
+    <div class="mb-8">
+      <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <% if (student==null){ %>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+              Register <span class="gradient-text">New Student</span>
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">
+              Fill in the details to register a new student in the system
+            </p>
+            <% } else{ %>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+              Update <span class="gradient-text">Student Profile</span>
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">
+              Update student information and manage profile details
+            </p>
+            <% } %>
+          </div>
+          
+          <% if (student!=null){ %>
+          <!-- Profile Status Badge -->
+          <div class="flex items-center gap-4">
+            <% if(student.profile_status) { %>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 text-green-700 dark:text-green-400 text-sm font-medium border border-green-200 dark:border-green-800">
+              <i class="fas fa-check-circle mr-2"></i>
+              <%= student.profile_status %>
+            </span>
+            <% } %>
+            
+            <!-- Speed Dial -->
+            <div data-dial-init class="relative z-50">
+              <!-- Toggle Button -->
+              <button
+                type="button"
+                data-dial-toggle="speed-dial-menu-dropdown"
+                aria-controls="speed-dial-menu-dropdown"
+                aria-expanded="false"
+                class="flex items-center justify-center text-white bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl w-12 h-12 hover:from-blue-600 hover:to-blue-700 focus:ring-4 focus:ring-blue-300/50 focus:outline-none dark:focus:ring-blue-800/30 shadow-md hover:shadow-lg transition-all z-50"
+              >
+                <i class="fas fa-ellipsis-h text-lg"></i>
+                <span class="sr-only">Open actions menu</span>
+              </button>
 
-    <!-- speed dial -->
-    <div
-      data-dial-init
-      class="fixed bottom-6 right-6 group hidden md:block lg:block"
-    >
-      <div
-        id="speed-dial-menu-dropdown"
-        class="flex flex-col justify-end hidden py-1 mb-4 space-y-2 bg-white border border-gray-100 rounded-lg shadow-xs dark:border-gray-600 dark:bg-gray-700"
-      >
-        <ul class="text-sm text-gray-500 dark:text-gray-300">
-          <li>
-            <a
-              href="#"
-              class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white"
-            >
-              <svg
-                class="w-3.5 h-3.5 me-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 18 18"
+              <!-- Dropdown Menu (opens BELOW) -->
+              <div
+                id="speed-dial-menu-dropdown"
+                class="absolute right-0 top-8 mt-2 hidden min-w-48 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50"
               >
-                <path
-                  d="M14.419 10.581a3.564 3.564 0 0 0-2.574 1.1l-4.756-2.49a3.54 3.54 0 0 0 .072-.71 3.55 3.55 0 0 0-.043-.428L11.67 6.1a3.56 3.56 0 1 0-.831-2.265c.006.143.02.286.043.428L6.33 6.218a3.573 3.573 0 1 0-.175 4.743l4.756 2.491a3.58 3.58 0 1 0 3.508-2.871Z"
-                />
-              </svg>
-              <span class="text-sm font-medium">Share</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white"
-            >
-              <svg
-                class="w-3.5 h-3.5 me-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M5 20h10a1 1 0 0 0 1-1v-5H4v5a1 1 0 0 0 1 1Z" />
-                <path
-                  d="M18 7H2a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2v-3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Zm-1-2V2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h14Z"
-                />
-              </svg>
-              <span class="text-sm font-medium">Print</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white"
-            >
-              <svg
-                class="w-3.5 h-3.5 me-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"
-                />
-                <path
-                  d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
-                />
-              </svg>
-              <span class="text-sm font-medium">Save</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white"
-            >
-              <svg
-                class="w-3.5 h-3.5 me-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 18 20"
-              >
-                <path
-                  d="M5 9V4.13a2.96 2.96 0 0 0-1.293.749L.879 7.707A2.96 2.96 0 0 0 .13 9H5Zm11.066-9H9.829a2.98 2.98 0 0 0-2.122.879L7 1.584A.987.987 0 0 0 6.766 2h4.3A3.972 3.972 0 0 1 15 6v10h1.066A1.97 1.97 0 0 0 18 14V2a1.97 1.97 0 0 0-1.934-2Z"
-                />
-                <path
-                  d="M11.066 4H7v5a2 2 0 0 1-2 2H0v7a1.969 1.969 0 0 0 1.933 2h9.133A1.97 1.97 0 0 0 13 18V6a1.97 1.97 0 0 0-1.934-2Z"
-                />
-              </svg>
-              <span class="text-sm font-medium">Copy</span>
-            </a>
-          </li>
-        </ul>
+                <ul class="text-sm">
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <i class="fas fa-share-alt text-blue-500 mr-3 w-5 text-center"></i>
+                      <span class="font-medium">Share Profile</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <i class="fas fa-print text-blue-500 mr-3 w-5 text-center"></i>
+                      <span class="font-medium">Print Details</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <i class="fas fa-download text-blue-500 mr-3 w-5 text-center"></i>
+                      <span class="font-medium">Save Copy</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <i class="fas fa-copy text-blue-500 mr-3 w-5 text-center"></i>
+                      <span class="font-medium">Duplicate</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+          <% } %>
+        </div>
+        
+        <!-- Progress Indicator -->
+        <div class="mt-6">
+          <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <span>Form Progress</span>
+            <span id="form-progress">0%</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
       </div>
-      <button
-        type="button"
-        data-dial-toggle="speed-dial-menu-dropdown"
-        aria-controls="speed-dial-menu-dropdown"
-        aria-expanded="false"
-        class="flex items-center justify-center ml-auto text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800"
-      >
-        <svg
-          class="w-6 h-6"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 16 3"
-        >
-          <path
-            d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-          />
-        </svg>
-        <span class="sr-only">Open actions menu</span>
-      </button>
     </div>
-    <% } %>
+    
     <input
       type="hidden"
       id="school_id"
       value="<%= student && student.school_id ? student.school_id : null %>"
     />
+    
     <form
       id="student_form"
-      class="shadow-md rounded flex flex-col justify-center gap-5 gap-x-8 md:gap-8 bg-white dark:bg-gray-900"
+      class="space-y-8"
     >
-      <div class="md:flex lg:flex flex-row-reverse gap-5">
-        <div
-          class="flex mt-10 md:flex-col lg:flex-col flex-row items-center justify-center lg:justify-start md:justify-start w-full md:w-full lg:w-full gap-5 border"
-        >
-          <label
-            for="dropzone-file"
-            class="flex flex-col items-center justify-center h-64 border-0 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            <div class="flex flex-col items-center justify-center p-2">
-              <!-- Placeholder Image -->
-              <img
-                id="image-preview"
-                class="rounded"
-                src="<%= photo %>"
-                alt="Uploaded Image Preview"
-                width="150px"
-              />
-              <p class="m-2 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Upload Photo</span>
-              </p>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Photo Uploads -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Photo Upload Card -->
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <i class="fas fa-camera text-blue-500 mr-2"></i>
+              Student Photos
+            </h3>
+            
+            <div class="space-y-6">
+              <!-- Profile Photo -->
+              <div class="text-center">
+                <label
+                  for="dropzone-file"
+                  class="relative group cursor-pointer"
+                >
+                  <div class="relative mx-auto w-48 h-48 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 flex items-center justify-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                    <img
+                      id="image-preview"
+                      class="w-full h-full object-cover"
+                      src="<%= photo %>"
+                      alt="Student Photo"
+                    />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div class="text-center p-4">
+                        <i class="fas fa-camera text-white text-2xl mb-2"></i>
+                        <p class="text-white text-sm font-medium">Click to upload photo</p>
+                        <p class="text-white/80 text-xs">PNG, JPG up to 5MB</p>
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    class="hidden"
+                    accept="image/png, image/jpeg"
+                  />
+                </label>
+                <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                  Student Photo
+                </p>
+              </div>
+              
+              <!-- Signature Upload -->
+              <div class="text-center">
+                <label
+                  for="file-signature"
+                  class="relative group cursor-pointer"
+                >
+                  <div class="relative mx-auto w-full h-32 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 flex items-center justify-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                    <img
+                      id="signature-preview"
+                      class="w-full h-full object-contain"
+                      src="<%= sign %>"
+                      alt="Student Signature"
+                    />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div class="text-center p-2">
+                        <i class="fas fa-signature text-white text-xl mb-1"></i>
+                        <p class="text-white text-xs font-medium">Upload Signature</p>
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    id="file-signature"
+                    type="file"
+                    class="hidden"
+                    accept="image/png, image/jpeg"
+                  />
+                </label>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Student Signature
+                </p>
+              </div>
             </div>
-            <input
-              id="dropzone-file"
-              type="file"
-              class="hidden"
-              accept="image/png, image/jpeg"
-            />
-          </label>
-          <label
-            for="file-signature"
-            class="flex flex-col items-center justify-center h-32 border-0 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            <div class="flex flex-col items-center justify-center p-2">
-              <!-- Signature Image -->
-              <img
-                id="signature-preview"
-                class="rounded mt-5"
-                src="<%= sign %>"
-                alt="Uploaded Image Preview"
-                width="150px"
-              />
-              <p class="m-1 mb-4 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Upload Sign</span>
-              </p>
+          </div>
+          
+          <!-- Quick Info Card -->
+          <% if (student!=null){ %>
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+              Quick Information
+            </h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Roll No:</span>
+                <span class="font-medium text-gray-900 dark:text-white"><%= student.roll || 'N/A' %></span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Class:</span>
+                <span class="font-medium text-gray-900 dark:text-white"><%= student.class || 'N/A' %></span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Section:</span>
+                <span class="font-medium text-gray-900 dark:text-white"><%= student.section || 'N/A' %></span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Session:</span>
+                <span class="font-medium text-gray-900 dark:text-white"><%= student.session || 'N/A' %></span>
+              </div>
             </div>
-            <input
-              id="file-signature"
-              type="file"
-              class="hidden"
-              accept="image/png, image/jpeg"
-            />
-          </label>
+          </div>
+          <% } %>
         </div>
 
-        <div>
-          <p class="dark:text-white text-xl p-2">Personal Information</p>
-
-          <div
-            class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500"
-          >
-            <!-- Name -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.name ? student.name : '' %>"
-              />
-              <label
-                for="name"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Name</label
-              >
-            </div>
-
-            <!-- Roll Number -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="roll_no"
-                name="roll_no"
-                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.roll ? student.roll : '' %>"
-              />
-              <label
-                for="rollno"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Roll Number</label
-              >
-            </div>
-
-            <!-- Class -->
-            <div class="relative min-w-44 w-full md:w-fit lg:w-fit">
-              <select
-                id="class"
-                name="class"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option
-                  value="<%= student && student.class ? student.class : '' %>"
-                  selected
-                >
-                  <%= student && student.class ? student.class : '' %>
-                </option>
-                <option value="NURSERY">NURSERY</option>
-                <option value="KG">KG</option>
-                <option value="1ST">1ST</option>
-                <option value="2ND">2ND</option>
-                <option value="3RD">3RD</option>
-                <option value="4TH">4TH</option>
-                <option value="5TH">5TH</option>
-                <option value="6TH">6TH</option>
-                <option value="7TH">7TH</option>
-                <option value="8TH">8TH</option>
-                <option value="9TH">9TH</option>
-                <option value="10TH">10TH</option>
-                <option value="11TH">11TH</option>
-                <option value="12TH">12TH</option>
-              </select>
-              <label
-                for="class"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Class</label
-              >
-            </div>
-
-            <!-- dob  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <div
-                class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
-              >
-                <svg
-                  class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-                  />
-                </svg>
+        <!-- Right Column - Form Sections -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Personal Information -->
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark z-40">
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/20 flex items-center justify-center mr-3">
+                <i class="fas fa-user text-blue-600 dark:text-blue-400"></i>
               </div>
-              <input
-                datepicker
-                id="dob"
-                type="text"
-                name="dob"
-                datepicker-format="dd-mm-yyyy"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value="<%= student && student.dob ? student.dob : '' %>"
-              />
-              <label
-                for="dob"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Date Of Birth</label
-              >
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Personal Information</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Student's personal details</p>
+              </div>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- Name -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.name ? student.name : '' %>"
+                />
+                <label
+                  for="name"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-user-circle mr-1 text-xs"></i>
+                    Full Name
+                  </span>
+                </label>
+              </div>
 
-            <!-- Student Aadhar no -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="student_aadhar_no"
-                name="student_aadhar_no"
-                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student &&  student.student_aadhar_no ? student.student_aadhar_no : '' %>"
-              />
-              <label
-                for="student_aadhar_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Student Aadhar Number</label
-              >
-            </div>
+              <!-- Roll Number -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="roll_no"
+                  name="roll_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.roll ? student.roll : '' %>"
+                />
+                <label
+                  for="roll_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-hashtag mr-1 text-xs"></i>
+                    Roll Number
+                  </span>
+                </label>
+              </div>
 
-            <!-- corresponding_address Address -->
-            <div class="relative mb-3 w-full">
-              <input
-                type="text"
-                id="corresponding_address"
-                name="corresponding_address"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.corresponding_address ? student.corresponding_address : '' %>"
-              />
-              <label
-                for="corresponding_address"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Corresponding Address</label
-              >
-            </div>
+              <!-- Class -->
+              <div class="relative">
+                <select
+                  id="class"
+                  name="class"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select Class</option>
+                  <option value="NURSERY" <%= student && student.class === 'NURSERY' ? 'selected' : '' %>>NURSERY</option>
+                  <option value="KG" <%= student && student.class === 'KG' ? 'selected' : '' %>>KG</option>
+                  <option value="1ST" <%= student && student.class === '1ST' ? 'selected' : '' %>>1ST</option>
+                  <option value="2ND" <%= student && student.class === '2ND' ? 'selected' : '' %>>2ND</option>
+                  <option value="3RD" <%= student && student.class === '3RD' ? 'selected' : '' %>>3RD</option>
+                  <option value="4TH" <%= student && student.class === '4TH' ? 'selected' : '' %>>4TH</option>
+                  <option value="5TH" <%= student && student.class === '5TH' ? 'selected' : '' %>>5TH</option>
+                  <option value="6TH" <%= student && student.class === '6TH' ? 'selected' : '' %>>6TH</option>
+                  <option value="7TH" <%= student && student.class === '7TH' ? 'selected' : '' %>>7TH</option>
+                  <option value="8TH" <%= student && student.class === '8TH' ? 'selected' : '' %>>8TH</option>
+                  <option value="9TH" <%= student && student.class === '9TH' ? 'selected' : '' %>>9TH</option>
+                  <option value="10TH" <%= student && student.class === '10TH' ? 'selected' : '' %>>10TH</option>
+                  <option value="11TH" <%= student && student.class === '11TH' ? 'selected' : '' %>>11TH</option>
+                  <option value="12TH" <%= student && student.class === '12TH' ? 'selected' : '' %>>12TH</option>
+                </select>
+                <label
+                  for="class"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-graduation-cap mr-1 text-xs"></i>
+                    Class
+                  </span>
+                </label>
+              </div>
 
-            <!-- Ask Permanemtn address TICK -->
-            <div class="flex items-center mb-3">
-              <input
-                id="link-checkbox"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="link-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Yes, if your permanent address is the same as your
-                corresponding address.
-              </label>
-            </div>
+              <!-- Date of Birth -->
+              <div class="relative">
+                <div class="relative">
+                  <input
+                    datepicker
+                    id="dob"
+                    type="text"
+                    name="dob"
+                    datepicker-format="dd-mm-yyyy"
+                    class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                    placeholder=" "
+                    value="<%= student && student.dob ? student.dob : '' %>"
+                  />
+                  <label
+                    for="dob"
+                    class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                  >
+                    <span class="flex items-center">
+                      <i class="fas fa-calendar-alt mr-1 text-xs"></i>
+                      Date of Birth
+                    </span>
+                  </label>
+                  <i class="fas fa-calendar absolute right-3 top-3.5 text-gray-400"></i>
+                </div>
+              </div>
 
-            <!-- Permanant Address -->
-            <div class="relative mb-3 w-full">
-              <input
-                type="text"
-                id="permanent_address"
-                name="permanent_address"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.permanent_address ? student.permanent_address : '' %>"
-              />
-              <label
-                for="permanent_address"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Permanent Address</label
-              >
+              <!-- Student Aadhar -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="student_aadhar_no"
+                  name="student_aadhar_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.student_aadhar_no ? student.student_aadhar_no : '' %>"
+                />
+                <label
+                  for="student_aadhar_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-id-card mr-1 text-xs"></i>
+                    Student Aadhar
+                  </span>
+                </label>
+              </div>
+
+              <!-- Gender -->
+              <div class="relative">
+                <select
+                  id="gender"
+                  name="gender"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="MALE" <%= student && student.gender === 'MALE' ? 'selected' : '' %>>MALE</option>
+                  <option value="FEMALE" <%= student && student.gender === 'FEMALE' ? 'selected' : '' %>>FEMALE</option>
+                </select>
+                <label
+                  for="gender"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-venus-mars mr-1 text-xs"></i>
+                    Gender
+                  </span>
+                </label>
+              </div>
+
+              <!-- Corresponding Address -->
+              <div class="relative md:col-span-2 lg:col-span-3">
+                <textarea
+                  id="corresponding_address"
+                  name="corresponding_address"
+                  rows="2"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer resize-none"
+                  placeholder=" "
+                ><%= student && student.corresponding_address ? student.corresponding_address : '' %></textarea>
+                <label
+                  for="corresponding_address"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-home mr-1 text-xs"></i>
+                    Corresponding Address
+                  </span>
+                </label>
+              </div>
+
+              <!-- Same Address Checkbox -->
+              <div class="flex items-center md:col-span-2 lg:col-span-3 p-3 rounded-lg bg-blue-50/50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                <input
+                  id="link-checkbox"
+                  type="checkbox"
+                  class="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                />
+                <label
+                  for="link-checkbox"
+                  class="ms-3 text-sm text-gray-700 dark:text-gray-300"
+                >
+                  <i class="fas fa-check-double text-blue-500 mr-2"></i>
+                  Permanent address is same as corresponding address
+                </label>
+              </div>
+
+              <!-- Permanent Address -->
+              <div class="relative md:col-span-2 lg:col-span-3">
+                <textarea
+                  id="permanent_address"
+                  name="permanent_address"
+                  rows="2"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer resize-none"
+                  placeholder=" "
+                ><%= student && student.permanent_address ? student.permanent_address : '' %></textarea>
+                <label
+                  for="permanent_address"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
+                    Permanent Address
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
 
-          <p class="dark:text-white text-xl p-2">Parent/Guardian Details</p>
-          <div
-            class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500"
-          >
-            <!-- Father Name -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="father_name"
-                name="father_name"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.father_name ? student.father_name : '' %>"
-              />
-              <label
-                for="father_name"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Father Name</label
-              >
+          <!-- Parent/Guardian Details -->
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 flex items-center justify-center mr-3">
+                <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Parent/Guardian Details</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Family and contact information</p>
+              </div>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Father Name -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="father_name"
+                  name="father_name"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.father_name ? student.father_name : '' %>"
+                />
+                <label
+                  for="father_name"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-male mr-1 text-xs"></i>
+                    Father's Name
+                  </span>
+                </label>
+              </div>
 
-            <!-- Mother Name -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="mother_name"
-                name="mother_name"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.mother_name ? student.mother_name : '' %>"
-              />
-              <label
-                for="mother_name"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Mother Name</label
-              >
-            </div>
+              <!-- Mother Name -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="mother_name"
+                  name="mother_name"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.mother_name ? student.mother_name : '' %>"
+                />
+                <label
+                  for="mother_name"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-female mr-1 text-xs"></i>
+                    Mother's Name
+                  </span>
+                </label>
+              </div>
 
-            <!-- family_id  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="family_id"
-                name="family_id"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.family_id ? student.family_id : '' %>"
-              />
-              <label
-                for="family_id"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Family ID</label
-              >
-            </div>
+              <!-- Family ID -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="family_id"
+                  name="family_id"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.family_id ? student.family_id : '' %>"
+                />
+                <label
+                  for="family_id"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-id-badge mr-1 text-xs"></i>
+                    Family ID
+                  </span>
+                </label>
+              </div>
 
-            <!-- Mobile  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="mobile_no"
-                name="mobile_no"
-                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.mobile_no ? student.mobile_no : '' %>"
-              />
-              <label
-                for="mobile_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Mobile No</label
-              >
-            </div>
+              <!-- Mobile Number -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="mobile_no"
+                  name="mobile_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.mobile_no ? student.mobile_no : '' %>"
+                />
+                <label
+                  for="mobile_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-phone mr-1 text-xs"></i>
+                    Mobile Number
+                  </span>
+                </label>
+              </div>
 
-            <!-- Father Aadhar no -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="father_aadhar_no"
-                name="father_aadhar_no"
-                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.father_aadhar_no ? student.father_aadhar_no : '' %>"
-              />
-              <label
-                for="father_aadhar_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Father Aadhar Number</label
-              >
-            </div>
+              <!-- Father Aadhar -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="father_aadhar_no"
+                  name="father_aadhar_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.father_aadhar_no ? student.father_aadhar_no : '' %>"
+                />
+                <label
+                  for="father_aadhar_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-id-card mr-1 text-xs"></i>
+                    Father's Aadhar
+                  </span>
+                </label>
+              </div>
 
-            <!-- Mother Aadhar no -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="mother_aadhar_no"
-                name="mother_aadhar_no"
-                class="appearance-none block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student &&  student.mother_aadhar_no ? student.mother_aadhar_no : '' %>"
-              />
-              <label
-                for="mother_aadhar_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Mother Aadhar Number</label
-              >
+              <!-- Mother Aadhar -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="mother_aadhar_no"
+                  name="mother_aadhar_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.mother_aadhar_no ? student.mother_aadhar_no : '' %>"
+                />
+                <label
+                  for="mother_aadhar_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-id-card mr-1 text-xs"></i>
+                    Mother's Aadhar
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
 
-          <p class="dark:text-white text-xl p-2">Admission Details</p>
-          <div
-            class="flex gap-5 border position-absolute flex-wrap p-5 rounded-md dark:border-gray-500 pb-20"
-          >
-            <!-- SRN Number -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="srn_no"
-                name="srn_no"
-                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.srn_no ? student.srn_no : '' %>"
-              />
-              <label
-                for="srn_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >SRN Number</label
-              >
+          <!-- Admission Details -->
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/20 flex items-center justify-center mr-3">
+                <i class="fas fa-university text-purple-600 dark:text-purple-400"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Admission Details</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Academic and admission information</p>
+              </div>
             </div>
-
-            <!-- Admission Number -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="admission_no"
-                name="admission_no"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.admission_no ? student.admission_no : '' %>"
-              />
-              <label
-                for="admission_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Admission No</label
-              >
-            </div>
-
-            <!-- pen Number -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="pen_no"
-                name="pen_no"
-                class="block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.pen_no ? student.pen_no : '' %>"
-              />
-              <label
-                for="pen_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >PEN No</label
-              >
-            </div>
-
-            <!-- Session -->
-            <div class="relative min-w-48 w-full md:w-fit lg:w-fit">
-              <select
-                id="session"
-                name="session"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option
-                  value="<%= student && student.session ? student.session : '' %>"
-                  selected
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- SRN Number -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="srn_no"
+                  name="srn_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.srn_no ? student.srn_no : '' %>"
+                />
+                <label
+                  for="srn_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
                 >
-                  <%= student && student.session ? student.session : '' %>
-                </option>
-                <option value="2018-2019">2018-2019</option>
-                <option value="2019-2020">2019-2020</option>
-                <option value="2020-2021">2020-2021</option>
-                <option value="2021-2022">2021-2022</option>
-                <option value="2022-2023">2022-2023</option>
-                <option value="2023-2024">2023-2024</option>
-                <option value="2024-2025" selected>2024-2025</option>
-                <option value="2025-2026">2025-2026</option>
-                <option value="2026-2027">2026-2027</option>
-                <option value="2027-2028">2027-2028</option>
-                <option value="2028-2029">2028-2029</option>
-                <option value="2029-2030">2029-2030</option>
-                <option value="2030-2031">2030-2031</option>
-                <option value="2031-2032">2031-2032</option>
-                <option value="2032-2033">2032-2033</option>
-                <option value="2033-2034">2033-2034</option>
-                <option value="2034-2035">2034-2035</option>
-                <option value="2035-2036">2035-2036</option>
-                <option value="2036-2037">2036-2037</option>
-                <option value="2037-2038">2037-2038</option>
-              </select>
-              <label
-                for="session"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Session</label
-              >
-            </div>
+                  <span class="flex items-center">
+                    <i class="fas fa-hashtag mr-1 text-xs"></i>
+                    SRN Number
+                  </span>
+                </label>
+              </div>
 
-            <!-- paste_file_no  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="paste_file_no"
-                name="paste_file_no"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.paste_file_no ? student.paste_file_no : '' %>"
-              />
-              <label
-                for="paste_file_no"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Paste File No</label
-              >
-            </div>
-
-            <!-- profile_status  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="profile_status"
-                name="profile_status"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.profile_status ? student.profile_status : '' %>"
-              />
-              <label
-                for="profile_status"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Profile Status</label
-              >
-            </div>
-            <!-- apaar_id  -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <input
-                type="text"
-                id="apaar_id"
-                name="apaar_id"
-                class="uppercase block px-2.5 pb-2.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value="<%= student && student.apaar_id ? student.apaar_id : '' %>"
-              />
-              <label
-                for="apaar_id"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >Apaar ID</label
-              >
-            </div>
-
-            <!-- Section -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <select
-                id="section"
-                name="section"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="A" selected>A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-              </select>
-              <label
-                for="section"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-              >
-                Section
-              </label>
-            </div>
-
-            <!-- gender -->
-            <div class="relative mb-3 w-full md:w-fit lg:w-fit">
-              <select
-                id="gender"
-                name="gender"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option
-                  value="<%= student && student.gender ? student.gender : '' %>"
-                  selected
+              <!-- Admission Number -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="admission_no"
+                  name="admission_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.admission_no ? student.admission_no : '' %>"
+                />
+                <label
+                  for="admission_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
                 >
-                  <%= student && student.gender ? student.gender : '' %>
-                </option>
-                <option value="MALE">MALE</option>
-                <option value="FEMALE">FEMALE</option>
-              </select>
-              <label
-                for="gender"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-              >
-                Gender
-              </label>
-            </div>
+                  <span class="flex items-center">
+                    <i class="fas fa-ticket-alt mr-1 text-xs"></i>
+                    Admission No
+                  </span>
+                </label>
+              </div>
 
-            <!-- button -->
-            <div class="flex justify-center items-center w-full">
+              <!-- PEN Number -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="pen_no"
+                  name="pen_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.pen_no ? student.pen_no : '' %>"
+                />
+                <label
+                  for="pen_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-pen mr-1 text-xs"></i>
+                    PEN No
+                  </span>
+                </label>
+              </div>
+
+              <!-- Session -->
+              <div class="relative">
+                <select
+                  id="session"
+                  name="session"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select Session</option>
+                  <% const sessions = ['2018-2019', '2019-2020', '2020-2021', '2021-2022', '2022-2023', '2023-2024', '2024-2025', '2025-2026', '2026-2027', '2027-2028', '2028-2029', '2029-2030', '2030-2031', '2031-2032', '2032-2033', '2033-2034', '2034-2035', '2035-2036', '2036-2037', '2037-2038']; %>
+                  <% sessions.forEach(session => { %>
+                    <option value="<%= session %>" 
+                      <%= student && student.session === session ? 'selected' : (session === '2024-2025' && !student ? 'selected' : '') %>>
+                      <%= session %>
+                    </option>
+                  <% }); %>
+                </select>
+                <label
+                  for="session"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-calendar mr-1 text-xs"></i>
+                    Session
+                  </span>
+                </label>
+              </div>
+
+              <!-- Paste File No -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="paste_file_no"
+                  name="paste_file_no"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.paste_file_no ? student.paste_file_no : '' %>"
+                />
+                <label
+                  for="paste_file_no"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-file-alt mr-1 text-xs"></i>
+                    Paste File No
+                  </span>
+                </label>
+              </div>
+
+              <!-- Profile Status -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="profile_status"
+                  name="profile_status"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.profile_status ? student.profile_status : '' %>"
+                />
+                <label
+                  for="profile_status"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-chart-line mr-1 text-xs"></i>
+                    Profile Status
+                  </span>
+                </label>
+              </div>
+
+              <!-- Apaar ID -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="apaar_id"
+                  name="apaar_id"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                  placeholder=" "
+                  value="<%= student && student.apaar_id ? student.apaar_id : '' %>"
+                />
+                <label
+                  for="apaar_id"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-id-badge mr-1 text-xs"></i>
+                    Apaar ID
+                  </span>
+                </label>
+              </div>
+
+              <!-- Section -->
+              <div class="relative">
+                <select
+                  id="section"
+                  name="section"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select Section</option>
+                  <option value="A" <%= student && student.section === 'A' ? 'selected' : 'selected' %>>A</option>
+                  <option value="B" <%= student && student.section === 'B' ? 'selected' : '' %>>B</option>
+                  <option value="C" <%= student && student.section === 'C' ? 'selected' : '' %>>C</option>
+                  <option value="D" <%= student && student.section === 'D' ? 'selected' : '' %>>D</option>
+                </select>
+                <label
+                  for="section"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-layer-group mr-1 text-xs"></i>
+                    Section
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="glass-panel rounded-2xl p-6 shadow-soft dark:shadow-glass-dark">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                  <% if (student==null){ %>
+                    Ready to Register
+                  <% } else { %>
+                    Update Student Profile
+                  <% } %>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                  <% if (student==null){ %>
+                    Click save to register the new student
+                  <% } else { %>
+                    Save changes to update student information
+                  <% } %>
+                </p>
+              </div>
+              
               <button
                 type="submit"
                 id="button_"
-                class="p-2.5 text-sm font-medium text-white bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+                class="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden min-w-40"
               >
-                            <svg aria-hidden="true" role="status"
-                                    class="hidden inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="#E5E7EB" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentColor" />
-                                </svg>
-                Save Details
+                <span class="relative z-10 flex items-center justify-center">
+                  <svg aria-hidden="true" role="status"
+                    class="hidden w-4 h-4 me-3 text-white animate-spin"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="#E5E7EB"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <i class="fas fa-save mr-2"></i>
+                  <% if (student==null){ %>
+                    Register Student
+                  <% } else { %>
+                    Update Details
+                  <% } %>
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
             </div>
           </div>
@@ -685,9 +838,38 @@
   </div>
 </div>
 
+<!-- Add these styles -->
+<style>
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+  }
+  
+  .dark .glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .dark .shadow-glass-dark {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
 <% if (student==null){ %>
 <script src="/js/newStudent.js" defer nonce="<%= nonce %>"></script>
-
 <% } else { %>
 <script src="/js/photoUpload.js" defer nonce="<%= nonce %>"></script>
 <% } %>

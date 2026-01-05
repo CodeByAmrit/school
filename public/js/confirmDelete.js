@@ -13,11 +13,19 @@ window.addEventListener("DOMContentLoaded", function () {
   });
 
   // Close dropdowns when clicking outside
-  document.addEventListener("click", function () {
+  document.addEventListener("click", function (e) {
     document.querySelectorAll('[id^="dropdown-"]').forEach((dropdown) => {
-      dropdown.classList.add("hidden");
+      const toggle = document.querySelector(
+        `[data-dropdown-toggle="${dropdown.id}"]`,
+      );
+
+      if (!dropdown.contains(e.target) && !toggle?.contains(e.target)) {
+        dropdown.classList.add("hidden");
+      }
     });
   });
+
+
 
   // Prevent dropdown close when clicking inside
   document.querySelectorAll('[id^="dropdown-"]').forEach((dropdown) => {
@@ -305,14 +313,17 @@ function getSelectedStudents() {
 }
 
 const modal = document.getElementById("quick-view-modal");
-const modalContent = modal.querySelector(".relative");
+const modalContent = modal ? modal.querySelector(".relative") : null;
 
 /* -----------------------------
    OPEN QUICK VIEW
 ----------------------------- */
 function quickViewStudent(studentId) {
   renderLoadingState(studentId);
+  if (!modal || !modalContent) return;
+
   modal.classList.remove("hidden");
+
 
   // Simulate API call
   setTimeout(() => {
@@ -416,20 +427,25 @@ function renderStudentData(studentId) {
 /* -----------------------------
    EVENT DELEGATION (GLOBAL)
 ----------------------------- */
-modal.addEventListener("click", (e) => {
-  const action = e.target.closest("[data-action]")?.dataset.action;
+if (modal) {
+  modal.addEventListener("click", (e) => {
+    const action = e.target.closest("[data-action]")?.dataset.action;
+    if (action === "close-modal") {
+      closeModal();
+    }
+  });
+}
 
-  if (action === "close-modal") {
-    closeModal();
-  }
-});
 
 /* -----------------------------
    CLOSE MODAL
 ----------------------------- */
 function closeModal() {
-  modal.classList.add("hidden");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
 }
+
 
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".quick-view-btn");
