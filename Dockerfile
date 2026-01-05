@@ -35,6 +35,7 @@ COPY --from=build /school/services ./services
 COPY --from=build /school/middleware ./middleware
 COPY --from=build /school/models ./models
 COPY --from=build /school/components ./components
+COPY --from=build /school/routes ./routes
 COPY --from=build /school/app.js ./
 
 # Install pm2 globally
