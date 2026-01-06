@@ -148,28 +148,47 @@ async function getSign(req, res) {
   }
 }
 
+function emptyToNull(value) {
+  if (value === undefined || value === null) return null;
+  if (typeof value === "string" && value.trim() === "") return null;
+  return value;
+}
+
+function normalizeBloodGroup(value) {
+  const allowed = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  return allowed.includes(value) ? value : null;
+}
+
 async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
   const student = studentData;
   let connection;
   let result = 0;
 
   try {
-    if (!connection) {
-      connection = await getConnection();
-    }
-
+    connection = await getConnection();
     const isNewRecord = !student.school_id;
 
     let query;
     let values;
 
+    // ✅ sanitize fields ONCE
+    const studentAadhar = emptyToNull(student.student_aadhar_no);
+    const fatherAadhar = emptyToNull(student.father_aadhar_no);
+    const motherAadhar = emptyToNull(student.mother_aadhar_no);
+    const bloodGroup = normalizeBloodGroup(student.blood_group);
+
     if (isNewRecord) {
-      // Insert new record without school_id
       query = `
-                INSERT INTO students (teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender, student_aadhar_no, father_aadhar_no, mother_aadhar_no)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
+        INSERT INTO students (
+          teacher_id, name, father_name, mother_name,
+          srn_no, pen_no, admission_no, class, session, roll,
+          permanent_address, corresponding_address, mobile_no,
+          paste_file_no, family_id, dob, profile_status,
+          apaar_id, gender, blood_group,
+          student_aadhar_no, father_aadhar_no, mother_aadhar_no
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
       values = [
         teacher_id,
@@ -191,40 +210,47 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
         student.profile_status,
         student.apaar_id,
         student.gender,
-        student.student_aadhar_no,
-        student.father_aadhar_no,
-        student.mother_aadhar_no,
+        bloodGroup, // ✅ NEW
+        studentAadhar,
+        fatherAadhar,
+        motherAadhar,
       ];
     } else {
-      // Insert or update existing record with school_id
       query = `
-                INSERT INTO students (school_id, teacher_id, name, father_name, mother_name, srn_no, pen_no, admission_no, class, session, roll, 
-                    permanent_address, corresponding_address, mobile_no, paste_file_no, family_id, dob, profile_status, apaar_id, gender, student_aadhar_no, father_aadhar_no, mother_aadhar_no)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE
-                    teacher_id = VALUES(teacher_id),
-                    name = VALUES(name),
-                    father_name = VALUES(father_name),
-                    mother_name = VALUES(mother_name),
-                    srn_no = VALUES(srn_no),
-                    pen_no = VALUES(pen_no),
-                    admission_no = VALUES(admission_no),
-                    class = VALUES(class),
-                    session = VALUES(session),
-                    roll = VALUES(roll),
-                    permanent_address = VALUES(permanent_address),
-                    corresponding_address = VALUES(corresponding_address),
-                    mobile_no = VALUES(mobile_no),
-                    paste_file_no = VALUES(paste_file_no),
-                    family_id = VALUES(family_id),
-                    dob = VALUES(dob),
-                    profile_status = VALUES(profile_status),
-                    apaar_id = VALUES(apaar_id),
-                    gender = VALUES(gender),
-                    student_aadhar_no = VALUES(student_aadhar_no),
-                    father_aadhar_no = VALUES(father_aadhar_no),
-                    mother_aadhar_no = VALUES(mother_aadhar_no)
-            `;
+        INSERT INTO students (
+          school_id, teacher_id, name, father_name, mother_name,
+          srn_no, pen_no, admission_no, class, session, roll,
+          permanent_address, corresponding_address, mobile_no,
+          paste_file_no, family_id, dob, profile_status,
+          apaar_id, gender, blood_group,
+          student_aadhar_no, father_aadhar_no, mother_aadhar_no
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          teacher_id = VALUES(teacher_id),
+          name = VALUES(name),
+          father_name = VALUES(father_name),
+          mother_name = VALUES(mother_name),
+          srn_no = VALUES(srn_no),
+          pen_no = VALUES(pen_no),
+          admission_no = VALUES(admission_no),
+          class = VALUES(class),
+          session = VALUES(session),
+          roll = VALUES(roll),
+          permanent_address = VALUES(permanent_address),
+          corresponding_address = VALUES(corresponding_address),
+          mobile_no = VALUES(mobile_no),
+          paste_file_no = VALUES(paste_file_no),
+          family_id = VALUES(family_id),
+          dob = VALUES(dob),
+          profile_status = VALUES(profile_status),
+          apaar_id = VALUES(apaar_id),
+          gender = VALUES(gender),
+          blood_group = VALUES(blood_group),   -- ✅ NEW
+          student_aadhar_no = VALUES(student_aadhar_no),
+          father_aadhar_no = VALUES(father_aadhar_no),
+          mother_aadhar_no = VALUES(mother_aadhar_no)
+      `;
 
       values = [
         student.school_id,
@@ -247,23 +273,23 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
         student.profile_status,
         student.apaar_id,
         student.gender,
-        student.student_aadhar_no,
-        student.father_aadhar_no,
-        student.mother_aadhar_no,
+        bloodGroup, // ✅ NEW
+        studentAadhar,
+        fatherAadhar,
+        motherAadhar,
       ];
     }
 
     result = await connection.query(query, values);
 
     if (isNewRecord) {
-      // Retrieve the auto-incremented school_id
-      const [rows] = await connection.query(
-        `SELECT LAST_INSERT_ID() as school_id`,
+      const [[row]] = await connection.query(
+        "SELECT LAST_INSERT_ID() AS school_id",
       );
-      studentData.school_id = rows[0].school_id;
+      studentData.school_id = row.school_id;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error(error.sqlMessage || "Database error");
   } finally {
     if (connection) connection.release();
@@ -325,6 +351,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
 
   return result;
 }
+
 
 async function getStudentDetails(req, res) {
   const {
@@ -414,7 +441,7 @@ async function teacherLogin(req, res) {
     // Fetch user with LIMIT 1 for performance boost
     const [rows] = await connection.execute(
       "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1",
-      [email]
+      [email],
     );
 
     if (rows.length === 0) {
@@ -508,7 +535,7 @@ async function teacherSignup(req, res) {
         school_address,
         school_phone,
         school_logo,
-      ]
+      ],
     );
 
     // await sendWelcomeEmail(email, `${firstName} ${lastName}`);
@@ -819,7 +846,7 @@ async function changePassword(req, res) {
     // Fetch the user's current hashed password from DB
     const [rows] = await connection.execute(
       "SELECT password FROM teacher WHERE id = ? LIMIT 1",
-      [userId]
+      [userId],
     );
 
     if (rows.length === 0) {

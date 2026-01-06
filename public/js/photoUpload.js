@@ -124,6 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     formData.append(
+      "blood_group",
+      document.getElementById("blood_group")?.value || "",
+    );
+
+    formData.append(
       "student_aadhar_no",
       document.getElementById("student_aadhar_no").value,
     );

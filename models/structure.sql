@@ -36,11 +36,29 @@ CREATE TABLE IF NOT EXISTS students (
     profile_status VARCHAR(255),
     apaar_id VARCHAR(40),
     gender ENUM('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
+
+    blood_group ENUM(
+        'A+', 'A-',
+        'B+', 'B-',
+        'AB+', 'AB-',
+        'O+', 'O-'
+    ) NULL,
+
     student_aadhar_no CHAR(12) NULL UNIQUE,
     father_aadhar_no CHAR(12) NULL,
     mother_aadhar_no CHAR(12) NULL,
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
+
+ALTER TABLE students
+ADD COLUMN blood_group ENUM(
+    'A+', 'A-',
+    'B+', 'B-',
+    'AB+', 'AB-',
+    'O+', 'O-'
+) NULL
+AFTER gender;
+
 
 CREATE TABLE IF NOT EXISTS student_credentials (
     id INT AUTO_INCREMENT PRIMARY KEY,

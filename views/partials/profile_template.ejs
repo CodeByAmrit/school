@@ -389,6 +389,36 @@
                 </label>
               </div>
 
+              <!-- Blood Group -->
+              <div class="relative">
+                <select
+                  id="blood_group"
+                  name="blood_group"
+                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select Blood Group</option>
+                  <option value="A+" <%= student && student.blood_group === 'A+' ? 'selected' : '' %>>A+</option>
+                  <option value="A-" <%= student && student.blood_group === 'A-' ? 'selected' : '' %>>A-</option>
+                  <option value="B+" <%= student && student.blood_group === 'B+' ? 'selected' : '' %>>B+</option>
+                  <option value="B-" <%= student && student.blood_group === 'B-' ? 'selected' : '' %>>B-</option>
+                  <option value="AB+" <%= student && student.blood_group === 'AB+' ? 'selected' : '' %>>AB+</option>
+                  <option value="AB-" <%= student && student.blood_group === 'AB-' ? 'selected' : '' %>>AB-</option>
+                  <option value="O+" <%= student && student.blood_group === 'O+' ? 'selected' : '' %>>O+</option>
+                  <option value="O-" <%= student && student.blood_group === 'O-' ? 'selected' : '' %>>O-</option>
+                </select>
+
+                <label
+                  for="blood_group"
+                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900"
+                >
+                  <span class="flex items-center">
+                    <i class="fas fa-tint mr-1 text-xs"></i>
+                    Blood Group
+                  </span>
+                </label>
+              </div>
+
+
               <!-- Corresponding Address -->
               <div class="relative md:col-span-2 lg:col-span-3">
                 <textarea
