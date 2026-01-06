@@ -44,11 +44,15 @@ CREATE TABLE IF NOT EXISTS students (
         'O+', 'O-'
     ) NULL,
 
-    student_aadhar_no CHAR(12) NULL UNIQUE,
-    father_aadhar_no CHAR(12) NULL,
-    mother_aadhar_no CHAR(12) NULL,
+    student_aadhar_no CHAR(14) NULL UNIQUE,
+    father_aadhar_no CHAR(14) NULL,
+    mother_aadhar_no CHAR(14) NULL,
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
+ALTER TABLE students
+MODIFY student_aadhar_no CHAR(14) NULL UNIQUE,
+MODIFY father_aadhar_no  CHAR(14) NULL,
+MODIFY mother_aadhar_no  CHAR(14) NULL;
 
 ALTER TABLE students
 ADD COLUMN blood_group ENUM(
