@@ -86,7 +86,9 @@ class App {
     this.app.use("/", router);
     this.app.use("/api/students/", student);
     this.app.use("/settings", settingsRouter);
-    // this.app.use("/webhook", webhook);
+    this.app.get("/health", (req, res) => {
+      res.status(200).send("OK");
+    });
     this.app.use("/ai", Gemini_router);
   }
 

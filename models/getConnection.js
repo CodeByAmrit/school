@@ -1,47 +1,82 @@
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
 
-// Load environment variables
 dotenv.config();
 
-// Decode SSL CA from Base64 (if used)
-let sslConfig = undefined;
+/**
+ * SSL configuration (supports Base64 CA)
+ */
+let sslConfig;
 if (process.env.DB_CA) {
-  const caContent = Buffer.from(process.env.DB_CA, "base64").toString("utf8");
-  sslConfig = { ca: caContent };
+  sslConfig = {
+    ca: Buffer.from(process.env.DB_CA, "base64").toString("utf8"),
+  };
 }
 
-// Create a connection pool
+/**
+ * MySQL connection pool
+ * - Auto reconnect
+ * - Safe for production
+ * - Handles idle disconnects
+ */
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT || 3306),
+
   ssl: sslConfig,
+
   waitForConnections: true,
-  connectionLimit: 10, // adjust as needed
+  connectionLimit: 10,
   queueLimit: 0,
+
+  // 🔥 Critical for production stability
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
 
-// Helper function to get a pooled connection
+/**
+ * Execute query directly on pool (RECOMMENDED)
+ */
+async function query(sql, params = []) {
+  return pool.execute(sql, params);
+}
+
+/**
+ * Get pooled connection (ONLY if transaction is needed)
+ */
 async function getConnection() {
+  const conn = await pool.getConnection();
+
+  // Safety: auto-release on unexpected disconnect
+  conn.on("error", () => {
+    try {
+      conn.release();
+    } catch (_) {}
+  });
+
+  return conn;
+}
+
+/**
+ * Graceful shutdown (Docker / PM2 safe)
+ */
+async function shutdown() {
   try {
-    const connection = await pool.getConnection();
-    return connection;
-  } catch (error) {
-    console.error("❌ Database connection error:", error);
-    throw error;
+    console.log("🛑 Closing MySQL pool...");
+    await pool.end();
+    process.exit(0);
+  } catch (err) {
+    console.error("Error closing pool:", err);
+    process.exit(1);
   }
 }
 
-process.on("SIGINT", async () => {
-  await pool.end();
-  console.log("Database pool closed.");
-  process.exit(0);
-});
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
 
 module.exports = {
   getConnection,
-  pool,
 };
