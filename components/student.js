@@ -1,64 +1,46 @@
 const bcrypt = require("bcrypt");
 const { setUser } = require("../services/aouth");
-const { getConnection } = require("../models/getConnection");
-const { sendWelcomeEmail } = require("./email");
-const fs = require("fs");
+const { getConnection, query } = require("../models/getConnection");
 const sharp = require("sharp");
 
 const saltRounds = 10;
 
 async function getAllStudent(req, res) {
   const teacher_id = req.user._id;
-  let connection;
   try {
-    connection = await getConnection();
-    const [rows] = await connection.execute(
-      `SELECT name, father_name, session, mother_name, class, school_id, 
-                              COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image 
-                              
-                                FROM student_photos_view 
-                                WHERE class = 'NURSERY' and teacher_id = ?`,
+    const [rows] = await query(
+      `SELECT name, father_name, session, mother_name, class, school_id,
+       COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image
+       FROM student_photos_view
+       WHERE class = 'NURSERY' AND teacher_id = ?`,
       [teacher_id],
     );
     return rows;
   } catch (error) {
-    console.log(error);
-    res.json({ status: error.sqlMessage });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
+    console.error(error);
   }
 }
 
+
 async function getTotalStudents(req, res) {
   const teacher_id = req.user._id;
-  let connection;
   try {
-    connection = await getConnection();
-    const [[{ total_students }]] = await connection.execute(
+    const [[{ total_students }]] = await query(
       "SELECT COUNT(*) AS total_students FROM students WHERE teacher_id = ?",
       [teacher_id],
     );
-    connection.release();
     return total_students;
   } catch (error) {
     console.log(error);
     res.json({ status: error.sqlMessage });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
   }
 }
 
 async function getOneStudent(req, res) {
   const teacher_id = req.user._id;
   const school_id = req.params.id;
-  let connection;
   try {
-    connection = await getConnection();
-    const [rows] = await connection.execute(
+    const [rows] = await query(
       "SELECT * FROM students where school_id = ? AND teacher_id = ?",
       [school_id, teacher_id],
     );
@@ -66,24 +48,17 @@ async function getOneStudent(req, res) {
   } catch (error) {
     console.log(error);
     res.json({ status: error.sqlMessage });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
   }
 }
 
 async function getPhoto(req, res) {
   const school_id = req.params.id;
   const teacher_id = req.user._id;
-  let connection;
 
   try {
-    connection = await getConnection();
-    const [[result]] = await connection.execute(
-      "SELECT image FROM photo WHERE id = ?",
-      [school_id],
-    );
+    const [[result]] = await query("SELECT image FROM photo WHERE id = ?", [
+      school_id,
+    ]);
 
     if (result && result.image) {
       // Dynamically process the image
@@ -104,20 +79,14 @@ async function getPhoto(req, res) {
   } catch (error) {
     console.error("Error processing image:", error);
     res.status(500).send({ message: "Internal Server Error" });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
   }
 }
 async function getSign(req, res) {
   const school_id = req.params.id;
   const teacher_id = req.user._id;
-  let connection;
 
   try {
-    connection = await getConnection();
-    const [[result]] = await connection.execute(
+    const [[result]] = await query(
       "SELECT student_sign FROM photo WHERE id = ?",
       [school_id],
     );
@@ -141,10 +110,6 @@ async function getSign(req, res) {
   } catch (error) {
     console.error("Error processing image:", error);
     res.status(500).send({ message: "Internal Server Error" });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
   }
 }
 
@@ -349,9 +314,9 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     }
   }
 
-  return result;
+    
+    return result;
 }
-
 
 async function getStudentDetails(req, res) {
   const {
@@ -363,102 +328,85 @@ async function getStudentDetails(req, res) {
     mother_name,
     session,
   } = req.query;
-  let connection;
   try {
-    connection = await getConnection();
     // let query = 'SELECT * FROM student_photos_view WHERE 1=1';
-    let query = `SELECT name, father_name, session, mother_name, class, school_id, COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image FROM student_photos_view
+    let query_prepared = `SELECT name, father_name, session, mother_name, class, school_id, COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image FROM student_photos_view
              WHERE teacher_id = ?`;
     const params = [req.user._id];
 
     if (name) {
-      query += " AND name LIKE ?";
+      query_prepared += " AND name LIKE ?";
       params.push(`%${name}%`);
     }
     if (roll_no) {
-      query += " AND roll LIKE ?";
+      query_prepared += " AND roll LIKE ?";
       params.push(`%${roll_no}%`);
     }
     if (studentClass) {
-      query += " AND class LIKE ?";
+      query_prepared += " AND class LIKE ?";
       params.push(`%${studentClass}%`);
     }
     if (srn_no) {
-      query += " AND srn_no LIKE ?";
+      query_prepared += " AND srn_no LIKE ?";
       params.push(`%${srn_no}%`);
     }
     if (father_name) {
-      query += " AND father_name LIKE ?";
+      query_prepared += " AND father_name LIKE ?";
       params.push(`%${father_name}%`);
     }
     if (mother_name) {
-      query += " AND mother_name LIKE ?";
+      query_prepared += " AND mother_name LIKE ?";
       params.push(`%${mother_name}%`);
     }
     if (session) {
-      query += " AND session LIKE ?";
+      query_prepared += " AND session LIKE ?";
       params.push(`%${session}%`);
     }
 
-    const [rows] = await connection.execute(query, params);
+    const [rows] = await query(query_prepared, params);
     // console.log(rows);
     return rows;
   } catch (error) {
     console.log(error);
     res.json({ status: error.sqlMessage });
-  } finally {
-    if (connection) {
-      await connection.release();
-    }
   }
 }
 
 async function get_school_logo(req, res) {
   const email = req.user.email;
-  let connection;
   try {
-    connection = await getConnection();
-
-    const [[result]] = await connection.execute(
+    const [[result]] = await query(
       "select school_logo from teacher where email = ?",
       [email],
     );
-    connection.release();
     return result;
   } catch (error) {
     return null;
   }
 }
 
-async function teacherLogin(req, res) {
-  let connection;
+
+async function teacherLogin(req) {
+  let { email, password } = req.body;
+  email = email.trim().toLowerCase();
+
   try {
-    let { email, password } = req.body;
-    email = email.trim().toLowerCase(); // Normalize email
-
-    connection = await getConnection();
-
-    // Fetch user with LIMIT 1 for performance boost
-    const [rows] = await connection.execute(
+    const [rows] = await query(
       "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1",
-      [email],
+      [email]
     );
 
     if (rows.length === 0) {
-      // Delay response slightly to prevent email enumeration attacks
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return res.status(401).json({ status: "Invalid credentials" });
+      throw new Error("INVALID_CREDENTIALS");
     }
 
     const teacher = rows[0];
 
-    // Secure password comparison
     const isMatch = await bcrypt.compare(password, teacher.password);
     if (!isMatch) {
-      return res.status(401).json({ status: "Invalid credentials" });
+      throw new Error("INVALID_CREDENTIALS");
     }
 
-    // JWT Payload
     const payload = {
       id: teacher.id,
       first_name: teacher.first_name,
@@ -469,24 +417,13 @@ async function teacherLogin(req, res) {
       school_phone: teacher.school_phone,
     };
 
-    // Generate JWT token
-    const token = setUser(payload);
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 3600000,
-    });
-    await connection.release();
-    res.json({ status: "success", token });
+    return setUser(payload);
   } catch (error) {
     console.error("Login Error:", error);
-    res.status(500).json({ status: "Internal Server Error" });
-  } finally {
-    if (connection) await connection.release();
+    throw error; // 🔥 CRITICAL: never swallow
   }
 }
+
 
 async function teacherSignup(req, res) {
   const {
@@ -544,9 +481,7 @@ async function teacherSignup(req, res) {
     console.error(error); // Log the actual error for debugging
     res.json({ status: error.sqlMessage || "An error occurred" });
   } finally {
-    if (connection) {
-      await connection.release();
-    }
+    if (connection) connection.release();
   }
 }
 
@@ -594,13 +529,7 @@ async function deleteStudent(req, res) {
     console.error(`Database connection error:`, error);
     res.status(500).json({ message: "Failed to connect to the database." });
   } finally {
-    if (connection) {
-      try {
-        await connection.release();
-      } catch (error) {
-        console.error(`Error closing the database connection:`, error);
-      }
-    }
+    if (connection) connection.release();
   }
 }
 
@@ -642,15 +571,13 @@ async function insertPDF(req, res) {
     console.log(error);
     res.status(500).json({ result: error.sqlMessage.toString() });
   } finally {
-    if (connection) {
-      await connection.release();
-    }
+    if (connection) connection.release();
   }
 }
 
 // Function to get marks of a single student by school ID
 async function getStudentMarksBySchoolId(schoolId) {
-  const query = `
+  const query_prepared = `
     SELECT 
       sm.subject, 
       sm.marks, 
@@ -665,14 +592,12 @@ async function getStudentMarksBySchoolId(schoolId) {
     ORDER BY sm.term, sm.subject
   `;
   try {
-    const connection = await getConnection();
-    const [results] = await connection.execute(query, [schoolId, schoolId]);
-    await connection.release();
+    const [results] = await query(query_prepared, [schoolId, schoolId]);
     return results;
   } catch (error) {
     console.error("Error fetching marks for student:", error);
     throw error;
-  }
+  } 
 }
 
 // Function to get student marks
@@ -685,18 +610,20 @@ async function getStudentMarks(studentId, term) {
           (SELECT class FROM students WHERE school_id = ?)
     WHERE sm.student_id = ? AND sm.term = ?
   `;
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const [results] = await connection.execute(query, [
       studentId,
       studentId,
       term,
     ]);
-    await connection.release();
     return results;
   } catch (error) {
     console.error("Error fetching student marks:", error);
     throw error;
+  } finally {
+    if (connection) connection.release();
   }
 }
 
@@ -707,8 +634,9 @@ async function storeStudentMarks(studentId, term, marksData) {
     VALUES (?, ?, ?, ?)
     ON DUPLICATE KEY UPDATE marks = VALUES(marks)
   `;
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     for (const mark of marksData) {
       await connection.execute(query, [
         studentId,
@@ -717,10 +645,11 @@ async function storeStudentMarks(studentId, term, marksData) {
         mark.marks,
       ]);
     }
-    await connection.release();
   } catch (error) {
     console.error("Error storing student marks:", error);
     throw error;
+  } finally {
+    if (connection) connection.release();
   }
 }
 
@@ -735,14 +664,17 @@ async function getStudentMarksWithMaxMarks(studentId) {
     WHERE sm.student_id = ?
     ORDER BY sm.term, sm.subject;
   `;
+
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const [results] = await connection.execute(query, [studentId, studentId]);
-    await connection.release();
     return results;
   } catch (error) {
     console.error("Error fetching marks with max marks:", error);
     throw error;
+  } finally {
+    if (connection) connection.release();
   }
 }
 
@@ -759,9 +691,9 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
         VALUES ((SELECT class FROM students WHERE school_id = ?), ?, ?, ?)
         ON DUPLICATE KEY UPDATE max_marks = VALUES(max_marks);
     `;
-
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
 
     // Loop through the marks and maxMarks for each term
     for (let term = 0; term < marks.length; term++) {
@@ -787,28 +719,25 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
         ]);
       }
     }
-
-    await connection.release();
   } catch (error) {
     console.error("Error saving marks:", error);
     throw error;
+  } finally {
+    if (connection) connection.release();
   }
 }
 
 async function getFileCount(req, res) {
   const teacherId = req.user._id;
 
-  const query = `
+  const query_prepared = `
         SELECT COUNT(*) AS total_files
         FROM student_files f
         INNER JOIN students s ON f.school_id = s.school_id
         WHERE s.teacher_id = ?;
     `;
-
   try {
-    const connection = await getConnection();
-    const [rows] = await connection.execute(query, [teacherId]);
-    connection.release();
+    const [rows] = await query(query_prepared, [teacherId]);
 
     // Return the count
     return rows[0].total_files;
@@ -879,7 +808,7 @@ async function changePassword(req, res) {
     console.error("Error changing password:", error);
     res.status(500).json({ status: "error", message: "Internal Server Error" });
   } finally {
-    if (connection) await connection.release();
+    if (connection) connection.release();
   }
 }
 
@@ -893,9 +822,10 @@ async function markStudentAsLeft(req, res) {
       .json({ message: "Student ID and reason are required." });
   }
 
-  const connection = await getConnection();
+  let connection;
 
   try {
+    connection = await getConnection();
     await connection.beginTransaction();
 
     // Fetch the student record
@@ -954,11 +884,10 @@ async function markStudentAsLeft(req, res) {
     // Redirect after success
     res.redirect("/students"); // Adjust path if needed
   } catch (err) {
-    console.error("Error marking student as left:", err);
-    await connection.rollback();
-    res.status(500).send("An error occurred while processing the request.");
+    if (connection) await connection.rollback();
+    throw err;
   } finally {
-    await connection.release();
+    if (connection) connection.release();
   }
 }
 

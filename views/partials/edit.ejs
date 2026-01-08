@@ -417,23 +417,30 @@
                             </button>
                           </form>
 
-                          <a
-                            href="/delete/<%= student.school_id %>"
-                            id="delete-link-<%= student.school_id %>"
-                            class="flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                          <form
+                            action="/delete/<%= student.school_id %>"
+                            method="POST"
+                            onsubmit="return confirmDelete(event)"
+                            class="w-full"
                           >
-                            <div
-                              class="w-8 h-8 rounded-lg bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center mr-3"
+                            <button
+                              type="submit"
+                              class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                             >
-                              <i class="fas fa-trash-alt text-red-600"></i>
-                            </div>
-                            <div>
-                              <div class="font-medium">Delete Student</div>
-                              <div class="text-xs text-red-500">
-                                Permanently remove
+                              <div
+                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center mr-3"
+                              >
+                                <i class="fas fa-trash-alt text-red-600"></i>
                               </div>
-                            </div>
-                          </a>
+                              <div>
+                                <div class="font-medium">Delete Student</div>
+                                <div class="text-xs text-red-500">
+                                  Permanently remove
+                                </div>
+                              </div>
+                            </button>
+                          </form>
+
                         </div>
                       </div>
                     </div>

@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 /**
- * SSL configuration (supports Base64 CA)
+ * SSL configuration (Base64 CA supported)
  */
 let sslConfig;
 if (process.env.DB_CA) {
@@ -14,10 +14,7 @@ if (process.env.DB_CA) {
 }
 
 /**
- * MySQL connection pool
- * - Auto reconnect
- * - Safe for production
- * - Handles idle disconnects
+ * MySQL connection pool (production safe)
  */
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -32,40 +29,31 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 
-  // 🔥 Critical for production stability
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
 });
 
 /**
- * Execute query directly on pool (RECOMMENDED)
+ * ✅ USE THIS FOR 90% OF QUERIES
  */
 async function query(sql, params = []) {
   return pool.execute(sql, params);
 }
 
 /**
- * Get pooled connection (ONLY if transaction is needed)
+ * ⚠️ ONLY FOR TRANSACTIONS
+ * NO listeners, NO magic, NO side effects
  */
 async function getConnection() {
-  const conn = await pool.getConnection();
-
-  // Safety: auto-release on unexpected disconnect
-  conn.on("error", () => {
-    try {
-      conn.release();
-    } catch (_) {}
-  });
-
-  return conn;
+  return pool.getConnection();
 }
 
 /**
- * Graceful shutdown (Docker / PM2 safe)
+ * Graceful shutdown (Docker / Traefik / PM2 safe)
  */
-async function shutdown() {
+async function shutdown(signal) {
+  console.log(`🛑 Closing MySQL pool (${signal})`);
   try {
-    console.log("🛑 Closing MySQL pool...");
     await pool.end();
     process.exit(0);
   } catch (err) {
@@ -78,5 +66,7 @@ process.on("SIGTERM", shutdown);
 process.on("SIGINT", shutdown);
 
 module.exports = {
+  pool,
+  query,
   getConnection,
 };

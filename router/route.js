@@ -82,11 +82,10 @@ router.get("/students/count/:session", checkAuth, async (req, res) => {
       and teacher_id = ?
       GROUP BY class;
   `;
-
+  let connection;
   try {
-    const connection = await getConnection(); // Get a connection
+    connection = await getConnection(); // Get a connection
     const [results] = await connection.query(query, [session, teacher_id]); // Execute the query with session as a parameter
-    connection.release(); // Close the connection
 
     res.status(200).json({ data: results });
   } catch (error) {
@@ -94,6 +93,8 @@ router.get("/students/count/:session", checkAuth, async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while fetching student count" });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -103,7 +104,7 @@ router.post("/create-certificate", checkAuth, async (req, res) => {
   const position = req.body.position || 0;
   let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const [student] = await connection.execute(
       "SELECT * FROM students WHERE school_id = ?",
       [student_id],
@@ -134,18 +135,20 @@ router.post("/create-certificate", checkAuth, async (req, res) => {
 });
 
 router.get("/chart-data", checkAuth, async (req, res) => {
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const [rows] = await connection.execute(`
           SELECT class AS label, COUNT(*) AS value
           FROM students
           GROUP BY class
       `);
-    connection.release();
     res.json(rows);
   } catch (error) {
     console.error("Error fetching chart data:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -229,9 +232,10 @@ router.get("/generate-certificate/:school_id", checkAuth, async (req, res) => {
 });
 
 router.get("/students", checkAuth, async (req, res) => {
+  let connection;
   try {
     let school_logo_url = "/image/graduated.png";
-    const connection = await getConnection();
+    connection = await getConnection();
     const school_logo = await get_school_logo(req, res);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString("base64");
@@ -249,7 +253,6 @@ router.get("/students", checkAuth, async (req, res) => {
 
     const studentlist = await getAllStudent(req, res);
 
-    connection.release();
     res.render("students", {
       studentlist,
       user,
@@ -258,6 +261,8 @@ router.get("/students", checkAuth, async (req, res) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -393,16 +398,21 @@ router.post(
   checkAuth,
   [
     body("currentPassword", "Current password is required").notEmpty(),
-    body("newPassword", "New password must be at least 8 characters long").isLength({ min: 8 }),
+    body(
+      "newPassword",
+      "New password must be at least 8 characters long",
+    ).isLength({ min: 8 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    await changePassword(req, res);
-  }
+
+    return changePassword(req, res);
+  },
 );
+
 
 router.get("/change-password", checkAuth, async (req, res) => {
   let school_logo_url = "/image/graduated.png";
@@ -432,15 +442,29 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
+
     try {
-      const token = await teacherLogin(req, res); // Ensure only one response is sent
-    } catch (error) {
-      console.error("Login error:", error);
-      // Send an error response and return immediately
-      return res.status(401).send("Login Failed");
+      const token = await teacherLogin(req);
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        maxAge: 3600000,
+      });
+
+      return res.json({ status: "success", token });
+    } catch (err) {
+      if (err.message === "INVALID_CREDENTIALS") {
+        return res.status(401).json({ status: "Invalid credentials" });
+      }
+
+      console.error("Login route error:", err);
+      return res.status(500).json({ status: "Internal Server Error" });
     }
   }
 );
+
 
 // Login page - Redirect if already authenticated
 router.get("/login", async (req, res, next) => {
@@ -687,9 +711,9 @@ router.post("/marks", checkAuth, async (req, res) => {
 // Route to display marks entry/view page
 router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
   const { studentId } = req.params;
-
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
 
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
@@ -701,7 +725,6 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
     );
 
     if (studentRows.length === 0) {
-      connection.release();
       return res.status(404).send("Student not found");
     }
 
@@ -759,8 +782,6 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    connection.release();
-
     let subjects = [
       "ENGLISH",
       "HINDI",
@@ -799,6 +820,8 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
   } catch (error) {
     console.error("Error fetching student marks:", error);
     res.status(500).send("Internal server error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -824,7 +847,7 @@ router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
 router.post("/student/attendance-status/:school_id", async (req, res) => {
   const { school_id } = req.params;
   const { attendance, status } = req.body;
-
+  let connection;
   try {
     // Validate input
     if (!attendance || !status) {
@@ -832,7 +855,7 @@ router.post("/student/attendance-status/:school_id", async (req, res) => {
     }
 
     // Get a database connection
-    const connection = await getConnection();
+    connection = await getConnection();
 
     // Create or update data in `student_attendance_status` table
     const query = `
@@ -844,12 +867,12 @@ router.post("/student/attendance-status/:school_id", async (req, res) => {
     `;
     await connection.execute(query, [school_id, attendance, status]);
 
-    // Release the connection and send response
-    connection.release();
     res.redirect(`/student/get_marks/${school_id}`);
   } catch (error) {
     console.error("Error submitting/updating attendance status:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -857,30 +880,32 @@ router.post("/student/attendance-status/:school_id", async (req, res) => {
 router.post("/upload", upload.single("file"), async (req, res) => {
   const { school_id, file_name } = req.body;
   let { buffer, mimetype } = req.file;
-
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     // Insert the data into the table, including file_name, mimetype (as type), and file_data
     await connection.execute(
       "INSERT INTO student_files (school_id, file_data, file_name, type) VALUES (?, ?, ?, ?)",
       [school_id, buffer, file_name, mimetype],
     );
 
-    connection.release();
     res.redirect(`/files/one/${school_id}`); // Redirect to the file manager page
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
 // Route to fetch all files
 router.get("/files", checkAuth, async (req, res) => {
+  let connection;
   try {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
 
-    const connection = await getConnection();
+    connection = await getConnection();
     const [files] = await connection.execute(
       "SELECT id, school_id, LENGTH(file_data) AS size FROM student_files",
     );
@@ -889,45 +914,50 @@ router.get("/files", checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    connection.release();
     res.render("files", { files, user, total_students: studentsCount });
   } catch (error) {
     console.error("Error fetching files:", error);
     res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
 // Route to get files for a particular student
 router.get("/files/one/:school_id", checkAuth, async (req, res) => {
   const { school_id } = req.params;
+  let connection;
+  try {
+    connection = await getConnection();
+    let [files] = await connection.execute(
+      "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
+      [school_id],
+    );
 
-  const connection = await getConnection();
-  let [files] = await connection.execute(
-    "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
-    [school_id],
-  );
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
 
-  const school_logo_url = await getSchoolLogo(req, res);
-  let user = req.user;
-  user.school_logo = school_logo_url;
-
-  // Fetch total students assigned to the teacher
-  const studentsCount = await getTotalStudents(req, res);
-  connection.release();
-  res.render("studentFiles", {
-    files,
-    user,
-    school_id,
-    total_students: studentsCount,
-  });
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
+    res.render("studentFiles", {
+      files,
+      user,
+      school_id,
+      total_students: studentsCount,
+    });
+  } finally {
+    if (connection) connection.release();
+  }
 });
 
 // Route to view a file
 router.get("/files/:id", async (req, res) => {
   const { id } = req.params;
 
+  let connection;
   try {
-    const connection = await getConnection();
+    connection = await getConnection();
     const [file] = await connection.execute(
       "SELECT file_data, type AS file_type FROM student_files WHERE id = ?",
       [id],
@@ -937,26 +967,27 @@ router.get("/files/:id", async (req, res) => {
       return res.status(404).send("File not found");
     }
 
-    res.contentType("application/pdf"); // Set the content type
-    connection.release();
-    res.send(file[0].file_data); // Send the file data
+    res.contentType("application/pdf");
+    res.send(file[0].file_data);
   } catch (error) {
     console.error("Error fetching file:", error);
     res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
 // Delete file route
 router.post("/delete-file/:id", async (req, res) => {
+  let connection;
   try {
-    let connection = await getConnection();
+    connection = await getConnection();
     const fileId = req.params.id;
 
     // SQL query to delete the file
     const query = "DELETE FROM student_files WHERE id = ?";
 
     const [result] = await connection.execute(query, [fileId]);
-    connection.release();
     if (result.affectedRows > 0) {
       res.redirect(`/files/one/${fileId}`); // Redirect back to file manager after deletion
     } else {
@@ -965,6 +996,8 @@ router.post("/delete-file/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error deleting file.");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -977,9 +1010,10 @@ async function executeProcedure(schoolId, action) {
     const query = "CALL promote_or_demote_student(?, ?)";
     [results] = await connection.execute(query, [schoolId, action]);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    throw error;
   } finally {
-    connection.release();
+    if (connection) connection.release();
   }
 
   return results;
@@ -1002,12 +1036,12 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
       [id, grade, remarks, term],
     );
 
-    connection.release();
-
     res.redirect(`/student/get_marks/${id}`);
   } catch (error) {
     console.error("Error ranking students:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -1068,7 +1102,7 @@ router.get("/students/leaved", checkAuth, async (req, res) => {
   user.school_logo = school_logo_url;
 
   const teacherId = req.user._id;
-
+  let connection;
   try {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
@@ -1077,13 +1111,12 @@ router.get("/students/leaved", checkAuth, async (req, res) => {
 
     const nonce = res.locals.nonce;
 
-    const connection = await getConnection();
+    connection = await getConnection();
     const teacherId = req.user._id;
     const [students] = await connection.execute(
       "SELECT * FROM school_leaved_students where teacher_id = ?",
       [teacherId],
     );
-    await connection.release();
     res.render("leave-students", {
       students,
       user,
@@ -1095,6 +1128,8 @@ router.get("/students/leaved", checkAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Failed to load leave students");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -1113,7 +1148,7 @@ router.get("/account", checkAuth, (req, res) => {
   res.render("account");
 });
 
-router.get("/delete/:id", checkAuth, deleteStudent);
+router.post("/delete/:id", checkAuth, deleteStudent);
 
 router.get("/", (req, res) => {
   res.render("landing", { nonce: res.locals.nonce });

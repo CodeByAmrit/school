@@ -48,7 +48,7 @@ class App {
     this.app.use(limiter);
 
     if (process.env.NODE_ENV !== "production") {
-      this.app.use(morgan("combined"));
+      this.app.use(morgan("dev"));
     }
 
     this.app.use(express.json({ limit: "10mb" }));

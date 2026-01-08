@@ -190,16 +190,19 @@ window.addEventListener("DOMContentLoaded", function () {
 
 // Helper Functions
 
-function confirmDelete(event, link) {
-  const isConfirmed = confirm("Are you sure you want to delete this record?");
+function confirmDelete(event) {
+  const isConfirmed = confirm(
+    "Are you sure you want to permanently delete this student?",
+  );
 
-  if (isConfirmed) {
-    return true;
-  } else {
+  if (!isConfirmed) {
     event.preventDefault();
     return false;
   }
+
+  return true;
 }
+
 
 function updateSelectedCount() {
   const selectedCountElement = document.getElementById("selected-count");
