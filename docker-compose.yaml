@@ -4,22 +4,13 @@ services:
     env_file: .env
     environment:
       - NODE_ENV=production
-      - PORT=5000
     restart: always
 
-    # Internal service only (Traefik will route)
+    # IMPORTANT: internal only
     expose:
       - "5000"
 
-    # Health check (safe to keep)
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
-
-    # Traefik integration (AUTO networking)
+    # Traefik integration
     labels:
       - "traefik.enable=true"
 
@@ -31,6 +22,5 @@ services:
       # Service
       - "traefik.http.services.student.loadbalancer.server.port=5000"
 
-    # Replicas (Dokploy supports this)
     deploy:
       replicas: 2
