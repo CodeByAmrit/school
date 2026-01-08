@@ -12,6 +12,7 @@ const student = require("./router/student");
 const Gemini_router = require("./router/ai_router");
 const settingsRouter = require("./routes/settings");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
+const os = require("os");
 
 class App {
   constructor() {
@@ -197,10 +198,9 @@ class App {
     this.app.set("views", path.join(__dirname, "views"));
     this.app.set("view engine", "ejs");
 
-    if (process.env.NODE_ENV === 'production') {
-      this.app.set('view cache', true);
+    if (process.env.NODE_ENV === "production") {
+      this.app.set("view cache", true);
     }
-
 
     // Favicon
     this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
@@ -232,6 +232,16 @@ class App {
         memory: process.memoryUsage(),
       });
     });
+
+    this.app.get("/_whoami", (req, res) => {
+      res.json({
+        hostname: os.hostname(),
+        container: process.env.HOSTNAME,
+        pid: process.pid,
+        time: new Date().toISOString(),
+      });
+    });
+
 
     // Readiness probe
     this.app.get("/ready", (req, res) => {
