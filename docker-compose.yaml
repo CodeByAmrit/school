@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
   node:
@@ -6,23 +5,67 @@ services:
     env_file: .env
     environment:
       - NODE_ENV=production
-    restart: always
-
+      - TRUST_PROXY=1
+      - PORT=5000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     # IMPORTANT: internal only
     expose:
       - "5000"
-
+    # Security: non-root user
+    user: "node"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    # Resource limits
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
     # Traefik integration
     labels:
       - "traefik.enable=true"
-
       # Router
       - "traefik.http.routers.student.rule=Host(`edu.amritsharma.dev`)"
       - "traefik.http.routers.student.entrypoints=websecure"
       - "traefik.http.routers.student.tls=true"
-
+      - "traefik.http.routers.student.tls.certresolver=myresolver"
+      # Middlewares
+      - "traefik.http.routers.student.middlewares=security-headers@file,rate-limit@file"
       # Service
       - "traefik.http.services.student.loadbalancer.server.port=5000"
+      - "traefik.http.services.student.loadbalancer.healthcheck.path=/health"
+      - "traefik.http.services.student.loadbalancer.healthcheck.interval=30s"
+      # Docker provider
+      - "traefik.docker.network=traefik-public"
+    networks:
+      - traefik-public
+      - internal
 
-    deploy:
-      replicas: 2
+# Separate network for security
+networks:
+  traefik-public:
+    external: true
+  internal:
+    driver: bridge

@@ -1,6 +1,6 @@
 {
-  "name": "generate_pdf",
-  "version": "1.0.0",
+  "name": "student_tracker",
+  "version": "1.4.0",
   "description": "Generate Certificate for students",
   "main": "app.js",
   "scripts": {
@@ -8,9 +8,24 @@
     "dev": "nodemon ./bin/www",
     "format": "npx prettier --write .",
     "build:css": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch",
-    "vercel-build": "npm install",
-    "start:pm2": "pm2 start ./bin/www --name studenttracker --env production"
+    "build": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --minify",
+    "vercel-build": "npm install && npm run build",
+    "start:pm2": "pm2 start ./bin/www --name studenttracker --env production",
+    "lint": "npx eslint .",
+    "test": "jest --coverage",
+    "docker:build": "docker build -t codebyamrit/student-tracker:1.4.0 .",
+    "docker:run": "docker compose up -d",
+    "security:check": "npm audit --audit-level=moderate",
+    "clean": "rm -rf node_modules package-lock.json"
   },
+  "keywords": [
+    "student",
+    "tracker",
+    "certificate",
+    "pdf",
+    "express",
+    "mysql"
+  ],
   "author": "Amrit",
   "license": "ISC",
   "dependencies": {
@@ -22,7 +37,6 @@
     "child_process": "^1.0.2",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
-    "crypto": "^1.0.1",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "exceljs": "^4.4.0",
@@ -61,5 +75,13 @@
         }
       }
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codebyamrit/school.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codebyamrit/school/issues"
+  },
+  "homepage": "https://github.com/codebyamrit/school#readme"
 }

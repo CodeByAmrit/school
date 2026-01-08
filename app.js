@@ -1,11 +1,9 @@
 const crypto = require("crypto");
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+const { rateLimit } = require("express-rate-limit");
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 
@@ -13,8 +11,6 @@ const router = require("./router/route");
 const student = require("./router/student");
 const Gemini_router = require("./router/ai_router");
 const settingsRouter = require("./routes/settings");
-// const authRoutes = require("./services/auth");
-// const webhook = require("./router/webhook");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 class App {
@@ -26,89 +22,266 @@ class App {
   }
 
   configureMiddleware() {
-    this.app.set("trust proxy", "loopback");
-    this.app.use(helmet());
-    this.app.use(compression());
+    // Configure reverse proxy settings
+    this.app.set("trust proxy", 1);
 
+    // Security headers - disable default CSP, we'll add our own
+    this.app.use(
+      helmet({
+        contentSecurityPolicy: false, // We'll handle CSP manually
+        crossOriginEmbedderPolicy: false,
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+      }),
+    );
+
+    // Dynamic CSP with nonce for scripts - Single line string
     this.app.use((req, res, next) => {
       res.locals.nonce = crypto.randomBytes(16).toString("hex");
-      res.setHeader(
-        "Content-Security-Policy",
-        `script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; frame-src 'self' https://www.google.com;`,
-      );
+
+      // CSP must be a single line string
+      const csp = `default-src 'self'; script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-src 'self' https://www.google.com; connect-src 'self';`;
+
+      res.setHeader("Content-Security-Policy", csp);
       next();
     });
 
+    this.app.use(
+      compression({
+        level: 6,
+        threshold: 1024,
+      }),
+    );
+
+    // Rate limiting - FIXED: Remove custom keyGenerator to let library handle it
     const limiter = rateLimit({
-      windowMs: 15 * 60 * 1000,
-      max: 700,
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      limit: 500, // Note: changed from 'max' to 'limit' in newer versions
+      message: "Too many requests, please try again later.",
       standardHeaders: true,
       legacyHeaders: false,
+      // Don't define keyGenerator - let the library handle IP detection
+      validate: {
+        trustProxy: true, // Trust proxy headers
+        xForwardedForHeader: true,
+      },
+      skip: (req, res) => {
+        // Skip rate limiting for health checks and static files
+        const skipPaths = [
+          "/health",
+          "/ready",
+          "/metrics",
+          "/favicon.png",
+          "/robots.txt",
+        ];
+
+        return (
+          skipPaths.includes(req.path) ||
+          req.path.startsWith("/css/") ||
+          req.path.startsWith("/js/") ||
+          req.path.startsWith("/output/") ||
+          req.path.startsWith("/uploads/") ||
+          req.path.startsWith("/flowbite/") ||
+          req.path.startsWith("/apexcharts/")
+        );
+      },
     });
+
+    // Apply rate limiting
     this.app.use(limiter);
 
+    // Logging
     if (process.env.NODE_ENV !== "production") {
       this.app.use(morgan("dev"));
+    } else {
+      this.app.use(
+        morgan("combined", {
+          skip: (req, res) => res.statusCode < 400,
+          stream: process.stderr,
+        }),
+      );
     }
 
-    this.app.use(express.json({ limit: "10mb" }));
-    this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
-    this.app.use(bodyParser.json({ limit: "10mb" }));
-    this.app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-    this.app.use(cookieParser());
+    // Body parsing
+    this.app.use(
+      express.json({
+        limit: "10mb",
+        verify: (req, res, buf) => {
+          try {
+            JSON.parse(buf.toString());
+          } catch (e) {
+            res.status(400).json({ error: "Invalid JSON" });
+            throw new Error("Invalid JSON");
+          }
+        },
+      }),
+    );
 
-    this.app.use("/css", express.static(path.join(__dirname, "public", "css")));
-    this.app.use("/js", express.static(path.join(__dirname, "public", "js")));
+    this.app.use(
+      express.urlencoded({
+        limit: "10mb",
+        extended: true,
+        parameterLimit: 10000,
+      }),
+    );
+
+    // Cookie parsing
+    this.app.use(
+      require("cookie-parser")(
+        process.env.COOKIE_SECRET || "your-secret-key-change-this",
+      ),
+    );
+
+    // Static files with proper caching
+    const staticOptions = {
+      maxAge: process.env.NODE_ENV === "production" ? "1d" : "0",
+      setHeaders: (res, path) => {
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (path.endsWith(".css")) {
+          res.setHeader("Content-Type", "text/css; charset=UTF-8");
+        }
+        if (path.endsWith(".js")) {
+          res.setHeader(
+            "Content-Type",
+            "application/javascript; charset=UTF-8",
+          );
+        }
+      },
+    };
+
+    // Static file routes
+    this.app.use(
+      "/css",
+      express.static(path.join(__dirname, "public", "css"), staticOptions),
+    );
+    this.app.use(
+      "/js",
+      express.static(path.join(__dirname, "public", "js"), staticOptions),
+    );
+    this.app.use(
+      "/output",
+      express.static(path.join(__dirname, "output"), staticOptions),
+    );
+
+    // Check if uploads directory exists before serving it
+    const fs = require("fs");
+    const uploadsPath = path.join(__dirname, "uploads");
+    if (fs.existsSync(uploadsPath)) {
+      this.app.use("/uploads", express.static(uploadsPath, staticOptions));
+    }
+
+    // External libraries
     this.app.use(
       "/flowbite",
-      express.static(path.join(__dirname, "node_modules/flowbite/dist")),
+      express.static(path.join(__dirname, "node_modules/flowbite/dist"), {
+        maxAge: "7d",
+      }),
     );
+
     this.app.use(
       "/apexcharts",
       express.static(
         path.join(__dirname, "node_modules", "apexcharts", "dist"),
+        { maxAge: "7d" },
       ),
     );
-    this.app.use("/output", express.static(path.join(__dirname, "output")));
+
+    // Public static files
     this.app.use(
       express.static(path.join(__dirname, "public"), {
-        setHeaders: (res) => res.setHeader("Access-Control-Allow-Origin", "*"),
+        ...staticOptions,
+        index: false,
       }),
     );
-    this.app.set("views", path.join(__dirname, "views"));
 
+    // View engine setup
+    this.app.set("views", path.join(__dirname, "views"));
+    this.app.set("view engine", "ejs");
+
+    if (process.env.NODE_ENV === 'production') {
+      this.app.set('view cache', true);
+    }
+
+
+    // Favicon
     this.app.use(favicon(path.join(__dirname, "public", "favicon.png")));
   }
 
   configureRoutes() {
-    // this.app.use(authRoutes);
-    this.app.set("view engine", "ejs");
+    // Request logging (development only)
+    if (process.env.NODE_ENV !== "production") {
+      this.app.use((req, res, next) => {
+        console.log(
+          `${new Date().toISOString()} - ${req.method} ${req.path} - IP: ${req.ip}`,
+        );
+        next();
+      });
+    }
+
+    // Routes
     this.app.use("/", router);
     this.app.use("/api/students/", student);
     this.app.use("/settings", settingsRouter);
-    this.app.get("/health", (req, res) => {
-      res.status(200).send("OK");
-    });
     this.app.use("/ai", Gemini_router);
+
+    // Health check endpoints
+    this.app.get("/health", (req, res) => {
+      res.status(200).json({
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+      });
+    });
+
+    // Readiness probe
+    this.app.get("/ready", (req, res) => {
+      res.status(200).json({
+        status: "ready",
+        timestamp: new Date().toISOString(),
+      });
+    });
+
+    // Metrics endpoint
+    this.app.get("/metrics", (req, res) => {
+      res.json({
+        memory: process.memoryUsage(),
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        nodeVersion: process.version,
+        platform: process.platform,
+      });
+    });
   }
 
   configureErrorHandling() {
+    // 404 handler
     this.app.use(notFoundHandler);
+
+    // Global error handler
     this.app.use(errorHandler);
   }
 
   startServer() {
-    // if (process.env.NODE_ENV === "production") {
-    //     this.app.set("view cache", true);
-    // }
-
     const PORT = process.env.PORT || 4000;
+
+    // Error handling
+    process.on("uncaughtException", (error) => {
+      console.error("Uncaught Exception:", error);
+      if (process.env.NODE_ENV !== "production") {
+        process.exit(1);
+      }
+    });
+
+    process.on("unhandledRejection", (reason, promise) => {
+      console.error("Unhandled Rejection at:", promise, "reason:", reason);
+    });
+
     this.app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`Health check: http://localhost:${PORT}/health`);
     });
   }
 }
 
-// const app = new App();
-// app.startServer();
 module.exports = App;
