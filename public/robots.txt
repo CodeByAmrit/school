@@ -1,0 +1,27 @@
+# Allow all crawlers
+User-agent: *
+
+# Disallow all pages by default
+Disallow: /
+
+# Allow public-facing pages
+Allow: /$
+Allow: /term_condition$
+Allow: /privacy$
+Allow: /about$
+
+# Disallow private and sensitive pages
+Disallow: /login
+Disallow: /signup
+Disallow: /dashboard
+Disallow: /students
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /settings
+Disallow: /account
+Disallow: /change-password
+Disallow: /files
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://edu.amritsharma.dev/sitemap.xml
