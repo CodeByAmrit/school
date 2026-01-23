@@ -9,12 +9,6 @@ services:
     expose:
       - "5000"
 
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.student-tracker-router.rule=Host(`edu.amritsharma.dev`)"
-      - "traefik.http.routers.student-tracker-router.entrypoints=websecure"
-      - "traefik.http.routers.student-tracker-router.tls.certresolver=amrit-cloudflare"
-      - "traefik.http.services.student-tracker-service.loadbalancer.server.port=5000"
 
     deploy:
       replicas: 2
