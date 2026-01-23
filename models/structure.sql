@@ -197,80 +197,99 @@ CREATE TABLE IF NOT EXISTS school_leaved_students (
 
 CREATE OR REPLACE VIEW StudentPerformance AS
 SELECT
-    s.school_id,
-    s.name AS student_name,
-    sm.term,
+  s.school_id,
+  s.name AS student_name,
+  sm.term,
+  (
+    SELECT SUM(
+      CASE
+        WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
+        ELSE 0
+      END
+    )
+    FROM student_marks sm2
+    WHERE sm2.student_id = s.school_id
+      AND sm2.term = sm.term
+      AND sm2.subject IN (
+        SELECT mm2.subject
+        FROM maximum_marks mm2
+        WHERE mm2.class = s.class
+          AND mm2.term  = sm.term
+      )
+  ) AS grand_total,
+  (
+    SELECT SUM(
+      CASE
+        WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+        ELSE 0
+      END
+    )
+    FROM maximum_marks mm
+    WHERE mm.class = s.class
+      AND mm.term  = sm.term
+      AND mm.subject IN (
+        SELECT DISTINCT sm3.subject
+        FROM student_marks sm3
+        WHERE sm3.student_id = s.school_id
+          AND sm3.term = sm.term
+          AND sm3.subject IN (
+            SELECT mm2.subject
+            FROM maximum_marks mm2
+            WHERE mm2.class = s.class
+              AND mm2.term  = sm.term
+          )
+      )
+  ) AS total_max_marks,
+  (
     (
-        SELECT SUM(
-                CASE
-                    WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
-                    ELSE 0
-                END
-            )
-        FROM student_marks sm2
-        WHERE
-            sm2.student_id = s.school_id
-            AND sm2.term = sm.term
-    ) AS grand_total,
-    (
-        SELECT SUM(
-                CASE
-                    WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
-                    ELSE 0
-                END
-            )
-        FROM maximum_marks mm
-        WHERE
-            mm.class = s.class
-            AND mm.term = sm.term
-            AND mm.subject IN (
-                SELECT DISTINCT
-                    sm3.subject
-                FROM student_marks sm3
-                WHERE
-                    sm3.student_id = s.school_id
-                    AND sm3.term = sm.term
-            )
-    ) AS total_max_marks,
-    (
-        (
-            SELECT SUM(
-                    CASE
-                        WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
-                        ELSE 0
-                    END
-                )
-            FROM student_marks sm2
-            WHERE
-                sm2.student_id = s.school_id
-                AND sm2.term = sm.term
-        ) / (
-            SELECT SUM(
-                    CASE
-                        WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
-                        ELSE 0
-                    END
-                )
-            FROM maximum_marks mm
-            WHERE
-                mm.class = s.class
-                AND mm.term = sm.term
-                AND mm.subject IN (
-                    SELECT DISTINCT
-                        sm3.subject
-                    FROM student_marks sm3
-                    WHERE
-                        sm3.student_id = s.school_id
-                        AND sm3.term = sm.term
-                )
+      SELECT SUM(
+        CASE
+          WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
+          ELSE 0
+        END
+      )
+      FROM student_marks sm2
+      WHERE sm2.student_id = s.school_id
+        AND sm2.term = sm.term
+        AND sm2.subject IN (
+          SELECT mm2.subject
+          FROM maximum_marks mm2
+          WHERE mm2.class = s.class
+            AND mm2.term  = sm.term
         )
-    ) * 100 AS percentage
+    )
+    /
+    NULLIF(
+      (
+        SELECT SUM(
+          CASE
+            WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+            ELSE 0
+          END
+        )
+        FROM maximum_marks mm
+        WHERE mm.class = s.class
+          AND mm.term  = sm.term
+          AND mm.subject IN (
+            SELECT DISTINCT sm3.subject
+            FROM student_marks sm3
+            WHERE sm3.student_id = s.school_id
+              AND sm3.term = sm.term
+              AND sm3.subject IN (
+                SELECT mm2.subject
+                FROM maximum_marks mm2
+                WHERE mm2.class = s.class
+                  AND mm2.term  = sm.term
+              )
+          )
+      ),
+      0
+    )
+  ) * 100 AS percentage
 FROM students s
-    JOIN student_marks sm ON s.school_id = sm.student_id
-GROUP BY
-    s.school_id,
-    s.name,
-    sm.term;
+JOIN student_marks sm
+  ON s.school_id = sm.student_id
+GROUP BY s.school_id, s.name, sm.term;
 
 DELIMITER $$
 
