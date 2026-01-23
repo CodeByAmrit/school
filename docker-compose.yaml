@@ -1,26 +1,20 @@
 services:
-  node:
+  student-tracker:
     image: codebyamrit/student-tracker:1.4.0
     env_file: .env
     environment:
       - NODE_ENV=production
     restart: always
 
-    # IMPORTANT: internal only
     expose:
       - "5000"
 
-    # Traefik integration
     labels:
       - "traefik.enable=true"
-
-      # Router
-      - "traefik.http.routers.student.rule=Host(`edu.amritsharma.dev`)"
-      - "traefik.http.routers.student.entrypoints=websecure"
-      - "traefik.http.routers.student.tls=true"
-
-      # Service
-      - "traefik.http.services.student.loadbalancer.server.port=5000"
+      - "traefik.http.routers.student-tracker-router.rule=Host(`edu.amritsharma.dev`)"
+      - "traefik.http.routers.student-tracker-router.entrypoints=websecure"
+      - "traefik.http.routers.student-tracker-router.tls.certresolver=amrit-cloudflare"
+      - "traefik.http.services.student-tracker-service.loadbalancer.server.port=5000"
 
     deploy:
       replicas: 2
