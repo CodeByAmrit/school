@@ -1,14 +1,10 @@
 services:
   student-tracker:
-    image: codebyamrit/student-tracker:1.4.0
+    image: codebyamrit/student-tracker:1.5.0
     env_file: .env
     environment:
       - NODE_ENV=production
     restart: always
 
-    expose:
-      - "5000"
-
-
-    deploy:
-      replicas: 2
+    ports:
+      - "5000:5000"

@@ -3,6 +3,7 @@
 "use strict";
 
 const http = require("http");
+const logger = require('../config/logger');
 const debug = require("debug")("studenttracker:server");
 const App = require("../app");
 
@@ -43,16 +44,16 @@ server.on("listening", onListening);
  * Graceful shutdown (Docker / SIGTERM)
  */
 function shutdown(signal) {
-  console.log(`🛑 Received ${signal}. Closing server...`);
+  logger.info(`🛑 Received ${signal}. Closing server...`);
 
   server.close(() => {
-    console.log("✅ HTTP server closed");
+    logger.info("✅ HTTP server closed");
     process.exit(0);
   });
 
   // Force exit if not closed in time
   setTimeout(() => {
-    console.error("⏰ Force shutdown");
+    logger.error("⏰ Force shutdown");
     process.exit(1);
   }, 10000);
 }
@@ -70,11 +71,11 @@ function onError(error) {
 
   switch (error.code) {
     case "EACCES":
-      console.error(`❌ ${bind} requires elevated privileges`);
+      logger.error(`❌ ${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case "EADDRINUSE":
-      console.error(`❌ ${bind} is already in use`);
+      logger.error(`❌ ${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -88,7 +89,7 @@ function onError(error) {
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === "string" ? addr : addr.port;
-  console.log(`🚀 Server running on port ${bind}`);
+  logger.info(`🚀 Server running on port ${bind}`);
   debug(`Listening on ${bind}`);
 }
 
@@ -96,11 +97,11 @@ function onListening() {
  * Crash hard on fatal errors → Docker restarts container
  */
 process.on("uncaughtException", (err) => {
-  console.error("🔥 Uncaught Exception:", err);
+  logger.error("🔥 Uncaught Exception:", err);
   process.exit(1);
 });
 
 process.on("unhandledRejection", (reason) => {
-  console.error("🔥 Unhandled Rejection:", reason);
+  logger.error("🔥 Unhandled Rejection:", reason);
   process.exit(1);
 });

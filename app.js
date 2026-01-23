@@ -4,6 +4,7 @@ const path = require("path");
 const compression = require("compression");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
+const logger = require('./config/logger');
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 
@@ -97,7 +98,9 @@ class App {
       this.app.use(
         morgan("combined", {
           skip: (req, res) => res.statusCode < 400,
-          stream: process.stderr,
+          stream: {
+            write: (message) => logger.info(message.trim()),
+          },
         }),
       );
     }
@@ -210,7 +213,7 @@ class App {
     // Request logging (development only)
     if (process.env.NODE_ENV !== "production") {
       this.app.use((req, res, next) => {
-        console.log(
+        logger.info(
           `${new Date().toISOString()} - ${req.method} ${req.path} - IP: ${req.ip}`,
         );
         next();
@@ -276,20 +279,20 @@ class App {
 
     // Error handling
     process.on("uncaughtException", (error) => {
-      console.error("Uncaught Exception:", error);
+      logger.error("Uncaught Exception:", error);
       if (process.env.NODE_ENV !== "production") {
         process.exit(1);
       }
     });
 
     process.on("unhandledRejection", (reason, promise) => {
-      console.error("Unhandled Rejection at:", promise, "reason:", reason);
+      logger.error("Unhandled Rejection at:", promise, "reason:", reason);
     });
 
     this.app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`Health check: http://localhost:${PORT}/health`);
+      logger.info(`🚀 Server running on http://localhost:${PORT}`);
+      logger.info(`Environment: ${process.env.NODE_ENV || "development"}`);
+      logger.info(`Health check: http://localhost:${PORT}/health`);
     });
   }
 }
