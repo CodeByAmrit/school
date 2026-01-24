@@ -89,7 +89,7 @@ function onError(error) {
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === "string" ? addr : addr.port;
-  logger.info(`🚀 Server running on port ${bind}`);
+  logger.info(`🚀 Server running on http://localhost:${bind}`);
   debug(`Listening on ${bind}`);
 }
 

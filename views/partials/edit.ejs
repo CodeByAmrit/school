@@ -211,13 +211,7 @@
                         alt="<%= student.name %>"
                       />
                     </div>
-                    <% if (index % 3 === 0) { %>
-                    <div
-                      class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center"
-                    >
-                      <i class="fas fa-check text-white text-xs"></i>
-                    </div>
-                    <% } %>
+                    
                   </div>
                   <div>
                     <div class="font-semibold text-gray-900">
@@ -264,17 +258,32 @@
 
               <!-- Status -->
               <td class="px-6 py-4">
-                <% const statuses = ['Active', 'Active', 'Inactive']; %> <%
-                const statusColors = ['bg-green-100 text-green-800',
-                'bg-green-100 text-green-800', 'bg-gray-100 text-gray-800']; %>
-                <% const statusIndex = index % 3; %>
+                <%
+                  let statusText;
+                  let statusClass;
+                  let dotClass;
+
+                  if (student.profile_status && student.profile_status.toLowerCase() === 'pending') {
+                      statusText = 'Pending';
+                      statusClass = 'bg-orange-100 text-orange-800';
+                      dotClass = 'text-orange-500';
+                  } else if (student.profile_status && student.profile_status.toLowerCase() === 'inactive') {
+                      statusText = 'Inactive';
+                      statusClass = 'bg-gray-100 text-gray-800';
+                      dotClass = 'text-gray-400';
+                  } else { // 'ok', empty, or any other value will be considered active
+                      statusText = 'Active';
+                      statusClass = 'bg-green-100 text-green-800';
+                      dotClass = 'text-green-500';
+                  }
+                %>
                 <div
-                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= statusColors[statusIndex] %>"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= statusClass %>"
                 >
                   <i
-                    class="fas fa-circle text-xs mr-2 <%= statusIndex === 0 ? 'text-green-500' : statusIndex === 1 ? 'text-green-500' : 'text-gray-400' %>"
+                    class="fas fa-circle text-xs mr-2 <%= dotClass %>"
                   ></i>
-                  <%= statuses[statusIndex] %>
+                  <%= statusText %>
                 </div>
               </td>
 

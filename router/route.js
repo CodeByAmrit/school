@@ -158,12 +158,22 @@ router.get("/dashboard", checkAuth, async (req, res) => {
   user.school_logo = school_logo_url;
 
   const teacherId = req.user._id;
+  let connection;
 
   try {
+    connection = await getConnection();
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
 
     const count_Files = await getFileCount(req, res);
+
+    const [performanceData] = await connection.execute(
+      `SELECT subject, AVG(average_percentage) as 'average_percentage'
+       FROM SubjectPerformance
+       WHERE teacher_id = ?
+       GROUP BY subject`,
+      [teacherId],
+    );
 
     const nonce = res.locals.nonce;
 
@@ -173,10 +183,13 @@ router.get("/dashboard", checkAuth, async (req, res) => {
       total_students: studentsCount,
       files_count: count_Files,
       user,
+      performanceData: performanceData,
     });
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
     res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -413,7 +426,6 @@ router.post(
   },
 );
 
-
 router.get("/change-password", checkAuth, async (req, res) => {
   let school_logo_url = "/image/graduated.png";
   const school_logo = await get_school_logo(req, res);
@@ -462,9 +474,8 @@ router.post(
       console.error("Login route error:", err);
       return res.status(500).json({ status: "Internal Server Error" });
     }
-  }
+  },
 );
-
 
 // Login page - Redirect if already authenticated
 router.get("/login", async (req, res, next) => {

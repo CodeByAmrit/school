@@ -34,9 +34,11 @@
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.2",
     "bootstrap": "^5.3.8",
+    "chart.js": "^4.5.1",
     "child_process": "^1.0.2",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
+    "debug": "^4.3.4",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
     "exceljs": "^4.4.0",
@@ -59,8 +61,7 @@
     "pdf-lib": "^1.17.1",
     "serve-favicon": "^2.5.1",
     "sharp": "^0.34.5",
-    "winston": "^3.11.0",
-    "debug": "^4.3.4"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@emnapi/runtime": "^1.8.1",

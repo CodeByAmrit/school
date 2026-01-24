@@ -99,7 +99,7 @@ FROM photo;
 
 
 CREATE OR REPLACE VIEW student_photos_view AS
-SELECT s.name, s.father_name, s.session, s.mother_name, s.class, s.school_id, s.teacher_id, 
+SELECT s.name, s.father_name, s.session, s.mother_name, s.class, s.school_id, s.teacher_id, s.profile_status,
        TO_BASE64(p.image) AS image_base64, 
        TO_BASE64(p.student_sign) AS student_sign_base64
 FROM students s
@@ -290,6 +290,37 @@ FROM students s
 JOIN student_marks sm
   ON s.school_id = sm.student_id
 GROUP BY s.school_id, s.name, sm.term;
+
+CREATE OR REPLACE VIEW SubjectPerformance AS
+SELECT
+    s.teacher_id,
+    s.class,
+    sm.term,
+    sm.subject,
+    AVG(
+        (
+            CASE
+                WHEN sm.marks REGEXP '^[0-9]+$' THEN CAST(sm.marks AS DECIMAL(5, 2))
+                ELSE 0
+            END
+            /
+            NULLIF(
+                CASE
+                    WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS DECIMAL(5, 2))
+                    ELSE 0
+                END,
+                0
+            )
+        ) * 100
+    ) AS average_percentage
+FROM
+    students s
+JOIN
+    student_marks sm ON s.school_id = sm.student_id
+JOIN
+    maximum_marks mm ON s.class = mm.class AND sm.term = mm.term AND sm.subject = mm.subject
+GROUP BY
+    s.teacher_id, s.class, sm.term, sm.subject;
 
 DELIMITER $$
 

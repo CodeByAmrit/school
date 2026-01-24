@@ -9,7 +9,7 @@ async function getAllStudent(req, res) {
   const teacher_id = req.user._id;
   try {
     const [rows] = await query(
-      `SELECT name, father_name, session, mother_name, class, school_id,
+      `SELECT name, father_name, session, mother_name, class, school_id, profile_status,
        COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image
        FROM student_photos_view
        WHERE class = 'NURSERY' AND teacher_id = ?`,
@@ -20,7 +20,6 @@ async function getAllStudent(req, res) {
     console.error(error);
   }
 }
-
 
 async function getTotalStudents(req, res) {
   const teacher_id = req.user._id;
@@ -314,8 +313,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
     }
   }
 
-    
-    return result;
+  return result;
 }
 
 async function getStudentDetails(req, res) {
@@ -330,7 +328,7 @@ async function getStudentDetails(req, res) {
   } = req.query;
   try {
     // let query = 'SELECT * FROM student_photos_view WHERE 1=1';
-    let query_prepared = `SELECT name, father_name, session, mother_name, class, school_id, COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image FROM student_photos_view
+    let query_prepared = `SELECT name, father_name, session, mother_name, class, school_id, profile_status, COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image FROM student_photos_view
              WHERE teacher_id = ?`;
     const params = [req.user._id];
 
@@ -385,7 +383,6 @@ async function get_school_logo(req, res) {
   }
 }
 
-
 async function teacherLogin(req) {
   let { email, password } = req.body;
   email = email.trim().toLowerCase();
@@ -393,7 +390,7 @@ async function teacherLogin(req) {
   try {
     const [rows] = await query(
       "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1",
-      [email]
+      [email],
     );
 
     if (rows.length === 0) {
@@ -423,7 +420,6 @@ async function teacherLogin(req) {
     throw error; // 🔥 CRITICAL: never swallow
   }
 }
-
 
 async function teacherSignup(req, res) {
   const {
@@ -597,7 +593,7 @@ async function getStudentMarksBySchoolId(schoolId) {
   } catch (error) {
     console.error("Error fetching marks for student:", error);
     throw error;
-  } 
+  }
 }
 
 // Function to get student marks

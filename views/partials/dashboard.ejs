@@ -227,20 +227,24 @@
                         </div>
                         <div class="relative">
                             <select class="appearance-none bg-white border border-blue-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 block px-4 py-2 pr-10 focus:outline-none transition-all duration-300">
-                                <option>This Term</option>
-                                <option>Last Term</option>
-                                <option>This Year</option>
+                                <option>Overall</option>
                             </select>
                         </div>
                     </div>
-                    <div class="h-48 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-chart-bar text-blue-500 text-xl"></i>
+                    <div class="h-48">
+                        <% if (typeof performanceData !== 'undefined' && performanceData.length > 0) { %>
+                            <canvas id="performanceChart"></canvas>
+                        <% } else { %>
+                            <div class="h-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-chart-bar text-blue-500 text-xl"></i>
+                                    </div>
+                                    <p class="text-gray-600">No performance data available.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Add student marks to see insights.</p>
+                                </div>
                             </div>
-                            <p class="text-gray-600">Performance chart will appear here</p>
-                            <p class="text-xs text-gray-500 mt-1">Connect your gradebook to view insights</p>
-                        </div>
+                        <% } %>
                     </div>
                 </div>
 
@@ -447,5 +451,48 @@
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
+<% if (typeof performanceData !== 'undefined' && performanceData.length > 0) { %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" nonce="<%= nonce %>"></script>
+<script nonce="<%= nonce %>">
+    document.addEventListener('DOMContentLoaded', function () {
+        const performanceData = <%- JSON.stringify(performanceData) %>;
+        
+        if (performanceData.length > 0) {
+            const labels = performanceData.map(d => d.subject);
+            const data = performanceData.map(d => d.average_percentage);
+
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Average Performance',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+<% } %>
 <!-- Enhanced Dashboard Script -->
 <script src="/js/dashboard_marks_show.js" nonce="<%= nonce %>"></script>
