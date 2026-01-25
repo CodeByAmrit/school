@@ -10,9 +10,7 @@ services:
       - "5000:5000"
 
   student-portal:
-    build:
-      context: ./student-portal
-      dockerfile: Dockerfile
+    image: codebyamrit/student-portal:1.0.0
     ports:
       - "8080:80"
     environment:
