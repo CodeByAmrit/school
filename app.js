@@ -1,21 +1,29 @@
+require("apminsight");
+
 const crypto = require("crypto");
-const express = require("express");
+const os = require("os");
 const path = require("path");
+
+const express = require("express");
 const compression = require("compression");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
 const cors = require("cors");
-const logger = require('./config/logger');
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 
+// App utilities / logger
+const logger = require("./config/logger");
+
+// Routers
 const router = require("./router/route");
 const student = require("./router/student");
 const studentPortal = require("./router/student_portal");
 const Gemini_router = require("./router/ai_router");
 const settingsRouter = require("./routes/settings");
+
+// Error handlers
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
-const os = require("os");
 
 class App {
   constructor() {
@@ -249,7 +257,6 @@ class App {
         time: new Date().toISOString(),
       });
     });
-
 
     // Readiness probe
     this.app.get("/ready", (req, res) => {
