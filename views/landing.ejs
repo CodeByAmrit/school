@@ -226,6 +226,38 @@
   </div>
 </section>
 
+<!-- Result Lookup Section -->
+<section id="result-lookup" class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg border border-blue-100 p-8 md:p-12">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Check Your Result</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 mb-8">
+                    Enter your roll number and date of birth to view your academic report.
+                </p>
+            </div>
+            <form action="/result" method="POST" class="max-w-lg mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="roll" class="block text-sm font-medium text-gray-700 mb-2">Roll Number</label>
+                        <input type="text" name="roll" id="roll" required class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        <input type="text" name="dob" id="dob" required placeholder="DD-MM-YYYY" class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg">
+                        <i class="fas fa-search mr-2"></i>
+                        Search Result
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
 <!-- Stats Section - Redesigned with Blue Theme -->
 <section
   class="py-12 bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white relative overflow-hidden"
