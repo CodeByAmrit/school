@@ -1,0 +1,236 @@
+<%- include('partials/land_header') %>
+
+<main class="bg-gray-50/50">
+    <div class="relative py-24 text-white bg-white">
+        <img src="/image/school-bg.svg" alt="Schools" class="absolute w-full h-[350px] hidden sm:hidden md:inline z-10 -rotate-3"/>
+        <div class="absolute inset-0 z-0 transform -skew-y-3 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] py-20 h-[420px] -top-10"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Student Academic Report</h1>
+                <p class="text-lg opacity-90">View and download your term-wise performance.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 -mt-32 relative z-20">
+        <% if (error) { %>
+            <div class="bg-white rounded-2xl shadow-lg border border-red-100 p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-red-800 mb-2">Result Not Found</h2>
+                <p class="text-red-600 mb-6"><%= error %></p>
+                <a href="/#result-lookup" class="text-blue-600 hover:underline font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Go Back and Try Again
+                </a>
+            </div>
+                <% } else if (student) { %>
+                    <!-- Result Card -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden printable-result">
+                        <!-- Header -->
+                        <div class="p-6 md:p-8 bg-gradient-to-r from-blue-50 to-white border-b border-blue-100">
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                                <div class="flex items-center gap-5">
+                                    <% if (school && school.school_logo) { %>
+                                        <img class="h-20 w-20 rounded-full object-cover border-4 border-white shadow-md" src="data:image/png;base64,<%= school.school_logo.toString('base64') %>" alt="School Logo">
+                                    <% } else { %>
+                                        <div class="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center border-4 border-white shadow-md">
+                                            <i class="fas fa-school text-blue-500 text-3xl"></i>
+                                        </div>
+                                    <% } %>
+                                    <div>
+                                        <h2 class="text-2xl font-bold text-gray-900"><%= school ? school.school_name : 'School Name' %></h2>
+                                        <p class="text-gray-600"><%= school ? school.school_address : 'School Address' %></p>
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-right">
+                                     <button id="print-button" class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg no-print">
+                                        <i class="fas fa-print mr-2"></i>
+                                        Print Result
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Student Info -->
+                        <div class="p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 border-b border-blue-100">
+                            <div>
+                                <label class="block text-sm text-gray-500">Student Name</label>
+                                <p class="font-semibold text-gray-800"><%= student.name %></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500">Father's Name</label>
+                                <p class="font-semibold text-gray-800"><%= student.father_name %></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500">Class</label>
+                                <p class="font-semibold text-gray-800"><%= student.class %></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500">Roll No.</label>
+                                <p class="font-semibold text-gray-800"><%= student.roll %></p>
+                            </div>
+                             <div>
+                                <label class="block text-sm text-gray-500">Session</label>
+                                <p class="font-semibold text-gray-800"><%= student.session %></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500">Date of Birth</label>
+                                <p class="font-semibold text-gray-800"><%= student.dob %></p>
+                            </div>
+                        </div>
+        
+                        <!-- Consolidated Marks Table -->
+                        <div class="p-6 md:p-8">
+                            <%
+                                const subjectsData = {};
+                                const termHeaders = new Set();
+                                if (marks) {
+                                    marks.forEach(mark => {
+                                        termHeaders.add(mark.term);
+                                        if (!subjectsData[mark.subject]) {
+                                            subjectsData[mark.subject] = { max_marks: mark.max_marks };
+                                        }
+                                        subjectsData[mark.subject][mark.term] = mark.marks;
+                                    });
+                                }
+                                const sortedTermHeaders = Array.from(termHeaders).sort((a, b) => a - b);
+                            %>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 pb-2">Academic Performance</h3>
+                            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="bg-gray-50 text-gray-600 uppercase">
+                                        <tr>
+                                            <th class="px-6 py-3">Subject</th>
+                                            <% sortedTermHeaders.forEach(term => { %>
+                                                <th class="px-6 py-3 text-center">Term <%= term %></th>
+                                            <% }); %>
+                                            <th class="px-6 py-3 text-center">Max Marks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <% Object.keys(subjectsData).sort().forEach(subject => { %>
+                                            <tr>
+                                                <td class="px-6 py-4 font-medium text-gray-900"><%= subject %></td>
+                                                <% sortedTermHeaders.forEach(term => { %>
+                                                    <td class="px-6 py-4 text-center"><%= subjectsData[subject][term] || '-' %></td>
+                                                <% }); %>
+                                                <td class="px-6 py-4 text-center"><%= subjectsData[subject].max_marks || '100' %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+        
+                        <!-- Term-wise Summary -->
+                         <% if (performance && grades && sortedTermHeaders.length > 0) { %>
+                        <div class="p-6 md:p-8 border-t border-blue-100">
+                             <h3 class="text-xl font-bold text-gray-800 mb-4 pb-2">Term Summary</h3>
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <% sortedTermHeaders.forEach(term => { %>
+                                    <div class="bg-blue-50/50 rounded-lg p-4 border border-blue-100">
+                                        <h4 class="font-bold text-blue-900 mb-3 text-center">Term <%= term %></h4>
+                                        <% const termPerformance = performance.find(p => p.term == term); %>
+                                        <% const termGrade = grades.find(g => g.term == term); %>
+                                        <% if (termPerformance) { %>
+                                            <div class="flex justify-between items-center text-sm mb-2">
+                                                <span class="text-gray-600">Total Marks:</span>
+                                                <span class="font-semibold text-gray-800"><%= termPerformance.grand_total %> / <%= termPerformance.total_max_marks %></span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-sm mb-3">
+                                                <span class="text-gray-600">Percentage:</span>
+                                                <span class="font-semibold text-gray-800"><%= typeof termPerformance.percentage === 'number' ? termPerformance.percentage.toFixed(2) + '%' : 'N/A' %></span>
+                                            </div>
+                                        <% } %>
+                                        <% if (termGrade) { %>
+                                             <div class="flex justify-between items-center text-sm">
+                                                <span class="text-gray-600">Grade:</span>
+                                                <span class="font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-full"><%= termGrade.grade %></span>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                <% }); %>
+                             </div>
+                        </div>
+                        <% } %>
+        
+                        <!-- Overall Result -->
+                        <% if(overallStatus) { %>
+                        <div class="p-6 md:p-8 bg-gray-50 border-t border-gray-200 text-center">
+                            <h3 class="text-lg font-semibold text-gray-800">Overall Result</h3>
+                            <p class="text-4xl font-bold mt-2 
+                                <%= overallStatus.status === 'passed' || overallStatus.status === 'promoted' ? 'text-green-600' : 'text-red-600' %>">
+                                <%= overallStatus.status.charAt(0).toUpperCase() + overallStatus.status.slice(1) %>
+                            </p>
+                            <p class="text-sm text-gray-600 mt-2">Total Attendance: <%= overallStatus.attendance %></p>
+                        </div>
+                        <% } %>
+                    </div>
+        
+
+        <% } else { %>
+             <div class="bg-white rounded-2xl shadow-lg border border-blue-100 p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-search text-blue-500 text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Find Your Result</h2>
+                <p class="text-gray-600 mb-8">Please enter your credentials to view your academic report.</p>
+                <form action="/result" method="POST" class="max-w-sm mx-auto">
+                     <div class="space-y-4 mb-6">
+                        <div>
+                            <label for="roll" class="sr-only">Roll Number</label>
+                            <input type="text" name="dob" id="dob" required="" placeholder="DD-MM-YYYY" class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="dob" class="sr-only">Date of Birth</label>
+                            <input type="text" name="dob" id="dob" required placeholder="DD-MM-YYYY" class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition text-center">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full inline-flex items-center justify-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg">
+                        View Result
+                    </button>
+                </form>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('partials/land_footer') %>
+
+<style>
+    @media print {
+        body, main, .printable-result {
+            background: #fff !important;
+        }
+        body * {
+            visibility: hidden;
+        }
+        .printable-result, .printable-result * {
+            visibility: visible;
+        }
+        .printable-result {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+
+<script nonce="<%= nonce %>">
+    document.addEventListener('DOMContentLoaded', function () {
+        const printButton = document.getElementById('print-button');
+        if (printButton) {
+            printButton.addEventListener('click', function () {
+                window.print();
+            });
+        }
+    });
+</script>
