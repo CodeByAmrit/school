@@ -152,26 +152,41 @@ const studentController = {
              connection = await getConnection();
              
              // Using student_photos_view for convenience as it has base64 images
-             const [rows] = await connection.execute(
-                 `SELECT name, father_name, session, mother_name, class, school_id, profile_status, 
-                  COALESCE(CONCAT('data:image/png;base64,', image_base64), '/image/graduated.png') AS image 
-                  FROM student_photos_view 
-                  WHERE school_id = ?`,
+             // We need image_base64 specifically for the frontend which adds the prefix itself
+             const [viewRows] = await connection.execute(
+                 `SELECT image_base64 FROM student_photos_view WHERE school_id = ?`,
                  [studentId]
              );
 
-             // Also fetch detailed fields from students table if not in view
+             // Fetch detailed fields from students table and email from credentials
+             // Join students with student_credentials to get email
              const [details] = await connection.execute(
-                 `SELECT * FROM students WHERE school_id = ?`,
+                 `SELECT s.*, sc.email 
+                  FROM students s 
+                  LEFT JOIN student_credentials sc ON s.school_id = sc.student_id 
+                  WHERE s.school_id = ?`,
                   [studentId]
              );
 
-             if (rows.length === 0 || details.length === 0) {
+             if (details.length === 0) {
                  return res.status(404).json({ message: "Student not found" });
              }
 
-             const profile = { ...details[0], ...rows[0], photo: rows[0].image_base64 };
-             delete profile.image_base64; // Cleanup
+             const studentData = details[0];
+             const photoData = viewRows.length > 0 ? viewRows[0].image_base64 : null;
+
+             // Map to frontend expected format
+             const profile = {
+                 ...studentData,
+                 student_id: studentData.roll || studentData.school_id, // Prefer roll number for display, fallback to ID
+                 contact_info: studentData.mobile_no,
+                 address: studentData.permanent_address,
+                 email: studentData.email,
+                 photo: photoData,
+                 blood_group: studentData.blood_group,
+                 dob: studentData.dob,
+                 emergency_contact: studentData.mobile_no // Defaulting to mobile_no as there is no specific field
+             };
 
              res.json(profile);
         } catch (error) {
