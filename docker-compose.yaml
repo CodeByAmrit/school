@@ -1,6 +1,6 @@
 services:
   student-tracker:
-    image: codebyamrit/student-tracker:1.5.0
+    build: .
     env_file: .env
     environment:
       - NODE_ENV=production
@@ -10,7 +10,9 @@ services:
       - "5000:5000"
 
   student-portal:
-    image: codebyamrit/student-portal:1.0.0
+    build:
+      context: ./student-portal
+      dockerfile: Dockerfile
     ports:
       - "8080:80"
     environment:
