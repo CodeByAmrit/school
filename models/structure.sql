@@ -203,89 +203,83 @@ SELECT
   (
     SELECT SUM(
       CASE
-        WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
+        WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED)
         ELSE 0
       END
     )
-    FROM student_marks sm2
-    WHERE sm2.student_id = s.school_id
-      AND sm2.term = sm.term
-      AND sm2.subject IN (
-        SELECT mm2.subject
-        FROM maximum_marks mm2
-        WHERE mm2.class = s.class
-          AND mm2.term  = sm.term
+    FROM student_marks AS sm_inner
+    WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+      AND EXISTS (
+        SELECT 1 FROM maximum_marks mm_inner
+        WHERE mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term
+        AND mm_inner.class =
+            CASE
+                WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
+                THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
+                ELSE s.class
+            END
       )
   ) AS grand_total,
   (
     SELECT SUM(
       CASE
-        WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+        WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS UNSIGNED)
         ELSE 0
       END
     )
-    FROM maximum_marks mm
-    WHERE mm.class = s.class
-      AND mm.term  = sm.term
-      AND mm.subject IN (
-        SELECT DISTINCT sm3.subject
-        FROM student_marks sm3
-        WHERE sm3.student_id = s.school_id
-          AND sm3.term = sm.term
-          AND sm3.subject IN (
-            SELECT mm2.subject
-            FROM maximum_marks mm2
-            WHERE mm2.class = s.class
-              AND mm2.term  = sm.term
-          )
-      )
+    FROM student_marks AS sm_inner
+    JOIN maximum_marks AS mm_inner ON sm_inner.subject = mm_inner.subject AND sm_inner.term = mm_inner.term
+    WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+    AND mm_inner.class =
+        CASE
+            WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
+            THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
+            ELSE s.class
+        END
   ) AS total_max_marks,
   (
     (
       SELECT SUM(
         CASE
-          WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS UNSIGNED)
+          WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED)
           ELSE 0
         END
       )
-      FROM student_marks sm2
-      WHERE sm2.student_id = s.school_id
-        AND sm2.term = sm.term
-        AND sm2.subject IN (
-          SELECT mm2.subject
-          FROM maximum_marks mm2
-          WHERE mm2.class = s.class
-            AND mm2.term  = sm.term
+      FROM student_marks AS sm_inner
+      WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+        AND EXISTS (
+          SELECT 1 FROM maximum_marks mm_inner
+          WHERE mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term
+          AND mm_inner.class =
+              CASE
+                  WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
+                  THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
+                  ELSE s.class
+              END
         )
-    )
+    ) * 100
     /
     NULLIF(
       (
         SELECT SUM(
           CASE
-            WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS UNSIGNED)
+            WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS UNSIGNED)
             ELSE 0
           END
         )
-        FROM maximum_marks mm
-        WHERE mm.class = s.class
-          AND mm.term  = sm.term
-          AND mm.subject IN (
-            SELECT DISTINCT sm3.subject
-            FROM student_marks sm3
-            WHERE sm3.student_id = s.school_id
-              AND sm3.term = sm.term
-              AND sm3.subject IN (
-                SELECT mm2.subject
-                FROM maximum_marks mm2
-                WHERE mm2.class = s.class
-                  AND mm2.term  = sm.term
-              )
-          )
+        FROM student_marks AS sm_inner
+        JOIN maximum_marks AS mm_inner ON sm_inner.subject = mm_inner.subject AND sm_inner.term = sm_inner.term
+        WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+        AND mm_inner.class =
+            CASE
+                WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
+                THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
+                ELSE s.class
+            END
       ),
       0
     )
-  ) * 100 AS percentage
+  ) AS percentage
 FROM students s
 JOIN student_marks sm
   ON s.school_id = sm.student_id
@@ -557,3 +551,43 @@ INSERT INTO school_config (teacher_id, school_name, school_address)
 SELECT id, school_name, school_address
 FROM teacher 
 WHERE id NOT IN (SELECT teacher_id FROM school_config);
+
+DELIMITER $$
+CREATE PROCEDURE get_student_full_result(IN p_school_id INT)
+BEGIN
+    -- 1. Student Details
+    SELECT * FROM students WHERE school_id = p_school_id;
+
+    -- 2. Marks per subject for all terms, including max marks
+    SELECT
+        sm.term,
+        sm.subject,
+        sm.marks,
+        mm.max_marks
+    FROM
+        student_marks sm
+    LEFT JOIN
+        maximum_marks mm ON sm.term = mm.term AND sm.subject = mm.subject AND mm.class = (SELECT class FROM students WHERE school_id = p_school_id)
+    WHERE
+        sm.student_id = p_school_id
+    ORDER BY
+        sm.term, sm.subject;
+
+    -- 3. Term-wise performance (total, percentage)
+    SELECT * FROM StudentPerformance WHERE school_id = p_school_id ORDER BY term;
+
+    -- 4. Term-wise grades and remarks
+    SELECT * FROM student_grade_remarks WHERE student_id = p_school_id ORDER BY term;
+
+    -- 5. Overall attendance and promotion status
+    SELECT * FROM student_attendance_status WHERE student_id = p_school_id;
+    
+    -- 6. School info
+    SELECT T.school_name, T.school_address, T.school_phone, SC.school_logo 
+    FROM teacher T
+    JOIN students S on S.teacher_id = T.id
+    JOIN school_config SC on SC.teacher_id = T.id
+    WHERE S.school_id = p_school_id;
+
+END $$
+DELIMITER ;
