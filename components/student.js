@@ -799,10 +799,83 @@ async function changePassword(req, res) {
       userId,
     ]);
 
-    res.json({ status: "success", message: "Password changed successfully" });
+    res.json({ status: "success", message: "Password updated successfully" });
   } catch (error) {
-    console.error("Error changing password:", error);
+    console.error("Change Password Error:", error);
     res.status(500).json({ status: "error", message: "Internal Server Error" });
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
+async function generateCredentials(req, res) {
+  const teacher_id = req.user._id;
+  const { student_ids } = req.body; // Expects array of student IDs, or null for all
+
+  let connection;
+  try {
+    connection = await getConnection();
+
+    // 1. Get Teacher's School Name for email domain
+    const [teacherRows] = await connection.execute(
+      "SELECT school_name FROM teacher WHERE id = ?",
+      [teacher_id]
+    );
+    if (teacherRows.length === 0) throw new Error("Teacher not found");
+    
+    // Sanitize school name for domain: "My School" -> "myschool"
+    let schoolDomain = teacherRows[0].school_name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (!schoolDomain) schoolDomain = "school"; 
+    schoolDomain += ".in";
+
+    // 2. Fetch Students
+    let queryStr = "SELECT school_id, name, dob FROM students WHERE teacher_id = ?";
+    let params = [teacher_id];
+
+    if (student_ids && Array.isArray(student_ids) && student_ids.length > 0) {
+      queryStr += ` AND school_id IN (${student_ids.map(() => "?").join(",")})`;
+      params.push(...student_ids);
+    } // else fetch all for this teacher
+
+    const [students] = await connection.execute(queryStr, params);
+
+    let createdCount = 0;
+    
+    // 3. Loop and Create Credentials
+    for (const student of students) {
+      // Generate Email: firstname_id@school.in
+      // Sanitize name: "John Doe" -> "john_doe"
+      const safeName = student.name.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+      const email = `${safeName}_${student.school_id}@${schoolDomain}`;
+      
+      // Generate Password: DOB (YYYY-MM-DD or whatever is stored)
+      // If DOB is missing, fallback to '123456'
+      const password = student.dob ? student.dob : '123456';
+
+      // Insert or Update student_credentials
+      // We explicitly set last_login to NULL to force password change (if logic implemented)
+      // or simply rely on checking if it matches DOB.
+      // Here we assume "first login" logic is tied to last_login being null.
+      await connection.execute(`
+        INSERT INTO student_credentials (student_id, email, password, last_login)
+        VALUES (?, ?, ?, NULL)
+        ON DUPLICATE KEY UPDATE 
+            email = VALUES(email), 
+            password = VALUES(password),
+            last_login = NULL 
+      `, [student.school_id, email, password]);
+      
+      createdCount++;
+    }
+
+    res.json({ 
+        message: `Successfully generated credentials for ${createdCount} students.`,
+        count: createdCount 
+    });
+
+  } catch (error) {
+    console.error("Generate Credentials Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   } finally {
     if (connection) connection.release();
   }
@@ -887,6 +960,70 @@ async function markStudentAsLeft(req, res) {
   }
 }
 
+async function getStudentResult(school_id) {
+  let connection;
+  try {
+    connection = await getConnection();
+    const [results] = await connection.query(
+      "CALL get_student_full_result(?)",
+      [school_id],
+    );
+
+    if (!results || results.length < 6) {
+      throw new Error("Incomplete result set from stored procedure.");
+    }
+
+    const studentDetails = results[0][0];
+    const marks = results[1];
+    const performance = results[2];
+    const grades = results[3];
+    const overallStatus = results[4][0];
+    const schoolInfo = results[5][0];
+
+    // Organize the data for easier consumption in the EJS template
+    const organizedResults = {
+      student: studentDetails,
+      school: schoolInfo,
+      terms: {},
+    };
+
+    // Group marks by term
+    marks.forEach((mark) => {
+      if (!organizedResults.terms[mark.term]) {
+        organizedResults.terms[mark.term] = {
+          marks: [],
+          performance: null,
+          grade: null,
+        };
+      }
+      organizedResults.terms[mark.term].marks.push(mark);
+    });
+
+    // Add performance to terms
+    performance.forEach((p) => {
+      if (organizedResults.terms[p.term]) {
+        organizedResults.terms[p.term].performance = p;
+      }
+    });
+
+    // Add grades to terms
+    grades.forEach((g) => {
+      if (organizedResults.terms[g.term]) {
+        organizedResults.terms[g.term].grade = g;
+      }
+    });
+
+    organizedResults.overallStatus = overallStatus;
+
+    return organizedResults;
+  } catch (error) {
+    console.error("Error fetching student result:", error);
+    throw error;
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
 module.exports = {
   getAllStudent,
   teacherLogin,
@@ -909,4 +1046,6 @@ module.exports = {
   getTotalStudents,
   getSchoolLogo,
   markStudentAsLeft,
+  getStudentResult,
+  generateCredentials,
 };

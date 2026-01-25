@@ -20,6 +20,7 @@ const {
   getTotalStudents,
   getSchoolLogo,
   markStudentAsLeft,
+  getStudentResult,
 } = require("../components/student");
 const { generateCertificate } = require("../components/achievement");
 const {
@@ -1179,5 +1180,67 @@ router.get("/about", (req, res) => {
 
 router.get("/security", (req, res) => {
   res.render("security", { nonce: res.locals.nonce });
+});
+
+router.get("/result", (req, res) => {
+  res.render("result", {
+    student: null,
+    result: null,
+    error: null,
+    nonce: res.locals.nonce,
+  });
+});
+
+router.post("/result", async (req, res) => {
+    const { roll, dob } = req.body;
+    let connection;
+    try {
+        connection = await getConnection();
+        // 1. Find Student
+        const [studentRows] = await connection.execute(
+            "SELECT * FROM students WHERE roll = ? AND dob = ?",
+            [roll, dob]
+        );
+
+        if (studentRows.length === 0) {
+            return res.render("result", { student: null, error: "Student not found. Please check your Roll Number and Date of Birth.", nonce: res.locals.nonce });
+        }
+        const student = studentRows[0];
+        const studentId = student.school_id;
+
+        // 2. School Info
+        const [schoolRows] = await connection.execute(
+           `SELECT T.school_name, T.school_address, T.school_phone, SC.school_logo 
+            FROM teacher T
+            JOIN students S on S.teacher_id = T.id
+            JOIN school_config SC on SC.teacher_id = T.id
+            WHERE S.school_id = ?`,
+            [studentId]
+        );
+        const school = schoolRows[0] || {};
+
+        // 3. Fetch all related academic data
+        const [marks] = await connection.execute("SELECT * FROM student_marks WHERE student_id = ? ORDER BY term, subject", [studentId]);
+        const [performance] = await connection.execute("SELECT * FROM StudentPerformance WHERE school_id = ? ORDER BY term", [studentId]);
+        const [grades] = await connection.execute("SELECT * FROM student_grade_remarks WHERE student_id = ? ORDER BY term", [studentId]);
+        const [statusRows] = await connection.execute("SELECT * FROM student_attendance_status WHERE student_id = ?", [studentId]);
+
+        res.render("result", {
+            student,
+            school,
+            marks,
+            performance,
+            grades,
+            overallStatus: statusRows[0],
+            error: null,
+            nonce: res.locals.nonce
+        });
+
+    } catch (error) {
+        console.error("Error fetching result:", error);
+        res.render("result", { student: null, error: "An error occurred while fetching your result.", nonce: res.locals.nonce });
+    } finally {
+        if (connection) connection.release();
+    }
 });
 module.exports = router;

@@ -4,12 +4,14 @@ const path = require("path");
 const compression = require("compression");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
+const cors = require("cors");
 const logger = require('./config/logger');
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 
 const router = require("./router/route");
 const student = require("./router/student");
+const studentPortal = require("./router/student_portal");
 const Gemini_router = require("./router/ai_router");
 const settingsRouter = require("./routes/settings");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
@@ -24,6 +26,9 @@ class App {
   }
 
   configureMiddleware() {
+    // Enable CORS - Allow requests from frontend (adjust origin as needed)
+    this.app.use(cors());
+
     // Configure reverse proxy settings
     this.app.set("trust proxy", 1);
 
@@ -189,7 +194,6 @@ class App {
       ),
     );
 
-    // Public static files
     this.app.use(
       express.static(path.join(__dirname, "public"), {
         ...staticOptions,
@@ -223,6 +227,7 @@ class App {
     // Routes
     this.app.use("/", router);
     this.app.use("/api/students/", student);
+    this.app.use("/api/student/", studentPortal);
     this.app.use("/settings", settingsRouter);
     this.app.use("/ai", Gemini_router);
 

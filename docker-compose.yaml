@@ -8,3 +8,13 @@ services:
 
     ports:
       - "5000:5000"
+
+  student-portal:
+    build:
+      context: ./student-portal
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api/student
+    restart: always

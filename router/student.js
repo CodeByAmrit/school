@@ -15,6 +15,7 @@ const {
 } = require("../components/virtual_id_card");
 const { sendEmail, sendOTPEmail } = require("../components/email");
 const { create_excel_selected } = require("../components/create_excel_file");
+const { generateCredentials } = require("../components/student");
 
 // ✅ **1. Get all students for the authenticated teacher**
 student.get("/", checkAuth, async (req, res) => {
@@ -177,6 +178,7 @@ student.post("/virtual-cards", checkAuth, selectedVirtualIdCard);
 student.post("/ceremonty-certificates", checkAuth, selectedCeremonyCertificate);
 
 student.post("/create-excel", checkAuth, create_excel_selected);
+student.post("/generate-credentials", checkAuth, generateCredentials);
 
 // email test route
 student.get("/mail", checkAuth, async (req, res) => {
