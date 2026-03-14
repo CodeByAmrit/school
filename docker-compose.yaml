@@ -1,20 +1,49 @@
 services:
+
   student-tracker:
-    image: codebyamrit/student-tracker:1.5.0
-    env_file: .env
+    image: codebyamrit/student-tracker:latest
     environment:
       - NODE_ENV=production
     restart: always
 
-    ports:
-      - "5000:5000"
+    networks:
+      - proxy
 
-  student-portal:
-    build:
-      context: ./student-portal
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    environment:
-      - VITE_API_URL=http://localhost:5000/api/student
-    restart: always
+    expose:
+      - "5000"
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.student-tracker.rule=Host(`edu.amritsharma.dev`)"
+      - "traefik.http.routers.student-tracker.entrypoints=websecure"
+      - "traefik.http.routers.student-tracker.tls.certresolver=letsencrypt"
+      - "traefik.http.services.student-tracker.loadbalancer.server.port=5000"
+
+
+  # student-portal:
+  #   build:
+  #     context: ./student-portal
+  #     dockerfile: Dockerfile
+
+  #   restart: always
+
+  #   networks:
+  #     - proxy
+
+  #   expose:
+  #     - "80"
+
+  #   environment:
+  #     - VITE_API_URL=https://edu.amritsharma.dev/api/student
+
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.student-portal.rule=Host(`students.amritsharma.dev`)"
+  #     - "traefik.http.routers.student-portal.entrypoints=websecure"
+  #     - "traefik.http.routers.student-portal.tls.certresolver=letsencrypt"
+  #     - "traefik.http.services.student-portal.loadbalancer.server.port=80"
+
+
+networks:
+  proxy:
+    external: true
