@@ -6,6 +6,9 @@ services:
       - NODE_ENV=production
     restart: always
 
+    env_file:
+      - .env
+
     networks:
       - proxy
 
