@@ -31,6 +31,7 @@ COPY --from=builder /school/services ./services
 COPY --from=builder /school/views ./views
 COPY --from=builder /school/public ./public
 COPY --from=builder /school/config ./config
+COPY --from=builder /school/template ./template
 
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup

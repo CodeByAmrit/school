@@ -1,6 +1,6 @@
 services:
   student-tracker:
-    build: .
+    image: codebyamrit/student-tracker:1.5.0
     env_file: .env
     environment:
       - NODE_ENV=production
