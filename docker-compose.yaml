@@ -6,16 +6,8 @@ services:
       - NODE_ENV=production
     env_file:
       - .env
-    networks:
-      - proxy
     expose:
       - "5000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.student-tracker.rule=Host(`edu.amritsharma.dev`)"
-      - "traefik.http.routers.student-tracker.entrypoints=websecure"
-      - "traefik.http.routers.student-tracker.tls.certresolver=letsencrypt"
-      - "traefik.http.services.student-tracker.loadbalancer.server.port=5000"
 
 
   # student-portal:
@@ -40,8 +32,3 @@ services:
   #     - "traefik.http.routers.student-portal.entrypoints=websecure"
   #     - "traefik.http.routers.student-portal.tls.certresolver=letsencrypt"
   #     - "traefik.http.services.student-portal.loadbalancer.server.port=80"
-
-
-networks:
-  proxy:
-    external: true
