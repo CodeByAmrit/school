@@ -27,6 +27,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
 
           script: |
+            sudo su
             set -e
 
             APP_NAME="student-tracker"
