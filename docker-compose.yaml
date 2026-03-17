@@ -14,7 +14,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.student-tracker.rule=Host(`edu.amritsharma.dev`)"
       - "traefik.http.routers.student-tracker.entrypoints=websecure"
-      - "traefik.http.routers.student-tracker.tls.certresolver=cloudflare"
+      - "traefik.http.routers.student-tracker.tls.certresolver=letsencrypt"
       - "traefik.http.services.student-tracker.loadbalancer.server.port=5000"
 
 
