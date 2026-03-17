@@ -27,23 +27,22 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
 
           script: |
-            sudo su
             set -e
 
             APP_NAME="student-tracker"
             NEW_VERSION="${{ steps.version.outputs.VERSION }}"
             NEW_CONTAINER="${APP_NAME}-${NEW_VERSION}"
-            OLD_CONTAINER=$(docker ps --filter "name=${APP_NAME}" --format "{{.Names}}" | head -n 1)
+            OLD_CONTAINER=$(sudo docker ps --filter "name=${APP_NAME}" --format "{{.Names}}" | head -n 1)
 
             echo "🚀 Deploying version $NEW_VERSION"
 
             cd /home/ubuntu/github/school
 
             echo "📦 Pulling new image..."
-            docker pull codebyamrit/student-tracker:$NEW_VERSION
+            sudo docker pull codebyamrit/student-tracker:$NEW_VERSION
 
             echo "🆕 Starting new container..."
-            docker run -d \
+            sudo docker run -d \
               --name $NEW_CONTAINER \
               --network proxy \
               --env-file .env \
@@ -69,11 +68,11 @@ jobs:
 
             if [ ! -z "$OLD_CONTAINER" ]; then
               echo "🗑 Removing old container: $OLD_CONTAINER"
-              docker stop $OLD_CONTAINER
-              docker rm $OLD_CONTAINER
+              sudo docker stop $OLD_CONTAINER
+              sudo docker rm $OLD_CONTAINER
             fi
 
             echo "🧹 Cleanup old images..."
-            docker image prune -af
+            sudo docker image prune -af
 
             echo "✅ Zero downtime deployment complete!"
