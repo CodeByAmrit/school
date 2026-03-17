@@ -47,6 +47,7 @@ jobs:
               --name $NEW_CONTAINER \
               --network proxy \
               --env-file .env \
+              -e APP_VERSION=$NEW_VERSION \
               -l "traefik.enable=true" \
               -l "traefik.http.routers.student-tracker.rule=Host(\`edu.amritsharma.dev\`)" \
               -l "traefik.http.routers.student-tracker.entrypoints=websecure" \
