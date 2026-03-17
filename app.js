@@ -38,7 +38,7 @@ class App {
     this.app.use(cors());
 
     // Configure reverse proxy settings
-    this.app.set("trust proxy", 1);
+    this.app.set("trust proxy", true);
 
     // Security headers - disable default CSP, we'll add our own
     this.app.use(
