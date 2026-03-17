@@ -1,20 +1,15 @@
 services:
-
   student-tracker:
-    image: codebyamrit/student-tracker:latest
+    image: codebyamrit/student-tracker:${APP_VERSION}
+    container_name: student-tracker
     environment:
       - NODE_ENV=production
-    restart: always
-
     env_file:
       - .env
-
     networks:
       - proxy
-
     expose:
       - "5000"
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.student-tracker.rule=Host(`edu.amritsharma.dev`)"

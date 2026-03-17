@@ -1,0 +1,77 @@
+name: Zero Downtime Deploy
+
+on:
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${{ github.event.workflow_run.head_branch }}
+          VERSION=${TAG#v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Deploy via SSH (Blue-Green)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+
+          script: |
+            set -e
+
+            APP_NAME="student-tracker"
+            NEW_VERSION="${{ steps.version.outputs.VERSION }}"
+            NEW_CONTAINER="${APP_NAME}-${NEW_VERSION}"
+            OLD_CONTAINER=$(docker ps --filter "name=${APP_NAME}" --format "{{.Names}}" | head -n 1)
+
+            echo "🚀 Deploying version $NEW_VERSION"
+
+            cd /home/ubuntu/github/school
+
+            echo "📦 Pulling new image..."
+            docker pull codebyamrit/student-tracker:$NEW_VERSION
+
+            echo "🆕 Starting new container..."
+            docker run -d \
+              --name $NEW_CONTAINER \
+              --network proxy \
+              --env-file .env \
+              -l "traefik.enable=true" \
+              -l "traefik.http.routers.student-tracker.rule=Host(\`edu.amritsharma.dev\`)" \
+              -l "traefik.http.routers.student-tracker.entrypoints=websecure" \
+              -l "traefik.http.routers.student-tracker.tls.certresolver=letsencrypt" \
+              -l "traefik.http.services.student-tracker.loadbalancer.server.port=5000" \
+              codebyamrit/student-tracker:$NEW_VERSION
+
+            echo "⏳ Waiting for container to be ready..."
+            for i in {1..10}; do
+              if curl -f http://localhost:5000/health; then
+                echo "✅ Healthy"
+                break
+              fi
+              echo "⏳ Waiting..."
+              sleep 2
+            done
+
+            echo "🔄 Switching traffic handled automatically by Traefik"
+
+            if [ ! -z "$OLD_CONTAINER" ]; then
+              echo "🗑 Removing old container: $OLD_CONTAINER"
+              docker stop $OLD_CONTAINER
+              docker rm $OLD_CONTAINER
+            fi
+
+            echo "🧹 Cleanup old images..."
+            docker image prune -af
+
+            echo "✅ Zero downtime deployment complete!"
