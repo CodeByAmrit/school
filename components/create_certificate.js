@@ -213,72 +213,99 @@ async function generate(req, res) {
     const rowHeight = 81; // Height between rows
     let termGrandTotal = 0;
 
-    // Define the desired order of subjects
-    const subjectOrder = [
-      "ENGLISH",
-      "HINDI",
-      "MATHEMATICS",
-      "SOCIAL SCIENCE/EVS",
-      "SCIENCE",
-      "COMPUTER",
-      "DRAWING",
-      "GENERAL KNOWLEDGE",
-    ];
+    // ---------------------- SUBJECT CONFIG ----------------------
+    function getSubjectsByClass(studentClass) {
+      if (studentClass === "NURSERY" || studentClass === "KG") {
+        return [
+          "ENGLISH (WR.)",
+          "ENGLISH ORAL",
+          "HINDI (WR.)",
+          "HINDI ORAL",
+          "MATHS (WR.)",
+          "MATHS ORAL",
+          "DRAWING",
+          "GENERAL KNOWLEDGE",
+        ];
+      }
 
-    // Iterate over each term and add marks
+      if (["6TH", "7TH", "8TH"].includes(studentClass)) {
+        return [
+          "ENGLISH",
+          "HINDI",
+          "SANSKRIT",
+          "MATHEMATICS",
+          "SOCIAL SCIENCE/EVS",
+          "SCIENCE",
+          "COMPUTER",
+          "GENERAL KNOWLEDGE",
+        ];
+      }
+
+      return [
+        "ENGLISH",
+        "HINDI",
+        "MATHEMATICS",
+        "SOCIAL SCIENCE/EVS",
+        "SCIENCE",
+        "COMPUTER",
+        "GENERAL KNOWLEDGE",
+        "DRAWING",
+      ];
+    }
+
+    const subjectOrder = getSubjectsByClass(student.class);
+
+    // ---------------------- DRAW MARKS ----------------------
     Object.keys(marksByTerm).forEach((term, termIndex) => {
       const termMarks = marksByTerm[term];
-
-      // Sort termMarks based on the desired subject order
-      termMarks.sort((a, b) => {
-        return (
-          subjectOrder.indexOf(a.subject) - subjectOrder.indexOf(b.subject)
-        );
-      });
-
       const startX = startXPositions[termIndex];
 
-      termMarks.forEach((mark, i) => {
+      subjectOrder.forEach((subject, i) => {
         const yPosition = startYPosition - i * rowHeight;
 
-        // Subject (bold)
-        firstPage.drawText(mark.subject, {
-          x: 223,
-          y: yPosition,
-          size: 34,
-          font: boldFont,
-          color: rgb(0, 0, 0),
-        });
+        // find subject marks safely
+        const found = termMarks.find((m) => m.subject === subject);
+        const marksValue = found ? found.marks : "N/A";
 
-        // Marks
-        firstPage.drawText(mark.marks.toString(), {
+        // SUBJECT NAME (draw only once - first term)
+        if (termIndex === 0) {
+          firstPage.drawText(subject, {
+            x: 223,
+            y: yPosition,
+            size: 34,
+            font: boldFont,
+            color: rgb(0, 0, 0),
+          });
+        }
+
+        // MARKS
+        firstPage.drawText(marksValue.toString(), {
           x: startX,
           y: yPosition,
           size: 34,
           color: rgb(0, 0, 0),
         });
 
-        // Maximum Marks (only in the first term column, at x = 226)
+        // MAX MARKS (only first column)
         if (termIndex === 0) {
-          const maxMarksForSubject =
-            maxMarks[term] && maxMarks[term][mark.subject]
-              ? maxMarks[term][mark.subject]
-              : "N/A";
+          const maxMarksForSubject = maxMarks[term]?.[subject] ?? "N/A";
+
           firstPage.drawText(maxMarksForSubject.toString(), {
             x: 857,
             y: yPosition,
             size: 34,
             color: rgb(0, 0, 0),
           });
-          const maxMarksForSubjectInt = parseInt(maxMarksForSubject, 10);
-          if (!isNaN(maxMarksForSubjectInt)) {
-            termGrandTotal += maxMarksForSubjectInt;
+
+          const maxInt = parseInt(maxMarksForSubject, 10);
+          if (!isNaN(maxInt)) {
+            termGrandTotal += maxInt;
           }
         }
       });
 
-      // Display Total Marks and Percentage at the correct position
-      const totalYPosition = startYPosition - termMarks.length * rowHeight;
+      // ---------------- TOTAL + % ----------------
+      const totalYPosition = startYPosition - subjectOrder.length * rowHeight;
       const performance = performanceByTerm[term] || {};
 
       // Total Marks
@@ -290,12 +317,13 @@ async function generate(req, res) {
         color: rgb(0, 0, 0),
       });
 
-      // Percentage (display in the next line)
-      const percentageYPosition = totalYPosition - 81; // Move down by 81
+      // Percentage
+      const percentageYPosition = totalYPosition - 81;
       const percentage = parseFloat(performance.percentage);
       const formattedPercentage = isNaN(percentage)
         ? "N/A"
         : `${percentage.toFixed(2)}%`;
+
       firstPage.drawText(formattedPercentage, {
         x: startX,
         y: percentageYPosition,

@@ -817,6 +817,21 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
         "GENERAL KNOWLEDGE",
       ];
     }
+
+    if (student.class === "6TH" || student.class === "7TH" || student.class === "8TH") {
+      subjects = [
+        "ENGLISH",
+        "HINDI",
+        "MATHEMATICS",
+        "SOCIAL SCIENCE/EVS",
+        "SCIENCE",
+        "COMPUTER",
+        "GENERAL KNOWLEDGE",
+        "SANSKRIT",
+      ];
+    }
+    
+
     // Render the EJS view
     res.render("studentMarks", {
       user,
