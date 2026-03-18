@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     expose:
-      - "4000"
+      - "5000"
     networks:
       - proxy
     labels:
@@ -15,7 +15,7 @@ services:
     - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`)"
     - "traefik.http.routers.edu.entrypoints=websecure"
     - "traefik.http.routers.edu.tls.certresolver=letsencrypt"
-    - "traefik.http.services.edu.loadbalancer.server.port=4000"
+    - "traefik.http.services.edu.loadbalancer.server.port=5000"
 
   # student-portal:
   #   build:

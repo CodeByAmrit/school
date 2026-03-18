@@ -35,7 +35,7 @@ class App {
 
   configureMiddleware() {
     // Configure reverse proxy settings
-    this.app.set("trust proxy", true);
+    this.app.set("trust proxy", 1);
     this.app.disable("x-powered-by");
 
     // Enable CORS - Allow requests from frontend (adjust origin as needed)
