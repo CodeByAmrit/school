@@ -34,11 +34,17 @@ class App {
   }
 
   configureMiddleware() {
-    // Enable CORS - Allow requests from frontend (adjust origin as needed)
-    this.app.use(cors());
-
     // Configure reverse proxy settings
     this.app.set("trust proxy", true);
+    this.app.disable("x-powered-by");
+
+    // Enable CORS - Allow requests from frontend (adjust origin as needed)
+    this.app.use(
+      cors({
+        origin: ["https://edu.amritsharma.dev", "http://localhost:3000"],
+        credentials: true,
+      }),
+    );
 
     // Security headers - disable default CSP, we'll add our own
     this.app.use(
