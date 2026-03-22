@@ -1,6 +1,6 @@
 {
   "name": "student_tracker",
-  "version": "1.5.4",
+  "version": "2.0.1",
   "description": "Generate Certificate for students",
   "main": "app.js",
   "scripts": {

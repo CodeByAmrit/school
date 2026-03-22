@@ -14,7 +14,7 @@
     />
 
     <!-- 3️⃣ Load your compiled CSS immediately after -->
-    <link rel="stylesheet" href="/css/style.css" nonce="<%= nonce %>" />
+    <link rel="stylesheet" href="/css/style.css?v=<%= appVersion %>" nonce="<%= nonce %>" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -633,6 +633,6 @@
       </div>
     </div>
 
-    <script src="/js/user_profile.js" nonce="<%= nonce %>" defer></script>
+    <script src="/js/user_profile.js?v=<%= appVersion %>" nonce="<%= nonce %>" defer></script>
   </body>
 </html>
