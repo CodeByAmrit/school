@@ -1,5 +1,5 @@
 <!-- Loading Screen -->
-<div id="introScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
+<div id="introScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
     <div class="text-center">
         <div class="relative w-64 h-64">
             <div class="absolute inset-0 opacity-20 animate-pulse"></div>
@@ -13,24 +13,24 @@
 </div>
 
 <!-- Main Dashboard Content -->
-<div class="p-6 sm:ml-64 mt-16 bg-gray-50/50 min-h-screen">
+<div class="p-4 sm:ml-64 mt-14 bg-gray-50/50 dark:bg-gray-950 min-h-screen">
     <!-- Welcome Section -->
-    <div class="mb-8">
+    <div class="mb-4">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
                     Welcome back, <span class="bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent"><%= user.first_name %>!</span>
                 </h1>
-                <p class="text-gray-600">Here's your dashboard overview for today</p>
+                <p class="text-gray-600 dark:text-gray-400">Here's your dashboard overview for today</p>
             </div>
             <div class="flex items-center space-x-3">
                 <div class="hidden md:block text-right">
-                    <p class="text-sm text-gray-500">Current Session</p>
-                    <p class="text-lg font-bold text-blue-600" id="currentSessionDisplay">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Current Session</p>
+                    <p class="text-lg font-bold text-blue-600 dark:text-blue-400" id="currentSessionDisplay">
                         <%= new Date().getFullYear() %>-<%= new Date().getFullYear() + 1 %>
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center text-white font-bold">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center text-white font-bold">
                     <%= user.first_name.charAt(0).toUpperCase() %>
                 </div>
             </div>
@@ -38,80 +38,80 @@
     </div>
 
     <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <!-- Total Students Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-4 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500 mb-1">Total Students</p>
-                    <h3 class="text-3xl font-bold text-gray-900"><%= total_students %></h3>
-                    <p class="text-xs text-blue-600 mt-1">All active students</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Students</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white"><%= total_students %></h3>
+                    <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">All active students</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center">
-                    <i class="fas fa-users text-orange-600 text-xl"></i>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/30 flex items-center justify-center">
+                    <i class="fas fa-users text-orange-600 dark:text-orange-400 text-xl"></i>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-blue-50">
+            <div class="mt-4 pt-4 border-t border-blue-50 dark:border-gray-700">
                 <div class="flex items-center justify-between text-sm">
-                    <span class="text-gray-600">Boys: <span class="font-semibold text-blue-600" id="totalBoys">0</span></span>
-                    <span class="text-gray-600">Girls: <span class="font-semibold text-pink-600" id="totalGirls">0</span></span>
+                    <span class="text-gray-600 dark:text-gray-400">Boys: <span class="font-semibold text-blue-600 dark:text-blue-400" id="totalBoys">0</span></span>
+                    <span class="text-gray-600 dark:text-gray-400">Girls: <span class="font-semibold text-pink-600 dark:text-pink-400" id="totalGirls">0</span></span>
                 </div>
             </div>
         </div>
 
         <!-- Active Classes Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-4 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500 mb-1">Active Classes</p>
-                    <h3 class="text-3xl font-bold text-gray-900" id="activeClasses">0</h3>
-                    <p class="text-xs text-blue-600 mt-1">Currently running</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Active Classes</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="activeClasses">0</h3>
+                    <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">Currently running</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
-                    <i class="fas fa-chalkboard-teacher text-purple-600 text-xl"></i>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/30 flex items-center justify-center">
+                    <i class="fas fa-chalkboard-teacher text-purple-600 dark:text-purple-400 text-xl"></i>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-blue-50">
-                <div class="text-sm text-gray-600">
-                    <i class="fas fa-clock text-blue-500 mr-1"></i>
+            <div class="mt-4 pt-4 border-t border-blue-50 dark:border-gray-700">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-clock text-blue-500 dark:text-blue-400 mr-1"></i>
                     Updated today
                 </div>
             </div>
         </div>
 
         <!-- Today's Attendance Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-4 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500 mb-1">Today's Attendance</p>
-                    <h3 class="text-3xl font-bold text-gray-900" id="attendanceRate">0%</h3>
-                    <p class="text-xs text-blue-600 mt-1">Marked attendance</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Today's Attendance</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="attendanceRate">0%</h3>
+                    <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">Marked attendance</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center">
-                    <i class="fas fa-clipboard-check text-green-600 text-xl"></i>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/30 flex items-center justify-center">
+                    <i class="fas fa-clipboard-check text-green-600 dark:text-green-400 text-xl"></i>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-blue-50">
+            <div class="mt-4 pt-4 border-t border-blue-50 dark:border-gray-700">
                 <div class="text-sm">
-                    <span class="text-gray-600">Present: <span class="font-semibold text-green-600" id="presentCount">0</span></span>
+                    <span class="text-gray-600 dark:text-gray-400">Present: <span class="font-semibold text-green-600 dark:text-green-400" id="presentCount">0</span></span>
                 </div>
             </div>
         </div>
 
         <!-- Pending Tasks Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-4 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500 mb-1">Total Files</p>
-                    <h3 class="text-3xl font-bold text-gray-900" id="files_count"><%= files_count %></h3>
-                    <p class="text-xs text-blue-600 mt-1">Require attention</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Files</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white" id="files_count"><%= files_count %></h3>
+                    <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">Require attention</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center">
-                    <i class="fas fa-tasks text-red-600 text-xl"></i>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/30 flex items-center justify-center">
+                    <i class="fas fa-tasks text-red-600 dark:text-red-400 text-xl"></i>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-blue-50">
-                <a href="/files" class="text-sm text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
+            <div class="mt-4 pt-4 border-t border-blue-50 dark:border-gray-700">
+                <a href="/files" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium inline-flex items-center">
                     View All
                     <i class="fas fa-chevron-right ml-1 text-xs"></i>
                 </a>
@@ -120,24 +120,24 @@
     </div>
 
     <!-- Main Dashboard Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column -->
-        <div class="lg:col-span-2 space-y-8">
+        <div class="lg:col-span-2 space-y-6">
             <!-- Student Count by Class Table -->
-            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden">
-                <div class="p-6 border-b border-blue-100 bg-blue-50">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 overflow-hidden">
+                <div class="p-4 border-b border-blue-100 dark:border-gray-700 bg-blue-50 dark:bg-gray-900/50">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <h2 class="text-xl font-bold text-gray-900">Student Count by Class</h2>
-                            <p class="text-sm text-gray-600 mt-1">Gender distribution across all classes</p>
+                            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Student Count by Class</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Gender distribution across all classes</p>
                         </div>
                         <div class="flex items-center space-x-3">
                             <form id="sessionForm" class="flex items-center">
                                 <div class="relative">
-                                    <select id="session" name="session" class="appearance-none bg-white border border-blue-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 block w-full px-4 py-2.5 pr-10 focus:outline-none transition-all duration-300">
+                                    <select id="session" name="session" class="appearance-none bg-white dark:bg-gray-900 border border-blue-200 dark:border-gray-700 text-gray-900 dark:text-gray-300 text-sm rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 block w-full px-4 py-2.5 pr-10 focus:outline-none transition-all duration-300">
                                         <% const currentYear = new Date().getFullYear(); %>
                                         <% for (let year=currentYear-2; year <=currentYear+2; year++) { %>
-                                            <option value="<%= year %>-<%= year + 1 %>" <%=year===new Date().getFullYear() ? 'selected' : '' %>>
+                                            <option value="<%= year %>-<%= year + 1 %>" <%=year===new Date().getFullYear() ? 'selected' : '' %> class="dark:bg-gray-800">
                                                 <%= year %>-<%= year + 1 %>
                                             </option>
                                         <% } %>
@@ -147,36 +147,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-6">
-                    <div class="overflow-x-auto rounded-xl border border-blue-100">
+                <div class="p-4">
+                    <div class="overflow-x-auto rounded-xl border border-blue-100 dark:border-gray-700">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-gray-700 uppercase bg-gradient-to-r from-blue-50 to-blue-100">
+                            <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 font-semibold text-gray-900">
+                                    <th scope="col" class="px-4 py-2 font-semibold text-gray-900 dark:text-white">
                                         <div class="flex items-center">
                                             <i class="fas fa-graduation-cap text-blue-500 mr-2"></i>
                                             Class
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-4 font-semibold text-gray-900">
+                                    <th scope="col" class="px-4 py-2 font-semibold text-gray-900 dark:text-white">
                                         <div class="flex items-center">
                                             <i class="fas fa-male text-blue-500 mr-2"></i>
                                             Boys
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-4 font-semibold text-gray-900">
+                                    <th scope="col" class="px-4 py-2 font-semibold text-gray-900 dark:text-white">
                                         <div class="flex items-center">
                                             <i class="fas fa-female text-pink-500 mr-2"></i>
                                             Girls
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-4 font-semibold text-gray-900">
+                                    <th scope="col" class="px-4 py-2 font-semibold text-gray-900 dark:text-white">
                                         <div class="flex items-center">
                                             <i class="fas fa-users text-gray-600 mr-2"></i>
                                             Total
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-4 font-semibold text-gray-900">
+                                    <th scope="col" class="px-4 py-2 font-semibold text-gray-900 dark:text-white">
                                         <div class="flex items-center">
                                             <i class="fas fa-chart-pie text-purple-500 mr-2"></i>
                                             Ratio
@@ -184,22 +184,22 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="classData" class="divide-y divide-blue-50">
+                            <tbody id="classData" class="divide-y divide-blue-50 dark:divide-gray-700">
                                 <!-- Data will be populated by JavaScript -->
                                 <tr>
                                     <td colspan="5" class="px-6 py-8 text-center">
                                         <div class="flex flex-col items-center justify-center">
-                                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                                            <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-gray-700 flex items-center justify-center mb-3">
                                                 <i class="fas fa-spinner text-blue-500 text-xl animate-spin"></i>
                                             </div>
-                                            <p class="text-gray-600">Loading class data...</p>
+                                            <p class="text-gray-600 dark:text-gray-400">Loading class data...</p>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4 flex items-center justify-between text-sm text-gray-600">
+                    <div class="mt-4 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                         <div class="flex items-center">
                             <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
                             <span>Boys</span>
@@ -207,7 +207,7 @@
                             <span>Girls</span>
                         </div>
                         <div>
-                            <span class="font-medium text-blue-600" id="tableTotalStudents">0</span> total students
+                            <span class="font-medium text-blue-600 dark:text-blue-400" id="tableTotalStudents">0</span> total students
                         </div>
                     </div>
                 </div>
@@ -216,14 +216,14 @@
             <!-- Class Performance & Upcoming Assignments -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Performance Chart -->
-                <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900">Performance Overview</h3>
-                            <p class="text-sm text-gray-600">Average grades by subject</p>
+                            <h2 class="text-base font-bold text-gray-900 dark:text-white">Performance Overview</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Average grades by subject</p>
                         </div>
                         <div class="relative">
-                            <select class="appearance-none bg-white border border-blue-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 block px-4 py-2 pr-10 focus:outline-none transition-all duration-300">
+                            <select class="appearance-none bg-white dark:bg-gray-900 border border-blue-200 dark:border-gray-700 text-gray-900 dark:text-gray-300 text-sm rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 block px-4 py-2 pr-10 focus:outline-none transition-all duration-300">
                                 <option>Overall</option>
                             </select>
                         </div>
@@ -232,13 +232,13 @@
                         <% if (typeof performanceData !== 'undefined' && performanceData.length > 0) { %>
                             <canvas id="performanceChart"></canvas>
                         <% } else { %>
-                            <div class="h-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center">
+                            <div class="h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 rounded-xl flex items-center justify-center">
                                 <div class="text-center">
-                                    <div class="w-12 h-12 rounded-full bg-white border-2 border-blue-200 flex items-center justify-center mx-auto mb-3">
-                                        <i class="fas fa-chart-bar text-blue-500 text-xl"></i>
+                                    <div class="w-12 h-12 rounded-full bg-white dark:bg-gray-700 border-2 border-blue-200 dark:border-gray-600 flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-chart-bar text-blue-500 dark:text-blue-400 text-xl"></i>
                                     </div>
-                                    <p class="text-gray-600">No performance data available.</p>
-                                    <p class="text-xs text-gray-500 mt-1">Add student marks to see insights.</p>
+                                    <p class="text-gray-600 dark:text-gray-400">No performance data available.</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Add student marks to see insights.</p>
                                 </div>
                             </div>
                         <% } %>
@@ -246,11 +246,11 @@
                 </div>
 
                 <!-- Upcoming Assignments -->
-                <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900">Upcoming Deadlines</h3>
-                            <p class="text-sm text-gray-600">Assignments due soon</p>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Upcoming Deadlines</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Assignments due soon</p>
                         </div>
                         <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
                             View All
@@ -259,7 +259,7 @@
                     </div>
                     <div class="space-y-4">
                         <% [1,2,3].forEach(assignment => { %>
-                        <div class="group p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100 hover:border-blue-200 transition-all duration-300 cursor-pointer">
+                        <div class="group p-3 bg-gradient-to-r from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-blue-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-gray-600 transition-all duration-300 cursor-pointer">
                             <div class="flex items-start">
                                 <div class="flex-shrink-0">
                                     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-50 flex items-center justify-center">
@@ -267,8 +267,8 @@
                                     </div>
                                 </div>
                                 <div class="ml-3 flex-1">
-                                    <h4 class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">Math Homework Chapter <%= 4 + assignment %></h4>
-                                    <p class="text-xs text-gray-500 mt-1">Class 9A • Due tomorrow</p>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Math Homework Chapter <%= 4 + assignment %></h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Class 9A • Due tomorrow</p>
                                     <div class="mt-2 flex items-center justify-between">
                                         <div class="flex items-center text-xs text-gray-600">
                                             <i class="fas fa-user-check text-green-500 mr-1"></i>
@@ -290,40 +290,40 @@
         <!-- Right Column -->
         <div class="space-y-8">
             <!-- Quick Actions -->
-            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <a href="/student/new" class="group relative p-4 bg-gradient-to-br from-blue-50 to-white rounded-xl border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all duration-300 text-center">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 group-hover:from-blue-200 group-hover:to-blue-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-                            <i class="fas fa-user-plus text-blue-600 text-lg"></i>
+                    <a href="/student/new" class="group relative p-4 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-blue-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all duration-300 text-center">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/30 group-hover:from-blue-200 group-hover:to-blue-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+                            <i class="fas fa-user-plus text-blue-600 dark:text-blue-400 text-lg"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">Add Student</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Add Student</span>
                     </a>
-                    <a href="/attendance" class="group relative p-4 bg-gradient-to-br from-green-50 to-white rounded-xl border border-green-100 hover:border-green-300 hover:shadow-md transition-all duration-300 text-center">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-100 to-green-50 group-hover:from-green-200 group-hover:to-green-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-                            <i class="fas fa-clipboard-check text-green-600 text-lg"></i>
+                    <a href="/attendance" class="group relative p-4 bg-gradient-to-br from-green-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-green-100 dark:border-green-900/50 hover:border-green-300 dark:hover:border-green-500 hover:shadow-md transition-all duration-300 text-center">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/30 group-hover:from-green-200 group-hover:to-green-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+                            <i class="fas fa-clipboard-check text-green-600 dark:text-green-400 text-lg"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">Take Attendance</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">Take Attendance</span>
                     </a>
-                    <a href="/grades" class="group relative p-4 bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-100 hover:border-purple-300 hover:shadow-md transition-all duration-300 text-center">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 group-hover:from-purple-200 group-hover:to-purple-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-                            <i class="fas fa-chart-bar text-purple-600 text-lg"></i>
+                    <a href="/grades" class="group relative p-4 bg-gradient-to-br from-purple-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-purple-100 dark:border-purple-900/50 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md transition-all duration-300 text-center">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/30 group-hover:from-purple-200 group-hover:to-purple-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+                            <i class="fas fa-chart-bar text-purple-600 dark:text-purple-400 text-lg"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">Enter Grades</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enter Grades</span>
                     </a>
-                    <a href="/reports" class="group relative p-4 bg-gradient-to-br from-orange-50 to-white rounded-xl border border-orange-100 hover:border-orange-300 hover:shadow-md transition-all duration-300 text-center">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-100 to-orange-50 group-hover:from-orange-200 group-hover:to-orange-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-                            <i class="fas fa-file-alt text-orange-600 text-lg"></i>
+                    <a href="/reports" class="group relative p-4 bg-gradient-to-br from-orange-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-orange-100 dark:border-orange-900/50 hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-md transition-all duration-300 text-center">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/30 group-hover:from-orange-200 group-hover:to-orange-100 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+                            <i class="fas fa-file-alt text-orange-600 dark:text-orange-400 text-lg"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900 group-hover:text-orange-600 transition-colors">Generate Reports</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">Generate Reports</span>
                     </a>
                 </div>
             </div>
 
             <!-- Recent Activity -->
-            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-bold text-gray-900">Recent Activity</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Activity</h3>
                     <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
                         View All
                         <i class="fas fa-chevron-right ml-1 text-xs"></i>
@@ -337,9 +337,9 @@
                             </div>
                         </div>
                         <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">Rahul Sharma</p>
-                            <p class="text-xs text-gray-600">Submitted Math assignment</p>
-                            <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Rahul Sharma</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Submitted Math assignment</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">2 hours ago</p>
                         </div>
                     </div>
                     <div class="flex items-start group">
@@ -349,9 +349,9 @@
                             </div>
                         </div>
                         <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">You</p>
-                            <p class="text-xs text-gray-600">Posted new Science project</p>
-                            <p class="text-xs text-gray-400 mt-1">5 hours ago</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">You</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Posted new Science project</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">5 hours ago</p>
                         </div>
                     </div>
                     <div class="flex items-start group">
@@ -361,18 +361,18 @@
                             </div>
                         </div>
                         <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">System</p>
-                            <p class="text-xs text-gray-600">Parent meeting scheduled for Friday</p>
-                            <p class="text-xs text-gray-400 mt-1">Yesterday</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">System</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Parent meeting scheduled for Friday</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Yesterday</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Calendar Widget -->
-            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-blue-100 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-bold text-gray-900">Upcoming Events</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Upcoming Events</h3>
                     <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
                         Calendar
                         <i class="fas fa-external-link-alt ml-1 text-xs"></i>
@@ -380,7 +380,7 @@
                 </div>
                 <div class="space-y-4">
                     <% [1,2].forEach(event => { %>
-                    <div class="group p-3 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    <div class="group p-3 bg-gradient-to-r from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl border border-blue-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-gray-600 transition-all duration-300">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
                                 <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
@@ -391,8 +391,8 @@
                                 </div>
                             </div>
                             <div class="ml-3 flex-1">
-                                <h4 class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">Parent-Teacher Meeting</h4>
-                                <p class="text-xs text-gray-600 mt-1">10:00 AM - 12:00 PM</p>
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Parent-Teacher Meeting</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">10:00 AM - 12:00 PM</p>
                                 <div class="mt-2">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                         Important

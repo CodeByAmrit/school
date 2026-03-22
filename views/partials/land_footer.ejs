@@ -1,6 +1,6 @@
 <!-- Footer - Enhanced with Blue Theme -->
 <footer
-  class="bg-gradient-to-b from-blue-50 to-white text-gray-600 py-12 border-t border-blue-100"
+  class="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 text-gray-600 dark:text-gray-400 py-12 border-t border-blue-100 dark:border-gray-800 transition-colors duration-300"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center">
@@ -13,7 +13,7 @@
 
       <div class="flex flex-wrap justify-center gap-8 mb-8">
         <div class="text-center">
-          <h4 class="font-bold text-gray-800 mb-2">Product</h4>
+          <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Product</h4>
           <div class="space-y-1">
             <a
               href="/features"
@@ -34,7 +34,7 @@
         </div>
 
         <div class="text-center">
-          <h4 class="font-bold text-gray-800 mb-2">Company</h4>
+          <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Company</h4>
           <div class="space-y-1">
             <a
               href="/about"
@@ -55,7 +55,7 @@
         </div>
 
         <div class="text-center">
-          <h4 class="font-bold text-gray-800 mb-2">Legal</h4>
+          <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Legal</h4>
           <div class="space-y-1">
             <a
               href="/privacy"
@@ -101,7 +101,7 @@
         </a>
       </div>
 
-      <div class="border-t border-blue-200 pt-8">
+      <div class="border-t border-blue-200 dark:border-gray-800 pt-8">
         <p class="mb-4">© 2025 Student Tracker. All rights reserved. <span class="text-xs opacity-50 ml-2">v<%= appVersion %></span></p>
         <p class="text-sm">
           Contact:
@@ -116,4 +116,5 @@
     </div>
   </div>
 </footer>
+<script src="/js/script.js" nonce="<%= nonce %>"></script>
 <script src="/js/index.js" nonce="<%= nonce %>"></script>

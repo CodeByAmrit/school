@@ -493,6 +493,15 @@ router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
+// Navigation pages
+router.get("/features", (req, res) => {
+  res.render("features", { nonce: res.locals.nonce });
+});
+
+router.get("/pricing", (req, res) => {
+  res.render("pricing", { nonce: res.locals.nonce });
+});
+
 // Route to get teacher details
 router.get("/teacher/profile/", checkAuth, async (req, res) => {
   const teacherId = req.user._id;

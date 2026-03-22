@@ -112,16 +112,7 @@ class SettingsManager {
 
   setupEventListeners() {
     // Theme toggle
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-      const isDark = document.documentElement.classList.contains("dark");
-      if (isDark) {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      }
-    });
+    // Theme toggle handled by script.js
 
     // School logo preview
     const logoInput = document.getElementById("school-logo");
@@ -305,10 +296,10 @@ class SettingsManager {
       // Update theme if changed
       if (settings.theme === "dark") {
         document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
+        localStorage.setItem("color-theme", "dark");
       } else if (settings.theme === "light") {
         document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
+        localStorage.setItem("color-theme", "light");
       }
     } catch (error) {
       this.showNotification("Failed to update settings", "error");
@@ -786,7 +777,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.settingsManager = new SettingsManager();
 
   // Set theme from localStorage
-  const savedTheme = localStorage.getItem("theme");
+  // Set theme from localStorage
+  const savedTheme = localStorage.getItem("color-theme");
   if (savedTheme === "dark") {
     document.documentElement.classList.add("dark");
   } else if (savedTheme === "light") {
