@@ -192,8 +192,8 @@
           </thead>
 
           <tbody class="divide-y divide-blue-50">
-            <% if (studentlist.length > 0) { %> <% studentlist.forEach((student,
-            index) => { %>
+            <% if (studentlist.length > 0) { %>
+            <% studentlist.forEach((student, index) => { %>
             <tr
               class="hover:bg-blue-50/50 transition-colors duration-200"
               data-student-id="<%= student.school_id %>"
@@ -227,7 +227,8 @@
                     </div>
                     <div class="text-sm text-gray-500">
                       <i class="fas fa-user mr-1 text-blue-500"></i>
-                      S/O <%= student.father_name %>
+                      S/O
+                      <%= student.father_name %>
                     </div>
                     <div class="text-xs text-gray-400 mt-1">
                       ID:
@@ -266,17 +267,24 @@
 
               <!-- Status -->
               <td class="px-4 py-2">
-                <% let statusText; let statusClass; let dotClass; if
-                (student.profile_status && student.profile_status.toLowerCase()
-                === 'pending') { statusText = 'Pending'; statusClass =
-                'bg-orange-100 text-orange-800'; dotClass = 'text-orange-500'; }
-                else if (student.profile_status &&
-                student.profile_status.toLowerCase() === 'inactive') {
-                statusText = 'Inactive'; statusClass = 'bg-gray-100
-                text-gray-800'; dotClass = 'text-gray-400'; } else { // 'ok',
-                empty, or any other value will be considered active statusText =
-                'Active'; statusClass = 'bg-green-100 text-green-800'; dotClass
-                = 'text-green-500'; } %>
+                <% 
+                  let statusText; 
+                  let statusClass; 
+                  let dotClass; 
+                  if (student.profile_status && student.profile_status.toLowerCase() === 'pending') { 
+                    statusText = 'Pending'; 
+                    statusClass = 'bg-orange-100 text-orange-800'; 
+                    dotClass = 'text-orange-500'; 
+                  } else if (student.profile_status && student.profile_status.toLowerCase() === 'inactive') { 
+                    statusText = 'Inactive'; 
+                    statusClass = 'bg-gray-100 text-gray-800'; 
+                    dotClass = 'text-gray-400'; 
+                  } else { 
+                    statusText = 'Active'; 
+                    statusClass = 'bg-green-100 text-green-800'; 
+                    dotClass = 'text-green-500'; 
+                  } 
+                %>
                 <div
                   class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= statusClass %>"
                 >
@@ -495,7 +503,8 @@
                 </div>
               </td>
             </tr>
-            <% }); %> <% } else { %>
+            <% }); %>
+            <% } else { %>
             <tr>
               <td colspan="6" class="px-6 py-12 text-center">
                 <div class="flex flex-col items-center justify-center">

@@ -175,12 +175,15 @@
               Term <%= term %>
             </h4>
             <% const termPerformance = performance.find(p => p.term == term); %>
-            <% const termGrade = grades.find(g => g.term == term); %> <% if
+            <% const termGrade = grades.find(g => g.term == term); %>
+            <% if
             (termPerformance) { %>
             <div class="flex justify-between items-center text-sm mb-2">
               <span class="text-gray-600">Total Marks:</span>
               <span class="font-semibold text-gray-800"
-                ><%= termPerformance.grand_total %> / <%=
+                ><%= termPerformance.grand_total %>
+                /
+                <%=
                 termPerformance.total_max_marks %></span
               >
             </div>
@@ -191,7 +194,8 @@
                 termPerformance.percentage.toFixed(2) + '%' : 'N/A' %></span
               >
             </div>
-            <% } %> <% if (termGrade) { %>
+            <% } %>
+            <% if (termGrade) { %>
             <div class="flex justify-between items-center text-sm">
               <span class="text-gray-600">Grade:</span>
               <span

@@ -1,5 +1,6 @@
-<%- include('./partials/header.ejs', {title: "File Manager" }) %> <%-
-include('./partials/topMenu.ejs') %> <%- include('./partials/navbar.ejs') %>
+<%- include('./partials/header.ejs', {title: "File Manager" }) %>
+<%- include('./partials/topMenu.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 
 <!-- Main Content -->
 <div
@@ -98,7 +99,8 @@ include('./partials/topMenu.ejs') %> <%- include('./partials/navbar.ejs') %>
   <div
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
   >
-    <% if (files){ %> <% files.forEach(file=> { %>
+    <% if (files){ %>
+    <% files.forEach(file=> { %>
     <div
       class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
     >
@@ -135,7 +137,8 @@ include('./partials/topMenu.ejs') %> <%- include('./partials/navbar.ejs') %>
           <!-- Ratings or any other detail, if required -->
           <span
             class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
-            >File Type: <%= file.type %></span
+            >File Type:
+            <%= file.type %></span
           >
         </div>
         <div class="flex items-center justify-between">
@@ -159,7 +162,8 @@ include('./partials/topMenu.ejs') %> <%- include('./partials/navbar.ejs') %>
         </div>
       </div>
     </div>
-    <% }); %> <% } %>
+    <% }); %>
+    <% } %>
   </div>
 </div>
 
