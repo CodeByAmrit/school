@@ -1,11 +1,16 @@
 <%- include('partials/land_header') %>
 
-<section class="relative pt-24 pb-20 text-white z-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-  <img src="/image/school-bg.svg" alt="Schools" class="absolute w-full h-[490px] hidden sm:hidden md:inline z-10 -rotate-6"/>
+<section
+  class="relative pt-24 pb-20 text-white z-20 bg-white dark:bg-gray-900 transition-colors duration-300"
+>
+  <img
+    src="/image/school-bg.svg"
+    alt="Schools"
+    class="absolute w-full h-[490px] hidden sm:hidden md:inline z-10 -rotate-6"
+  />
   <div
     class="absolute inset-0 z-0 transform -skew-y-6 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] py-20 h-[620px] -top-10"
-  >
-  </div>
+  ></div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-8">
@@ -114,7 +119,9 @@
 </section>
 
 <!-- Solutions Section - Redesigned with Blue Theme -->
-<section class="py-16 sm:py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-950 transition-colors duration-300">
+<section
+  class="py-16 sm:py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-950 transition-colors duration-300"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -227,35 +234,66 @@
 </section>
 
 <!-- Result Lookup Section -->
-<section id="result-lookup" class="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-gradient-to-r from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg border border-blue-100 dark:border-gray-700 p-8 md:p-12">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Check Your Result</h2>
-                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-400 mb-8">
-                    Enter your roll number and date of birth to view your academic report.
-                </p>
-            </div>
-            <form action="/result" method="POST" class="max-w-lg mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label for="roll" class="block text-sm font-medium text-gray-700 mb-2">Roll Number</label>
-                        <input type="text" name="roll" id="roll" required class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition">
-                    </div>
-                    <div>
-                        <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                        <input type="text" name="dob" id="dob" required placeholder="DD-MM-YYYY" class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition">
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg">
-                        <i class="fas fa-search mr-2"></i>
-                        Search Result
-                    </button>
-                </div>
-            </form>
+<section
+  id="result-lookup"
+  class="py-16 bg-white dark:bg-gray-900 transition-colors duration-300"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="bg-gradient-to-r from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg border border-blue-100 dark:border-gray-700 p-8 md:p-12"
+    >
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          Check Your Result
+        </h2>
+        <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-400 mb-8">
+          Enter your roll number and date of birth to view your academic report.
+        </p>
+      </div>
+      <form action="/result" method="POST" class="max-w-lg mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label
+              for="roll"
+              class="block text-sm font-medium text-gray-700 mb-2"
+              >Roll Number</label
+            >
+            <input
+              type="text"
+              name="roll"
+              id="roll"
+              required
+              class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition"
+            />
+          </div>
+          <div>
+            <label
+              for="dob"
+              class="block text-sm font-medium text-gray-700 mb-2"
+              >Date of Birth</label
+            >
+            <input
+              type="text"
+              name="dob"
+              id="dob"
+              required
+              placeholder="DD-MM-YYYY"
+              class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition"
+            />
+          </div>
         </div>
+        <div class="text-center">
+          <button
+            type="submit"
+            class="inline-flex items-center bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            <i class="fas fa-search mr-2"></i>
+            Search Result
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </section>
 
 <!-- Stats Section - Redesigned with Blue Theme -->
@@ -297,7 +335,9 @@
 </section>
 
 <!-- Benefits Section - Redesigned with Blue Theme -->
-<section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-950 dark:to-gray-900 transition-colors duration-300">
+<section
+  class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-950 dark:to-gray-900 transition-colors duration-300"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -406,9 +446,13 @@
 </section>
 
 <!-- Features Section - Already Redesigned -->
-<section class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 transition-colors duration-300">
+<section
+  class="py-16 sm:py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 transition-colors duration-300"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+    <h2
+      class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12"
+    >
       Discover Our
       <span
         class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
@@ -591,89 +635,225 @@
 </section>
 
 <!-- Pricing Section -->
-<section class="py-16 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+<section
+  class="py-16 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Choose Your Plan</h2>
-      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Flexible pricing options designed to grow with your institution.</p>
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Choose Your Plan
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        Flexible pricing options designed to grow with your institution.
+      </p>
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      
       <!-- Starter Plan Card -->
-      <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300">
+      <div
+        class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300"
+      >
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Starter</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">For small classrooms</p>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            Starter
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            For small classrooms
+          </p>
         </div>
         <div class="mb-8 font-bold">
           <span class="text-3xl text-gray-900 dark:text-white">₹0</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Up to 100 Students
           </li>
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Attendance Tracking
           </li>
         </ul>
-        <a href="/pricing" class="w-full text-center py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-bold hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">Learn More</a>
+        <a
+          href="/pricing"
+          class="w-full text-center py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-bold hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
+          >Learn More</a
+        >
       </div>
 
       <!-- Professional Plan Card (Featured) -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-2 border-blue-600 shadow-xl flex flex-col h-full relative z-10 transition-all duration-300 hover:scale-[1.02]">
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider">RECOMMENDED</div>
+      <div
+        class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-2 border-blue-600 shadow-xl flex flex-col h-full relative z-10 transition-all duration-300 hover:scale-[1.02]"
+      >
+        <div
+          class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider"
+        >
+          RECOMMENDED
+        </div>
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Professional</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Advanced educator tools</p>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            Professional
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Advanced educator tools
+          </p>
         </div>
         <div class="mb-8 font-bold">
           <span class="text-3xl text-gray-900 dark:text-white">₹1,499</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Unlimited Students
           </li>
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             AI Assistant Features
           </li>
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Priority Support
           </li>
         </ul>
-        <a href="/pricing" class="w-full text-center py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-200 dark:shadow-none">View All Plans</a>
+        <a
+          href="/pricing"
+          class="w-full text-center py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-200 dark:shadow-none"
+          >View All Plans</a
+        >
       </div>
 
       <!-- Institution Plan Card -->
-      <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300">
+      <div
+        class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300"
+      >
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Institution</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">For enterprise schools</p>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            Institution
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            For enterprise schools
+          </p>
         </div>
         <div class="mb-8 font-bold">
           <span class="text-3xl text-gray-900 dark:text-white">₹4,999</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Multi-Teacher Support
           </li>
-          <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <li
+            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+          >
+            <svg
+              class="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Custom Branding
           </li>
         </ul>
-        <a href="/pricing" class="w-full text-center py-2 border-2 border-gray-900 dark:border-gray-200 text-gray-900 dark:text-white rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">Learn More</a>
+        <a
+          href="/pricing"
+          class="w-full text-center py-2 border-2 border-gray-900 dark:border-gray-200 text-gray-900 dark:text-white rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+          >Learn More</a
+        >
       </div>
-
     </div>
   </div>
 </section>

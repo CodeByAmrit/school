@@ -25,8 +25,6 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-
-
   // Prevent dropdown close when clicking inside
   document.querySelectorAll('[id^="dropdown-"]').forEach((dropdown) => {
     dropdown.addEventListener("click", function (e) {
@@ -203,7 +201,6 @@ function confirmDelete(event) {
   return true;
 }
 
-
 function updateSelectedCount() {
   const selectedCountElement = document.getElementById("selected-count");
   const bulkSelectedCount = document.getElementById("bulk-selected-count");
@@ -327,7 +324,6 @@ function quickViewStudent(studentId) {
 
   modal.classList.remove("hidden");
 
-
   // Simulate API call
   setTimeout(() => {
     renderStudentData(studentId);
@@ -439,7 +435,6 @@ if (modal) {
   });
 }
 
-
 /* -----------------------------
    CLOSE MODAL
 ----------------------------- */
@@ -448,7 +443,6 @@ function closeModal() {
     modal.classList.add("hidden");
   }
 }
-
 
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".quick-view-btn");

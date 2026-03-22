@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia';
-import api from '../services/api';
+import { defineStore } from "pinia";
+import api from "../services/api";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: localStorage.getItem('student_token') || null,
-    user: JSON.parse(localStorage.getItem('student_user')) || null,
+    token: localStorage.getItem("student_token") || null,
+    user: JSON.parse(localStorage.getItem("student_user")) || null,
     loading: false,
     error: null,
   }),
@@ -18,23 +18,23 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await api.post('/login', { email, password });
+        const response = await api.post("/login", { email, password });
         const { token, user, forceChangePassword } = response.data;
 
         this.token = token;
-        localStorage.setItem('student_token', token);
-        
+        localStorage.setItem("student_token", token);
+
         // If user object is provided, use it. Else fetch.
         if (user) {
-             this.user = user;
-             localStorage.setItem('student_user', JSON.stringify(this.user));
+          this.user = user;
+          localStorage.setItem("student_user", JSON.stringify(this.user));
         } else {
-             await this.fetchUser();
+          await this.fetchUser();
         }
-        
+
         return { success: true, forceChangePassword };
       } catch (err) {
-        this.error = err.response?.data?.message || 'Login failed';
+        this.error = err.response?.data?.message || "Login failed";
         return { success: false };
       } finally {
         this.loading = false;
@@ -43,11 +43,11 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUser() {
       try {
-        const response = await api.get('/me');
+        const response = await api.get("/me");
         this.user = response.data;
-        localStorage.setItem('student_user', JSON.stringify(this.user));
+        localStorage.setItem("student_user", JSON.stringify(this.user));
       } catch (err) {
-        console.error('Failed to fetch user', err);
+        console.error("Failed to fetch user", err);
         // If 401, interceptor handles it
       }
     },
@@ -55,11 +55,11 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.token = null;
       this.user = null;
-      localStorage.removeItem('student_token');
-      localStorage.removeItem('student_user');
+      localStorage.removeItem("student_token");
+      localStorage.removeItem("student_user");
       // Ideally call backend logout too
       // api.post('/logout').catch(() => {});
       // Redirect handled by router or component
-    }
-  }
+    },
+  },
 });

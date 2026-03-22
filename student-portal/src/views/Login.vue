@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div
+    class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+  >
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Sign in to your account
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
-        Student Portal
-      </p>
+      <p class="mt-2 text-center text-sm text-gray-600">Student Portal</p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -30,7 +30,10 @@
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <div class="mt-1">
@@ -45,10 +48,13 @@
               />
             </div>
           </div>
-          
-           <div class="flex items-center justify-between">
+
+          <div class="flex items-center justify-between">
             <div class="text-sm">
-              <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+              <a
+                href="#"
+                class="font-medium text-indigo-600 hover:text-indigo-500"
+              >
                 Forgot your password?
               </a>
             </div>
@@ -59,7 +65,11 @@
           </div>
 
           <div>
-            <Button type="submit" class="w-full flex justify-center py-2 px-4" :loading="authStore.loading">
+            <Button
+              type="submit"
+              class="w-full flex justify-center py-2 px-4"
+              :loading="authStore.loading"
+            >
               Sign in
             </Button>
           </div>
@@ -70,24 +80,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useAuthStore } from '../store/auth';
-import { useRouter } from 'vue-router';
-import Button from '../components/ui/Button.vue';
+import { ref } from "vue";
+import { useAuthStore } from "../store/auth";
+import { useRouter } from "vue-router";
+import Button from "../components/ui/Button.vue";
 
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
 
 const handleLogin = async () => {
-    const result = await authStore.login(email.value, password.value);
-    if (result.success) {
-        if (result.forceChangePassword) {
-            router.push('/change-password');
-        } else {
-            router.push('/dashboard');
-        }
+  const result = await authStore.login(email.value, password.value);
+  if (result.success) {
+    if (result.forceChangePassword) {
+      router.push("/change-password");
+    } else {
+      router.push("/dashboard");
     }
+  }
 };
 </script>

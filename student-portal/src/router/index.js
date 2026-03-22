@@ -1,73 +1,73 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../store/auth';
+import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "../store/auth";
 
 // Lazy load views
-const Login = () => import('../views/Login.vue');
-const Dashboard = () => import('../views/Dashboard.vue');
-const Profile = () => import('../views/Profile.vue');
-const Results = () => import('../views/Results.vue');
-const Documents = () => import('../views/Documents.vue');
-const Settings = () => import('../views/Settings.vue');
-const ChangePassword = () => import('../views/ChangePassword.vue');
-const NotFound = () => import('../views/NotFound.vue');
+const Login = () => import("../views/Login.vue");
+const Dashboard = () => import("../views/Dashboard.vue");
+const Profile = () => import("../views/Profile.vue");
+const Results = () => import("../views/Results.vue");
+const Documents = () => import("../views/Documents.vue");
+const Settings = () => import("../views/Settings.vue");
+const ChangePassword = () => import("../views/ChangePassword.vue");
+const NotFound = () => import("../views/NotFound.vue");
 
 const routes = [
   {
-    path: '/login',
-    name: 'Login',
+    path: "/login",
+    name: "Login",
     component: Login,
-    meta: { guest: true }
+    meta: { guest: true },
   },
   {
-    path: '/change-password',
-    name: 'ChangePassword',
+    path: "/change-password",
+    name: "ChangePassword",
     component: ChangePassword,
-    meta: { requiresAuth: true } // Technically they are logged in (have token), but restricted
+    meta: { requiresAuth: true }, // Technically they are logged in (have token), but restricted
   },
   {
-    path: '/',
-    redirect: '/dashboard'
+    path: "/",
+    redirect: "/dashboard",
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
+    path: "/dashboard",
+    name: "Dashboard",
     component: Dashboard,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/profile',
-    name: 'Profile',
+    path: "/profile",
+    name: "Profile",
     component: Profile,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/results',
-    name: 'Results',
+    path: "/results",
+    name: "Results",
     component: Results,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/documents',
-    name: 'Documents',
+    path: "/documents",
+    name: "Documents",
     component: Documents,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/settings',
-    name: 'Settings',
+    path: "/settings",
+    name: "Settings",
     component: Settings,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
-  }
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: NotFound,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(), // Uses HTML5 history mode
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
@@ -75,9 +75,9 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = authStore.isAuthenticated;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login');
+    next("/login");
   } else if (to.meta.guest && isAuthenticated) {
-    next('/dashboard');
+    next("/dashboard");
   } else {
     next();
   }

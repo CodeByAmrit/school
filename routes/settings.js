@@ -316,7 +316,6 @@ router.post("/update-settings", checkAuth, async (req, res) => {
       );
     }
 
-
     res.json({ success: true, message: "Settings updated successfully" });
   } catch (error) {
     console.error("Update settings error:", error);

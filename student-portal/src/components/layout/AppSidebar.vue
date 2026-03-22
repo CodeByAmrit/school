@@ -29,7 +29,7 @@
               'group relative flex items-center p-4 rounded-xl transition-all duration-300',
               item.current
                 ? 'bg-gradient-to-r from-blue-50 to-white text-blue-600'
-                : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600'
+                : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600',
             ]"
             @click="closeMobileMenu"
           >
@@ -37,7 +37,9 @@
             <div
               :class="[
                 'absolute left-0 w-1 h-6 bg-[#3182ce] rounded-r-full transition-opacity duration-300',
-                item.current ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                item.current
+                  ? 'opacity-100'
+                  : 'opacity-0 group-hover:opacity-100',
               ]"
             ></div>
 
@@ -47,7 +49,7 @@
                 'w-10 h-10 rounded-xl border border-blue-200 flex items-center justify-center mr-3 transition-all duration-300',
                 item.current
                   ? 'bg-gradient-to-br from-blue-200 to-blue-100'
-                  : 'bg-gradient-to-br from-blue-100 to-white group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100'
+                  : 'bg-gradient-to-br from-blue-100 to-white group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100',
               ]"
             >
               <i :class="[item.icon, 'text-blue-600 text-sm']"></i>
@@ -61,7 +63,7 @@
                 'fas fa-chevron-right text-blue-400 ml-auto text-xs transition-all duration-300',
                 item.current
                   ? 'opacity-100 translate-x-1'
-                  : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-1'
+                  : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-1',
               ]"
             ></i>
           </router-link>
@@ -175,7 +177,7 @@
             <i
               :class="[
                 'fas text-blue-400 text-xs transition-transform duration-300',
-                userMenuOpen ? 'fa-chevron-up' : 'fa-chevron-down'
+                userMenuOpen ? 'fa-chevron-up' : 'fa-chevron-down',
               ]"
             ></i>
           </button>
@@ -275,7 +277,7 @@
                 'group relative flex items-center p-4 rounded-xl transition-all duration-300',
                 item.current
                   ? 'bg-gradient-to-r from-blue-50 to-white text-blue-600'
-                  : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600'
+                  : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-600',
               ]"
               @click="$emit('close-mobile')"
             >
@@ -285,7 +287,7 @@
                   'w-10 h-10 rounded-xl border border-blue-200 flex items-center justify-center mr-3',
                   item.current
                     ? 'bg-gradient-to-br from-blue-200 to-blue-100'
-                    : 'bg-gradient-to-br from-blue-100 to-white'
+                    : 'bg-gradient-to-br from-blue-100 to-white',
                 ]"
               >
                 <i :class="[item.icon, 'text-blue-600 text-sm']"></i>
@@ -308,7 +310,9 @@
             <div
               class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center mr-3"
             >
-              <span class="text-white font-bold text-sm">{{ userInitials }}</span>
+              <span class="text-white font-bold text-sm">{{
+                userInitials
+              }}</span>
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-gray-900 truncate">
@@ -324,109 +328,117 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '../../store/auth'
-import { storeToRefs } from 'pinia'
+import { computed, ref, onMounted, onUnmounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "../../store/auth";
+import { storeToRefs } from "pinia";
 
 defineProps({
-  mobileOpen: Boolean
-})
+  mobileOpen: Boolean,
+});
 
-const emit = defineEmits(['close-mobile'])
+const emit = defineEmits(["close-mobile"]);
 
-const route = useRoute()
-const router = useRouter()
-const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
-const userMenuOpen = ref(false)
+const userMenuOpen = ref(false);
 
 // User data
-const userName = computed(() => user.value?.name || 'Student')
+const userName = computed(() => user.value?.name || "Student");
 const userInitials = computed(() => {
-  const name = userName.value || 'Student'
-  const names = name.split(' ')
-  return names.map(n => n[0]).join('').toUpperCase().substring(0, 2)
-})
+  const name = userName.value || "Student";
+  const names = name.split(" ");
+  return names
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .substring(0, 2);
+});
 
 const navigation = computed(() => {
-  const currentPath = route.path
+  const currentPath = route.path;
   return [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: 'fas fa-chart-pie',
-      current: currentPath === '/dashboard' || currentPath === '/' 
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: "fas fa-chart-pie",
+      current: currentPath === "/dashboard" || currentPath === "/",
     },
-    { 
-      name: 'Profile', 
-      href: '/profile', 
-      icon: 'fas fa-user',
-      current: currentPath === '/profile' 
+    {
+      name: "Profile",
+      href: "/profile",
+      icon: "fas fa-user",
+      current: currentPath === "/profile",
     },
-    { 
-      name: 'Results', 
-      href: '/results', 
-      icon: 'fas fa-graduation-cap',
-      current: currentPath === '/results' 
+    {
+      name: "Results",
+      href: "/results",
+      icon: "fas fa-graduation-cap",
+      current: currentPath === "/results",
     },
-    { 
-      name: 'Documents', 
-      href: '/documents', 
-      icon: 'fas fa-folder-open',
-      current: currentPath === '/documents' 
+    {
+      name: "Documents",
+      href: "/documents",
+      icon: "fas fa-folder-open",
+      current: currentPath === "/documents",
     },
-    { 
-      name: 'Settings', 
-      href: '/settings', 
-      icon: 'fas fa-cog',
-      current: currentPath === '/settings' 
-    }
-  ]
-})
+    {
+      name: "Settings",
+      href: "/settings",
+      icon: "fas fa-cog",
+      current: currentPath === "/settings",
+    },
+  ];
+});
 
 const toggleUserMenu = () => {
-  userMenuOpen.value = !userMenuOpen.value
-}
+  userMenuOpen.value = !userMenuOpen.value;
+};
 
 const closeMenus = () => {
-  userMenuOpen.value = false
+  userMenuOpen.value = false;
   // Close mobile menu if open
-  emit('close-mobile')
-}
+  emit("close-mobile");
+};
 
 const closeMobileMenu = () => {
   // If on mobile view, close the sidebar when clicking a link
   if (window.innerWidth < 768) {
-    emit('close-mobile')
+    emit("close-mobile");
   }
-}
+};
 
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
-  const menuButton = document.getElementById('studentMenuButton')
-  const menu = document.getElementById('student-menu')
-  
-  if (menuButton && !menuButton.contains(event.target) && 
-      menu && !menu.contains(event.target)) {
-    userMenuOpen.value = false
+  const menuButton = document.getElementById("studentMenuButton");
+  const menu = document.getElementById("student-menu");
+
+  if (
+    menuButton &&
+    !menuButton.contains(event.target) &&
+    menu &&
+    !menu.contains(event.target)
+  ) {
+    userMenuOpen.value = false;
   }
-}
+};
 
 const handleLogout = () => {
-  closeMenus()
-  authStore.logout()
-  router.push('/login')
-}
+  closeMenus();
+  authStore.logout();
+  router.push("/login");
+};
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener("click", handleClickOutside);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>

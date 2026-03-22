@@ -3,7 +3,7 @@
 "use strict";
 
 const http = require("http");
-const logger = require('../config/logger');
+const logger = require("../config/logger");
 const debug = require("debug")("studenttracker:server");
 const App = require("../app");
 

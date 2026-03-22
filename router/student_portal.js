@@ -11,7 +11,6 @@ router.use(checkStudentAuth); // Apply middleware to all subsequent routes
 
 router.post("/change-password", controller.changePassword); // Force change password
 
-
 router.get("/me", (req, res) => res.json(req.user)); // Simple user info from token
 router.get("/profile", controller.getProfile);
 router.get("/result", controller.getResult);

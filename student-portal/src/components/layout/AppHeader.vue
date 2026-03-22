@@ -40,7 +40,9 @@
             </div>
             <div>
               <a href="/dashboard" class="flex flex-col">
-                <span class="text-sm font-medium text-gray-500">Welcome to</span>
+                <span class="text-sm font-medium text-gray-500"
+                  >Welcome to</span
+                >
                 <span
                   class="text-xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent"
                 >
@@ -141,7 +143,7 @@
                 v-if="unreadNotifications > 0"
                 class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[#63b3ed] to-[#3182ce] text-xs font-bold text-white shadow-md"
               >
-                {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
+                {{ unreadNotifications > 9 ? "9+" : unreadNotifications }}
               </span>
             </button>
 
@@ -178,7 +180,7 @@
                         <i
                           :class="[
                             'text-blue-600 text-sm',
-                            getNotificationIcon(notification.type)
+                            getNotificationIcon(notification.type),
                           ]"
                         ></i>
                       </div>
@@ -258,10 +260,7 @@
                 <div
                   class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] flex items-center justify-center border-2 border-white shadow-md"
                 >
-                  <span
-                    v-if="!userAvatar"
-                    class="text-white font-bold text-sm"
-                  >
+                  <span v-if="!userAvatar" class="text-white font-bold text-sm">
                     {{ userInitials }}
                   </span>
                   <img
@@ -279,7 +278,7 @@
               <i
                 :class="[
                   'fas text-blue-400 text-xs transition-transform duration-300',
-                  userDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'
+                  userDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down',
                 ]"
               ></i>
             </button>
@@ -361,132 +360,136 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useAuthStore } from '../../store/auth'
-import { useStudentStore } from '../../store/student'
-import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useAuthStore } from "../../store/auth";
+import { useStudentStore } from "../../store/student";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 
-defineEmits(['open-mobile'])
+defineEmits(["open-mobile"]);
 
-const authStore = useAuthStore()
-const studentStore = useStudentStore()
-const { user } = storeToRefs(authStore)
-const { notifications } = storeToRefs(studentStore)
-const router = useRouter()
+const authStore = useAuthStore();
+const studentStore = useStudentStore();
+const { user } = storeToRefs(authStore);
+const { notifications } = storeToRefs(studentStore);
+const router = useRouter();
 
 // UI State
-const notificationsOpen = ref(false)
-const userDropdownOpen = ref(false)
-const searchQuery = ref('')
-const theme = ref('light')
+const notificationsOpen = ref(false);
+const userDropdownOpen = ref(false);
+const searchQuery = ref("");
+const theme = ref("light");
 
 // User Data
-const userName = computed(() => user.value?.name || 'Student')
-const userEmail = computed(() => user.value?.email || 'student@school.com')
-const userAvatar = computed(() => user.value?.avatar || null)
+const userName = computed(() => user.value?.name || "Student");
+const userEmail = computed(() => user.value?.email || "student@school.com");
+const userAvatar = computed(() => user.value?.avatar || null);
 const userInitials = computed(() => {
-  const name = userName.value || 'Student'
-  const names = name.split(' ')
-  return names.map(n => n[0]).join('').toUpperCase().substring(0, 2)
-})
+  const name = userName.value || "Student";
+  const names = name.split(" ");
+  return names
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .substring(0, 2);
+});
 
 // School Data
-const schoolName = computed(() => user.value?.school_name || 'Student Portal')
-const schoolLogo = computed(() => user.value?.school_logo || null)
+const schoolName = computed(() => user.value?.school_name || "Student Portal");
+const schoolLogo = computed(() => user.value?.school_logo || null);
 
 // Notifications Data
 const unreadNotifications = computed(() => {
-  return notifications.value.filter(n => !n.read).length
-})
+  return notifications.value.filter((n) => !n.read).length;
+});
 
 // Methods
 const toggleNotifications = () => {
-  notificationsOpen.value = !notificationsOpen.value
-  userDropdownOpen.value = false
-}
+  notificationsOpen.value = !notificationsOpen.value;
+  userDropdownOpen.value = false;
+};
 
 const toggleUserDropdown = () => {
-  userDropdownOpen.value = !userDropdownOpen.value
-  notificationsOpen.value = false
-}
+  userDropdownOpen.value = !userDropdownOpen.value;
+  notificationsOpen.value = false;
+};
 
 const closeAllDropdowns = () => {
-  notificationsOpen.value = false
-  userDropdownOpen.value = false
-}
+  notificationsOpen.value = false;
+  userDropdownOpen.value = false;
+};
 
 const handleSearch = () => {
   // Implement search functionality
-  console.log('Searching for:', searchQuery.value)
-}
+  console.log("Searching for:", searchQuery.value);
+};
 
 const toggleTheme = () => {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-  document.documentElement.classList.toggle('dark')
-  localStorage.setItem('theme', theme.value)
-}
+  theme.value = theme.value === "light" ? "dark" : "light";
+  document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme", theme.value);
+};
 
 const getNotificationIcon = (type) => {
   const icons = {
-    result: 'fas fa-graduation-cap',
-    assignment: 'fas fa-tasks',
-    certificate: 'fas fa-award',
-    announcement: 'fas fa-bullhorn',
-    default: 'fas fa-bell'
-  }
-  return icons[type] || icons.default
-}
+    result: "fas fa-graduation-cap",
+    assignment: "fas fa-tasks",
+    certificate: "fas fa-award",
+    announcement: "fas fa-bullhorn",
+    default: "fas fa-bell",
+  };
+  return icons[type] || icons.default;
+};
 
 const formatTimeAgo = (date) => {
-  if (!date) return ''
-  const now = new Date()
-  const diffMs = now - new Date(date)
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMs / 3600000)
-  const diffDays = Math.floor(diffMs / 86400000)
+  if (!date) return "";
+  const now = new Date();
+  const diffMs = now - new Date(date);
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return 'Just now'
-  if (diffMins < 60) return `${diffMins}m ago`
-  if (diffHours < 24) return `${diffHours}h ago`
-  if (diffDays < 7) return `${diffDays}d ago`
-  return new Date(date).toLocaleDateString()
-}
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return new Date(date).toLocaleDateString();
+};
 
 const markAsRead = async (id) => {
-  await studentStore.markNotificationRead(id)
-}
+  await studentStore.markNotificationRead(id);
+};
 
 const handleLogout = () => {
-  closeAllDropdowns()
-  authStore.logout()
-  router.push('/login')
-}
+  closeAllDropdowns();
+  authStore.logout();
+  router.push("/login");
+};
 
 // Close dropdowns when clicking outside
 const handleClickOutside = (event) => {
-  if (!event.target.closest('.relative')) {
-    closeAllDropdowns()
+  if (!event.target.closest(".relative")) {
+    closeAllDropdowns();
   }
-}
+};
 
 // Initialize theme from localStorage
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme') || 'light'
-  theme.value = savedTheme
-  if (savedTheme === 'dark') {
-    document.documentElement.classList.add('dark')
+  const savedTheme = localStorage.getItem("theme") || "light";
+  theme.value = savedTheme;
+  if (savedTheme === "dark") {
+    document.documentElement.classList.add("dark");
   }
 
-  document.addEventListener('click', handleClickOutside)
-  
+  document.addEventListener("click", handleClickOutside);
+
   // Fetch specific data
-  studentStore.fetchNotifications()
-})
+  studentStore.fetchNotifications();
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>

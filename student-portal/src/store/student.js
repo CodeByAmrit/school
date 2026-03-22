@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import api from '../services/api';
+import { defineStore } from "pinia";
+import api from "../services/api";
 
-export const useStudentStore = defineStore('student', {
+export const useStudentStore = defineStore("student", {
   state: () => ({
     profile: null,
     results: null,
@@ -22,10 +22,10 @@ export const useStudentStore = defineStore('student', {
     async fetchProfile() {
       this.loading.profile = true;
       try {
-        const response = await api.get('/profile');
+        const response = await api.get("/profile");
         this.profile = response.data;
       } catch (err) {
-        this.error = 'Failed to fetch profile';
+        this.error = "Failed to fetch profile";
         console.error(err);
       } finally {
         this.loading.profile = false;
@@ -35,10 +35,10 @@ export const useStudentStore = defineStore('student', {
     async fetchResults() {
       this.loading.results = true;
       try {
-        const response = await api.get('/result');
+        const response = await api.get("/result");
         this.results = response.data;
       } catch (err) {
-        this.error = 'Failed to fetch results';
+        this.error = "Failed to fetch results";
         console.error(err);
       } finally {
         this.loading.results = false;
@@ -48,10 +48,10 @@ export const useStudentStore = defineStore('student', {
     async fetchFiles() {
       this.loading.files = true;
       try {
-        const response = await api.get('/files');
+        const response = await api.get("/files");
         this.files = response.data;
       } catch (err) {
-        this.error = 'Failed to fetch files';
+        this.error = "Failed to fetch files";
         console.error(err);
       } finally {
         this.loading.files = false;
@@ -61,10 +61,10 @@ export const useStudentStore = defineStore('student', {
     async fetchSettings() {
       this.loading.settings = true;
       try {
-        const response = await api.get('/settings');
+        const response = await api.get("/settings");
         this.settings = response.data;
       } catch (err) {
-        this.error = 'Failed to fetch settings';
+        this.error = "Failed to fetch settings";
         console.error(err);
       } finally {
         this.loading.settings = false;
@@ -74,25 +74,25 @@ export const useStudentStore = defineStore('student', {
     async updateSettings(newSettings) {
       this.loading.settings = true;
       try {
-        const response = await api.put('/settings', newSettings);
+        const response = await api.put("/settings", newSettings);
         this.settings = response.data;
         return true;
       } catch (err) {
-        this.error = 'Failed to update settings';
+        this.error = "Failed to update settings";
         console.error(err);
         return false;
       } finally {
         this.loading.settings = false;
       }
     },
-    
+
     async fetchNotifications() {
       this.loading.notifications = true;
       try {
-        const response = await api.get('/notifications');
+        const response = await api.get("/notifications");
         this.notifications = response.data;
       } catch (err) {
-        this.error = 'Failed to fetch notifications';
+        this.error = "Failed to fetch notifications";
         console.error(err);
       } finally {
         this.loading.notifications = false;
@@ -100,14 +100,14 @@ export const useStudentStore = defineStore('student', {
     },
 
     async markNotificationRead(id) {
-       try {
-         await api.put(`/notifications/${id}/read`);
-         // Optimistically update local state or refetch
-         const notif = this.notifications.find(n => n.id === id);
-         if (notif) notif.read = true;
-       } catch (err) {
-         console.error(err);
-       }
-    }
-  }
+      try {
+        await api.put(`/notifications/${id}/read`);
+        // Optimistically update local state or refetch
+        const notif = this.notifications.find((n) => n.id === id);
+        if (notif) notif.read = true;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
 });

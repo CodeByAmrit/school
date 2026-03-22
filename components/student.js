@@ -819,17 +819,20 @@ async function generateCredentials(req, res) {
     // 1. Get Teacher's School Name for email domain
     const [teacherRows] = await connection.execute(
       "SELECT school_name FROM teacher WHERE id = ?",
-      [teacher_id]
+      [teacher_id],
     );
     if (teacherRows.length === 0) throw new Error("Teacher not found");
-    
+
     // Sanitize school name for domain: "My School" -> "myschool"
-    let schoolDomain = teacherRows[0].school_name.toLowerCase().replace(/[^a-z0-9]/g, "");
-    if (!schoolDomain) schoolDomain = "school"; 
+    let schoolDomain = teacherRows[0].school_name
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+    if (!schoolDomain) schoolDomain = "school";
     schoolDomain += ".in";
 
     // 2. Fetch Students
-    let queryStr = "SELECT school_id, name, dob FROM students WHERE teacher_id = ?";
+    let queryStr =
+      "SELECT school_id, name, dob FROM students WHERE teacher_id = ?";
     let params = [teacher_id];
 
     if (student_ids && Array.isArray(student_ids) && student_ids.length > 0) {
@@ -840,39 +843,44 @@ async function generateCredentials(req, res) {
     const [students] = await connection.execute(queryStr, params);
 
     let createdCount = 0;
-    
+
     // 3. Loop and Create Credentials
     for (const student of students) {
       // Generate Email: firstname_id@school.in
       // Sanitize name: "John Doe" -> "john_doe"
-      const safeName = student.name.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+      const safeName = student.name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
       const email = `${safeName}_${student.school_id}@${schoolDomain}`;
-      
+
       // Generate Password: DOB (YYYY-MM-DD or whatever is stored)
       // If DOB is missing, fallback to '123456'
-      const password = student.dob ? student.dob : '123456';
+      const password = student.dob ? student.dob : "123456";
 
       // Insert or Update student_credentials
       // We explicitly set last_login to NULL to force password change (if logic implemented)
       // or simply rely on checking if it matches DOB.
       // Here we assume "first login" logic is tied to last_login being null.
-      await connection.execute(`
+      await connection.execute(
+        `
         INSERT INTO student_credentials (student_id, email, password, last_login)
         VALUES (?, ?, ?, NULL)
         ON DUPLICATE KEY UPDATE 
             email = VALUES(email), 
             password = VALUES(password),
             last_login = NULL 
-      `, [student.school_id, email, password]);
-      
+      `,
+        [student.school_id, email, password],
+      );
+
       createdCount++;
     }
 
-    res.json({ 
-        message: `Successfully generated credentials for ${createdCount} students.`,
-        count: createdCount 
+    res.json({
+      message: `Successfully generated credentials for ${createdCount} students.`,
+      count: createdCount,
     });
-
   } catch (error) {
     console.error("Generate Credentials Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
