@@ -1,6 +1,5 @@
 {
   "ignore": [
-    "apminsightdata/*",
     "node_modules/*",
     "public/*",
     "*.log",

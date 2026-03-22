@@ -1,4 +1,4 @@
-require("apminsight");
+require("dotenv").config();
 
 const crypto = require("crypto");
 const os = require("os");

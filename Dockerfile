@@ -35,8 +35,7 @@ COPY --from=builder /school/template ./template
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Fix permissions for runtime
-RUN mkdir -p /school/apminsightdata \
-  && chown -R appuser:appgroup /school
+RUN chown -R appuser:appgroup /school
 
 USER appuser
 
