@@ -1,6 +1,6 @@
 {
   "name": "student_tracker",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "Generate Certificate for students",
   "main": "app.js",
   "scripts": {
@@ -31,7 +31,6 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@pdf-lib/fontkit": "^1.1.1",
-    "@tailwindcss/cli": "^4.2.2",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",

@@ -64,7 +64,7 @@ class App {
       res.locals.appVersion = (process.env.APP_VERSION || packageVersion).split('.')[0];
 
       // CSP must be a single line string
-      const csp = `default-src 'self'; script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-src 'self' https://www.google.com; connect-src 'self';`;
+      const csp = `default-src 'self'; script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'nonce-${res.locals.nonce}' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-src 'self' https://www.google.com; connect-src 'self';`;
 
       res.setHeader("Content-Security-Policy", csp);
       next();
