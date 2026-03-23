@@ -1225,8 +1225,8 @@ router.post("/result", async (req, res) => {
     connection = await getConnection();
     // 1. Find Student
     const [studentRows] = await connection.execute(
-      "SELECT * FROM students WHERE roll = ? AND dob = ?",
-      [roll, dob],
+      "SELECT * FROM students WHERE (roll = ? OR (roll REGEXP '^[0-9]+$' AND CAST(roll AS UNSIGNED) = CAST(? AS UNSIGNED))) AND dob = ?",
+      [roll, roll, dob],
     );
 
     if (studentRows.length === 0) {
@@ -1242,10 +1242,9 @@ router.post("/result", async (req, res) => {
 
     // 2. School Info
     const [schoolRows] = await connection.execute(
-      `SELECT T.school_name, T.school_address, T.school_phone, SC.school_logo 
+      `SELECT T.school_name, T.school_address, T.school_phone, T.school_logo 
             FROM teacher T
             JOIN students S on S.teacher_id = T.id
-            JOIN school_config SC on SC.teacher_id = T.id
             WHERE S.school_id = ?`,
       [studentId],
     );
