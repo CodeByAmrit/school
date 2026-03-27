@@ -49,7 +49,9 @@ exports.getStudentsCountBySession = async (req, res) => {
     res.status(200).json({ data: results });
   } catch (error) {
     console.error("Error fetching student count:", error);
-    res.status(500).json({ error: "An error occurred while fetching student count" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching student count" });
   } finally {
     if (connection) connection.release();
   }
@@ -84,7 +86,7 @@ exports.getDashboardView = async (req, res) => {
 
     const teacherId = req.user._id;
     connection = await getConnection();
-    
+
     const studentsCount = await getTotalStudents(req, res);
     const count_Files = await getFileCount(req, res);
 

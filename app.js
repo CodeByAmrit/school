@@ -16,10 +16,10 @@ const favicon = require("serve-favicon");
 const logger = require("./config/logger");
 
 // Routers
-const router = require('./routes/route');
-const student = require('./routes/student');
-const studentPortal = require('./routes/student_portal');
-const Gemini_router = require('./routes/ai_router');
+const router = require("./routes/route");
+const student = require("./routes/student");
+const studentPortal = require("./routes/student_portal");
+const Gemini_router = require("./routes/ai_router");
 const settingsRouter = require("./routes/settings");
 
 // Error handlers
@@ -63,7 +63,9 @@ class App {
 
     this.app.use((req, res, next) => {
       res.locals.nonce = crypto.randomBytes(16).toString("hex");
-      res.locals.appVersion = (process.env.APP_VERSION || packageVersion).split('.')[0];
+      res.locals.appVersion = (process.env.APP_VERSION || packageVersion).split(
+        ".",
+      )[0];
 
       // CSP must be a single line string
       const csp = `default-src 'self'; script-src 'self' 'nonce-${res.locals.nonce}' https://www.google.com https://www.gstatic.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-src 'self' https://www.google.com; connect-src 'self';`;

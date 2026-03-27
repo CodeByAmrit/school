@@ -4,8 +4,11 @@ const { getConnection } = require("../models/getConnection");
 
 async function runMigration() {
   console.log("🚀 Starting database migration...");
-  
-  const migrationFile = path.join(__dirname, "../migrations/v3_multi_tenant.sql");
+
+  const migrationFile = path.join(
+    __dirname,
+    "../migrations/v3_multi_tenant.sql",
+  );
   if (!fs.existsSync(migrationFile)) {
     console.error("❌ Migration file not found:", migrationFile);
     process.exit(1);

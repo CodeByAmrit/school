@@ -7,16 +7,16 @@ const {
   getSchoolLogo,
   getFileCount,
   getTotalStudents,
-} = require('../controllers/student');
+} = require("../controllers/student");
 const {
   generateVirtualIdCard,
   generateVirtualIdCards_with_session,
   selectedVirtualIdCard,
   selectedCeremonyCertificate,
-} = require('../controllers/virtual_id_card');
-const { sendEmail, sendOTPEmail } = require('../controllers/email');
-const { create_excel_selected } = require('../controllers/create_excel_file');
-const { generateCredentials } = require('../controllers/student');
+} = require("../controllers/virtual_id_card");
+const { sendEmail, sendOTPEmail } = require("../controllers/email");
+const { create_excel_selected } = require("../controllers/create_excel_file");
+const { generateCredentials } = require("../controllers/student");
 
 // ✅ **1. Get all students for the authenticated teacher**
 student.get("/", checkAuth, apiCache(10), async (req, res) => {
@@ -108,7 +108,7 @@ student.post("/", checkAuth, async (req, res) => {
 
     connection.release();
     clearCache(teacher_id);
-    
+
     res.status(201).json({
       message: "Student added successfully",
       student_id: result.insertId,

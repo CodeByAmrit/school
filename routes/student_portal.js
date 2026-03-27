@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const checkStudentAuth = require("../services/checkStudentAuth");
-const controller = require('../controllers/student_portal_controller');
+const controller = require("../controllers/student_portal_controller");
 
 // Public Routes
 router.post("/login", controller.login);

@@ -21,20 +21,20 @@ const {
   getSchoolLogo,
   markStudentAsLeft,
   getStudentResult,
-} = require('../controllers/student');
+} = require("../controllers/student");
 const {
   getTotalStudentsCounts,
   getStudentsCountBySession,
   getChartData,
   getDashboardView,
-  getAiChatView
-} = require('../controllers/dashboard');
-const { generateCertificate } = require('../controllers/achievement');
+  getAiChatView,
+} = require("../controllers/dashboard");
+const { generateCertificate } = require("../controllers/achievement");
 const {
   generate,
   preview,
   generateAll,
-} = require('../controllers/create_certificate');
+} = require("../controllers/create_certificate");
 const multer = require("multer");
 const { getConnection } = require("../models/getConnection");
 const { loginLimiter } = require("../middleware/security");
@@ -677,7 +677,6 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
-
     let subjects = [
       "ENGLISH",
       "HINDI",
@@ -913,7 +912,7 @@ router.post("/delete-file/:id", async (req, res) => {
     // Execute the deletion
     const query = "DELETE FROM student_files WHERE id = ?";
     const [result] = await connection.execute(query, [fileId]);
-    
+
     if (result.affectedRows > 0) {
       // Redirect back to the actual student's file list correctly!
       res.redirect(`/files/one/${school_id}`);

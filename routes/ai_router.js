@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const aiController = require('../controllers/ai_controller');
+const aiController = require("../controllers/ai_controller");
 
 const checkAuth = require("../services/checkauth");
 const { check } = require("express-validator");
