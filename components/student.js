@@ -317,6 +317,7 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
 
 async function getStudentDetails(req, res) {
   const {
+    q, // Unified search query
     name,
     roll_no,
     class: studentClass,
@@ -324,13 +325,19 @@ async function getStudentDetails(req, res) {
     father_name,
     mother_name,
     session,
+    reason, // Status filter
   } = req.query;
   try {
-    // let query = 'SELECT * FROM student_photos_view WHERE 1=1';
     let query_prepared = `SELECT name, father_name, session, mother_name, class, school_id, profile_status 
              FROM students
              WHERE teacher_id = ?`;
     const params = [req.user._id];
+
+    if (q) {
+      query_prepared += " AND (name LIKE ? OR roll LIKE ? OR srn_no LIKE ?)";
+      const searchVal = `%${q}%`;
+      params.push(searchVal, searchVal, searchVal);
+    }
 
     if (name) {
       query_prepared += " AND name LIKE ?";
@@ -360,9 +367,12 @@ async function getStudentDetails(req, res) {
       query_prepared += " AND session LIKE ?";
       params.push(`%${session}%`);
     }
+    if (reason) {
+      query_prepared += " AND profile_status LIKE ?";
+      params.push(`%${reason}%`);
+    }
 
     const [rows] = await query(query_prepared, params);
-    // console.log(rows);
     return rows;
   } catch (error) {
     console.log(error);
@@ -399,10 +409,10 @@ async function teacherLogin(req) {
 
     const teacher = rows[0];
 
-    // const isMatch = await bcrypt.compare(password, teacher.password);
-    // if (!isMatch) {
-    //   throw new Error("INVALID_CREDENTIALS");
-    // }
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
 
     const payload = {
       id: teacher.id,

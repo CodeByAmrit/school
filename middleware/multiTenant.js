@@ -16,8 +16,8 @@ async function multiTenantMiddleware(req, res, next) {
   }
 
   try {
-    const connection = await getConnection();
-    const [rows] = await connection.execute(
+    const { query } = require("../models/getConnection");
+    const [rows] = await query(
       "SELECT id, school_name, subscription_tier FROM teacher WHERE custom_domain = ?",
       [hostname],
     );
