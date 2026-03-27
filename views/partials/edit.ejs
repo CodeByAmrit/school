@@ -168,17 +168,14 @@
               </th>
 
               <!-- Session -->
-              <th scope="col" class="px-4 py-2">
+              <th scope="col" class="px-2 py-2 hidden md:table-cell">
                 <div class="flex items-center">
                   <span>Session</span>
-                  <button class="ml-1 text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-sort"></i>
-                  </button>
                 </div>
               </th>
 
               <!-- Status -->
-              <th scope="col" class="px-4 py-2">
+              <th scope="col" class="px-2 py-2 hidden lg:table-cell">
                 <div class="flex items-center">
                   <span>Status</span>
                 </div>
@@ -208,31 +205,29 @@
               </td>
 
               <!-- Student Info with Avatar -->
-              <td class="px-4 py-2">
-                <div class="flex items-center space-x-4">
-                  <div class="relative">
+              <td class="px-2 py-1.5">
+                <div class="flex items-center space-x-3">
+                  <div class="relative flex-shrink-0">
                     <div
-                      class="w-10 h-10 rounded-xl overflow-hidden border-2 border-white shadow-sm"
+                      class="w-12 h-12 rounded-lg overflow-hidden border border-gray-100 shadow-sm"
                     >
                       <img
                         class="object-cover w-full h-full"
-                        src="<%= student.image %>"
+                        src="/api/student/photo/<%= student.school_id %>"
+                        loading="lazy"
                         alt="<%= student.name %>"
                       />
                     </div>
                   </div>
-                  <div>
-                    <div class="font-semibold text-gray-900">
+                  <div class="min-w-0">
+                    <div class="font-bold text-gray-900 truncate text-sm">
                       <%= student.name %>
                     </div>
-                    <div class="text-sm text-gray-500">
-                      <i class="fas fa-user mr-1 text-blue-500"></i>
-                      S/O
-                      <%= student.father_name %>
+                    <div class="text-xs text-gray-500 truncate">
+                      S/O <%= student.father_name %>
                     </div>
-                    <div class="text-xs text-gray-400 mt-1">
-                      ID:
-                      <span class="font-mono"><%= student.school_id %></span>
+                    <div class="text-[10px] text-gray-400 font-mono">
+                      ID: <%= student.school_id %>
                     </div>
                   </div>
                 </div>
@@ -256,39 +251,30 @@
               </td>
 
               <!-- Session -->
-              <td class="px-4 py-2">
-                <div
-                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
-                >
-                  <i class="fas fa-calendar-alt mr-2"></i>
+              <td class="px-2 py-1.5 hidden md:table-cell">
+                <div class="text-xs font-medium text-gray-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
                   <%= student.session %>
                 </div>
               </td>
 
               <!-- Status -->
-              <td class="px-4 py-2">
+              <td class="px-2 py-1.5 hidden lg:table-cell">
                 <% 
                   let statusText; 
                   let statusClass; 
-                  let dotClass; 
                   if (student.profile_status && student.profile_status.toLowerCase() === 'pending') { 
                     statusText = 'Pending'; 
-                    statusClass = 'bg-orange-100 text-orange-800'; 
-                    dotClass = 'text-orange-500'; 
+                    statusClass = 'text-orange-600'; 
                   } else if (student.profile_status && student.profile_status.toLowerCase() === 'inactive') { 
                     statusText = 'Inactive'; 
-                    statusClass = 'bg-gray-100 text-gray-800'; 
-                    dotClass = 'text-gray-400'; 
+                    statusClass = 'text-gray-500'; 
                   } else { 
                     statusText = 'Active'; 
-                    statusClass = 'bg-green-100 text-green-800'; 
-                    dotClass = 'text-green-500'; 
+                    statusClass = 'text-green-600'; 
                   } 
                 %>
-                <div
-                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= statusClass %>"
-                >
-                  <i class="fas fa-circle text-xs mr-2 <%= dotClass %>"></i>
+                <div class="text-xs font-semibold <%= statusClass %> flex items-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-current mr-1.5"></span>
                   <%= statusText %>
                 </div>
               </td>
@@ -298,11 +284,12 @@
                 <div class="flex items-center justify-end space-x-2">
                   <!-- Quick View Button -->
                   <button
-                    class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors"
+                    type="button"
+                    class="quick-view-btn text-blue-600 hover:text-blue-800 p-1.5 rounded-md hover:bg-blue-50 transition-colors"
                     data-student-id="<%= student.school_id %>"
                     title="Quick View"
                   >
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye text-sm"></i>
                   </button>
 
                   <!-- Edit Button -->
@@ -559,5 +546,112 @@
   <span class="sr-only">Loading...</span>
 </div>
 
+<!-- Student Quick View Modal -->
+<div id="quick-view-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl dark:bg-gray-800 border-t-4 border-blue-600 animate-in fade-in zoom-in duration-200">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-user-graduate text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Student Quick View
+                    </h3>
+                </div>
+                <button type="button" class="close-quick-view text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6" id="quick-view-content">
+                <div class="animate-pulse space-y-4">
+                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/js/confirmDelete.js?v=3"></script>
 <script src="/js/generateCredentials.js"></script>
+
+<script nonce="<%= nonce %>">
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('quick-view-modal');
+    const content = document.getElementById('quick-view-content');
+    const closeBtns = document.querySelectorAll('.close-quick-view');
+    
+    function toggleModal() {
+        modal.classList.toggle('hidden');
+        modal.classList.toggle('flex');
+    }
+
+    closeBtns.forEach(btn => btn.addEventListener('click', toggleModal));
+
+    document.querySelectorAll('.quick-view-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const studentId = this.getAttribute('data-student-id');
+            toggleModal();
+            content.innerHTML = `<div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-4xl text-blue-600"></i></div>`;
+            
+            try {
+                const response = await fetch(`/api/student/details/${studentId}`);
+                const student = await response.json();
+                
+                content.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="flex flex-col items-center">
+                            <div class="w-32 h-40 rounded-xl overflow-hidden border-4 border-white shadow-xl mb-4">
+                                <img src="/api/student/photo/${student.school_id}" class="w-full h-full object-cover">
+                            </div>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wider">
+                                ${student.class}
+                            </span>
+                        </div>
+                        <div class="md:col-span-2 space-y-4">
+                            <div>
+                                <h4 class="text-2xl font-black text-gray-900 dark:text-white flex items-center">
+                                    ${student.name}
+                                    ${student.profile_status === 'Active' ? '<i class="fas fa-check-circle text-green-500 text-sm ml-2"></i>' : ''}
+                                </h4>
+                                <p class="text-gray-500 font-medium">S/O ${student.father_name}</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-y-3 text-sm">
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">SRN Number</span><span class="font-semibold text-gray-700">${student.srn_no || 'N/A'}</span></div>
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Roll Number</span><span class="font-semibold text-gray-700">${student.roll || 'N/A'}</span></div>
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Admission No</span><span class="font-semibold text-gray-700">${student.admission_no || 'N/A'}</span></div>
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Session</span><span class="font-semibold text-gray-700">${student.session}</span></div>
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Mobile</span><span class="font-semibold text-gray-700">${student.mobile_no || 'N/A'}</span></div>
+                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Date of Birth</span><span class="font-semibold text-gray-700">${student.dob ? new Date(student.dob).toLocaleDateString() : 'N/A'}</span></div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100 flex gap-2">
+                                <a href="/student/edit/${student.school_id}" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-all text-sm">
+                                    <i class="fas fa-edit mr-2"></i> Full Edit
+                                </a>
+                                <a href="/student/get_marks/${student.school_id}" class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-lg transition-all text-sm">
+                                    <i class="fas fa-chart-bar mr-2 text-blue-500"></i> Marks
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                content.innerHTML = `<p class="text-red-500 text-center py-4">Error loading data. Please try again.</p>`;
+            }
+        });
+    });
+
+    // Close on click outside
+    window.onclick = function(event) {
+        if (event.target == modal) toggleModal();
+    }
+});
+</script>

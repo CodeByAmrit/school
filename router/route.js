@@ -271,6 +271,7 @@ router.get("/students", checkAuth, async (req, res) => {
       studentlist,
       user,
       total_students: studentsCount[0].total_students,
+      query: req.query,
     });
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -294,6 +295,7 @@ router.get("/search", checkAuth, async (req, res) => {
       studentlist,
       user,
       total_students: studentsCount,
+      query: req.query,
     });
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -803,6 +805,7 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
     let user = req.user;
     user.school_logo = school_logo_url;
 
+
     let subjects = [
       "ENGLISH",
       "HINDI",
@@ -1289,4 +1292,46 @@ router.post("/result", async (req, res) => {
     if (connection) connection.release();
   }
 });
+
+// API route to get student details for Quick View
+router.get("/api/student/details/:id", checkAuth, async (req, res) => {
+  const { id } = req.params;
+  let connection;
+  try {
+    connection = await getConnection();
+    const [studentRows] = await connection.execute(
+      "SELECT * FROM students WHERE school_id = ?",
+      [id],
+    );
+
+    if (studentRows.length === 0) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.json(studentRows[0]);
+  } catch (error) {
+    console.error("Error fetching student details:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    if (connection) connection.release();
+  }
+});
+
+// API route to serve student photo
+router.get("/api/student/photo/:id", checkAuth, async (req, res) => {
+  try {
+    const photoBuffer = await getPhoto(req, res);
+    if (photoBuffer) {
+      res.set("Content-Type", "image/png");
+      res.set("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
+      res.send(photoBuffer);
+    } else {
+      res.redirect("/image/graduated.png");
+    }
+  } catch (error) {
+    console.error("Error serving photo:", error);
+    res.redirect("/image/graduated.png");
+  }
+});
+
 module.exports = router;
