@@ -6,12 +6,22 @@ CREATE TABLE IF NOT EXISTS teacher (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
     school_name VARCHAR(200),
     school_address VARCHAR(200),
     school_phone VARCHAR(200),
-    school_logo MEDIUMBLOB
+    school_logo MEDIUMBLOB,
+    subscription_tier ENUM('FREE', 'PREMIUM') DEFAULT 'FREE',
+    custom_domain VARCHAR(255) UNIQUE NULL,
+    subscription_expires_at TIMESTAMP NULL,
+    stripe_customer_id VARCHAR(255) NULL,
+    payment_status VARCHAR(50) DEFAULT 'unpaid',
+    is_active BOOLEAN DEFAULT TRUE,
+    email_verified BOOLEAN DEFAULT FALSE,
+    last_login TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS students (
@@ -36,32 +46,17 @@ CREATE TABLE IF NOT EXISTS students (
     profile_status VARCHAR(255),
     apaar_id VARCHAR(40),
     gender ENUM('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
-
     blood_group ENUM(
         'A+', 'A-',
         'B+', 'B-',
         'AB+', 'AB-',
         'O+', 'O-'
     ) NULL,
-
     student_aadhar_no CHAR(14) NULL UNIQUE,
     father_aadhar_no CHAR(14) NULL,
     mother_aadhar_no CHAR(14) NULL,
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
-ALTER TABLE students
-MODIFY student_aadhar_no CHAR(14) NULL UNIQUE,
-MODIFY father_aadhar_no  CHAR(14) NULL,
-MODIFY mother_aadhar_no  CHAR(14) NULL;
-
-ALTER TABLE students
-ADD COLUMN blood_group ENUM(
-    'A+', 'A-',
-    'B+', 'B-',
-    'AB+', 'AB-',
-    'O+', 'O-'
-) NULL
-AFTER gender;
 
 
 CREATE TABLE IF NOT EXISTS student_credentials (
@@ -436,6 +431,7 @@ CREATE TABLE IF NOT EXISTS school_config (
     school_address TEXT,
     school_phone VARCHAR(20),
     school_email VARCHAR(100),
+    school_logo MEDIUMBLOB NULL, -- Consolidated
     principal_name VARCHAR(100),
     affiliation_number VARCHAR(100),
     board VARCHAR(100) DEFAULT 'CBSE',
@@ -523,16 +519,6 @@ CREATE TABLE IF NOT EXISTS audit_log (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
-
--- Add school_logo column to school_config
-ALTER TABLE school_config 
-ADD COLUMN school_logo MEDIUMBLOB NULL AFTER school_email;
-
--- Add email_verified column to teacher table
-ALTER TABLE teacher 
-ADD COLUMN email_verified BOOLEAN DEFAULT FALSE,
-ADD COLUMN last_login TIMESTAMP NULL,
-ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 -- Create indexes for better performance
 CREATE INDEX idx_teacher_id ON teacher_settings (teacher_id);

@@ -93,6 +93,12 @@ class SettingsManager {
     document
       .getElementById("update-school")
       .addEventListener("click", () => this.updateSchool());
+    const updateDomainBtn = document.getElementById("update-domain");
+    if (updateDomainBtn) {
+      updateDomainBtn.addEventListener("click", () =>
+        this.updateCustomDomain(),
+      );
+    }
     document
       .getElementById("update-advanced")
       .addEventListener("click", () => this.updateAdvancedSettings());
@@ -257,6 +263,31 @@ class SettingsManager {
       );
     } catch (error) {
       this.showNotification("Failed to update school information", "error");
+    } finally {
+      this.hideLoading();
+    }
+  }
+
+  async updateCustomDomain() {
+    const custom_domain = document.getElementById("custom_domain").value;
+
+    try {
+      this.showLoading();
+      const response = await fetch("/settings/update-domain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ custom_domain }),
+      });
+
+      const result = await response.json();
+      this.showNotification(
+        result.message,
+        result.success ? "success" : "error",
+      );
+    } catch (error) {
+      this.showNotification("Failed to update custom domain", "error");
     } finally {
       this.hideLoading();
     }
@@ -506,17 +537,264 @@ class SettingsManager {
   }
 
   async editClass(classId) {
-    // Fetch class data and show edit form
-    // You would implement this based on your API
-    this.showClassForm({ id: classId, class_name: "Sample Class" });
+    try {
+      this.showLoading();
+      const response = await fetch("/settings/api/classes");
+      const classes = await response.json();
+      const classData = classes.find((c) => c.id == classId);
+      if (classData) {
+        this.showClassForm(classData);
+      }
+    } catch (error) {
+      this.showNotification("Failed to load class details", "error");
+    } finally {
+      this.hideLoading();
+    }
   }
 
   async loadSubjects() {
-    // Similar to loadClasses, implement based on your API
+    try {
+      const response = await fetch("/settings/api/subjects");
+      const subjects = await response.json();
+      this.renderSubjects(subjects);
+    } catch (error) {
+      console.error("Failed to load subjects:", error);
+    }
+  }
+
+  renderSubjects(subjects) {
+    const container = document.getElementById("subjects-container");
+    if (!container) return;
+
+    if (subjects.length === 0) {
+      container.innerHTML = `
+                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-book text-4xl mb-3 opacity-50"></i>
+                    <p class="font-medium">No subjects configured</p>
+                    <p class="text-sm mt-1">Add your first subject to get started</p>
+                </div>
+            `;
+      return;
+    }
+
+    // Group subjects by class
+    const grouped = subjects.reduce((acc, sub) => {
+      if (!acc[sub.class_name]) acc[sub.class_name] = [];
+      acc[sub.class_name].push(sub);
+      return acc;
+    }, {});
+
+    container.innerHTML = Object.entries(grouped)
+      .map(
+        ([className, subs]) => `
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1">${className}</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${subs
+                      .map(
+                        (sub) => `
+                        <div class="subject-item p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-gray-900 dark:text-white">${sub.subject_name}</div>
+                                    <div class="text-xs text-gray-500">${sub.subject_code || "No code"} • ${sub.max_marks} Marks</div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="edit-subject p-2 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg" data-id="${sub.id}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="delete-subject p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg" data-id="${sub.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            </div>
+        `,
+      )
+      .join("");
+
+    container.querySelectorAll(".edit-subject").forEach((btn) => {
+      btn.addEventListener("click", (e) =>
+        this.editSubject(e.target.closest("button").dataset.id),
+      );
+    });
+
+    container.querySelectorAll(".delete-subject").forEach((btn) => {
+      btn.addEventListener("click", (e) =>
+        this.deleteSubject(e.target.closest("button").dataset.id),
+      );
+    });
   }
 
   showSubjectForm(subjectData = null) {
-    // Implement subject form modal
+    // Get list of classes for the dropdown
+    const classes = Array.from(
+      document.querySelectorAll("#classes-container .class-item h4"),
+    ).map((h4) => h4.textContent);
+
+    this.showModal(
+      subjectData ? "Edit Subject" : "Add New Subject",
+      `
+            <div class="space-y-4">
+                <div class="relative">
+                    <select id="sub-class-name" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                        ${classes.map((c) => `<option value="${c}" ${subjectData?.class_name === c ? "selected" : ""}>${c}</option>`).join("")}
+                    </select>
+                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                        Class
+                    </label>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" id="sub-name" value="${subjectData?.subject_name || ""}" 
+                           class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all" 
+                           placeholder="e.g., Mathematics">
+                    <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                        Subject Name
+                    </label>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <input type="text" id="sub-code" value="${subjectData?.subject_code || ""}" 
+                               class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all" 
+                               placeholder="e.g., MATH101">
+                        <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                            Subject Code
+                        </label>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="number" id="sub-priority" value="${subjectData?.priority || 1}" 
+                               class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                        <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                            Priority Order
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <input type="number" id="sub-max-marks" value="${subjectData?.max_marks || 100}" 
+                               class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                        <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                            Max Marks
+                        </label>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="number" id="sub-passing-marks" value="${subjectData?.passing_marks || 33}" 
+                               class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:outline-none transition-all">
+                        <label class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900">
+                            Passing Marks
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800">
+                    <input type="checkbox" id="sub-is-elective" ${subjectData?.is_elective ? "checked" : ""} 
+                           class="w-5 h-5 rounded text-primary-600 focus:ring-primary-500">
+                    <label for="sub-is-elective" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        This is an elective subject
+                    </label>
+                </div>
+                
+                <input type="hidden" id="subject-id" value="${subjectData?.id || ""}">
+            </div>
+            `,
+      () => this.saveSubject(),
+    );
+  }
+
+  async saveSubject() {
+    const subjectData = {
+      action: document.getElementById("subject-id").value ? "update" : "add",
+      subject_id: document.getElementById("subject-id").value || null,
+      class_name: document.getElementById("sub-class-name").value,
+      subject_name: document.getElementById("sub-name").value,
+      subject_code: document.getElementById("sub-code").value,
+      priority: document.getElementById("sub-priority").value,
+      max_marks: document.getElementById("sub-max-marks").value,
+      passing_marks: document.getElementById("sub-passing-marks").value,
+      is_elective: document.getElementById("sub-is-elective").checked,
+    };
+
+    try {
+      const response = await fetch("/settings/subjects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subjectData),
+      });
+
+      const result = await response.json();
+      this.showNotification(
+        result.message,
+        result.success ? "success" : "error",
+      );
+
+      if (result.success) {
+        this.loadSubjects();
+        this.hideModal();
+      }
+    } catch (error) {
+      this.showNotification("Failed to save subject", "error");
+    }
+  }
+
+  async editSubject(subjectId) {
+    try {
+      this.showLoading();
+      const response = await fetch("/settings/api/subjects");
+      const subjects = await response.json();
+      const subjectData = subjects.find((s) => s.id == subjectId);
+      if (subjectData) {
+        this.showSubjectForm(subjectData);
+      }
+    } catch (error) {
+      this.showNotification("Failed to load subject details", "error");
+    } finally {
+      this.hideLoading();
+    }
+  }
+
+  async deleteSubject(subjectId) {
+    this.showConfirmation(
+      "Delete Subject",
+      "Are you sure you want to delete this subject?",
+      async () => {
+        try {
+          const response = await fetch("/settings/subjects", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              action: "delete",
+              subject_id: subjectId,
+            }),
+          });
+
+          const result = await response.json();
+          this.showNotification(
+            result.message,
+            result.success ? "success" : "error",
+          );
+
+          if (result.success) {
+            this.loadSubjects();
+          }
+        } catch (error) {
+          this.showNotification("Failed to delete subject", "error");
+        }
+      },
+    );
   }
 
   async performBackup() {

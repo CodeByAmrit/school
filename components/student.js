@@ -389,7 +389,7 @@ async function teacherLogin(req) {
 
   try {
     const [rows] = await query(
-      "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone FROM teacher WHERE email = ? LIMIT 1",
+      "SELECT id, first_name, last_name, email, password, school_name, school_address, school_phone, subscription_tier FROM teacher WHERE email = ? LIMIT 1",
       [email],
     );
 
@@ -412,6 +412,7 @@ async function teacherLogin(req) {
       school_name: teacher.school_name,
       school_address: teacher.school_address,
       school_phone: teacher.school_phone,
+      subscription_tier: teacher.subscription_tier,
     };
 
     return setUser(payload);

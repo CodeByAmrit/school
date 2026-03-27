@@ -77,6 +77,22 @@ student.post("/", checkAuth, async (req, res) => {
     } = req.body;
     let connection = await getConnection();
 
+    // Enforce limits for FREE tier
+    const [countResult] = await connection.execute(
+      "SELECT COUNT(*) as count FROM students WHERE teacher_id = ?",
+      [teacher_id],
+    );
+    const studentCount = countResult[0].count;
+    const tier = req.user.subscription_tier || "FREE";
+
+    if (tier === "FREE" && studentCount >= 50) {
+      connection.release();
+      return res.status(403).json({
+        error:
+          "Free tier limit reached (50 students). Please upgrade to Premium for unlimited students.",
+      });
+    }
+
     const query = `INSERT INTO students (teacher_id, name, father_name, mother_name, session, class, school_id) 
                        VALUES (?, ?, ?, ?, ?, ?, ?)`;
     const [result] = await connection.execute(query, [

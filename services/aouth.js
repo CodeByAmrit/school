@@ -15,6 +15,7 @@ function setUser(user) {
       school_address: user.school_address,
       school_name: user.school_name,
       school_phone: user.school_phone,
+      subscription_tier: user.subscription_tier,
     },
     chabi,
     { expiresIn: "24h" }, // Token expires in 24 hours

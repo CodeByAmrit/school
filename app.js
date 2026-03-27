@@ -23,6 +23,7 @@ const Gemini_router = require("./router/ai_router");
 const settingsRouter = require("./routes/settings");
 
 // Error handlers
+const multiTenantMiddleware = require("./middleware/multiTenant");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandlers");
 
 class App {
@@ -37,6 +38,7 @@ class App {
     // Configure reverse proxy settings
     this.app.set("trust proxy", 1);
     this.app.disable("x-powered-by");
+    this.app.use(multiTenantMiddleware);
 
     // Enable CORS - Allow requests from frontend (adjust origin as needed)
     this.app.use(

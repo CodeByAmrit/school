@@ -131,6 +131,50 @@ router.post("/update-profile", checkAuth, async (req, res) => {
     if (db) db.release();
   }
 });
+
+// Update custom domain
+router.post("/update-domain", checkAuth, async (req, res) => {
+  let db;
+  try {
+    db = await getConnection();
+    const teacherId = req.user._id;
+    const { custom_domain } = req.body;
+
+    // Only PREMIUM users can set custom domains
+    const [teacher] = await db.query(
+      "SELECT subscription_tier FROM teacher WHERE id = ?",
+      [teacherId],
+    );
+    if (teacher[0].subscription_tier !== "PREMIUM") {
+      return res.json({
+        success: false,
+        message:
+          "Custom domains are a Premium feature. Please upgrade your subscription.",
+      });
+    }
+
+    // Update custom domain
+    await db.query("UPDATE teacher SET custom_domain = ? WHERE id = ?", [
+      custom_domain && custom_domain.trim() !== ""
+        ? custom_domain.trim().toLowerCase()
+        : null,
+      teacherId,
+    ]);
+
+    res.json({ success: true, message: "Custom domain updated successfully" });
+  } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.json({
+        success: false,
+        message: "This domain is already in use by another school.",
+      });
+    }
+    console.error("Update domain error:", error);
+    res.json({ success: false, message: "Failed to update custom domain" });
+  } finally {
+    if (db) db.release();
+  }
+});
 // Update school configuration
 router.post(
   "/update-school",
@@ -162,7 +206,7 @@ router.post(
         [teacherId],
       );
 
-      if (existing) {
+      if (existing.length > 0) {
         // Update existing config
         if (logoData) {
           await db.query(
@@ -185,6 +229,11 @@ router.post(
               teacherId,
             ],
           );
+          // Sync to teacher table
+          await db.query(
+            "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ?, school_logo = ? WHERE id = ?",
+            [school_name, school_address, school_phone, logoData, teacherId],
+          );
         } else {
           await db.query(
             `
@@ -204,6 +253,11 @@ router.post(
               affiliation_number,
               teacherId,
             ],
+          );
+          // Sync to teacher table (no logo)
+          await db.query(
+            "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ? WHERE id = ?",
+            [school_name, school_address, school_phone, teacherId],
           );
         }
       } else {
@@ -226,6 +280,11 @@ router.post(
             affiliation_number,
             logoData,
           ],
+        );
+        // Sync to teacher table
+        await db.query(
+          "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ?, school_logo = ? WHERE id = ?",
+          [school_name, school_address, school_phone, logoData, teacherId],
         );
       }
 
@@ -603,6 +662,39 @@ router.get("/system-check", checkAuth, async (req, res) => {
   } catch (error) {
     console.error("System check error:", error);
     res.json({ success: false, message: "System check failed" });
+  } finally {
+    if (db) db.release();
+  }
+});
+
+// API Routes for JS frontend
+router.get("/api/classes", checkAuth, async (req, res) => {
+  let db;
+  try {
+    db = await getConnection();
+    const [classes] = await db.query(
+      "SELECT * FROM class_config WHERE teacher_id = ? ORDER BY class_name",
+      [req.user._id],
+    );
+    res.json(classes);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch classes" });
+  } finally {
+    if (db) db.release();
+  }
+});
+
+router.get("/api/subjects", checkAuth, async (req, res) => {
+  let db;
+  try {
+    db = await getConnection();
+    const [subjects] = await db.query(
+      "SELECT * FROM subject_config WHERE teacher_id = ? ORDER BY class_name, priority",
+      [req.user._id],
+    );
+    res.json(subjects);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch subjects" });
   } finally {
     if (db) db.release();
   }
