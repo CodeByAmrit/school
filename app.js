@@ -246,6 +246,28 @@ class App {
       });
     }
 
+    // Global Cache Invalidator for state-changing requests
+    this.app.use((req, res, next) => {
+      res.on("finish", () => {
+        if (
+          ["POST", "PUT", "DELETE", "PATCH"].includes(req.method) &&
+          res.statusCode >= 200 &&
+          res.statusCode < 400
+        ) {
+          // Identify the tenant/teacher ID
+          const tenantId =
+            req.user && req.user._id
+              ? req.user._id
+              : req.CurrentTeacher
+                ? req.CurrentTeacher.id
+                : "global";
+          const { clearCache } = require("./middleware/cache");
+          clearCache(tenantId);
+        }
+      });
+      next();
+    });
+
     // Routes
     this.app.use("/", router);
     this.app.use("/api/students/", student);

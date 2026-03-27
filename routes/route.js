@@ -39,6 +39,7 @@ const multer = require("multer");
 const { getConnection } = require("../models/getConnection");
 const { loginLimiter } = require("../middleware/security");
 const { body, validationResult } = require("express-validator");
+const { apiCache } = require("../middleware/cache");
 require("dotenv").config();
 
 // Configure multer
@@ -90,7 +91,7 @@ router.post("/create-certificate", checkAuth, async (req, res) => {
 
 router.get("/chart-data", checkAuth, getChartData);
 
-router.get("/dashboard", checkAuth, getDashboardView);
+router.get("/dashboard", checkAuth, apiCache(30), getDashboardView);
 
 router.get("/ai/chat", checkAuth, getAiChatView);
 
@@ -117,7 +118,7 @@ router.get("/generate-certificate/:school_id", checkAuth, async (req, res) => {
   }
 });
 
-router.get("/students", checkAuth, async (req, res) => {
+router.get("/students", checkAuth, apiCache(30), async (req, res) => {
   let connection;
   try {
     let school_logo_url = "/image/graduated.png";
@@ -154,7 +155,7 @@ router.get("/students", checkAuth, async (req, res) => {
 });
 
 // route to search for students
-router.get("/search", checkAuth, async (req, res) => {
+router.get("/search", checkAuth, apiCache(15), async (req, res) => {
   try {
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
@@ -812,7 +813,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 // Route to fetch all files
-router.get("/files", checkAuth, async (req, res) => {
+router.get("/files", checkAuth, apiCache(30), async (req, res) => {
   let connection;
   try {
     // Fetch total students assigned to the teacher
@@ -837,7 +838,7 @@ router.get("/files", checkAuth, async (req, res) => {
 });
 
 // Route to get files for a particular student
-router.get("/files/one/:school_id", checkAuth, async (req, res) => {
+router.get("/files/one/:school_id", checkAuth, apiCache(30), async (req, res) => {
   const { school_id } = req.params;
   let connection;
   try {
