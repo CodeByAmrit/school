@@ -11,159 +11,111 @@
   </h1>
 
   <!-- File Upload Form -->
-  <form
-    action="/upload"
-    method="POST"
-    enctype="multipart/form-data"
-    class="mb-6"
-  >
-    <div
-      class="flex flex-col lg:flex-row xl:flex-row md:flex-row lg:flex-wrap md:flex-wrap mb-4 md:-mb-4 space-x-4"
-    >
-      <div class="flex-1 mb-4 pl-4 md:pl-0">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          for="school_id"
-          >Student ID</label
-        >
-        <input
-          value="<%= school_id %>"
-          required
-          readonly
-          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="school_id"
-          type="text"
-          name="school_id"
-        />
+  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="w-full flex w-full flex-col sm:flex-row items-end gap-4 m-0">
+      <div class="w-full sm:w-48">
+        <label class="block mb-1 text-xs font-semibold text-gray-500 uppercase tracking-widest" for="school_id">Student ID</label>
+        <input value="<%= school_id %>" required readonly class="block w-full text-sm text-gray-900 border border-gray-200 rounded-lg cursor-not-allowed bg-gray-50 focus:ring-0 focus:border-gray-200" id="school_id" type="text" name="school_id" />
       </div>
-      <div class="flex-1 mb-4">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          for="file_name"
-          >File Name</label
-        >
-        <input
-          class="uppercase block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="file_name"
-          type="text"
-          name="file_name"
-          uppercase
-          required
-        />
+      <div class="flex-1 w-full relative group">
+        <label class="block mb-1 text-xs font-semibold text-gray-500 uppercase tracking-widest" for="file_name">Document Name</label>
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pt-6 pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+          <i class="fas fa-font"></i>
+        </div>
+        <input class="uppercase block w-full text-sm text-gray-900 border border-gray-200 rounded-lg pl-10 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-300" id="file_name" type="text" name="file_name" required placeholder="EG. TERM 1 REPORT" />
       </div>
-      <div class="flex-1 mb-4">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          for="file"
-          >Upload file</label
-        >
-        <input
-          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="file"
-          type="file"
-          name="file"
-          accept=".pdf"
-          required
-        />
-        <p
-          class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-          id="file_input_help"
-        >
-          (MAX. 12 MB).
-        </p>
+      <div class="flex-1 w-full">
+        <label class="block mb-1 text-xs font-semibold text-gray-500 uppercase tracking-widest" for="file">Select File <span class="text-[10px] text-gray-400 lowercase font-medium ml-1">(Max 12 MB)</span></label>
+        <input class="block w-full text-sm text-gray-600 border border-gray-200 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" id="file" type="file" name="file" accept=".pdf" required />
       </div>
-    </div>
-
-    <button
-      type="submit"
-      class="inline-flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-    >
-      <svg
-        aria-hidden="true"
-        class="mr-1 -ml-1 w-5 h-5"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-          clip-rule="evenodd"
-        ></path>
-      </svg>
-      Upload
-    </button>
-  </form>
+      <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-md shadow-blue-500/20 rounded-lg text-sm transition-all focus:ring-4 focus:ring-blue-100 flex items-center justify-center whitespace-nowrap">
+        <i class="fas fa-cloud-upload-alt mr-2"></i> Upload
+      </button>
+    </form>
+  </div>
 
   <!-- File List Table -->
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-  >
-    <% if (files){ %>
-    <% files.forEach(file=> { %>
-    <div
-      class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-    >
-      <!-- File Image or Placeholder -->
-      <button
-        class="view-file-btn text-blue-600 hover:underline"
-        data-file-url="/files/<%= file.id %>"
-        data-file-type="<%= file.type %>"
-      >
-        <% if (file.type==='application/pdf' ) { %>
-        <img
-          class="px-8 py-3 rounded-t-lg"
-          src="/image/pdf.png"
-          alt="file image"
-        />
-        <% } else { %>
-        <img
-          class="px-8 py-3 rounded-t-lg"
-          src="/image/image.png"
-          alt="file image"
-        />
-        <% } %>
-      </button>
-
-      <div class="px-5 pb-5">
-        <a href="#">
-          <h5
-            class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
-          >
-            <%= file.file_name.toUpperCase(); %>
-          </h5>
-        </a>
-        <div class="flex items-center mt-1 mb-1">
-          <!-- Ratings or any other detail, if required -->
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
-            >File Type:
-            <%= file.type %></span
-          >
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-sm text-gray-900 dark:text-white"
-            >Uploaded: <br />
-            <p class="text-xs p-0 m-0">
-              <%= new Date(file.upload_date).toDateString() %>
-            </p>
-          </span>
-
-          <!-- Delete Button -->
-          <form
-            action="/delete-file/<%= file.id %>"
-            method="POST"
-            class="inline"
-          >
-            <button type="submit" class="text-red-600 hover:underline ml-2">
-              Delete
-            </button>
-          </form>
-        </div>
-      </div>
+  <div class="bg-white border border-gray-100 rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] overflow-hidden mb-6">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-600 font-medium">
+        <thead class="text-xs text-gray-500 uppercase bg-gray-50/70 border-b border-gray-100">
+          <tr>
+            <th scope="col" class="px-6 py-4 font-bold tracking-wider">Document Details</th>
+            <th scope="col" class="px-6 py-4 font-bold tracking-wider">Type</th>
+            <th scope="col" class="px-6 py-4 font-bold tracking-wider">Size</th>
+            <th scope="col" class="px-6 py-4 font-bold tracking-wider">Upload Date</th>
+            <th scope="col" class="px-6 py-4 text-right font-bold tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          <% if (files && files.length > 0) { %>
+            <% files.forEach(file => { %>
+            <tr class="bg-white hover:bg-blue-50/50 transition-colors">
+              <td class="px-6 py-3 whitespace-nowrap">
+                <div class="flex items-center gap-4">
+                  <% if (file.type === 'application/pdf') { %>
+                    <div class="w-10 h-10 rounded-lg bg-red-50 text-red-500 flex items-center justify-center shadow-sm border border-red-100">
+                      <i class="fas fa-file-pdf text-lg"></i>
+                    </div>
+                  <% } else { %>
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm border border-blue-100">
+                      <i class="fas fa-image text-lg"></i>
+                    </div>
+                  <% } %>
+                  <div>
+                    <div class="font-semibold text-gray-900 border-none bg-transparent hover:underline cursor-pointer view-file-btn" data-file-url="/files/<%= file.id %>" data-file-type="<%= file.type %>">
+                      <%= file.file_name.toUpperCase() %>
+                    </div>
+                    <div class="text-xs text-gray-400">ID: <%= file.id %></div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-3 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide bg-gray-100 text-gray-600 border border-gray-200">
+                  <%= file.type.split('/')[1] || file.type || 'FILE' %>
+                </span>
+              </td>
+              <td class="px-6 py-3 whitespace-nowrap">
+                <% if (file.size) { %>
+                  <span class="text-gray-500"><%= (file.size / 1024).toFixed(1) %> KB</span>
+                <% } else { %>
+                  <span class="text-gray-400 text-xs italic">Unknown</span>
+                <% } %>
+              </td>
+              <td class="px-6 py-3 whitespace-nowrap">
+                <div class="flex items-center gap-2 text-gray-500">
+                  <i class="far fa-calendar-alt text-gray-400"></i>
+                  <%= new Date(file.upload_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right space-x-2">
+                <button class="view-file-btn inline-flex items-center justify-center w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-100 transition-colors focus:ring-2 focus:ring-blue-100" data-file-url="/files/<%= file.id %>" data-file-type="<%= file.type %>" title="Preview Document">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <form action="/delete-file/<%= file.id %>" method="POST" class="inline m-0" onsubmit="return confirm('WARNING: Are you sure you want to permanently delete this document?');">
+                  <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors focus:ring-2 focus:ring-red-100" title="Delete Document">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" class="px-6 py-16 text-center">
+                <div class="flex flex-col items-center justify-center max-w-sm mx-auto">
+                  <div class="w-16 h-16 mb-4 rounded-full bg-blue-50 text-blue-200 flex items-center justify-center shadow-inner border border-blue-100">
+                    <i class="fas fa-folder-open text-3xl"></i>
+                  </div>
+                  <h3 class="text-base font-bold text-gray-900 mb-1">No Documents Uploaded</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">There are currently no files attached to this student record. Use the form above to securely upload PDFs or images.</p>
+                </div>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
     </div>
-    <% }); %>
-    <% } %>
   </div>
 </div>
 
@@ -178,50 +130,36 @@
 </button>
 
 <!-- Main modal -->
-<div
-  id="default-modal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 left-0 right-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-opacity-50 bg-black"
->
-  <div class="relative p-4 w-full max-w-2xl max-h-full">
-    <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+<div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-hidden fixed inset-0 z-50 w-full h-full bg-black/60 backdrop-blur-sm">
+  <!-- Container forces absolute centering regardless of Flowbite JS overrides -->
+  <div class="flex items-center justify-center w-full h-full p-4 md:p-6 sm:p-5 pointer-events-none">
+    
+    <!-- Modal content (Pointer events re-enabled here) -->
+    <div class="relative w-full max-w-7xl h-[85vh] flex flex-col bg-white rounded-2xl shadow-2xl pointer-events-auto overflow-hidden ring-1 ring-gray-900/5 transition-all duration-300 transform">
+      
       <!-- Modal header -->
-      <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
-      >
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          File Preview
-        </h3>
-        <button
-          type="button"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="default-modal"
-        >
-          <svg
-            class="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
+      <div class="flex items-center justify-between px-6 py-4 bg-gray-50/80 border-b border-gray-100 backdrop-blur shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 tracking-tight">
+            Document Preview
+          </h3>
+        </div>
+        
+        <button type="button" class="w-8 h-8 flex items-center justify-center text-gray-400 bg-white border border-gray-200 hover:bg-red-50 hover:text-red-500 hover:border-red-200 rounded-lg transition-colors focus:ring-2 focus:ring-red-100 outline-none" data-modal-hide="default-modal" title="Close Preview (ESC)">
+          <i class="fas fa-times text-sm"></i>
           <span class="sr-only">Close modal</span>
         </button>
       </div>
+      
       <!-- Modal body -->
-      <div class="p-4 md:p-5 space-y-4">
-        <div id="fileContainer" class="w-full h-[400px] overflow-auto"></div>
-        <!-- Dynamic content container -->
+      <div class="flex-1 bg-gray-100 overflow-hidden relative shadow-inner">
+        <!-- Dynamic content container spans 100% of flex space -->
+        <div id="fileContainer" class="absolute inset-0 w-full h-full overflow-auto flex items-center justify-center"></div>
       </div>
+
     </div>
   </div>
 </div>

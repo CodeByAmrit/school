@@ -1,6 +1,5 @@
 <div class="p-3 sm:ml-64 dark:bg-gray-900 dark:text-white">
   <div class="w-full h-full mt-14 dark:bg-gray-900 dark:text-white">
-    <p class="pt-3 text-xl">Students Details</p>
 
     <form action="/search" method="get">
       <%- include('./search.ejs') %>
@@ -313,174 +312,59 @@
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div
-                      id="dropdown-<%= student.school_id %>"
-                      class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-blue-100 z-50 overflow-hidden"
-                    >
+                    <div id="dropdown-<%= student.school_id %>" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
                       <!-- Dropdown Header -->
-                      <div
-                        class="p-4 bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100"
-                      >
-                        <div class="font-semibold text-gray-900">
-                          <%= student.name %>
-                        </div>
-                        <div class="text-sm text-gray-600">
-                          ID: <%= student.school_id %>
-                        </div>
+                      <div class="px-4 py-3 bg-gradient-to-r from-blue-50/80 to-blue-100/30 border-b border-gray-100">
+                        <div class="font-semibold text-gray-800 text-sm truncate"><%= student.name %></div>
+                        <div class="text-xs text-gray-500 font-medium">ID: <%= student.school_id %></div>
                       </div>
 
                       <!-- Dropdown Items -->
-                      <div class="py-2">
+                      <div class="py-1">
                         <!-- Academic Section -->
-                        <div
-                          class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                        >
-                          Academic
-                        </div>
-                        <a
-                          href="/student/get_marks/<%= student.school_id %>"
-                          class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                        >
-                          <div
-                            class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center mr-3"
-                          >
-                            <i class="fas fa-chart-line text-purple-600"></i>
-                          </div>
-                          <div>
-                            <div class="font-medium">Edit Marks</div>
-                            <div class="text-xs text-gray-500">
-                              Update academic records
-                            </div>
-                          </div>
+                        <div class="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Academic</div>
+                        <a href="/student/get_marks/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                          <i class="fas fa-chart-line w-5 text-purple-500 text-center mr-2"></i>
+                          <span class="font-medium">Edit Marks</span>
                         </a>
 
                         <!-- Documents Section -->
-                        <div
-                          class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                        >
-                          Documents
-                        </div>
-                        <a
-                          href="/generate-report/<%= student.school_id %>"
-                          class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                        >
-                          <div
-                            class="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center mr-3"
-                          >
-                            <i class="fas fa-file-alt text-orange-600"></i>
-                          </div>
-                          <div>
-                            <div class="font-medium">Create Report Card</div>
-                            <div class="text-xs text-gray-500">
-                              Generate academic report
-                            </div>
-                          </div>
+                        <div class="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Documents</div>
+                        <a href="/generate-report/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                          <i class="fas fa-file-invoice w-5 text-orange-500 text-center mr-2"></i>
+                          <span class="font-medium">Report Card</span>
                         </a>
-                        <a
-                          href="/generate-certificate/<%= student.school_id %>"
-                          class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                        >
-                          <div
-                            class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center mr-3"
-                          >
-                            <i class="fas fa-certificate text-green-600"></i>
-                          </div>
-                          <div>
-                            <div class="font-medium">Generate Certificate</div>
-                            <div class="text-xs text-gray-500">
-                              Create student certificate
-                            </div>
-                          </div>
+                        <a href="/generate-certificate/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                          <i class="fas fa-award w-5 text-green-500 text-center mr-2"></i>
+                          <span class="font-medium">Certificate</span>
                         </a>
-                        <a
-                          href="/api/students/get/virual-card/<%= student.school_id %>"
-                          target="_blank"
-                          class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                        >
-                          <div
-                            class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center mr-3"
-                          >
-                            <i class="fas fa-id-card text-blue-600"></i>
-                          </div>
-                          <div>
-                            <div class="font-medium">Virtual ID Card</div>
-                            <div class="text-xs text-gray-500">
-                              View/Print ID card
-                            </div>
-                          </div>
+                        <a href="/api/students/get/virual-card/<%= student.school_id %>" target="_blank" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                          <i class="fas fa-id-badge w-5 text-blue-500 text-center mr-2"></i>
+                          <span class="font-medium">Virtual ID Card</span>
                         </a>
 
                         <!-- Files Section -->
-                        <div class="border-t border-blue-100">
-                          <a
-                            href="/files/one/<%= student.school_id %>"
-                            class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                          >
-                            <div
-                              class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-100 to-indigo-50 flex items-center justify-center mr-3"
-                            >
-                              <i class="fas fa-folder text-indigo-600"></i>
-                            </div>
-                            <div>
-                              <div class="font-medium">Manage Files</div>
-                              <div class="text-xs text-gray-500">
-                                View/Upload documents
-                              </div>
-                            </div>
-                          </a>
-                        </div>
+                        <div class="w-full h-px bg-gray-100 my-1"></div>
+                        <a href="/files/one/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                          <i class="fas fa-folder-open w-5 text-indigo-500 text-center mr-2"></i>
+                          <span class="font-medium">Manage Files</span>
+                        </a>
 
                         <!-- Danger Zone -->
-                        <div class="border-t border-red-100">
-                          <form
-                            id="move-to-leaved-form-<%= student.school_id %>"
-                            action="/student/mark-left/<%= student.school_id %>"
-                            method="POST"
-                          >
-                            <input
-                              type="hidden"
-                              name="reason"
-                              value="Graduated"
-                            />
-                            <button
-                              type="submit"
-                              class="flex items-center w-full px-4 py-3 text-sm text-amber-600 hover:bg-amber-50 transition-colors"
-                            >
-                              <div
-                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center mr-3"
-                              >
-                                <i class="fas fa-user-slash text-amber-600"></i>
-                              </div>
-                              <div>
-                                <div class="font-medium">Mark as Left</div>
-                                <div class="text-xs text-amber-500">
-                                  Move to leaved students
-                                </div>
-                              </div>
+                        <div class="w-full h-px bg-red-50 my-1"></div>
+                        <div class="bg-red-50/20">
+                          <form id="move-to-leaved-form-<%= student.school_id %>" action="/student/mark-left/<%= student.school_id %>" method="POST" class="m-0">
+                            <input type="hidden" name="reason" value="Graduated"/>
+                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors">
+                              <i class="fas fa-user-graduate w-5 text-center mr-2"></i>
+                              <span class="font-medium">Mark as Left</span>
                             </button>
                           </form>
 
-                          <form
-                            action="/delete/<%= student.school_id %>"
-                            method="POST"
-                            onsubmit="return confirmDelete(event);"
-                            class="w-full"
-                          >
-                            <button
-                              type="submit"
-                              class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                            >
-                              <div
-                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center mr-3"
-                              >
-                                <i class="fas fa-trash-alt text-red-600"></i>
-                              </div>
-                              <div>
-                                <div class="font-medium">Delete Student</div>
-                                <div class="text-xs text-red-500">
-                                  Permanently remove
-                                </div>
-                              </div>
+                          <form action="/delete/<%= student.school_id %>" method="POST" onsubmit="return confirmDelete(event);" class="m-0">
+                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors">
+                              <i class="fas fa-trash w-5 text-center mr-2"></i>
+                              <span class="font-medium">Delete Student</span>
                             </button>
                           </form>
                         </div>

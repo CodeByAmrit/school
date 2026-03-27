@@ -16,10 +16,10 @@ const favicon = require("serve-favicon");
 const logger = require("./config/logger");
 
 // Routers
-const router = require("./router/route");
-const student = require("./router/student");
-const studentPortal = require("./router/student_portal");
-const Gemini_router = require("./router/ai_router");
+const router = require('./routes/route');
+const student = require('./routes/student');
+const studentPortal = require('./routes/student_portal');
+const Gemini_router = require('./routes/ai_router');
 const settingsRouter = require("./routes/settings");
 
 // Error handlers
