@@ -12,7 +12,7 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`)"
+      - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`) || Host(`school.cctvcameralive.in`)"
       - "traefik.http.routers.edu.entrypoints=websecure"
       - "traefik.http.routers.edu.tls.certresolver=letsencrypt"
       - "traefik.http.services.edu.loadbalancer.server.port=5000"

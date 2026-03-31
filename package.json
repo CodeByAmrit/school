@@ -16,7 +16,8 @@
     "docker:build": "docker build -t codebyamrit/student-tracker:1.4.0 .",
     "docker:run": "docker compose up -d",
     "security:check": "npm audit --audit-level=moderate",
-    "clean": "rm -rf node_modules package-lock.json"
+    "clean": "rm -rf node_modules package-lock.json",
+    "db:backup": "node scripts/backup.js"
   },
   "keywords": [
     "student",
