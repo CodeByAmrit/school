@@ -54,20 +54,20 @@ router.get("/", checkAuth, async (req, res) => {
     }
 
     res.render("settings", {
-      teacher: teacher[0],
-      teacherSettings: teacherSettings[0] || {},
+      teacher: teacher[0][0],
+      teacherSettings: teacherSettings[0][0] || {},
       schoolConfig: {
-        ...schoolConfig[0],
+        ...(schoolConfig[0][0] || {}),
         logo: schoolLogo,
       },
-      classes: classes,
-      subjects: subjects,
+      classes: classes[0],
+      subjects: subjects[0],
       settings: {
-        studentCount: stats[0]?.studentCount || 0,
-        classCount: stats[0]?.classCount || 0,
-        teacherCount: stats[0]?.teacherCount || 0,
-        session: teacherSettings[0]?.default_session || "2024-2025",
-        lastBackup: "Never", // You'll need to fetch this from backup_schedule
+        studentCount: stats[0][0]?.studentCount || 0,
+        classCount: stats[0][0]?.classCount || 0,
+        teacherCount: stats[0][0]?.teacherCount || 0,
+        session: teacherSettings[0][0]?.default_session || "2024-2025",
+        lastBackup: "Never",
         storageUsed: "45",
         storageTotal: "100",
       },

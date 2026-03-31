@@ -46,27 +46,8 @@
   </head>
 
   <body class="bg-blue-50">
-    <nav class="fixed w-full bg-white/80 backdrop-blur-sm shadow-sm z-50">
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
-      >
-        <a
-          href="/"
-          class="text-2xl font-bold bg-gradient-to-b from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent quicksand"
-        >
-          StudentTracker
-        </a>
-
-        <div class="flex items-center space-x-4">
-          <a
-            href="/signup"
-            class="bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >
-            Sign Up
-          </a>
-        </div>
-      </div>
-    </nav>
+    <!-- Shared Guest Navbar -->
+    <%- include('./partials/guestNavbar.ejs') %>
 
     <main class="flex md:items-center justify-center min-h-screen pt-16">
       <div

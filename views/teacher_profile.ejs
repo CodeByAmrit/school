@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile - StudentTracker</title>
 
-    <!-- 1️⃣ Preconnect for faster CDN load -->
+    <!-- Preconnect for faster CDN load -->
     <link
       rel="preconnect"
       href="https://cdnjs.cloudflare.com"
@@ -13,92 +13,101 @@
       nonce="<%= nonce %>"
     />
 
-    <!-- 3️⃣ Load your compiled CSS immediately after -->
+    <!-- Compiled CSS -->
     <link rel="stylesheet" href="/css/styles.css?v=<%= appVersion %>" nonce="<%= nonce %>" />
+    <!-- Font Awesome 6 (Free) -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
 
-    <!-- 4️⃣ Critical inline CSS (safe here) -->
-    <style>
-      body {
-        background: linear-gradient(135deg, #f2fcff 0%, #eaf6fb 100%);
-      }
-
+    <!-- Critical inline styles for smooth loading and typography refinement -->
+    <style nonce="<%= nonce %>">
       /* Prevent FOUC */
       body {
         visibility: hidden;
       }
-
       body.ready {
         visibility: visible;
       }
 
-      /* Custom scrollbar */
+      /* Refined scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
-
       ::-webkit-scrollbar-track {
         background: #f1f5f9;
+        border-radius: 8px;
       }
-
       ::-webkit-scrollbar-thumb {
-        background: linear-gradient(to bottom, #63b3ed, #3182ce);
-        border-radius: 4px;
+        background: linear-gradient(135deg, #63b3ed, #3182ce);
+        border-radius: 8px;
       }
 
-      @keyframes fadeIn {
+      /* Subtle fade-in animation */
+      @keyframes fadeInUp {
         from {
           opacity: 0;
-          transform: translateY(10px);
+          transform: translateY(12px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
-
       .fade-in {
-        animation: fadeIn 0.5s ease-out;
+        animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+      }
+
+      /* Smooth card hover */
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Focus ring for accessibility */
+      *:focus-visible {
+        outline: 2px solid #3182ce;
+        outline-offset: 2px;
+        border-radius: 0.5rem;
+      }
+
+      /* Typography scale */
+      h1, h2, h3, h4, .heading {
+        letter-spacing: -0.02em;
+      }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: linear-gradient(145deg, #f8fafc 0%, #eef2f6 100%);
       }
     </style>
   </head>
 
-  <body class="min-h-screen">
-    <!-- Profile Container -->
+  <body class="min-h-screen antialiased">
     <div class="min-h-screen fade-in">
-      <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white py-8 px-4 sm:px-6 lg:px-8"
-      >
-        <div class="max-w-6xl mx-auto">
-          <div
-            class="flex flex-col md:flex-row md:items-center justify-between"
-          >
-            <div class="mb-6 md:mb-0">
-              <a
-                href="/dashboard"
-                class="inline-flex items-center text-white/90 hover:text-white mb-2 transition-colors duration-300"
-              >
-                <i class="fas fa-arrow-left mr-2"></i>
-                Back to Dashboard
+      <!-- Premium Header with subtle pattern -->
+      <div class="relative bg-gradient-to-br from-[#1e5eb0] via-[#3182ce] to-[#4299e1] overflow-hidden">
+        <!-- Abstract pattern overlay -->
+        <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 0 L60 30 L30 60 L0 30 Z" fill="none" stroke="white" stroke-width="1.5"/%3E%3C/svg%3E'); background-size: 30px 30px;"></div>
+        <div class="relative max-w-7xl mx-auto px-6 py-10 md:py-12 lg:py-16">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <a href="/dashboard" class="inline-flex items-center text-white/80 hover:text-white transition-colors mb-3 text-sm font-medium">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i> Back to Dashboard
               </a>
-              <h1 class="text-3xl md:text-4xl font-bold">My Profile</h1>
-              <p class="text-white/80 mt-2">
-                Manage your personal and school information
-              </p>
+              <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">My Profile</h1>
+              <p class="text-white/80 text-base md:text-lg mt-2 max-w-xl">Manage your personal and school information securely</p>
             </div>
-            <div class="flex items-center space-x-4">
-              <div class="text-right hidden md:block">
-                <p class="text-sm font-medium text-white/90">Account Status</p>
-                <p class="text-lg font-bold">Active</p>
+            <div class="flex items-center gap-5">
+              <div class="text-right hidden sm:block">
+                <p class="text-sm font-medium text-white/80">Account Status</p>
+                <p class="text-xl font-bold text-white flex items-center justify-end gap-2"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span> Active</p>
               </div>
-              <div
-                class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center"
-              >
-                <i class="fas fa-user-shield text-white text-2xl"></i>
+              <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg">
+                <i class="fas fa-user-graduate text-white text-2xl"></i>
               </div>
             </div>
           </div>
@@ -106,182 +115,91 @@
       </div>
 
       <!-- Main Content -->
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Left Column - Profile Info -->
+          <!-- Left Column: Profile & Edit Form -->
           <div class="lg:col-span-2 space-y-8">
-            <!-- Profile Card -->
-            <div
-              class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden"
-            >
-              <div
-                class="bg-gradient-to-r from-blue-50 to-white p-6 border-b border-blue-100"
-              >
-                <div
-                  class="flex flex-col sm:flex-row sm:items-center justify-between"
-                >
-                  <div>
-                    <h2 class="text-2xl font-bold text-gray-900">
-                      Personal Information
-                    </h2>
-                    <p class="text-gray-600 mt-1">
-                      Update your personal details and contact information
-                    </p>
-                  </div>
-                  <button
-                    id="editProfileBtn"
-                    class="mt-4 sm:mt-0 inline-flex items-center px-5 py-2.5 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] text-white rounded-xl font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <i class="fas fa-edit mr-2"></i>
-                    Edit Profile
-                  </button>
+            <!-- Profile Display Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 card-hover">
+              <div class="bg-white px-6 pt-6 pb-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Personal Information</h2>
+                  <p class="text-gray-500 text-sm mt-1">Your identity and contact details</p>
                 </div>
+                <button id="editProfileBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                  <i class="fas fa-pen-alt text-xs"></i> Edit Profile
+                </button>
               </div>
 
-              <div class="p-6">
-                <div class="flex flex-col md:flex-row gap-8">
-                  <!-- Avatar Section -->
-                  <div class="md:w-1/3">
+              <div class="p-6 md:p-8">
+                <div class="flex flex-col lg:flex-row gap-8">
+                  <!-- Avatar / Logo Section -->
+                  <div class="lg:w-1/3 flex flex-col items-center">
                     <div class="relative">
-                      <div
-                        class="w-48 h-48 mx-auto rounded-2xl overflow-hidden border-4 border-white shadow-xl"
-                      >
+                      <div class="w-40 h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 shadow-xl border-4 border-white">
                         <% if (base64Image) { %>
-                        <img
-                          src="<%= base64Image %>"
-                          alt="School Logo"
-                          class="w-full h-full object-cover"
-                        />
+                          <img src="<%= base64Image %>" alt="School Logo" class="w-full h-full object-cover" />
                         <% } else { %>
-                        <div
-                          class="w-full h-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center"
-                        >
-                          <i class="fas fa-school text-blue-400 text-5xl"></i>
-                        </div>
+                          <div class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-school text-blue-300 text-6xl"></i>
+                          </div>
                         <% } %>
                       </div>
-                      <div
-                        class="absolute -bottom-3 -right-3 w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg"
-                      >
-                        <i class="fas fa-check text-white text-xl"></i>
+                      <div class="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-gradient-to-tr from-green-400 to-green-500 flex items-center justify-center shadow-lg border-2 border-white">
+                        <i class="fas fa-check text-white text-sm"></i>
                       </div>
                     </div>
-
-                    <!-- Upload Button -->
-                    <div class="mt-6 text-center">
-                      <label
-                        for="logo-upload"
-                        class="inline-flex items-center px-4 py-2 bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 rounded-xl font-medium hover:from-blue-100 hover:to-blue-50 transition-all duration-300 cursor-pointer border border-blue-200"
-                      >
-                        <i class="fas fa-camera mr-2"></i>
-                        Change Logo
+                    <div class="mt-5 text-center">
+                      <label for="logo-upload" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded-xl border border-gray-200 cursor-pointer transition-all">
+                        <i class="fas fa-cloud-upload-alt text-blue-500"></i> Change Logo
                       </label>
-                      <input
-                        id="logo-upload"
-                        type="file"
-                        accept="image/*"
-                        class="hidden"
-                      />
+                      <input id="logo-upload" type="file" accept="image/*" class="hidden" />
+                      <p class="text-xs text-gray-400 mt-2">PNG, JPG up to 2MB</p>
                     </div>
                   </div>
 
                   <!-- Profile Details -->
-                  <div class="md:w-2/3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="lg:w-2/3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div class="space-y-1">
-                        <p class="text-sm font-medium text-gray-500">
-                          Full Name
-                        </p>
-                        <p
-                          class="text-lg font-bold text-gray-900"
-                          id="displayName"
-                        >
-                          <%= teacher.first_name.toUpperCase() %>
-                          <%=
-                          teacher.last_name.toUpperCase() %>
-                        </p>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Full Name</p>
+                        <p class="text-lg font-bold text-gray-900" id="displayName"><%= teacher.first_name.toUpperCase() %> <%= teacher.last_name.toUpperCase() %></p>
                       </div>
                       <div class="space-y-1">
-                        <p class="text-sm font-medium text-gray-500">
-                          Email Address
-                        </p>
-                        <p
-                          class="text-lg font-bold text-gray-900"
-                          id="displayEmail"
-                        >
-                          <%= teacher.email %>
-                        </p>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</p>
+                        <p class="text-lg font-bold text-gray-900" id="displayEmail"><%= teacher.email %></p>
                       </div>
                       <div class="space-y-1">
-                        <p class="text-sm font-medium text-gray-500">
-                          School Name
-                        </p>
-                        <p
-                          class="text-lg font-bold text-gray-900"
-                          id="displaySchool"
-                        >
-                          <%= teacher.school_name.toUpperCase() %>
-                        </p>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">School Name</p>
+                        <p class="text-lg font-bold text-gray-900" id="displaySchool"><%= teacher.school_name.toUpperCase() %></p>
                       </div>
                       <div class="space-y-1">
-                        <p class="text-sm font-medium text-gray-500">
-                          Phone Number
-                        </p>
-                        <p
-                          class="text-lg font-bold text-gray-900"
-                          id="displayPhone"
-                        >
-                          <%= teacher.school_phone || 'Not provided' %>
-                        </p>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Phone Number</p>
+                        <p class="text-lg font-bold text-gray-900" id="displayPhone"><%= teacher.school_phone || 'Not provided' %></p>
                       </div>
-                      <div class="md:col-span-2 space-y-1">
-                        <p class="text-sm font-medium text-gray-500">
-                          School Address
-                        </p>
-                        <p
-                          class="text-lg font-bold text-gray-900"
-                          id="displayAddress"
-                        >
-                          <%= teacher.school_address.toUpperCase() %>
-                        </p>
+                      <div class="sm:col-span-2 space-y-1">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">School Address</p>
+                        <p class="text-lg font-bold text-gray-900" id="displayAddress"><%= teacher.school_address.toUpperCase() %></p>
                       </div>
                     </div>
 
-                    <!-- Account Info -->
-                    <div class="mt-8 pt-8 border-t border-blue-100">
-                      <h3 class="text-lg font-bold text-gray-900 mb-4">
-                        Account Information
-                      </h3>
+                    <!-- Account Summary -->
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                      <h3 class="text-lg font-bold text-gray-900 mb-4">Account Overview</h3>
                       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-blue-50 rounded-xl p-4">
-                          <p class="text-sm font-medium text-gray-500">
-                            Account Type
-                          </p>
-                          <p class="text-lg font-bold text-blue-600">Teacher</p>
+                        <div class="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100">
+                          <p class="text-xs font-semibold text-blue-600 uppercase">Role</p>
+                          <p class="text-lg font-bold text-gray-800">Teacher</p>
                         </div>
-                        <div class="bg-blue-50 rounded-xl p-4">
-                          <p class="text-sm font-medium text-gray-500">
-                            Member Since
-                          </p>
-                          <p
-                            class="text-lg font-bold text-blue-600"
-                            id="memberSince"
-                          >
-                            <%= new Date().toLocaleDateString('en-US', { year:
-                            'numeric', month: 'short' }) %>
-                          </p>
+                        <div class="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100">
+                          <p class="text-xs font-semibold text-blue-600 uppercase">Member Since</p>
+                          <p class="text-lg font-bold text-gray-800" id="memberSince"><%= new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) %></p>
                         </div>
-                        <div class="bg-blue-50 rounded-xl p-4">
-                          <p class="text-sm font-medium text-gray-500">
-                            Status
-                          </p>
-                          <div class="flex items-center">
-                            <div
-                              class="w-2 h-2 rounded-full bg-green-500 mr-2"
-                            ></div>
-                            <p class="text-lg font-bold text-green-600">
-                              Active
-                            </p>
+                        <div class="bg-gradient-to-br from-green-50 to-white rounded-xl p-4 border border-green-100">
+                          <p class="text-xs font-semibold text-green-600 uppercase">Status</p>
+                          <div class="flex items-center gap-2">
+                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+                            <p class="text-lg font-bold text-green-700">Active</p>
                           </div>
                         </div>
                       </div>
@@ -291,197 +209,60 @@
               </div>
             </div>
 
-            <!-- Edit Form (Hidden by default) -->
-            <form
-              id="editProfileForm"
-              action="/teacher/profile/update/<%= teacher.id %>"
-              method="POST"
-              enctype="multipart/form-data"
-              class="hidden bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden"
-            >
-              <div
-                class="bg-gradient-to-r from-blue-50 to-white p-6 border-b border-blue-100"
-              >
+            <!-- Edit Form (Initially Hidden) -->
+            <form id="editProfileForm" action="/teacher/profile/update/<%= teacher.id %>" method="POST" enctype="multipart/form-data" class="hidden bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300">
+              <div class="bg-gray-50 px-6 py-5 border-b border-gray-100">
                 <h2 class="text-2xl font-bold text-gray-900">Edit Profile</h2>
-                <p class="text-gray-600 mt-1">Update your information below</p>
+                <p class="text-gray-500 text-sm mt-1">Update your details below</p>
               </div>
-
-              <div class="p-6 space-y-6">
-                <!-- Name Fields -->
+              <div class="p-6 md:p-8 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      for="first_name"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      <i class="fas fa-user text-blue-500 mr-2"></i>
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      id="first_name"
-                      name="first_name"
-                      value="<%= teacher.first_name %>"
-                      class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300 uppercase"
-                    />
+                    <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-user text-blue-500 mr-2"></i>First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="<%= teacher.first_name %>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all uppercase">
                   </div>
                   <div>
-                    <label
-                      for="last_name"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      <i class="fas fa-user text-blue-500 mr-2"></i>
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      id="last_name"
-                      name="last_name"
-                      value="<%= teacher.last_name %>"
-                      class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300 uppercase"
-                    />
+                    <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-user text-blue-500 mr-2"></i>Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="<%= teacher.last_name %>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all uppercase">
                   </div>
                 </div>
-
-                <!-- Email -->
                 <div>
-                  <label
-                    for="email"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    <i class="fas fa-envelope text-blue-500 mr-2"></i>
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="<%= teacher.email %>"
-                    class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300"
-                  />
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-envelope text-blue-500 mr-2"></i>Email Address</label>
+                  <input type="email" id="email" name="email" value="<%= teacher.email %>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all">
                 </div>
-
-                <!-- School Information -->
                 <div>
-                  <label
-                    for="school_name"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    <i class="fas fa-school text-blue-500 mr-2"></i>
-                    School Name
-                  </label>
-                  <input
-                    type="text"
-                    id="school_name"
-                    name="school_name"
-                    value="<%= teacher.school_name %>"
-                    class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300 uppercase"
-                  />
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-school text-blue-500 mr-2"></i>School Name</label>
+                  <input type="text" id="school_name" name="school_name" value="<%= teacher.school_name %>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all uppercase">
                 </div>
-
-                <!-- Logo Upload -->
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-image text-blue-500 mr-2"></i>
-                    School Logo
-                  </label>
-                  <div
-                    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-blue-200 border-dashed rounded-2xl hover:border-blue-300 transition-colors duration-300 bg-gradient-to-br from-blue-50 to-white"
-                  >
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-image text-blue-500 mr-2"></i>School Logo</label>
+                  <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-blue-400 transition bg-gray-50/50">
                     <div class="space-y-1 text-center">
-                      <svg
-                        class="mx-auto h-12 w-12 text-blue-400"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      <div class="flex text-sm text-gray-600">
-                        <label
-                          for="school_logo"
-                          class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            id="school_logo"
-                            name="school_logo"
-                            type="file"
-                            class="sr-only"
-                            accept="image/*"
-                          />
-                        </label>
+                      <i class="fas fa-cloud-upload-alt text-3xl text-blue-400"></i>
+                      <div class="flex text-sm text-gray-600 justify-center">
+                        <label for="school_logo" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">Upload a file</label>
                         <p class="pl-1">or drag and drop</p>
                       </div>
-                      <p class="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                      <p class="text-xs text-blue-600 mt-2">
-                        Recommended: 800x400px
-                      </p>
+                      <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                      <input id="school_logo" name="school_logo" type="file" class="sr-only" accept="image/*">
                     </div>
                   </div>
                 </div>
-
-                <!-- Address & Phone -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      for="school_address"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>
-                      School Address
-                    </label>
-                    <input
-                      type="text"
-                      id="school_address"
-                      name="school_address"
-                      value="<%= teacher.school_address %>"
-                      class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300 uppercase"
-                    />
+                    <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>School Address</label>
+                    <input type="text" id="school_address" name="school_address" value="<%= teacher.school_address %>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all uppercase">
                   </div>
                   <div>
-                    <label
-                      for="school_phone"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      <i class="fas fa-phone text-blue-500 mr-2"></i>
-                      School Phone
-                    </label>
-                    <input
-                      type="text"
-                      id="school_phone"
-                      name="school_phone"
-                      value="<%= teacher.school_phone %>"
-                      placeholder="xxx xxx xxxx, xxx xxx xxxx"
-                      class="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 focus:outline-none transition-all duration-300 uppercase"
-                    />
+                    <label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-phone text-blue-500 mr-2"></i>School Phone</label>
+                    <input type="text" id="school_phone" name="school_phone" value="<%= teacher.school_phone %>" placeholder="xxx xxx xxxx" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition-all">
                   </div>
                 </div>
-
-                <!-- Form Actions -->
-                <div
-                  class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-blue-100"
-                >
-                  <button
-                    type="submit"
-                    class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  >
-                    <i class="fas fa-save mr-2"></i>
-                    Save Changes
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100">
+                  <button type="submit" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <i class="fas fa-check-circle"></i> Save Changes
                   </button>
-                  <button
-                    type="button"
-                    id="cancelEditBtn"
-                    class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 rounded-xl font-bold border border-blue-200 hover:border-blue-300 transition-all duration-300"
-                  >
+                  <button type="button" id="cancelEditBtn" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all">
                     Cancel
                   </button>
                 </div>
@@ -489,125 +270,75 @@
             </form>
           </div>
 
-          <!-- Right Column - Quick Actions & Stats -->
-          <div class="space-y-8">
+          <!-- Right Column: Security, Stats, Support -->
+          <div class="space-y-7">
             <!-- Security Card -->
-            <div
-              class="bg-white rounded-2xl shadow-lg border border-blue-100 p-6"
-            >
-              <h3
-                class="text-lg font-bold text-gray-900 mb-4 flex items-center"
-              >
-                <i class="fas fa-shield-alt text-blue-500 mr-2"></i>
-                Security
-              </h3>
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 card-hover">
+              <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-shield-alt text-blue-600"></i></div>
+                <h3 class="text-xl font-bold text-gray-900">Security</h3>
+              </div>
               <div class="space-y-4">
-                <a
-                  href="/change-password"
-                  class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div
-                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center mr-3 group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300"
-                  >
-                    <i class="fas fa-key text-blue-600"></i>
+                <a href="/change-password" class="flex items-center gap-4 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors group">
+                  <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center"><i class="fas fa-key text-blue-600"></i></div>
+                  <div class="flex-1">
+                    <p class="font-semibold text-gray-800 group-hover:text-blue-600">Change Password</p>
+                    <p class="text-xs text-gray-500">Update your password regularly</p>
                   </div>
-                  <div>
-                    <p
-                      class="font-medium text-gray-900 group-hover:text-blue-600 transition-colors"
-                    >
-                      Change Password
-                    </p>
-                    <p class="text-sm text-gray-500">
-                      Update your password regularly
-                    </p>
-                  </div>
+                  <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
                 </a>
-                <div
-                  class="p-4 bg-gradient-to-r from-green-50 to-white rounded-xl border border-green-100"
-                >
-                  <div class="flex items-center">
-                    <div
-                      class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center mr-3"
-                    >
-                      <i class="fas fa-check text-green-600"></i>
-                    </div>
-                    <div>
-                      <p class="font-medium text-gray-900">2FA Status</p>
-                      <p class="text-sm text-green-600 font-medium">Active</p>
-                    </div>
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-green-50 border border-green-100">
+                  <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center"><i class="fas fa-check-circle text-green-600"></i></div>
+                  <div>
+                    <p class="font-semibold text-gray-800">2FA Status</p>
+                    <p class="text-xs text-green-700 font-medium">Active & Secure</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Stats Card -->
-            <div
-              class="bg-white rounded-2xl shadow-lg border border-blue-100 p-6"
-            >
-              <h3
-                class="text-lg font-bold text-gray-900 mb-6 flex items-center"
-              >
-                <i class="fas fa-chart-line text-blue-500 mr-2"></i>
-                Profile Stats
-              </h3>
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 card-hover">
+              <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-chart-simple text-blue-600"></i></div>
+                <h3 class="text-xl font-bold text-gray-900">Profile Insights</h3>
+              </div>
               <div class="space-y-4">
-                <div
-                  class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-white rounded-xl"
-                >
-                  <span class="text-gray-600">Profile Completion</span>
-                  <div class="flex items-center">
-                    <div
-                      class="w-24 h-2 bg-blue-100 rounded-full overflow-hidden"
-                    >
-                      <div
-                        class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
-                        style="width: 85%"
-                      ></div>
-                    </div>
-                    <span class="ml-2 font-bold text-blue-600">85%</span>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                  <span class="text-gray-600 font-medium">Completion</span>
+                  <div class="flex items-center gap-3">
+                    <div class="w-28 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" style="width: 85%"></div></div>
+                    <span class="text-sm font-bold text-blue-600">85%</span>
                   </div>
                 </div>
-                <div
-                  class="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-white rounded-xl"
-                >
-                  <span class="text-gray-600">Last Updated</span>
-                  <span class="font-bold text-green-600">Today</span>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                  <span class="text-gray-600 font-medium">Last Updated</span>
+                  <span class="font-semibold text-green-600">Today</span>
                 </div>
-                <div
-                  class="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-white rounded-xl"
-                >
-                  <span class="text-gray-600">Profile Views</span>
-                  <span class="font-bold text-purple-600">124</span>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                  <span class="text-gray-600 font-medium">Profile Views</span>
+                  <span class="font-semibold text-purple-600">124</span>
                 </div>
               </div>
             </div>
 
-            <!-- Support Card -->
-            <div
-              class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white"
-            >
-              <h3 class="text-lg font-bold mb-4 flex items-center">
-                <i class="fas fa-life-ring mr-2"></i>
-                Need Help?
-              </h3>
-              <p class="text-white/90 mb-4">
-                Having trouble with your profile? We're here to help!
-              </p>
-              <div class="space-y-3">
-                <a
-                  href="mailto:support@studenttracker.com"
-                  class="flex items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300"
-                >
-                  <i class="fas fa-envelope mr-3"></i>
-                  Email Support
-                </a>
-                <a
-                  href="/help"
-                  class="flex items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300"
-                >
-                  <i class="fas fa-question-circle mr-3"></i>
-                  Help Center
-                </a>
+            <!-- Support Card - Premium Gradient -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-xl card-hover">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+              <div class="relative">
+                <div class="flex items-center gap-3 mb-4">
+                  <i class="fas fa-headset text-2xl"></i>
+                  <h3 class="text-xl font-bold">Need Help?</h3>
+                </div>
+                <p class="text-white/80 text-sm mb-6">We're here 24/7 to assist you with any questions.</p>
+                <div class="space-y-3">
+                  <a href="mailto:support@studenttracker.com" class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all">
+                    <i class="fas fa-envelope"></i> Email Support
+                  </a>
+                  <a href="/help" class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all">
+                    <i class="fas fa-life-ring"></i> Help Center
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -615,24 +346,83 @@
       </div>
     </div>
 
-    <!-- Success Toast -->
-    <div
-      id="successToast"
-      class="hidden fixed top-4 right-4 max-w-sm bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-xl shadow-lg z-50"
-    >
-      <div class="flex items-center">
-        <div
-          class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-3"
-        >
-          <i class="fas fa-check"></i>
+    <!-- Success Toast Notification -->
+    <div id="successToast" class="hidden fixed bottom-6 right-6 max-w-sm bg-white rounded-xl shadow-2xl border-l-4 border-green-500 p-4 z-50 animate-fade-in-up">
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center"><i class="fas fa-check text-green-600"></i></div>
+        <div class="flex-1">
+          <p class="font-bold text-gray-800">Success!</p>
+          <p class="text-sm text-gray-600">Profile updated successfully</p>
         </div>
-        <div>
-          <p class="font-bold">Success!</p>
-          <p class="text-sm opacity-90">Profile updated successfully</p>
-        </div>
+        <button onclick="this.parentElement.parentElement.style.display='none'" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
       </div>
     </div>
 
+    <!-- Scripts -->
     <script src="/js/user_profile.js?v=<%= appVersion %>" nonce="<%= nonce %>" defer></script>
+    <!-- Additional inline script for form toggle and logo preview (nonce-aware) -->
+    <script nonce="<%= nonce %>">
+      (function() {
+        // Toggle between display and edit mode
+        const editBtn = document.getElementById('editProfileBtn');
+        const displayCard = document.querySelector('.bg-white.rounded-2xl.shadow-xl.border.border-gray-100.overflow-hidden');
+        const editForm = document.getElementById('editProfileForm');
+        const cancelBtn = document.getElementById('cancelEditBtn');
+
+        if (editBtn && displayCard && editForm && cancelBtn) {
+          editBtn.addEventListener('click', () => {
+            displayCard.classList.add('hidden');
+            editForm.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          cancelBtn.addEventListener('click', () => {
+            editForm.classList.add('hidden');
+            displayCard.classList.remove('hidden');
+          });
+        }
+
+        // Logo upload preview (for the display card)
+        const logoInput = document.getElementById('logo-upload');
+        if (logoInput) {
+          logoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = function(ev) {
+                const imgContainer = document.querySelector('.w-40.h-40.rounded-2xl.overflow-hidden');
+                if (imgContainer) {
+                  imgContainer.innerHTML = `<img src="${ev.target.result}" alt="School Logo" class="w-full h-full object-cover" />`;
+                }
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+
+        // Show toast on successful update (if query param or flash message)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('updated') === 'true') {
+          const toast = document.getElementById('successToast');
+          if (toast) {
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+              toast.classList.add('hidden');
+            }, 4000);
+          }
+        }
+
+        // Mark body ready
+        document.body.classList.add('ready');
+      })();
+    </script>
+    <style nonce="<%= nonce %>">
+      @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in-up {
+        animation: fade-in-up 0.3s ease-out;
+      }
+    </style>
   </body>
 </html>

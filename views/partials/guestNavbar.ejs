@@ -1,0 +1,91 @@
+<nav
+  class="fixed w-full z-50 top-0 left-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300"
+  id="guest-navbar"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 sm:h-20 items-center">
+      <!-- Logo Section -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center space-x-2 group">
+          <div class="rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+            <span class="text-white font-bold text-xl quicksand tracking-tighter"><img src="/favicon.png" alt="logo" class="w-6 h-6"></span>
+          </div>
+          <span class="text-2xl font-bold bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent quicksand tracking-tight hidden sm:block">
+            StudentTracker
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-[#3182ce] dark:hover:text-blue-400 font-medium transition-colors">Home</a>
+        <a href="/features" class="text-gray-600 dark:text-gray-300 hover:text-[#3182ce] dark:hover:text-blue-400 font-medium transition-colors">Features</a>
+        <a href="/pricing" class="text-gray-600 dark:text-gray-300 hover:text-[#3182ce] dark:hover:text-blue-400 font-medium transition-colors">Pricing</a>
+      </div>
+
+      <!-- Auth Buttons -->
+      <div class="flex items-center space-x-4">
+        <a
+          href="/login"
+          class="text-gray-700 dark:text-gray-200 hover:text-[#3182ce] font-semibold text-sm px-4 py-2 transition-colors"
+        >
+          Login
+        </a>
+        <a
+          href="/signup"
+          class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] hover:shadow-lg hover:shadow-blue-200/50 dark:hover:shadow-none text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+        >
+          Get Started
+        </a>
+
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-toggle"
+          type="button"
+          class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-500 hover:text-[#3182ce] hover:bg-blue-50 dark:hover:bg-gray-800 transition-all"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 pt-2 pb-6 space-y-2 shadow-xl animate-in fade-in slide-in-from-top-4" id="mobile-menu">
+    <a href="/" class="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-xl transition-all">Home</a>
+    <a href="/#features" class="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-xl transition-all">Features</a>
+    <a href="/#pricing" class="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-xl transition-all">Pricing</a>
+    <div class="pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col space-y-3">
+        <a href="/login" class="block px-4 py-3 text-center text-gray-700 dark:text-gray-200 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-all">Login</a>
+        <a href="/signup" class="block px-4 py-4 text-center bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white font-bold rounded-xl shadow-lg">Get Started</a>
+    </div>
+  </div>
+
+  <script nonce="<%= nonce %>">
+    const btn = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('menu-icon');
+
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      const isHidden = menu.classList.contains('hidden');
+      icon.setAttribute('d', isHidden ? 'M4 6h16M4 12h16M4 18h16' : 'M6 18L18 6M6 6l12 12');
+    });
+
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('guest-navbar');
+        if (window.scrollY > 20) {
+            nav.classList.add('shadow-md', 'py-1');
+            nav.classList.remove('bg-white/80', 'dark:bg-gray-900/80');
+            nav.classList.add('bg-white', 'dark:bg-gray-900');
+        } else {
+            nav.classList.remove('shadow-md', 'py-1');
+            nav.classList.add('bg-white/80', 'dark:bg-gray-900/80');
+            nav.classList.remove('bg-white', 'dark:bg-gray-900');
+        }
+    });
+  </script>
+</nav>

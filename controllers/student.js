@@ -409,10 +409,10 @@ async function teacherLogin(req) {
 
     const teacher = rows[0];
 
-    // const isMatch = await bcrypt.compare(password, teacher.password);
-    // if (!isMatch) {
-    //   throw new Error("INVALID_CREDENTIALS");
-    // }
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
 
     const payload = {
       id: teacher.id,
@@ -441,8 +441,12 @@ async function teacherSignup(req, res) {
     school_name,
     school_address,
     school_phone,
+    subscription_tier = "FREE",
   } = req.body;
+
+  const normalizedEmail = email.trim().toLowerCase();
   let school_logo = null;
+
   if (req.file) {
     school_logo = await sharp(req.file.buffer)
       .resize(300, 300, {
@@ -453,40 +457,83 @@ async function teacherSignup(req, res) {
       .toBuffer();
   }
 
-  // Password policy: minimum 8 characters
+  // Basic Validation
+  if (!firstName || !normalizedEmail || !password || !school_name) {
+    return res.status(400).render("signup", {
+      error_message: "Please fill in all required fields.",
+    });
+  }
+
   if (password.length < 8) {
-    return res
-      .status(400)
-      .json({ status: "Password must be at least 8 characters long" });
+    return res.status(400).render("signup", {
+      error_message: "Password must be at least 8 characters long.",
+    });
   }
 
   let connection;
   try {
     connection = await getConnection();
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Ensure school_logo is included in the query values
+    // Check for duplicate email
+    const [existing] = await connection.execute(
+      "SELECT id FROM teacher WHERE email = ? LIMIT 1",
+      [normalizedEmail],
+    );
+
+    if (existing.length > 0) {
+      return res.status(409).render("signup", {
+        error_message:
+          "This email is already registered. Please login or use a different email.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const payment_status = subscription_tier === "FREE" ? "paid" : "unpaid";
+
+    await connection.beginTransaction();
+
     const [result] = await connection.execute(
       `INSERT INTO teacher 
-             (first_name, last_name, email, password, school_name, school_address, school_phone, school_logo) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+             (first_name, last_name, email, password, school_name, school_address, school_phone, school_logo, subscription_tier, payment_status) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         firstName,
         lastName,
-        email,
+        normalizedEmail,
         hashedPassword,
         school_name,
         school_address,
         school_phone,
         school_logo,
+        subscription_tier,
+        payment_status,
       ],
     );
 
-    // await sendWelcomeEmail(email, `${firstName} ${lastName}`);
-    return res.render("show", { result }); // Show the result after successful insert
+    const teacherId = result.insertId;
+
+    // Initialize teacher settings
+    await connection.execute(
+      "INSERT INTO teacher_settings (teacher_id) VALUES (?)",
+      [teacherId],
+    );
+
+    // Initialize school config
+    await connection.execute(
+      "INSERT INTO school_config (teacher_id, school_name, school_address) VALUES (?, ?, ?)",
+      [teacherId, school_name, school_address],
+    );
+
+    await connection.commit();
+
+    // After success, log them in or redirect to login
+    return res.redirect("/login?signup=success");
   } catch (error) {
-    console.error(error); // Log the actual error for debugging
-    res.json({ status: error.sqlMessage || "An error occurred" });
+    if (connection) await connection.rollback();
+    console.error("Signup Error:", error);
+    res.status(500).render("signup", {
+      error_message: "A server error occurred during signup. Please try again.",
+    });
   } finally {
     if (connection) connection.release();
   }

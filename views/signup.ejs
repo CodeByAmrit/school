@@ -2,28 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Create Your Account - StudentTracker</title>
 
+    <!-- Core styles with nonce -->
     <link rel="stylesheet" href="/css/styles.css?v=<%= appVersion %>" nonce="<%= nonce %>" />
+    <!-- Flowbite + Tailwind -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Quicksand:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@600;700&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/icons/favicon-32x32.png"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
 
-    <style>
+    <style nonce="<%= nonce %>">
       body {
         font-family: "Inter", sans-serif;
       }
@@ -31,284 +29,409 @@
         font-family: "Quicksand", sans-serif;
       }
       .hero-gradient {
-        background: linear-gradient(-45deg, #3182ce 0%, #63b3ed 100%);
+        background: linear-gradient(135deg, #1e5eb0 0%, #3182ce 50%, #63b3ed 100%);
+      }
+      .step-transition {
+        transition: opacity 0.25s ease-in-out, visibility 0.2s;
+      }
+      .plan-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      }
+      .plan-selected {
+        border-color: #3182ce !important;
+        background-color: #f0f9ff !important;
+      }
+      .plan-selected .check-icon {
+        display: block !important;
       }
     </style>
   </head>
 
-  <body class="bg-gray-50 dark:bg-gray-900">
-    <nav
-      class="fixed w-full bg-white/80 backdrop-blur-sm shadow-sm z-50 dark:bg-gray-800/80"
-    >
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
-      >
-        <a
-          href="/"
-          class="text-2xl font-bold bg-gradient-to-r from-[#63b3ed] to-[#3182ce] bg-clip-text text-transparent quicksand"
-        >
-          StudentTracker
-        </a>
-        <div class="flex items-center space-x-4">
-          <a
-            href="/login"
-            class="text-gray-600 dark:text-gray-300 hover:text-[#3182ce] dark:hover:text-blue-500 px-3 py-2 text-sm font-medium"
-            >Login</a
-          >
-        </div>
-      </div>
-    </nav>
+  <body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 antialiased">
+    <!-- Shared Guest Navbar -->
+    <%- include('./partials/guestNavbar.ejs') %>
 
-    <main class="flex items-center justify-center py-24 px-4">
+    <!-- Main container -->
+    <main class="min-h-screen flex items-center justify-center px-4 py-24 sm:py-32">
       <div
-        class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden grid md:grid-cols-2 h-[480px]"
+        class="max-w-6xl w-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl overflow-hidden grid md:grid-cols-2 transition-all duration-300"
       >
-        <div class="hidden md:flex flex-col p-8 text-white hero-gradient">
-          <div class="my-auto text-center">
+        <!-- LEFT SIDE: HERO -->
+        <div class="hidden md:flex flex-col justify-center items-center p-8 lg:p-12 hero-gradient text-white relative overflow-hidden">
+          <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 0 L60 30 L30 60 L0 30 Z" fill="none" stroke="white" stroke-width="1"/%3E%3C/svg%3E')]"></div>
+          <div class="relative z-10 text-center">
             <img
               src="/image/teacher.svg"
               alt="Teacher Illustration"
-              class="w-64 mx-auto mb-6"
+              class="w-72 mx-auto mb-8 drop-shadow-xl transform transition-transform hover:scale-105 duration-300"
             />
-            <h2 class="text-2xl font-bold mb-2 quicksand">
-              Join Our Community
+            <h2 class="text-3xl lg:text-4xl font-bold mb-4 quicksand tracking-tight">
+              Ready to scale?
             </h2>
-            <p class="text-blue-200">
-              Create your free account to manage, track, and report on student
-              progress with ease.
+            <p class="text-blue-100 text-lg max-w-md mx-auto leading-relaxed">
+              Join thousands of educators who have transformed their school management with StudentTracker.
             </p>
           </div>
         </div>
 
-        <div class="p-6 sm:p-8 flex flex-col">
-          <h1
-            class="text-2xl font-bold text-gray-900 dark:text-white quicksand"
-          >
-            Create Your Account
-          </h1>
-          <p class="text-gray-500 dark:text-gray-400 mt-2 mb-6">
-            Already have an account?
-            <a
-              href="/login"
-              class="font-medium text-[#3182ce] hover:underline dark:text-blue-500"
-              >Log in here</a
-            >
-          </p>
+        <!-- RIGHT SIDE: SIGNUP FORM -->
+        <div class="p-6 sm:p-10 flex flex-col bg-white dark:bg-gray-800">
+          <!-- header -->
+          <div class="mb-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white quicksand tracking-tight">
+              Create account
+            </h1>
+            
+            <% if (locals.error_message) { %>
+                <div class="mt-4 p-4 mb-4 text-sm text-red-800 rounded-2xl bg-red-50 dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-900/30 flex items-center gap-3 animate-pulse" role="alert">
+                  <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                  <span class="font-bold"><%= error_message %></span>
+                </div>
+            <% } %>
+          </div>
 
-          <div class="w-full mb-6">
-            <div class="flex justify-between mb-1">
-              <span class="text-sm font-medium text-[#3182ce] dark:text-white"
-                >Step <span id="current-step">1</span> of 2</span
+          <!-- Progress step indicator -->
+          <div class="w-full mb-8">
+            <div class="flex justify-between mb-2 text-sm">
+              <span class="font-bold text-[#3182ce] dark:text-blue-400"
+                >Step <span id="current-step">1</span> of 3</span
+              >
+              <span id="step-label" class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest"
+                >Personal details</span
               >
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden">
               <div
                 id="progress-bar"
-                class="bg-[#3182ce] h-2.5 rounded-full w-1/2 transition-all duration-500"
+                class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] h-2.5 rounded-full w-1/3 transition-all duration-500 ease-out"
               ></div>
             </div>
           </div>
 
+          <!-- Form -->
           <form
             action="/signup"
             method="post"
-            class="flex-grow flex flex-col pt-2"
+            class="flex flex-col"
             enctype="multipart/form-data"
+            id="signup-form"
           >
-            <div class="relative flex-grow overflow-y-auto overflow-x-hidden">
-              <div
-                id="form-slider"
-                class="absolute top-0 left-0 flex w-[200%] h-full transition-transform duration-500 ease-in-out"
-              >
-                <div id="step-1" class="w-1/2 px-1 space-y-5">
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div class="relative">
-                      <input
-                        type="text"
-                        id="exampleInputName"
-                        name="firstName"
-                        class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                        autocomplete="given-name"
-                        required
-                      />
-                      <label
-                        for="exampleInputName"
-                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                        >First Name</label
-                      >
-                    </div>
-                    <div class="relative">
-                      <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                        autocomplete="family-name"
-                      />
-                      <label
-                        for="lastName"
-                        class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                        >Last Name</label
-                      >
-                    </div>
-                  </div>
-                  <div class="relative">
-                    <input
-                      type="school_phone"
-                      id="school_phone"
-                      name="school_phone"
-                      class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                      required
-                    />
-                    <label
-                      for="school_phone"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                      >Phone No</label
-                    >
-                  </div>
-                  <div class="relative">
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                      autocomplete="email"
-                      required
-                    />
-                    <label
-                      for="email"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                      >Email *</label
-                    >
-                  </div>
+            <!-- Hidden input for subscription tier -->
+            <input type="hidden" name="subscription_tier" id="subscription_tier" value="FREE">
 
-                  <div class="relative">
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                      autocomplete="new-password"
-                      required
-                    />
-                    <label
-                      for="password"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                      >Password</label
-                    >
-                  </div>
+            <!-- STEP 1: Personal Info -->
+            <div id="step-1" class="space-y-5 step-transition">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    required
+                  />
+                  <label
+                    for="firstName"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >First name *</label
+                  >
                 </div>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                  />
+                  <label
+                    for="lastName"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >Last name</label
+                  >
+                </div>
+              </div>
 
-                <div id="step-2" class="w-1/2 px-1 space-y-5 -z-10">
-                  <div class="relative">
-                    <input
-                      type="text"
-                      id="school_name"
-                      name="school_name"
-                      class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                      required
-                    />
-                    <label
-                      for="school_name"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                      >School Name</label
-                    >
-                  </div>
-                  <div class="relative">
-                    <input
-                      type="text"
-                      id="school_address"
-                      name="school_address"
-                      class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                    />
-                    <label
-                      for="school_address"
-                      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-                      >School Address</label
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >School Logo</label
-                    >
-                    <label
-                      for="dropzone-file"
-                      class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600"
-                    >
-                      <div
-                        class="flex flex-col items-center justify-center pt-5 pb-6"
-                      >
-                        <svg
-                          class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 20 16"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                          />
-                        </svg>
-                        <p
-                          class="text-xs text-center text-gray-500 dark:text-gray-400"
-                        >
-                          <span class="font-semibold">Click to upload</span> or
-                          drag & drop
-                        </p>
-                      </div>
-                      <input
-                        id="dropzone-file"
-                        type="file"
-                        name="school_logo"
-                        class="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
+              <div class="relative">
+                <input
+                  type="tel"
+                  id="school_phone"
+                  name="school_phone"
+                  class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="school_phone"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >Phone number *</label
+                >
+              </div>
+
+              <div class="relative">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="email"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >Email address *</label
+                >
+              </div>
+
+              <div class="relative">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="password"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >Password *</label
+                >
               </div>
             </div>
 
-            <div class="mt-auto pt-6 flex gap-4">
+            <!-- STEP 2: School details -->
+            <div id="step-2" class="space-y-5 step-transition hidden">
+              <div class="relative">
+                <input
+                  type="text"
+                  id="school_name"
+                  name="school_name"
+                  class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="school_name"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >School name *</label
+                >
+              </div>
+
+              <div class="relative">
+                <input
+                  type="text"
+                  id="school_address"
+                  name="school_address"
+                  class="block px-3 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                />
+                <label
+                  for="school_address"
+                  class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-[#3182ce] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                  >School address</label
+                >
+              </div>
+
+              <div>
+                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-gray-200"
+                  >School logo (optional)</label
+                >
+                <label
+                  for="dropzone-file"
+                  class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-2xl cursor-pointer bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 transition-all border-gray-300 dark:border-gray-600"
+                >
+                  <div class="flex flex-col items-center justify-center pt-4 pb-5">
+                    <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    <p class="text-sm text-gray-500"><span class="font-bold text-blue-600">Click to upload</span></p>
+                  </div>
+                  <input id="dropzone-file" type="file" name="school_logo" class="hidden" accept="image/*" />
+                </label>
+                <div id="file-name-preview" class="text-xs text-center text-gray-500 mt-2"></div>
+              </div>
+            </div>
+
+            <!-- STEP 3: Plan Selection -->
+            <div id="step-3" class="space-y-6 step-transition hidden">
+               <div class="grid grid-cols-1 gap-4">
+                  <!-- Free Plan -->
+                  <div 
+                    class="plan-card p-6 border-2 border-gray-200 dark:border-gray-700 rounded-2xl cursor-pointer transition-all relative plan-selected" 
+                    onclick="selectPlan('FREE', this)"
+                  >
+                     <div class="absolute top-4 right-4 check-icon text-blue-600">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                     </div>
+                     <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Basic Explorer</h3>
+                        <span class="text-sm font-bold text-gray-500">FREE</span>
+                     </div>
+                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Perfect for small schools starting their digital journey.</p>
+                     <ul class="text-xs space-y-2 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Up to 100 Students</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Standard Marksheets</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Basic Reports</li>
+                     </ul>
+                  </div>
+
+                  <!-- Premium Plan -->
+                  <div 
+                    class="plan-card p-6 border-2 border-gray-200 dark:border-gray-700 rounded-2xl cursor-pointer transition-all relative"
+                    onclick="selectPlan('PREMIUM', this)"
+                  >
+                     <div class="absolute top-4 right-4 check-icon text-blue-600 hidden">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                     </div>
+                     <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                           Ultimate Pro <i class="fas fa-crown text-amber-500 text-sm"></i>
+                        </h3>
+                        <span class="text-sm font-bold text-blue-600">$19/mo</span>
+                     </div>
+                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Complete control with advanced AI and customization.</p>
+                     <ul class="text-xs space-y-2 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-[#3182ce]"></i> Unlimited Students</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-[#3182ce]"></i> AI Performance Insights</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-[#3182ce]"></i> Batch ID Generation</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-[#3182ce]"></i> Priority 24/7 Support</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-8 pt-2 flex flex-col sm:flex-row gap-4">
               <button
                 id="prev-btn"
                 type="button"
-                class="w-1/2 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 hidden"
+                class="w-full sm:w-1/3 py-3 px-4 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all hidden"
               >
-                Previous
+                Back
               </button>
               <button
                 id="next-btn"
                 type="button"
-                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-800"
+                class="w-full py-4 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-[#3182ce] to-[#63b3ed] hover:shadow-lg transition-all"
               >
-                Next
+                Continue
               </button>
               <button
                 id="submit-btn"
                 type="submit"
-                class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md hidden"
+                class="w-full py-4 px-4 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-[#1e5eb0] to-[#3182ce] hover:shadow-xl transition-all hidden"
               >
-                Create Account
+                Complete Registration
               </button>
             </div>
           </form>
+
+          <p class="text-xs text-center text-gray-400 dark:text-gray-500 mt-6">
+            Already have an account? <a href="/login" class="font-bold text-blue-600 hover:underline">Log in</a>
+          </p>
         </div>
       </div>
     </main>
 
     <script src="/flowbite/flowbite.min.js" nonce="<%= nonce %>"></script>
-    <script src="/js/uploadSchoolLogo.js" nonce="<%= nonce %>"></script>
+    
+    <script nonce="<%= nonce %>">
+      const step1 = document.getElementById('step-1');
+      const step2 = document.getElementById('step-2');
+      const step3 = document.getElementById('step-3');
+      const nextBtn = document.getElementById('next-btn');
+      const prevBtn = document.getElementById('prev-btn');
+      const submitBtn = document.getElementById('submit-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const currentStepSpan = document.getElementById('current-step');
+      const stepLabelSpan = document.getElementById('step-label');
+      const tierInput = document.getElementById('subscription_tier');
+
+      let currentStep = 1;
+
+      function selectPlan(tier, el) {
+          tierInput.value = tier;
+          document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('plan-selected'));
+          el.classList.add('plan-selected');
+          document.querySelectorAll('.check-icon').forEach(i => i.classList.add('hidden'));
+          el.querySelector('.check-icon').classList.remove('hidden');
+      }
+
+      function updateStepUI() {
+          [step1, step2, step3].forEach(s => s.classList.add('hidden'));
+          
+          if (currentStep === 1) {
+              step1.classList.remove('hidden');
+              nextBtn.classList.remove('hidden');
+              nextBtn.classList.add('w-full');
+              prevBtn.classList.add('hidden');
+              submitBtn.classList.add('hidden');
+              progressBar.style.width = '33%';
+              currentStepSpan.innerText = '1';
+              stepLabelSpan.innerText = 'Personal details';
+          } else if (currentStep === 2) {
+              step2.classList.remove('hidden');
+              nextBtn.classList.remove('hidden');
+              nextBtn.classList.remove('w-full');
+              nextBtn.classList.add('w-full', 'sm:w-2/3');
+              prevBtn.classList.remove('hidden');
+              submitBtn.classList.add('hidden');
+              progressBar.style.width = '66%';
+              currentStepSpan.innerText = '2';
+              stepLabelSpan.innerText = 'School info';
+          } else {
+              step3.classList.remove('hidden');
+              nextBtn.classList.add('hidden');
+              prevBtn.classList.remove('hidden');
+              submitBtn.classList.remove('hidden');
+              submitBtn.classList.add('w-full', 'sm:w-2/3');
+              progressBar.style.width = '100%';
+              currentStepSpan.innerText = '3';
+              stepLabelSpan.innerText = 'Choose Plan';
+          }
+      }
+
+      nextBtn.addEventListener('click', () => {
+          if (currentStep === 1) {
+              if (validateStep1()) { currentStep = 2; updateStepUI(); }
+          } else if (currentStep === 2) {
+              if (validateStep2()) { currentStep = 3; updateStepUI(); }
+          }
+      });
+
+      prevBtn.addEventListener('click', () => {
+          if (currentStep > 1) { currentStep--; updateStepUI(); }
+      });
+
+      function validateStep1() {
+          const email = document.getElementById('email').value.trim();
+          const pw = document.getElementById('password').value;
+          if (!document.getElementById('firstName').value.trim() || !email || pw.length < 8) {
+              alert('Please check all fields. Password must be at least 8 characters.');
+              return false;
+          }
+          return true;
+      }
+
+      function validateStep2() {
+          if (!document.getElementById('school_name').value.trim()) {
+              alert('School name is required.');
+              return false;
+          }
+          return true;
+      }
+
+      const fileInput = document.getElementById('dropzone-file');
+      if (fileInput) {
+          fileInput.addEventListener('change', () => {
+              const name = fileInput.files[0]?.name;
+              document.getElementById('file-name-preview').innerText = name ? `Selected: ${name}` : '';
+          });
+      }
+
+      updateStepUI();
+    </script>
   </body>
 </html>
