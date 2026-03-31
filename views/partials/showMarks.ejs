@@ -4,22 +4,67 @@
         <div class="container mx-auto py-8">
             <h1 class="text-2xl font-bold text-center mb-8 dark:text-white">Student Marks Entry</h1>
 
-            <div
-                class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col md:flex-row xl:flex-row justify-center gap-10 mx-2 md:mx-8 lg:mx-8">
-                <div class="flex flex-col gap-3">
-                    <h2 class="text-xl font-semibold dark:text-white">Student Details</h2>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mr-3">
+                        <i class="fas fa-history text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-900 dark:text-white">Academic History</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Switch between sessions and classes</p>
+                    </div>
+                </div>
+                
+                <form action="/student/get_marks/<%= student.school_id %>" method="GET" class="flex items-center gap-2">
+                    <select name="session_class" onchange="const val = this.value.split('|'); window.location.href='/student/get_marks/<%= student.school_id %>?session=' + val[0] + '&class_name=' + val[1]"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="<%= student.session %>|<%= student.class %>" <%= !viewingHistory ? 'selected' : '' %>>
+                            Current: <%= student.session %> - <%= student.class %>
+                        </option>
+                        <% history.forEach(h => { %>
+                            <% if (h.session !== student.session || h.class_name !== student.class) { %>
+                                <option value="<%= h.session %>|<%= h.class_name %>" <%= (viewSession === h.session && viewClassName === h.class_name) ? 'selected' : '' %>>
+                                    Archive: <%= h.session %> - <%= h.class_name %>
+                                </option>
+                            <% } %>
+                        <% }); %>
+                    </select>
+                </form>
+            </div>
 
-                    <p><strong>Name:</strong>
-                        <input type="text" value="<%= student.name %>" disabled
-                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+            <% if (viewingHistory) { %>
+                <div class="mb-6 p-4 flex items-center bg-amber-50 border-l-4 border-amber-400 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300 rounded-r-lg">
+                    <i class="fas fa-exclamation-triangle mr-3"></i>
+                    <p class="text-sm font-medium">
+                        You are viewing archived records for <strong>Session <%= viewSession %></strong> and <strong>Class <%= viewClassName %></strong>. 
+                        To edit current marks, switch back to the "Current" view in the history selector above.
                     </p>
-                    <p><strong>Class:</strong>
-                        <input type="text" value="<%= student.class %>" disabled
-                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+                </div>
+            <% } %>
+
+            <div
+                class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row xl:flex-row justify-center gap-10 mx-2 md:mx-8 lg:mx-8">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center mb-2">
+                        <h2 class="text-xl font-bold dark:text-white">Student Details</h2>
+                        <% if (viewingHistory) { %>
+                            <span class="ml-3 px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold uppercase rounded">Archive</span>
+                        <% } else { %>
+                            <span class="ml-3 px-2 py-0.5 bg-green-100 text-green-800 text-[10px] font-bold uppercase rounded">Active</span>
+                        <% } %>
+                    </div>
+
+                    <p class="flex flex-col">
+                        <span class="text-xs font-semibold text-gray-500 uppercase">Name</span>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white"><%= student.name %></span>
                     </p>
-                    <p><strong>Father Name:</strong>
-                        <input type="text" value="<%= student.father_name %>" disabled
-                            class="w-full px-2 py-1 border rounded bg-gray-200 dark:bg-gray-700 dark:text-white">
+                    <p class="flex flex-col">
+                        <span class="text-xs font-semibold text-gray-500 uppercase">Class (Viewing)</span>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white"><%= viewClassName %></span>
+                    </p>
+                    <p class="flex flex-col">
+                        <span class="text-xs font-semibold text-gray-500 uppercase">Academic Session</span>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white text-blue-600 dark:text-blue-400"><%= viewSession %></span>
                     </p>
                 </div>
                 <div>
@@ -149,12 +194,21 @@
                                                         placeholder="Enter marks">
                                                 </td>
                                                 <td class="px-2 lg:px-4 py-2">
+                                                    <% 
+                                                       let maxVal = maxMarks[term] && (maxMarks[term][subject] !== undefined) ? maxMarks[term][subject] : '';
+                                                       let displayMax = maxVal;
+                                                       if (maxVal === 0 || maxVal === '0') {
+                                                          displayMax = (subject === 'GENERAL KNOWLEDGE') ? 'NA' : 'Grading';
+                                                       } else if (maxVal === '') {
+                                                          displayMax = '100'; // Default if not found
+                                                       }
+                                                    %>
                                                     <input required type="text"
                                                         name="maxMarks[<%= term %>][<%= subject %>]"
-                                                        value="<%= maxMarks[term] && maxMarks[term][subject] ? maxMarks[term][subject] : '100' %>"
+                                                        value="<%= displayMax %>"
                                                         class="w-full lg:w-2/3 px-3 py-1 border rounded dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                                                         placeholder="Enter max marks" <% if (maxMarks[term] &&
-                                                        maxMarks[term][subject]) { %>
+                                                        (maxMarks[term][subject] !== undefined)) { %>
                                                     readonly <% } %> >
                                                 </td>
                                             </tr>

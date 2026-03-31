@@ -27,12 +27,12 @@ async function generate(req, res) {
 
     const student = studentResults[0];
 
-    // Fetch marks for the student by term and subject
+    // Fetch marks for the student filtered by their CURRENT session and class
     const [marksResults] = await connection.execute(
       `SELECT sm.subject, sm.marks, sm.term 
              FROM student_marks sm 
-             WHERE sm.student_id = ?`,
-      [studentId],
+             WHERE sm.student_id = ? AND sm.session = ? AND sm.class_name = ?`,
+      [studentId, student.session, student.class],
     );
 
     // Organize marks by term
@@ -44,27 +44,29 @@ async function generate(req, res) {
       marksByTerm[mark.term].push({ subject: mark.subject, marks: mark.marks });
     });
 
-    // Fetch maximum marks for the student's class
+    // Fetch maximum marks for the student's class (from the new config table for consistency)
     const [maxMarksRows] = await connection.execute(
-      "SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?",
-      [student.class],
+      "SELECT subject_name as subject, max_marks FROM subject_config WHERE class_name = ? AND teacher_id = ?",
+      [student.class, student.teacher_id],
     );
 
-    // Organize max marks by term
+    // Organize max marks
     const maxMarks = {};
     maxMarksRows.forEach((row) => {
-      if (!maxMarks[row.term]) {
-        maxMarks[row.term] = {};
-      }
-      maxMarks[row.term][row.subject] = row.max_marks;
+      // In subject_config, max_marks is set once per subject.
+      // We apply it to all terms (1, 2, 3) for the certificate logic.
+      [1, 2, 3].forEach(term => {
+        if (!maxMarks[term]) maxMarks[term] = {};
+        maxMarks[term][row.subject] = row.max_marks;
+      });
     });
 
     // Fetch grand total, total maximum marks, and percentage for each term
     const [performanceResults] = await connection.execute(
       `SELECT term, grand_total, total_max_marks, percentage 
              FROM StudentPerformance 
-             WHERE school_id = ?`,
-      [studentId],
+             WHERE school_id = ? AND session = ? AND class_name = ?`,
+      [studentId, student.session, student.class],
     );
 
     const performanceByTerm = {};
@@ -78,14 +80,14 @@ async function generate(req, res) {
 
     // Fetch attendance and status for the student
     const [[student_attendance_status]] = await connection.execute(
-      "SELECT attendance, status FROM student_attendance_status WHERE student_id = ?",
-      [studentId],
+      "SELECT attendance, status FROM student_attendance_status WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, student.session, student.class],
     );
 
-    // Fetch attendance and status for the student
+    // Fetch grade and remarks
     const [grade_remarks] = await connection.execute(
-      "SELECT * FROM student_grade_remarks WHERE student_id = ?",
-      [studentId],
+      "SELECT * FROM student_grade_remarks WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, student.session, student.class],
     );
 
     // Load the certificate template
@@ -213,47 +215,18 @@ async function generate(req, res) {
     const rowHeight = 81; // Height between rows
     let termGrandTotal = 0;
 
-    // ---------------------- SUBJECT CONFIG ----------------------
-    function getSubjectsByClass(studentClass) {
-      if (studentClass === "NURSERY" || studentClass === "KG") {
-        return [
-          "ENGLISH (WR.)",
-          "ENGLISH ORAL",
-          "HINDI (WR.)",
-          "HINDI ORAL",
-          "MATHS (WR.)",
-          "MATHS ORAL",
-          "DRAWING",
-          "GENERAL KNOWLEDGE",
-        ];
-      }
+    // ---------------------- DYNAMIC SUBJECTS ----------------------
+    // Try to fetch subjects from database configuration first
+    const [dbSubjects] = await connection.execute(
+      "SELECT subject_name FROM subject_config WHERE teacher_id = ? AND class_name = ? ORDER BY priority",
+      [student.teacher_id, student.class],
+    );
 
-      if (["6TH", "7TH", "8TH"].includes(studentClass)) {
-        return [
-          "ENGLISH",
-          "HINDI",
-          "SANSKRIT",
-          "MATHEMATICS",
-          "SOCIAL SCIENCE/EVS",
-          "SCIENCE",
-          "COMPUTER",
-          "GENERAL KNOWLEDGE",
-        ];
-      }
-
-      return [
-        "ENGLISH",
-        "HINDI",
-        "MATHEMATICS",
-        "SOCIAL SCIENCE/EVS",
-        "SCIENCE",
-        "COMPUTER",
-        "GENERAL KNOWLEDGE",
-        "DRAWING",
-      ];
+    let subjectOrder = [];
+    if (dbSubjects.length > 0) {
+      subjectOrder = dbSubjects.map((s) => s.subject_name);
     }
-
-    const subjectOrder = getSubjectsByClass(student.class);
+    // All subjects now pulled from DB config (subject_config)
 
     // ---------------------- DRAW MARKS ----------------------
     Object.keys(marksByTerm).forEach((term, termIndex) => {
@@ -289,16 +262,23 @@ async function generate(req, res) {
         // MAX MARKS (only first column)
         if (termIndex === 0) {
           const maxMarksForSubject = maxMarks[term]?.[subject] ?? "N/A";
+          const maxInt = parseInt(maxMarksForSubject, 10);
 
-          firstPage.drawText(maxMarksForSubject.toString(), {
+          // Display logic for Grading subjects (max marks 0)
+          let maxDisplayValue = maxMarksForSubject.toString();
+          if (maxInt === 0) {
+            // Check original subject names for specific labels if needed, or default to Grading
+            maxDisplayValue = (subject === 'GENERAL KNOWLEDGE') ? 'NA' : 'Grading';
+          }
+
+          firstPage.drawText(maxDisplayValue, {
             x: 857,
             y: yPosition,
             size: 34,
             color: rgb(0, 0, 0),
           });
 
-          const maxInt = parseInt(maxMarksForSubject, 10);
-          if (!isNaN(maxInt)) {
+          if (!isNaN(maxInt) && maxInt > 0) {
             termGrandTotal += maxInt;
           }
         }

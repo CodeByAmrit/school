@@ -683,17 +683,29 @@ async function getStudentMarks(studentId, term) {
 
 // Function to store student marks
 async function storeStudentMarks(studentId, term, marksData) {
-  const query = `
-    INSERT INTO student_marks (student_id, term, subject, marks)
-    VALUES (?, ?, ?, ?)
-    ON DUPLICATE KEY UPDATE marks = VALUES(marks)
-  `;
   let connection;
   try {
     connection = await getConnection();
+
+    // Fetch student's current session and class
+    const [[student]] = await connection.execute(
+      "SELECT session, class FROM students WHERE school_id = ?",
+      [studentId],
+    );
+
+    if (!student) throw new Error("Student not found");
+
+    const query = `
+      INSERT INTO student_marks (student_id, session, class_name, term, subject, marks)
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE marks = VALUES(marks)
+    `;
+
     for (const mark of marksData) {
       await connection.execute(query, [
         studentId,
+        student.session,
+        student.class,
         term,
         mark.subject,
         mark.marks,
@@ -707,22 +719,34 @@ async function storeStudentMarks(studentId, term, marksData) {
   }
 }
 
-// Fetch marks and maximum marks for a student
+// Fetch marks and maximum marks for a student (session-aware)
 async function getStudentMarksWithMaxMarks(studentId) {
-  const query = `
-    SELECT sm.term, sm.subject, sm.marks, mm.max_marks
-    FROM student_marks sm
-    LEFT JOIN maximum_marks mm
-      ON sm.term = mm.term AND sm.subject = mm.subject AND
-         mm.class = (SELECT class FROM students WHERE school_id = ?)
-    WHERE sm.student_id = ?
-    ORDER BY sm.term, sm.subject;
-  `;
-
   let connection;
   try {
     connection = await getConnection();
-    const [results] = await connection.execute(query, [studentId, studentId]);
+
+    // Fetch student details first
+    const [[student]] = await connection.execute(
+      "SELECT session, class, teacher_id FROM students WHERE school_id = ?",
+      [studentId],
+    );
+    if (!student) throw new Error("Student not found");
+
+    const query = `
+      SELECT sm.term, sm.subject, sm.marks, sc.max_marks
+      FROM student_marks sm
+      LEFT JOIN subject_config sc
+        ON sm.subject = sc.subject_name AND sc.class_name = sm.class_name AND sc.teacher_id = ?
+      WHERE sm.student_id = ? AND sm.session = ? AND sm.class_name = ?
+      ORDER BY sm.term, sm.subject;
+    `;
+
+    const [results] = await connection.execute(query, [
+      student.teacher_id,
+      studentId,
+      student.session,
+      student.class,
+    ]);
     return results;
   } catch (error) {
     console.error("Error fetching marks with max marks:", error);
@@ -735,19 +759,28 @@ async function getStudentMarksWithMaxMarks(studentId) {
 // Save or update marks for a student
 async function saveStudentMarks(studentId, marks, maxMarks) {
   const insertMarksQuery = `
-        INSERT INTO student_marks (student_id, term, subject, marks)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO student_marks (student_id, session, class_name, term, subject, marks)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE marks = VALUES(marks);
     `;
 
   const insertMaxMarksQuery = `
         INSERT INTO maximum_marks (class, term, subject, max_marks)
-        VALUES ((SELECT class FROM students WHERE school_id = ?), ?, ?, ?)
+        VALUES (?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE max_marks = VALUES(max_marks);
     `;
+
   let connection;
   try {
     connection = await getConnection();
+
+    // Fetch student's current session and class to ensure correct mapping
+    const [[student]] = await connection.execute(
+      "SELECT session, class FROM students WHERE school_id = ?",
+      [studentId],
+    );
+
+    if (!student) throw new Error("Student not found");
 
     // Loop through the marks and maxMarks for each term
     for (let term = 0; term < marks.length; term++) {
@@ -756,9 +789,11 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
         const mark = marks[term][subject];
         const maxMark = maxMarks[term][subject];
 
-        // Insert or update marks
+        // Insert or update marks with session and class context
         await connection.execute(insertMarksQuery, [
           studentId,
+          student.session,
+          student.class,
           term + 1,
           subject,
           mark,
@@ -766,7 +801,7 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
 
         // Insert or update maximum marks
         await connection.execute(insertMaxMarksQuery, [
-          studentId,
+          student.class,
           term + 1,
           subject,
           maxMark,

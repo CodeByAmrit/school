@@ -487,24 +487,57 @@ router.get("/preview/:srn_no", checkAuth, async (req, res) => {
 
 // Marks certificate routes
 router.get("/student/marks/:id", checkAuth, async (req, res) => {
+  const { id } = req.params;
+  let connection;
   try {
-    const maxMarks = await getMaximumMarks(req, res);
-    const { rows1, rows2, rows3 } = await getMarks(req, res);
-    const students = await getOneStudent(req, res);
-    const student = students[0];
-    let school_logo_url = "/image/graduated.png";
-    const school_logo = await get_school_logo(req, res);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString("base64");
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
+    connection = await getConnection();
 
+    // Fetch student details
+    const [studentRows] = await connection.execute(
+      "SELECT * FROM students WHERE school_id = ?",
+      [id],
+    );
+    if (studentRows.length === 0)
+      return res.status(404).send("Student not found");
+    const student = studentRows[0];
+
+    // Fetch marks for the student filtered by their CURRENT session and class
+    const [marksRows] = await connection.execute(
+      `SELECT term, subject, marks FROM student_marks 
+       WHERE student_id = ? AND session = ? AND class_name = ?`,
+      [id, student.session, student.class],
+    );
+
+    // Fetch maximum marks from configuration
+    const [maxMarksRows] = await connection.execute(
+      "SELECT subject_name as subject, max_marks FROM subject_config WHERE class_name = ? AND teacher_id = ?",
+      [student.class, student.teacher_id],
+    );
+
+    // Organize data for the view
+    const rows1 = marksRows.filter((m) => m.term === 1);
+    const rows2 = marksRows.filter((m) => m.term === 2);
+    const rows3 = marksRows.filter((m) => m.term === 3);
+
+    const maxMarks = {};
+    maxMarksRows.forEach((row) => {
+      // Apply the same max_marks to all terms (1, 2, 3) for the preview view
+      [1, 2, 3].forEach((term) => {
+        if (!maxMarks[term]) maxMarks[term] = {};
+        maxMarks[term][row.subject] = row.max_marks;
+      });
+    });
+
+    const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
+
     res.render("marks", { user, student, rows1, rows2, rows3, maxMarks });
   } catch (error) {
-    console.error("Error generating certificate:", error);
-    res.status(500).send("Error generating certificate");
+    console.error("Error generating marks sheet:", error);
+    res.status(500).send("Error generating marks sheet");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -626,10 +659,23 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 
     const student = studentRows[0];
 
-    // Fetch marks for all terms
-    const [marksRows] = await connection.execute(
-      "SELECT term, subject, marks FROM student_marks WHERE student_id = ?",
+    // --- HISTORICAL DATA DETECTION ---
+    // Find all sessions and classes this student has records for
+    const [historyRows] = await connection.execute(
+      "SELECT DISTINCT session, class_name FROM student_marks WHERE student_id = ? ORDER BY session DESC",
       [studentId],
+    );
+
+    // Check for query parameters, otherwise default to student's current session/class
+    const viewSession = req.query.session || student.session;
+    const viewClassName = req.query.class_name || student.class;
+    const viewingHistory =
+      viewSession !== student.session || viewClassName !== student.class;
+
+    // Fetch regular marks filtered by selected session and class
+    const [marksRows] = await connection.execute(
+      "SELECT term, subject, marks FROM student_marks WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, viewSession, viewClassName],
     );
 
     // Organize marks by term
@@ -641,10 +687,11 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
       marks[row.term][row.subject] = row.marks;
     });
 
-    // Fetch maximum marks for the student's class
+    // Fetch maximum marks for the selected class and session (if applicable)
+    // Fallback: If no max marks found for this specific class/session, use class-only query
     const [maxMarksRows] = await connection.execute(
       "SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?",
-      [student.class],
+      [viewClassName],
     );
 
     // Organize max marks by term
@@ -658,66 +705,38 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 
     // Fetch performance summary
     const [performanceRows] = await connection.execute(
-      "SELECT * FROM StudentPerformance WHERE school_id = ?",
-      [studentId],
+      "SELECT * FROM StudentPerformance WHERE school_id = ? AND session = ? AND class_name = ?",
+      [studentId, viewSession, viewClassName],
     );
 
     const [gradeRankRows] = await connection.execute(
-      "SELECT * FROM student_grade_remarks WHERE student_id = ?",
-      [studentId],
+      "SELECT * FROM student_grade_remarks WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, viewSession, viewClassName],
     );
 
     // Fetch attendance and status for the student
     const [[student_attendance_status]] = await connection.execute(
-      "SELECT attendance, status FROM student_attendance_status WHERE student_id = ?",
-      [studentId],
+      "SELECT attendance, status FROM student_attendance_status WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, viewSession, viewClassName],
     );
 
-    // user
+    // Fetch school logo and user info
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
 
-    let subjects = [
-      "ENGLISH",
-      "HINDI",
-      "MATHEMATICS",
-      "SOCIAL SCIENCE/EVS",
-      "SCIENCE",
-      "COMPUTER",
-      "GENERAL KNOWLEDGE",
-      "DRAWING",
-    ];
+    // --- DYNAMIC SUBJECTS LOGIC ---
+    // Try to fetch subjects from database configuration first (using the class we're viewing)
+    const [dbSubjects] = await connection.execute(
+      "SELECT subject_name FROM subject_config WHERE teacher_id = ? AND class_name = ? ORDER BY priority",
+      [user._id, viewClassName],
+    );
 
-    if (student.class === "NURSERY" || student.class === "KG") {
-      subjects = [
-        "ENGLISH (WR.)",
-        "ENGLISH ORAL",
-        "HINDI (WR.)",
-        "HINDI ORAL",
-        "MATHS (WR.)",
-        "MATHS ORAL",
-        "DRAWING",
-        "GENERAL KNOWLEDGE",
-      ];
+    let subjects = [];
+    if (dbSubjects.length > 0) {
+      subjects = dbSubjects.map((s) => s.subject_name);
     }
-
-    if (
-      student.class === "6TH" ||
-      student.class === "7TH" ||
-      student.class === "8TH"
-    ) {
-      subjects = [
-        "ENGLISH",
-        "HINDI",
-        "MATHEMATICS",
-        "SOCIAL SCIENCE/EVS",
-        "SCIENCE",
-        "COMPUTER",
-        "GENERAL KNOWLEDGE",
-        "SANSKRIT",
-      ];
-    }
+    // No more hardcoded fallbacks - rely on DB config
 
     // Render the EJS view
     res.render("studentMarks", {
@@ -730,6 +749,10 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
       rank_remarks: gradeRankRows,
       student_attendance_status,
       total_students: studentsCount,
+      history: historyRows,
+      viewSession,
+      viewClassName,
+      viewingHistory,
     });
   } catch (error) {
     console.error("Error fetching student marks:", error);
@@ -771,15 +794,29 @@ router.post("/student/attendance-status/:school_id", async (req, res) => {
     // Get a database connection
     connection = await getConnection();
 
+    // Fetch student's current session and class
+    const [[student]] = await connection.execute(
+      "SELECT session, class FROM students WHERE school_id = ?",
+      [school_id],
+    );
+
+    if (!student) return res.status(404).send("Student not found");
+
     // Create or update data in `student_attendance_status` table
     const query = `
-      INSERT INTO student_attendance_status (student_id, attendance, status)
-      VALUES (?, ?, ?)
+      INSERT INTO student_attendance_status (student_id, session, class_name, attendance, status)
+      VALUES (?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         attendance = VALUES(attendance),
         status = VALUES(status)
     `;
-    await connection.execute(query, [school_id, attendance, status]);
+    await connection.execute(query, [
+      school_id,
+      student.session,
+      student.class,
+      attendance,
+      status,
+    ]);
 
     res.redirect(`/student/get_marks/${school_id}`);
   } catch (error) {
@@ -838,32 +875,37 @@ router.get("/files", checkAuth, apiCache(30), async (req, res) => {
 });
 
 // Route to get files for a particular student
-router.get("/files/one/:school_id", checkAuth, apiCache(30), async (req, res) => {
-  const { school_id } = req.params;
-  let connection;
-  try {
-    connection = await getConnection();
-    let [files] = await connection.execute(
-      "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
-      [school_id],
-    );
+router.get(
+  "/files/one/:school_id",
+  checkAuth,
+  apiCache(30),
+  async (req, res) => {
+    const { school_id } = req.params;
+    let connection;
+    try {
+      connection = await getConnection();
+      let [files] = await connection.execute(
+        "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
+        [school_id],
+      );
 
-    const school_logo_url = await getSchoolLogo(req, res);
-    let user = req.user;
-    user.school_logo = school_logo_url;
+      const school_logo_url = await getSchoolLogo(req, res);
+      let user = req.user;
+      user.school_logo = school_logo_url;
 
-    // Fetch total students assigned to the teacher
-    const studentsCount = await getTotalStudents(req, res);
-    res.render("studentFiles", {
-      files,
-      user,
-      school_id,
-      total_students: studentsCount,
-    });
-  } finally {
-    if (connection) connection.release();
-  }
-});
+      // Fetch total students assigned to the teacher
+      const studentsCount = await getTotalStudents(req, res);
+      res.render("studentFiles", {
+        files,
+        user,
+        school_id,
+        total_students: studentsCount,
+      });
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+);
 
 // Route to view a file
 router.get("/files/:id", async (req, res) => {
@@ -953,14 +995,21 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   const { grade, remarks } = req.body;
   let connection;
   try {
-    connection = await getConnection();
+    // Fetch student's current session and class
+    const [[student]] = await connection.execute(
+      "SELECT session, class FROM students WHERE school_id = ?",
+      [id],
+    );
+
+    if (!student) return res.status(404).send("Student not found");
+
     await connection.execute(
-      `INSERT INTO student_grade_remarks (student_id, grade, remarks, term) 
-       VALUES (?, ?, ?, ?)
+      `INSERT INTO student_grade_remarks (student_id, session, class_name, grade, remarks, term) 
+       VALUES (?, ?, ?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE
        grade = VALUES(grade),
        remarks = VALUES(remarks)`,
-      [id, grade, remarks, term],
+      [id, student.session, student.class, grade, remarks, term],
     );
 
     res.redirect(`/student/get_marks/${id}`);
@@ -1138,22 +1187,22 @@ router.post("/result", async (req, res) => {
     );
     const school = schoolRows[0] || {};
 
-    // 3. Fetch all related academic data
+    // 3. Fetch all related academic data for the student's CURRENT session and class
     const [marks] = await connection.execute(
-      "SELECT * FROM student_marks WHERE student_id = ? ORDER BY term, subject",
-      [studentId],
+      "SELECT * FROM student_marks WHERE student_id = ? AND session = ? AND class_name = ? ORDER BY term, subject",
+      [studentId, student.session, student.class],
     );
     const [performance] = await connection.execute(
-      "SELECT * FROM StudentPerformance WHERE school_id = ? ORDER BY term",
-      [studentId],
+      "SELECT * FROM StudentPerformance WHERE school_id = ? AND session = ? AND class_name = ? ORDER BY term",
+      [studentId, student.session, student.class],
     );
     const [grades] = await connection.execute(
-      "SELECT * FROM student_grade_remarks WHERE student_id = ? ORDER BY term",
-      [studentId],
+      "SELECT * FROM student_grade_remarks WHERE student_id = ? AND session = ? AND class_name = ? ORDER BY term",
+      [studentId, student.session, student.class],
     );
     const [statusRows] = await connection.execute(
-      "SELECT * FROM student_attendance_status WHERE student_id = ?",
-      [studentId],
+      "SELECT * FROM student_attendance_status WHERE student_id = ? AND session = ? AND class_name = ?",
+      [studentId, student.session, student.class],
     );
 
     res.render("result", {
