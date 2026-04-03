@@ -125,9 +125,9 @@
       </div>
 
       <!-- Student Table -->
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto m-2 rounded-xl min-h-[calc(100vh-25rem)]">
         <table
-          class="w-full text-sm text-left text-gray-700"
+          class="w-full text-sm text-left text-gray-700 border-separate border-spacing-y-2"
           id="student-table"
         >
           <thead class="text-xs text-gray-700 uppercase bg-blue-50">
@@ -187,15 +187,15 @@
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-blue-50">
+          <tbody>
             <% if (studentlist.length > 0) { %>
             <% studentlist.forEach((student, index) => { %>
             <tr
-              class="hover:bg-blue-50/50 transition-colors duration-200"
+              class="bg-white rounded-xl overflow-hidden hover:bg-blue-50/30 transition-all shadow-sm border border-gray-100"
               data-student-id="<%= student.school_id %>"
             >
               <!-- Checkbox -->
-              <td class="px-4 py-2">
+              <td class="px-3 py-0">
                 <input
                   type="checkbox"
                   class="student-checkbox w-4 h-4 text-blue-600 bg-white border-blue-300 rounded focus:ring-blue-500 focus:ring-2"
@@ -204,11 +204,11 @@
               </td>
 
               <!-- Student Info with Avatar -->
-              <td class="px-2 py-1.5">
+              <td class="px-2 py-0">
                 <div class="flex items-center space-x-3">
                   <div class="relative flex-shrink-0">
                     <div
-                      class="w-12 h-12 rounded-lg overflow-hidden border border-gray-100 shadow-sm"
+                      class="w-10 h-10 rounded-lg overflow-hidden shadow-sm"
                     >
                       <img
                         class="object-cover w-full h-full"
@@ -233,54 +233,65 @@
               </td>
 
               <!-- Class -->
-              <td class="px-4 py-2">
+              <td class="px-4 py-0">
                 <div class="flex items-center">
                   <div
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center mr-3"
+                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center mr-2"
                   >
-                    <i class="fas fa-graduation-cap text-blue-600 text-sm"></i>
+                    <i class="fas fa-chalkboard text-blue-600 text-[10px]"></i>
                   </div>
                   <div>
-                    <div class="font-medium text-gray-900">
+                    <div class="font-semibold text-gray-800 text-xs">
                       <%= student.class %>
                     </div>
-                    <div class="text-xs text-gray-500">Grade</div>
+                    <div class="text-[10px] text-gray-500">
+                      Sec: <%= student.section %>
+                    </div>
                   </div>
                 </div>
               </td>
 
               <!-- Session -->
-              <td class="px-2 py-1.5 hidden md:table-cell">
+              <td class="px-2 py-0 hidden md:table-cell">
                 <div class="text-xs font-medium text-gray-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
                   <%= student.session %>
                 </div>
               </td>
 
               <!-- Status -->
-              <td class="px-2 py-1.5 hidden lg:table-cell">
+              <td class="px-2 py-0 hidden lg:table-cell">
                 <% 
                   let statusText; 
-                  let statusClass; 
+                  let bgClass; 
+                  let textClass; 
+                  let borderClass; 
+                  
                   if (student.profile_status && student.profile_status.toLowerCase() === 'pending') { 
                     statusText = 'Pending'; 
-                    statusClass = 'text-orange-600'; 
+                    bgClass = 'bg-orange-50'; 
+                    textClass = 'text-orange-700'; 
+                    borderClass = 'border-orange-200'; 
                   } else if (student.profile_status && student.profile_status.toLowerCase() === 'inactive') { 
                     statusText = 'Inactive'; 
-                    statusClass = 'text-gray-500'; 
+                    bgClass = 'bg-gray-50'; 
+                    textClass = 'text-gray-700'; 
+                    borderClass = 'border-gray-200'; 
                   } else { 
                     statusText = 'Active'; 
-                    statusClass = 'text-green-600'; 
+                    bgClass = 'bg-emerald-50'; 
+                    textClass = 'text-emerald-700'; 
+                    borderClass = 'border-emerald-200'; 
                   } 
                 %>
-                <div class="text-xs font-semibold <%= statusClass %> flex items-center">
-                  <span class="w-1.5 h-1.5 rounded-full bg-current mr-1.5"></span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium <%= bgClass %> <%= textClass %> border <%= borderClass %>">
+                  <span class="w-1 h-1 rounded-full bg-current mr-1"></span>
                   <%= statusText %>
-                </div>
+                </span>
               </td>
 
-              <!-- Actions Dropdown -->
-              <td class="px-6 py-4 text-right">
-                <div class="flex items-center justify-end space-x-2">
+              <!-- Actions -->
+              <td class="px-4 py-0 text-right">
+                <div class="flex items-center justify-end space-x-1 relative">
                   <!-- Quick View Button -->
                   <button
                     type="button"
@@ -462,6 +473,15 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="hidden bg-blue-50 bg-blue-50
+outline
+outline-1
+outline-blue-500
+-outline-offset-1 border-l-4 border-blue-400 ring-1 ring-blue-400 ring-inset hover:bg-blue-50/50 transition-colors duration-200 ring-1 ring-blue-400 ring-inset bg-blue-50 border-blue-400">
+
 </div>
 
 <script src="/js/confirmDelete.js?v=3"></script>

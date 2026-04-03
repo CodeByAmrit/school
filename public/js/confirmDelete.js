@@ -76,10 +76,22 @@ window.addEventListener("DOMContentLoaded", function () {
         checkbox.checked = isChecked;
         if (isChecked) {
           const row = checkbox.closest("tr");
-          row.classList.add("bg-blue-50", "border-l-4", "border-blue-400");
+          row.classList.add(
+            "bg-blue-50",
+            "outline",
+            "outline-1",
+            "outline-blue-500",
+            "-outline-offset-1",
+          );
         } else {
           const row = checkbox.closest("tr");
-          row.classList.remove("bg-blue-50", "border-l-4", "border-blue-400");
+          row.classList.remove(
+            "bg-blue-50",
+            "outline",
+            "outline-2",
+            "outline-blue-500",
+            "-outline-offset-2",
+          );
         }
       });
 
@@ -94,9 +106,21 @@ window.addEventListener("DOMContentLoaded", function () {
       // Update row styling
       const row = this.closest("tr");
       if (this.checked) {
-        row.classList.add("bg-blue-50", "border-l-4", "border-blue-400");
+        row.classList.add(
+          "bg-blue-50",
+          "outline",
+          "outline-2",
+          "outline-blue-500",
+          "-outline-offset-2",
+        );
       } else {
-        row.classList.remove("bg-blue-50", "border-l-4", "border-blue-400");
+        row.classList.remove(
+          "bg-blue-50",
+          "outline",
+          "outline-2",
+          "outline-blue-500",
+          "-outline-offset-2",
+        );
       }
 
       // Update "select all" checkbox state

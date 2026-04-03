@@ -35,32 +35,27 @@ function getFileType(fileUrl) {
 }
 
 function openModal(fileUrl, fileType) {
+  if (fileType === "application/pdf") {
+    // Open PDFs natively in a separate tab
+    window.open(fileUrl, "_blank");
+    return;
+  }
+
   const modal = document.getElementById("default-modal");
-  const fileContainer = document.getElementById("fileContainer"); // New container for different file types
+  const fileContainer = document.getElementById("fileContainer"); 
   fileContainer.innerHTML = ""; // Clear previous content
 
   if (fileType.startsWith("image/")) {
     const img = document.createElement("img");
     img.src = fileUrl;
-    img.classList.add("max-w-full", "max-h-full"); // Ensure the image fits within the modal
+    img.classList.add("max-w-full", "max-h-full", "rounded-lg", "shadow");
     fileContainer.appendChild(img);
   } else if (fileType.startsWith("video/")) {
     const video = document.createElement("video");
     video.src = fileUrl;
     video.controls = true;
-    video.classList.add("max-w-full", "max-h-full"); // Ensure the video fits within the modal
+    video.classList.add("max-w-full", "max-h-full", "rounded-lg", "shadow");
     fileContainer.appendChild(video);
-  } else if (fileType === "application/pdf") {
-    const iframe = document.createElement("iframe");
-    iframe.src = fileUrl;
-    iframe.classList.add("w-full", "h-full");
-    iframe.onload = function () {
-      console.log("PDF loaded successfully");
-    };
-    iframe.onerror = function () {
-      console.log("Error loading PDF");
-    };
-    fileContainer.appendChild(iframe);
   } else {
     fileContainer.innerHTML = "<p>Unsupported file type</p>";
   }

@@ -9,7 +9,7 @@ async function getAllStudent(req, res) {
   const teacher_id = req.user._id;
   try {
     const [rows] = await query(
-      `SELECT name, father_name, session, mother_name, class, school_id, profile_status
+      `SELECT name, father_name, session, mother_name, class, section, school_id, profile_status
        FROM students
        WHERE class = 'NURSERY' AND teacher_id = ?`,
       [teacher_id],
@@ -349,7 +349,7 @@ async function getStudentDetails(req, res) {
     reason, // Status filter
   } = req.query;
   try {
-    let query_prepared = `SELECT name, father_name, session, mother_name, class, school_id, profile_status 
+    let query_prepared = `SELECT name, father_name, session, mother_name, class, section, school_id, profile_status 
              FROM students
              WHERE teacher_id = ?`;
     const params = [req.user._id];
@@ -638,12 +638,14 @@ async function insertPDF(req, res) {
 
     const [ownerCheck] = await connection.execute(
       "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
-      [student_id, teacherId]
+      [student_id, teacherId],
     );
 
     if (ownerCheck.length === 0) {
       connection.release();
-      return res.status(404).json({ result: "Student not found or unauthorized" });
+      return res
+        .status(404)
+        .json({ result: "Student not found or unauthorized" });
     }
 
     // Check if the record already exists

@@ -62,7 +62,9 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   try {
     const isOwner = await checkStudentOwnership(studentId, req.user._id);
     if (!isOwner) {
-      return res.status(404).json({ error: "Student not found or unauthorized." });
+      return res
+        .status(404)
+        .json({ error: "Student not found or unauthorized." });
     }
 
     const connection = await getConnection();
@@ -826,7 +828,7 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
   const { studentId } = req.params;
   const { marks, maxMarks, session, class_name } = req.body; // Explicitly pass context
-  
+
   try {
     if (!marks || !maxMarks) {
       throw new Error("marks or maxMarks are undefined or missing");
@@ -874,36 +876,37 @@ router.post(
         return res.status(404).send("Student not found or access denied.");
       }
 
-    // Create or update data in `student_attendance_status` table
-    const query = `
+      // Create or update data in `student_attendance_status` table
+      const query = `
       INSERT INTO student_attendance_status (student_id, session, class_name, attendance, status)
       VALUES (?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         attendance = VALUES(attendance),
         status = VALUES(status)
     `;
-    await connection.execute(query, [
-      school_id,
-      student.session,
-      student.class,
-      attendance,
-      status,
-    ]);
+      await connection.execute(query, [
+        school_id,
+        student.session,
+        student.class,
+        attendance,
+        status,
+      ]);
 
-    res.redirect(`/student/get_marks/${school_id}`);
-  } catch (error) {
-    console.error("Error submitting/updating attendance status:", error);
-    res.status(500).send("Internal Server Error");
-  } finally {
-    if (connection) connection.release();
-  }
-});
+      res.redirect(`/student/get_marks/${school_id}`);
+    } catch (error) {
+      console.error("Error submitting/updating attendance status:", error);
+      res.status(500).send("Internal Server Error");
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+);
 
 // Helper for generic ownership check
 async function checkStudentOwnership(school_id, teacher_id) {
   const connection = await getConnection();
   const [rows] = await connection.execute(
-    "SELECT id FROM students WHERE school_id = ? AND teacher_id = ?",
+    "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
     [school_id, teacher_id],
   );
   connection.release();
@@ -922,7 +925,9 @@ router.post("/upload", checkAuth, upload.single("file"), async (req, res) => {
   try {
     const isOwner = await checkStudentOwnership(school_id, req.user._id);
     if (!isOwner) {
-      return res.status(403).json({ error: "Unauthorized: You do not own this student." });
+      return res
+        .status(403)
+        .json({ error: "Unauthorized: You do not own this student." });
     }
 
     const connection = await getConnection();
@@ -940,6 +945,36 @@ router.post("/upload", checkAuth, upload.single("file"), async (req, res) => {
   } catch (err) {
     console.error("Upload error:", err);
     res.status(500).json({ error: "Database error" });
+  }
+});
+
+// Route to get files UI for a particular student
+router.get("/files/one/:school_id", checkAuth, async (req, res) => {
+  const { school_id } = req.params;
+  let connection;
+  try {
+    const isOwner = await checkStudentOwnership(school_id, req.user._id);
+    if (!isOwner) {
+      return res.status(404).send("Student not found or unauthorized.");
+    }
+
+    connection = await getConnection();
+    let [files] = await connection.execute(
+      "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
+      [school_id]
+    );
+
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
+    const studentsCount = await getTotalStudents(req, res);
+
+    res.render("files", { files, user, total_students: studentsCount, school_id });
+  } catch (error) {
+    console.error("Error fetching files:", error);
+    res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -962,7 +997,7 @@ router.get("/files/:id", checkAuth, async (req, res) => {
       return res.status(404).send("File not found or unauthorized.");
     }
 
-    res.contentType("application/pdf");
+    res.contentType(file[0].file_type || "application/pdf");
     res.send(file[0].file_data);
   } catch (error) {
     console.error("Error fetching file:", error);
@@ -1027,12 +1062,14 @@ async function executeProcedure(req, res, procedureName) {
     for (const studentId of studentIds) {
       // Inline check for each student
       const [ownerRows] = await connection.execute(
-        "SELECT id FROM students WHERE school_id = ? AND teacher_id = ?",
+        "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
         [studentId, teacherId],
       );
 
       if (ownerRows.length === 0) {
-        console.warn(`Unauthorized procedure attempt for student ${studentId} by teacher ${teacherId}`);
+        console.warn(
+          `Unauthorized procedure attempt for student ${studentId} by teacher ${teacherId}`,
+        );
         continue; // Skip unauthorized students
       }
 
