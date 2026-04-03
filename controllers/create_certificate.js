@@ -182,14 +182,14 @@ async function generate(req, res) {
 
     firstPage.drawText(attendanceText, {
       x: 1746,
-      y: 738,
+      y: 800,
       size: 38,
       font: boldFont,
       color: rgb(0, 0, 0),
     });
     firstPage.drawText(statusText, {
       x: 1856,
-      y: 668,
+      y: 728,
       size: 38,
       font: boldFont,
       color: rgb(0, 0, 0),
