@@ -174,9 +174,43 @@ async function getIndividualAnalytics(req, res) {
       highestScore = parseFloat(classRanks[0].avg_pct).toFixed(2);
       const studentRankIndex = classRanks.findIndex(r => r.school_id.toString() === studentId.toString());
       if (studentRankIndex !== -1) {
-        rank = studentRankIndex + 1; // 1-indexed
+        rank = studentRankIndex + 1;
       }
     }
+
+    // 6. Subject Momentum (First Term vs Latest Term delta per subject)
+    const [subjectMomentum] = await connection.execute(
+      `SELECT 
+          sc.subject_name as subject,
+          MIN(sm.term) as first_term,
+          MAX(sm.term) as last_term,
+          (
+            SELECT AVG(
+              (CASE WHEN sm2.marks REGEXP '^[0-9]+$' THEN CAST(sm2.marks AS DECIMAL(5,2)) ELSE NULL END)
+              / NULLIF((CASE WHEN mm2.max_marks REGEXP '^[0-9]+$' THEN CAST(mm2.max_marks AS DECIMAL(5,2)) ELSE NULL END), 0)
+            ) * 100
+            FROM student_marks sm2
+            JOIN maximum_marks mm2 ON mm2.subject = sm2.subject AND mm2.term = sm2.term AND mm2.class = ?
+            WHERE sm2.student_id = ? AND sm2.subject = sc.subject_name AND sm2.term = MAX(sm.term)
+            AND sm2.marks IS NOT NULL AND sm2.marks REGEXP '^[0-9]+$'
+          ) as latest_pct,
+          (
+            SELECT AVG(
+              (CASE WHEN sm3.marks REGEXP '^[0-9]+$' THEN CAST(sm3.marks AS DECIMAL(5,2)) ELSE NULL END)
+              / NULLIF((CASE WHEN mm3.max_marks REGEXP '^[0-9]+$' THEN CAST(mm3.max_marks AS DECIMAL(5,2)) ELSE NULL END), 0)
+            ) * 100
+            FROM student_marks sm3
+            JOIN maximum_marks mm3 ON mm3.subject = sm3.subject AND mm3.term = sm3.term AND mm3.class = ?
+            WHERE sm3.student_id = ? AND sm3.subject = sc.subject_name AND sm3.term = MIN(sm.term)
+            AND sm3.marks IS NOT NULL AND sm3.marks REGEXP '^[0-9]+$'
+          ) as first_pct
+       FROM subject_config sc
+       JOIN student_marks sm ON sm.subject = sc.subject_name AND sm.student_id = ?
+       WHERE sc.class_name = ? AND sc.teacher_id = ? AND sc.subject_name NOT LIKE '%DRAWING%'
+       GROUP BY sc.subject_name
+       HAVING first_term != last_term`,
+      [student.class, studentId, student.class, studentId, studentId, student.class, teacherId]
+    );
 
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
@@ -193,6 +227,7 @@ async function getIndividualAnalytics(req, res) {
         personalTrend,
         classTrend,
         subjectRadar,
+        subjectMomentum,
         rank,
         highestScore,
         totalInClass: classRanks.length
