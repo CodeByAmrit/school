@@ -92,7 +92,7 @@
                 <button class="view-file-btn inline-flex items-center justify-center w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-100 transition-colors focus:ring-2 focus:ring-blue-100" data-file-url="/files/<%= file.id %>" data-file-type="<%= file.type %>" title="Preview Document">
                   <i class="fas fa-eye"></i>
                 </button>
-                <form action="/delete-file/<%= file.id %>" method="POST" class="inline m-0" onsubmit="return confirm('WARNING: Are you sure you want to permanently delete this document?');">
+                <form action="/delete-file/<%= file.id %>" method="POST" class="inline m-0 delete-file-form">
                   <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors focus:ring-2 focus:ring-red-100" title="Delete Document">
                     <i class="fas fa-trash-alt"></i>
                   </button>
@@ -165,4 +165,15 @@
 </div>
 
 <script src="/js/files.js" nonce="<%= nonce %>"></script>
+<script nonce="<%= nonce %>">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-file-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                if (!confirm('WARNING: Are you sure you want to permanently delete this document?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+</script>
 <%- include('./partials/footer.ejs') %>

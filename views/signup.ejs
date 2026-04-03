@@ -260,7 +260,7 @@
                   <!-- Free Plan -->
                   <div 
                     class="plan-card p-6 border-2 border-gray-200 dark:border-gray-700 rounded-2xl cursor-pointer transition-all relative plan-selected" 
-                    onclick="selectPlan('FREE', this)"
+                    data-tier="FREE"
                   >
                      <div class="absolute top-4 right-4 check-icon text-blue-600">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
@@ -280,7 +280,7 @@
                   <!-- Premium Plan -->
                   <div 
                     class="plan-card p-6 border-2 border-gray-200 dark:border-gray-700 rounded-2xl cursor-pointer transition-all relative"
-                    onclick="selectPlan('PREMIUM', this)"
+                    data-tier="PREMIUM"
                   >
                      <div class="absolute top-4 right-4 check-icon text-blue-600 hidden">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
@@ -430,6 +430,14 @@
               document.getElementById('file-name-preview').innerText = name ? `Selected: ${name}` : '';
           });
       }
+
+      // Plan selection using event delegation
+      document.querySelectorAll('.plan-card').forEach(card => {
+          card.addEventListener('click', function() {
+              const tier = this.getAttribute('data-tier');
+              selectPlan(tier, this);
+          });
+      });
 
       updateStepUI();
     </script>

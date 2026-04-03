@@ -764,15 +764,15 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 
 router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
   const { studentId } = req.params;
-  const { marks, maxMarks } = req.body; // Use `marks` and `maxMarks` directly
-
+  const { marks, maxMarks, session, class_name } = req.body; // Explicitly pass context
+  
   try {
     if (!marks || !maxMarks) {
       throw new Error("marks or maxMarks are undefined or missing");
     }
 
-    // Proceed to save marks if data is valid
-    await saveStudentMarks(studentId, marks, maxMarks);
+    // Proceed to save marks with potential session/class context
+    await saveStudentMarks(studentId, marks, maxMarks, session, class_name);
     res.redirect(`/student/get_marks/${studentId}`);
   } catch (error) {
     console.error("Error saving marks:", error);
@@ -995,6 +995,7 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   const { grade, remarks } = req.body;
   let connection;
   try {
+    connection = await getConnection();
     // Fetch student's current session and class
     const [[student]] = await connection.execute(
       "SELECT session, class FROM students WHERE school_id = ?",

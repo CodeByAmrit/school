@@ -354,7 +354,7 @@
           <p class="font-bold text-gray-800">Success!</p>
           <p class="text-sm text-gray-600">Profile updated successfully</p>
         </div>
-        <button onclick="this.parentElement.parentElement.style.display='none'" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+        <button id="closeToastBtn" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
       </div>
     </div>
 
@@ -405,6 +405,13 @@
           const toast = document.getElementById('successToast');
           if (toast) {
             toast.classList.remove('hidden');
+            // Add listener to close button
+            const closeBtn = document.getElementById('closeToastBtn');
+            if (closeBtn) {
+              closeBtn.addEventListener('click', () => {
+                toast.classList.add('hidden');
+              });
+            }
             setTimeout(() => {
               toast.classList.add('hidden');
             }, 4000);

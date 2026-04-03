@@ -16,7 +16,7 @@
                 </div>
                 
                 <form action="/student/get_marks/<%= student.school_id %>" method="GET" class="flex items-center gap-2">
-                    <select name="session_class" onchange="const val = this.value.split('|'); window.location.href='/student/get_marks/<%= student.school_id %>?session=' + val[0] + '&class_name=' + val[1]"
+                    <select id="historySelector" name="session_class"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="<%= student.session %>|<%= student.class %>" <%= !viewingHistory ? 'selected' : '' %>>
                             Current: <%= student.session %> - <%= student.class %>
@@ -163,6 +163,8 @@
 
                 <form action="/student/input-marks/<%= student.school_id %>" method="POST">
                     <input type="hidden" name="studentId" value="<%= student.school_id %>">
+                    <input type="hidden" name="session" value="<%= viewSession %>">
+                    <input type="hidden" name="class_name" value="<%= viewClassName %>">
 
                     <% for (let term=1; term <=3; term++) { %>
                         <div class="mb-6">
@@ -293,3 +295,17 @@
         </div>
     </div>
 </div>
+
+<script nonce="<%= nonce %>">
+    document.addEventListener('DOMContentLoaded', function() {
+        const historySelector = document.getElementById('historySelector');
+        if (historySelector) {
+            historySelector.addEventListener('change', function() {
+                const val = this.value.split('|');
+                if (val.length === 2) {
+                    window.location.href = `/student/get_marks/<%= student.school_id %>?session=${val[0]}&class_name=${val[1]}`;
+                }
+            });
+        }
+    });
+</script>
