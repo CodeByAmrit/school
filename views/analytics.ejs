@@ -1,0 +1,249 @@
+<%- include('./partials/header.ejs', {title: "Next-Gen Intelligent Tracking" }) %>
+<%- include('./partials/topMenu.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+
+<!-- Script to fetch Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js" nonce="<%= nonce %>"></script>
+
+<div class="p-4 sm:ml-64 dark:bg-gray-900 mt-16 min-h-screen font-inter">
+  <!-- Header & Filters -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <div>
+      <h1 class="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-3">
+        <i class="fas fa-satellite-dish text-indigo-500"></i> Next-Gen Analytics
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1 font-medium">Real-time intelligent tracking & performance distribution.</p>
+    </div>
+
+    <!-- Class Filter -->
+    <div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+      <i class="fas fa-filter text-indigo-400 ml-2"></i>
+      <select id="classFilter" class="bg-transparent border-0 text-gray-700 dark:text-gray-300 font-semibold focus:ring-0 cursor-pointer">
+        <option value="">All Classes (Global View)</option>
+        <% classes.forEach(c => { %>
+          <option value="<%= c %>" <%= currentClass === c ? 'selected' : '' %>><%= c %> Class</option>
+        <% }) %>
+      </select>
+    </div>
+  </div>
+
+  <!-- Key Metrics Row -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Top Performers Card -->
+    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 shadow-lg shadow-indigo-200 dark:shadow-none relative overflow-hidden group">
+      <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
+      <div class="relative z-10">
+        <p class="text-indigo-100 font-semibold mb-1 text-sm tracking-wide uppercase">Top Performers</p>
+        <h3 class="text-4xl font-black text-white"><%= analytics.distribution.top_performers || 0 %></h3>
+        <p class="text-indigo-200 text-sm mt-3 flex items-center gap-2">
+          <i class="fas fa-arrow-trend-up"></i> Students Scoring >= 90%
+        </p>
+      </div>
+    </div>
+
+    <!-- Average Performers Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
+      <div class="absolute right-0 top-0 w-32 h-32 bg-amber-400/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+      <div class="relative z-10">
+        <p class="text-gray-500 dark:text-gray-400 font-semibold mb-1 text-sm tracking-wide uppercase">Average Bracket</p>
+        <h3 class="text-4xl font-black text-gray-800 dark:text-white"><%= analytics.distribution.average || 0 %></h3>
+        <p class="text-gray-400 text-sm mt-3 flex items-center gap-2">
+          <i class="fas fa-check-circle text-amber-500"></i> Students Scoring 60 - 89%
+        </p>
+      </div>
+    </div>
+
+    <!-- Needs Attention Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
+      <div class="absolute right-0 top-0 w-32 h-32 bg-red-400/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+      <div class="relative z-10">
+        <p class="text-gray-500 dark:text-gray-400 font-semibold mb-1 text-sm tracking-wide uppercase">Needs Attention</p>
+        <h3 class="text-4xl font-black text-gray-800 dark:text-white"><%= analytics.distribution.needs_attention || 0 %></h3>
+        <p class="text-red-400 text-sm mt-3 flex items-center gap-2">
+          <i class="fas fa-triangle-exclamation"></i> Students Scoring < 60%
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    
+    <!-- Distribution Doughnut Chart -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">Performance Matrix</h3>
+        <button class="text-gray-400 hover:text-indigo-500 transition-colors"><i class="fas fa-ellipsis-h"></i></button>
+      </div>
+      <div class="relative h-64 w-full flex justify-center">
+        <canvas id="distributionChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Term Over Term Progress Line Chart -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">Class Average Momentum</h3>
+        <span class="bg-indigo-50 text-indigo-600 text-xs font-bold px-2 py-1 rounded-md">Term vs Term</span>
+      </div>
+      <div class="relative h-64 w-full">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="grid grid-cols-1 gap-6 mb-8">
+    
+    <!-- Vulnerable Subjects Bar Chart -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white">Vulnerable Subjects Analytics</h3>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mb-6">These subjects represent the lowest historical averages across the selected cohort.</p>
+      <div class="relative h-72 w-full">
+        <canvas id="subjectChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('./partials/bottonNavBar.ejs') %>
+
+<!-- Initialize Dynamic Charts Data -->
+<script nonce="<%= nonce %>">
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle the class filter dropdown securely
+    const classFilter = document.getElementById('classFilter');
+    if (classFilter) {
+      classFilter.addEventListener('change', function() {
+        window.location.href = '/analytics?class=' + this.value;
+      });
+    }
+
+    const analyticsData = <%- JSON.stringify(analytics) %>;
+
+    // 1. Distribution Chart (Doughnut)
+    const distCtx = document.getElementById('distributionChart').getContext('2d');
+    const distData = [
+      Number(analyticsData.distribution.top_performers) || 0,
+      Number(analyticsData.distribution.average) || 0,
+      Number(analyticsData.distribution.needs_attention) || 0
+    ];
+    
+    new Chart(distCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Top Performers (90%+)', 'Average (60-89%)', 'Needs Attention (<60%)'],
+        datasets: [{
+          data: distData,
+          backgroundColor: ['#6366f1', '#fbbf24', '#f87171'],
+          borderWidth: 0,
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '75%',
+        plugins: {
+          legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+        }
+      }
+    });
+
+    // 2. Trend Momentum Chart (Line)
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const trendLabels = analyticsData.termAvgs.map(t => 'Term ' + t.term);
+    const trendValues = analyticsData.termAvgs.map(t => parseFloat(t.avg_percentage).toFixed(2));
+
+    // Create Gradient for Line Chart
+    let gradient = trendCtx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+    gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: trendLabels,
+        datasets: [{
+          label: 'Class Average %',
+          data: trendValues,
+          borderColor: '#6366f1',
+          backgroundColor: gradient,
+          borderWidth: 3,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#6366f1',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: false, suggestedMin: 40, suggestedMax: 100, grid: { borderDash: [4, 4] } },
+          x: { grid: { display: false } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1e293b',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 8,
+            padding: 12
+          }
+        }
+      }
+    });
+
+    // 3. Vulnerable Subjects Chart (Bar)
+    const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+    const subjectLabels = analyticsData.weakSubjects.map(s => s.subject);
+    const subjectValues = analyticsData.weakSubjects.map(s => parseFloat(s.overall_avg).toFixed(2));
+
+    new Chart(subjectCtx, {
+      type: 'bar',
+      data: {
+        labels: subjectLabels,
+        datasets: [{
+          label: 'Historical Subject Average %',
+          data: subjectValues,
+          backgroundColor: '#f87171',
+          borderRadius: 6,
+          barPercentage: 0.6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y', // Horizontal bar chart
+        scales: {
+          x: { beginAtZero: true, max: 100, grid: { borderDash: [4, 4] } },
+          y: { grid: { display: false } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) { return 'Avg Score: ' + context.parsed.x + '%'; }
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+
+<%- include('./partials/footer.ejs') %>

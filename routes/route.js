@@ -22,6 +22,8 @@ const {
   markStudentAsLeft,
   getStudentResult,
 } = require("../controllers/student");
+const { getMarksAnalytics } = require("../controllers/analytics");
+
 const {
   getTotalStudentsCounts,
   getStudentsCountBySession,
@@ -219,6 +221,9 @@ router.get("/search", checkAuth, apiCache(15), async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+// route to analytics platform
+router.get("/analytics", checkAuth, getMarksAnalytics);
 
 // route to edit for students
 router.get("/student/edit/:id", checkAuth, async (req, res) => {
