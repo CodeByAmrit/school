@@ -172,15 +172,22 @@ async function generate(req, res) {
       color: rgb(0, 0, 0),
     });
 
-    // attendance and status
-    firstPage.drawText(student_attendance_status.attendance.toUpperCase(), {
+    // attendance and status (with null safety)
+    const attendanceText = (
+      student_attendance_status?.attendance?.toString() || "N/A"
+    ).toUpperCase();
+    const statusText = (
+      student_attendance_status?.status?.toString() || "Pending"
+    ).toUpperCase();
+
+    firstPage.drawText(attendanceText, {
       x: 1746,
       y: 738,
       size: 38,
       font: boldFont,
       color: rgb(0, 0, 0),
     });
-    firstPage.drawText(student_attendance_status.status.toUpperCase(), {
+    firstPage.drawText(statusText, {
       x: 1856,
       y: 668,
       size: 38,
@@ -217,17 +224,18 @@ async function generate(req, res) {
 
     // ---------------------- DYNAMIC SUBJECTS ----------------------
     // Try to fetch subjects from database configuration first
-    const [dbSubjects] = await connection.execute(
+    let [dbSubjects] = await connection.execute(
       "SELECT subject_name FROM subject_config WHERE teacher_id = ? AND class_name = ? ORDER BY priority",
       [student.teacher_id, student.class],
     );
-
     let subjectOrder = [];
     if (dbSubjects.length > 0) {
       subjectOrder = dbSubjects.map((s) => s.subject_name);
     }
     // All subjects now pulled from DB config (subject_config)
-
+    subjectOrder.push("GRAND TOTAL");
+    subjectOrder.push("PERCENTAGE");
+    subjectOrder.push("RANK / GRADE");
     // ---------------------- DRAW MARKS ----------------------
     Object.keys(marksByTerm).forEach((term, termIndex) => {
       const termMarks = marksByTerm[term];
@@ -236,10 +244,45 @@ async function generate(req, res) {
       subjectOrder.forEach((subject, i) => {
         const yPosition = startYPosition - i * rowHeight;
 
-        // find subject marks safely
-        const found = termMarks.find((m) => m.subject === subject);
-        const marksValue = found ? found.marks : "N/A";
+        // --- DATA RETRIEVAL ---
+        let marksValue = "N/A";
+        let maxDisplayValue = "";
+        const performance = performanceByTerm[term] || {};
+        const gradeRemark =
+          grade_remarks.find(
+            (r) => r.term == term && r.student_id == student.school_id,
+          ) || {};
 
+        if (subject === "GRAND TOTAL") {
+          const obtained = performance.grandTotal?.toString() || "0";
+          const max = performance.totalMaxMarks?.toString() || "0";
+          marksValue = `${obtained} / ${max}`;
+        } else if (subject === "PERCENTAGE") {
+          const p = parseFloat(performance.percentage);
+          marksValue = isNaN(p) ? "0.00%" : `${p.toFixed(2)}%`;
+        } else if (subject === "RANK / GRADE") {
+          marksValue = gradeRemark.grade || "N/A";
+        } else {
+          // Regular Subject
+          const found = termMarks.find((m) => m.subject === subject);
+          marksValue = found ? found.marks : "N/A";
+
+          if (termIndex === 0) {
+            const maxMarksForSubject = maxMarks[term]?.[subject] ?? "N/A";
+            const maxInt = parseInt(maxMarksForSubject, 10);
+            maxDisplayValue = maxMarksForSubject.toString();
+
+            if (maxInt === 0) {
+              maxDisplayValue =
+                subject === "GENERAL KNOWLEDGE" ? "NA" : "Grading";
+            }
+            if (!isNaN(maxInt) && maxInt > 0) {
+              termGrandTotal += maxInt;
+            }
+          }
+        }
+
+        // --- DRAWING ---
         // SUBJECT NAME (draw only once - first term)
         if (termIndex === 0) {
           firstPage.drawText(subject, {
@@ -249,96 +292,71 @@ async function generate(req, res) {
             font: boldFont,
             color: rgb(0, 0, 0),
           });
+
+          // Draw Rounded Rectangle using drawSvgPath (standard for pdf-lib v1.x)
+          const r = 10; // Corner radius
+          const w = 2140;
+          const h = 76;
+          const x = 210;
+          const rectY = Number(yPosition - 20);
+          const y = rectY;
+
+          // Single-line path string to prevent parsing errors in pdf-lib's SVG parser
+          const pathString =
+            `M ${x + r} ${y} L ${x + w - r} ${y} Q ${x + w} ${y} ${x + w} ${y + r} L ${x + w} ${y + h - r} Q ${x + w} ${y + h} ${x + w - r} ${y + h} L ${x + r} ${y + h} Q ${x} ${y + h} ${x} ${y + h - r} L ${x} ${y + r} Q ${x} ${y} ${x + r} ${y} Z`.trim();
+
+          // Apply requested colors: Border #026575, Fill #F8F8F8
+          firstPage.drawSvgPath(pathString, {
+            color: rgb(248 / 255, 248 / 255, 248 / 255), // #F8F8F8
+            borderColor: rgb(2 / 255, 101 / 255, 117 / 255), // #026575
+            borderWidth: 1,
+            x: 0,
+            y: 0,
+          });
+
+          // MAX MARKS column (only first term column)
+          if (maxDisplayValue) {
+            firstPage.drawText(maxDisplayValue, {
+              x: 857,
+              y: yPosition,
+              size: 34,
+              color: rgb(0, 0, 0),
+            });
+          }
         }
 
-        // MARKS
+        // MARKS / VALUES
         firstPage.drawText(marksValue.toString(), {
           x: startX,
           y: yPosition,
           size: 34,
+          font:
+            subject === "GRAND TOTAL" ||
+            subject === "PERCENTAGE" ||
+            subject === "RANK / GRADE"
+              ? boldFont
+              : undefined,
           color: rgb(0, 0, 0),
         });
+      });
+    });
 
-        // MAX MARKS (only first column)
-        if (termIndex === 0) {
-          const maxMarksForSubject = maxMarks[term]?.[subject] ?? "N/A";
-          const maxInt = parseInt(maxMarksForSubject, 10);
-
-          // Display logic for Grading subjects (max marks 0)
-          let maxDisplayValue = maxMarksForSubject.toString();
-          if (maxInt === 0) {
-            // Check original subject names for specific labels if needed, or default to Grading
-            maxDisplayValue =
-              subject === "GENERAL KNOWLEDGE" ? "NA" : "Grading";
-          }
-
-          firstPage.drawText(maxDisplayValue, {
-            x: 857,
-            y: yPosition,
+    // Draw Remarks in their special positions (outside the main table)
+    let y_remark = 1161;
+    grade_remarks
+      .filter((r) => r.term > 0) // Skip invalid Term 0 entries
+      .forEach((grade_remark) => {
+        if (grade_remark.remarks) {
+          firstPage.drawText(grade_remark.remarks.toString(), {
+            x: 525,
+            y: y_remark,
             size: 34,
+            font: boldFont,
             color: rgb(0, 0, 0),
           });
-
-          if (!isNaN(maxInt) && maxInt > 0) {
-            termGrandTotal += maxInt;
-          }
         }
+        y_remark -= 244; // Vertical spacing for each term's remarks
       });
-
-      // ---------------- TOTAL + % ----------------
-      const totalYPosition = startYPosition - subjectOrder.length * rowHeight;
-      const performance = performanceByTerm[term] || {};
-
-      // Total Marks (Obtained / Max)
-      const obtained = performance.grandTotal?.toString() || "N/A";
-      const max = performance.totalMaxMarks?.toString() || "N/A";
-      const totalLabel = `${obtained} / ${max}`;
-
-      firstPage.drawText(totalLabel, {
-        x: startX,
-        y: totalYPosition,
-        size: 34,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-
-      // Percentage
-      const percentageYPosition = totalYPosition - 81;
-      const percentage = parseFloat(performance.percentage);
-      const formattedPercentage = isNaN(percentage)
-        ? "N/A"
-        : `${percentage.toFixed(2)}%`;
-
-      firstPage.drawText(formattedPercentage, {
-        x: startX,
-        y: percentageYPosition,
-        size: 34,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-    });
-
-    let xvalue = 1293;
-    let yvalue = 1161;
-
-    grade_remarks.forEach((grade_remark, i) => {
-      firstPage.drawText(grade_remark.grade, {
-        x: xvalue,
-        y: 1380,
-        size: 34,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText(grade_remark.remarks, {
-        x: 525,
-        y: yvalue,
-        size: 34,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      xvalue += 400;
-      yvalue -= 244;
-    });
 
     // Save the PDF and send it to the client
     const pdfBytes = await pdfDoc.save();
@@ -350,7 +368,7 @@ async function generate(req, res) {
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
     console.error("Error generating certificate:", error);
-    res.status(500).send("Error generating certificate.");
+    res.status(500).send(`Failed to generate report card: ${error.message}`);
   } finally {
     if (connection) connection.release();
   }
