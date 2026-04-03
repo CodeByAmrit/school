@@ -12,13 +12,13 @@ async function generate(req, res) {
   try {
     connection = await getConnection();
 
-    // Fetch student details
+    // Fetch student details and VERIFY OWNERSHIP
     const [studentResults] = await connection.execute(
       `SELECT s.*, p.image 
              FROM students s 
              LEFT JOIN photo p ON s.school_id = p.id 
-             WHERE s.school_id = ?`,
-      [studentId],
+             WHERE s.school_id = ? AND s.teacher_id = ?`,
+      [studentId, req.user._id],
     );
 
     if (studentResults.length === 0) {

@@ -61,8 +61,8 @@ router.post("/create-certificate", checkAuth, async (req, res) => {
   try {
     connection = await getConnection();
     const [student] = await connection.execute(
-      "SELECT * FROM students WHERE school_id = ?",
-      [student_id],
+      "SELECT * FROM students WHERE school_id = ? AND teacher_id = ?",
+      [student_id, req.user._id],
     );
     if (student.length > 0) {
       const studentData = student[0];
@@ -96,11 +96,23 @@ router.get("/dashboard", checkAuth, apiCache(30), getDashboardView);
 router.get("/ai/chat", checkAuth, getAiChatView);
 
 router.get("/generate-certificate/:school_id", checkAuth, async (req, res) => {
+  let connection;
   try {
-    // Fetch total students assigned to the teacher
-    const studentsCount = await getTotalStudents(req, res);
+    connection = await getConnection();
     const school_id = req.params.school_id;
 
+    // Verify student ownership
+    const [studentCheck] = await connection.execute(
+      "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
+      [school_id, req.user._id],
+    );
+
+    if (studentCheck.length === 0) {
+      return res.status(404).send("Student not found or access denied.");
+    }
+
+    // Fetch total students assigned to the teacher
+    const studentsCount = await getTotalStudents(req, res);
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
@@ -115,6 +127,8 @@ router.get("/generate-certificate/:school_id", checkAuth, async (req, res) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -183,6 +197,9 @@ router.get("/student/edit/:id", checkAuth, async (req, res) => {
     const studentsCount = await getTotalStudents(req, res);
 
     const [student] = await getOneStudent(req, res);
+    if (!student) {
+      return res.status(404).send("Student not found or access denied.");
+    }
     const photo = await getPhoto(req, res);
     const sign = await getSign(req, res);
 
@@ -492,13 +509,13 @@ router.get("/student/marks/:id", checkAuth, async (req, res) => {
   try {
     connection = await getConnection();
 
-    // Fetch student details
+    // Fetch student details and VERIFY OWNERSHIP
     const [studentRows] = await connection.execute(
-      "SELECT * FROM students WHERE school_id = ?",
-      [id],
+      "SELECT * FROM students WHERE school_id = ? AND teacher_id = ?",
+      [id, req.user._id],
     );
     if (studentRows.length === 0)
-      return res.status(404).send("Student not found");
+      return res.status(404).send("Student not found or access denied.");
     const student = studentRows[0];
 
     // Fetch marks for the student filtered by their CURRENT session and class
@@ -607,22 +624,50 @@ router.post(
 // Route to get marks for a single student by school ID
 router.get("/marks/school/:schoolId", checkAuth, async (req, res) => {
   const { schoolId } = req.params;
+  let connection;
   try {
-    const marks = await getStudentMarksBySchoolId(schoolId);
+    connection = await getConnection();
+    // Verify ownership
+    const [ownerCheck] = await connection.execute(
+      "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
+      [schoolId, req.user._id],
+    );
+
+    if (ownerCheck.length === 0) {
+      return res.status(404).send("Student not found or access denied.");
+    }
+
+    const marks = await getStudentMarksBySchoolId(schoolId, req.user._id);
     res.json(marks);
   } catch (error) {
     res.status(500).send("Error retrieving marks for student");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
 // Route to get marks data
 router.get("/marks/:studentId/:term", checkAuth, async (req, res) => {
   const { studentId, term } = req.params;
+  let connection;
   try {
-    const marks = await getStudentMarks(studentId, term);
+    connection = await getConnection();
+    // Verify ownership
+    const [ownerCheck] = await connection.execute(
+      "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, req.user._id],
+    );
+
+    if (ownerCheck.length === 0) {
+      return res.status(404).send("Student not found or access denied.");
+    }
+
+    const marks = await getStudentMarks(studentId, term, req.user._id);
     res.json(marks);
   } catch (error) {
     res.status(500).send("Error retrieving marks data");
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -630,7 +675,7 @@ router.get("/marks/:studentId/:term", checkAuth, async (req, res) => {
 router.post("/marks", checkAuth, async (req, res) => {
   const { studentId, term, marksData } = req.body;
   try {
-    await storeStudentMarks(studentId, term, marksData);
+    await storeStudentMarks(studentId, term, marksData, req.user._id);
     res.status(201).send("Marks data stored successfully");
   } catch (error) {
     res.status(500).send("Error storing marks data");
@@ -647,14 +692,14 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
 
-    // Fetch student details
+    // Fetch student details and VERIFY OWNERSHIP
     const [studentRows] = await connection.execute(
-      "SELECT * FROM students WHERE school_id = ?",
-      [studentId],
+      "SELECT * FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, req.user._id],
     );
 
     if (studentRows.length === 0) {
-      return res.status(404).send("Student not found");
+      return res.status(404).send("Student not found or access denied.");
     }
 
     const student = studentRows[0];
@@ -771,8 +816,14 @@ router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
       throw new Error("marks or maxMarks are undefined or missing");
     }
 
-    // Proceed to save marks with potential session/class context
-    await saveStudentMarks(studentId, marks, maxMarks, session, class_name);
+    await saveStudentMarks(
+      studentId,
+      marks,
+      maxMarks,
+      session,
+      class_name,
+      req.user._id,
+    );
     res.redirect(`/student/get_marks/${studentId}`);
   } catch (error) {
     console.error("Error saving marks:", error);
@@ -781,24 +832,31 @@ router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
 });
 
 // POST route to insert or update attendance status
-router.post("/student/attendance-status/:school_id", async (req, res) => {
-  const { school_id } = req.params;
-  const { attendance, status } = req.body;
-  let connection;
-  try {
-    // Validate input
-    if (!attendance || !status) {
-      return res.status(400).send("Invalid input data");
-    }
+router.post(
+  "/student/attendance-status/:school_id",
+  checkAuth,
+  async (req, res) => {
+    const { school_id } = req.params;
+    const { attendance, status } = req.body;
+    let connection;
+    try {
+      // Validate input
+      if (!attendance || !status) {
+        return res.status(400).send("Invalid input data");
+      }
 
-    // Get a database connection
-    connection = await getConnection();
+      // Get a database connection
+      connection = await getConnection();
 
-    // Fetch student's current session and class
-    const [[student]] = await connection.execute(
-      "SELECT session, class FROM students WHERE school_id = ?",
-      [school_id],
-    );
+      // Fetch student's current session and class and VERIFY OWNERSHIP
+      const [[student]] = await connection.execute(
+        "SELECT session, class FROM students WHERE school_id = ? AND teacher_id = ?",
+        [school_id, req.user._id],
+      );
+
+      if (!student) {
+        return res.status(404).send("Student not found or access denied.");
+      }
 
     if (!student) return res.status(404).send("Student not found");
 

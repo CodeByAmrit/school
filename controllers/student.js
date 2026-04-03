@@ -54,9 +54,13 @@ async function getPhoto(req, res) {
   const teacher_id = req.user._id;
 
   try {
-    const [[result]] = await query("SELECT image FROM photo WHERE id = ?", [
-      school_id,
-    ]);
+    const [[result]] = await query(
+      `SELECT p.image 
+       FROM photo p
+       INNER JOIN students s ON p.id = s.school_id
+       WHERE p.id = ? AND s.teacher_id = ?`,
+      [school_id, teacher_id],
+    );
 
     if (result && result.image) {
       // Dynamically process the image
@@ -85,8 +89,11 @@ async function getSign(req, res) {
 
   try {
     const [[result]] = await query(
-      "SELECT student_sign FROM photo WHERE id = ?",
-      [school_id],
+      `SELECT p.student_sign 
+       FROM photo p
+       INNER JOIN students s ON p.id = s.school_id
+       WHERE p.id = ? AND s.teacher_id = ?`,
+      [school_id, teacher_id],
     );
 
     if (result && result.student_sign) {
@@ -130,6 +137,20 @@ async function insertOrUpdateStudent(studentData, photo, sign, teacher_id) {
   try {
     connection = await getConnection();
     const isNewRecord = !student.school_id;
+
+    // Check for ownership if updating
+    if (!isNewRecord) {
+      const [ownerCheck] = await connection.execute(
+        "SELECT teacher_id FROM students WHERE school_id = ? AND teacher_id = ?",
+        [student.school_id, teacher_id],
+      );
+
+      if (ownerCheck.length === 0) {
+        throw new Error(
+          "UNAUTHORIZED_ACCESS: You do not have permission to update this student.",
+        );
+      }
+    }
 
     let query;
     let values;
@@ -551,6 +572,16 @@ async function deleteStudent(req, res) {
     connection = await getConnection();
 
     try {
+      // ✅ VERIFY OWNERSHIP FIRST
+      const [ownerCheck] = await connection.execute(
+        "SELECT school_id FROM students WHERE school_id = ? AND teacher_id = ?",
+        [school_id, req.user._id],
+      );
+
+      if (ownerCheck.length === 0) {
+        return res.status(404).send("Student not found or access denied.");
+      }
+
       // Call the stored procedure
       const result = await connection.execute("CALL delete_student(?)", [
         school_id,
@@ -630,7 +661,7 @@ async function insertPDF(req, res) {
 }
 
 // Function to get marks of a single student by school ID
-async function getStudentMarksBySchoolId(schoolId) {
+async function getStudentMarksBySchoolId(schoolId, teacherId) {
   const query_prepared = `
     SELECT 
       sm.subject, 
@@ -641,12 +672,16 @@ async function getStudentMarksBySchoolId(schoolId) {
     JOIN maximum_marks mm 
       ON sm.subject = mm.subject 
       AND sm.term = mm.term 
-      AND mm.class = (SELECT class FROM students WHERE school_id = ?)
+      AND mm.class = (SELECT class FROM students WHERE school_id = ? AND teacher_id = ?)
     WHERE sm.student_id = ?
     ORDER BY sm.term, sm.subject
   `;
   try {
-    const [results] = await query(query_prepared, [schoolId, schoolId]);
+    const [results] = await query(query_prepared, [
+      schoolId,
+      teacherId,
+      schoolId,
+    ]);
     return results;
   } catch (error) {
     console.error("Error fetching marks for student:", error);
@@ -655,13 +690,13 @@ async function getStudentMarksBySchoolId(schoolId) {
 }
 
 // Function to get student marks
-async function getStudentMarks(studentId, term) {
+async function getStudentMarks(studentId, term, teacherId) {
   const query = `
     SELECT sm.*, mm.max_marks 
     FROM student_marks sm
     JOIN maximum_marks mm 
       ON sm.subject = mm.subject AND sm.term = mm.term AND mm.class = 
-          (SELECT class FROM students WHERE school_id = ?)
+          (SELECT class FROM students WHERE school_id = ? AND teacher_id = ?)
     WHERE sm.student_id = ? AND sm.term = ?
   `;
   let connection;
@@ -669,6 +704,7 @@ async function getStudentMarks(studentId, term) {
     connection = await getConnection();
     const [results] = await connection.execute(query, [
       studentId,
+      teacherId,
       studentId,
       term,
     ]);
@@ -682,15 +718,15 @@ async function getStudentMarks(studentId, term) {
 }
 
 // Function to store student marks
-async function storeStudentMarks(studentId, term, marksData) {
+async function storeStudentMarks(studentId, term, marksData, teacherId) {
   let connection;
   try {
     connection = await getConnection();
 
-    // Fetch student's current session and class
+    // Fetch student's current session and class and VERIFY OWNERSHIP
     const [[student]] = await connection.execute(
-      "SELECT session, class FROM students WHERE school_id = ?",
-      [studentId],
+      "SELECT session, class FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, teacherId],
     );
 
     if (!student) throw new Error("Student not found");
@@ -755,14 +791,13 @@ async function getStudentMarksWithMaxMarks(studentId) {
     if (connection) connection.release();
   }
 }
-
-// Save or update marks for a student
 async function saveStudentMarks(
   studentId,
   marks,
   maxMarks,
   sessionOverride,
   classOverride,
+  teacherId,
 ) {
   const insertMarksQuery = `
         INSERT INTO student_marks (student_id, session, class_name, term, subject, marks)
@@ -783,11 +818,11 @@ async function saveStudentMarks(
     let targetSession = sessionOverride;
     let targetClass = classOverride;
 
-    // Fetch student's current session and class only if not provided by the context
+    // Fetch student's current session and class only if not provided by the context and VERIFY OWNERSHIP
     if (!targetSession || !targetClass) {
       const [[student]] = await connection.execute(
-        "SELECT session, class FROM students WHERE school_id = ?",
-        [studentId],
+        "SELECT session, class FROM students WHERE school_id = ? AND teacher_id = ?",
+        [studentId, teacherId],
       );
       if (!student) throw new Error("Student not found");
       targetSession = targetSession || student.session;
@@ -1036,10 +1071,10 @@ async function markStudentAsLeft(req, res) {
     connection = await getConnection();
     await connection.beginTransaction();
 
-    // Fetch the student record
+    // Fetch the student record and VERIFY OWNERSHIP
     const [studentRows] = await connection.execute(
-      "SELECT * FROM students WHERE school_id = ?",
-      [studentId],
+      "SELECT * FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, req.user._id],
     );
 
     if (studentRows.length === 0) {
