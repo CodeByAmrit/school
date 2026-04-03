@@ -201,40 +201,6 @@ student.post("/ceremonty-certificates", checkAuth, selectedCeremonyCertificate);
 student.post("/create-excel", checkAuth, create_excel_selected);
 student.post("/generate-credentials", checkAuth, generateCredentials);
 
-// email test route
-student.get("/mail", checkAuth, async (req, res) => {
-  // Example student data
-  const studentData = {
-    name: "John Doe",
-    admissionStatus: "Approved",
-    attendance: 95,
-    marksObtained: 450,
-    totalMarks: 500,
-    percentage: 90,
-    actionUrl: "https://student.codebyamrit.co.in/dashboard",
-  };
-
-  // Send email
-  sendEmail("amritsharma54300@gmail.com", studentData);
-});
-
-student.get("/otp", checkAuth, async (req, res) => {
-  // Example student data
-  const studentData = {
-    name: "John Doe",
-    admissionStatus: "Approved",
-    attendance: 95,
-    marksObtained: 450,
-    totalMarks: 500,
-    percentage: 90,
-    actionUrl: "https://student.codebyamrit.co.in/dashboard",
-  };
-
-  // Send email
-  const otpStatus = sendOTPEmail("amritsharma54300@gmail.com", "654321");
-  if (otpStatus) {
-    return res.json({ message: "OTP sent successfully" });
-  }
-});
+// email test routes removed for security
 
 module.exports = student;

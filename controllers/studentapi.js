@@ -89,8 +89,8 @@ async function getAllStudentsByStudentId(req, res) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE student_id = ?",
-      [studentId],
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section FROM students WHERE student_id = ? AND teacher_id = ?",
+      [studentId, req.user._id],
     );
     return res.json({ data: rows });
   } catch (error) {
@@ -204,8 +204,8 @@ async function getStudentById_render(req, res, next) {
   try {
     connection = await getConnection();
     const [rows] = await connection.execute(
-      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section, photo FROM students WHERE student_id = ?",
-      [studentId],
+      "SELECT student_id, teacher_id, full_name, father_name, mother_name, email, phone_no, house_no, state, district, zip, gender, srn_no, pen_no, admission_no, class, section, photo FROM students WHERE student_id = ? AND teacher_id = ?",
+      [studentId, req.user._id],
     );
     // Convert photo BLOBs to Base64 strings
     const students = rows.map((student) => {
@@ -328,6 +328,7 @@ async function insertStudent(req, res) {
 async function deleteStudent(req, res) {
   // Check if req.user.id is available
   const studentId = req.params.id;
+  const teacherId = req.user._id;
 
   // Ensure all required fields are defined
   if (!studentId) {
@@ -337,6 +338,16 @@ async function deleteStudent(req, res) {
   let connection;
   try {
     connection = await getConnection();
+
+    const [ownerCheck] = await connection.execute(
+      "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
+      [studentId, teacherId]
+    );
+
+    if (ownerCheck.length === 0) {
+      connection.release();
+      return res.status(404).json({ message: "Student not found or access denied" });
+    }
 
     try {
       await connection.execute(
@@ -369,6 +380,7 @@ async function deleteStudent(req, res) {
 async function deletePDF(req, res) {
   // Check if req.user.id is available
   const studentId = req.params.id;
+  const teacherId = req.user._id;
 
   // Ensure all required fields are defined
   if (!studentId) {
@@ -378,6 +390,16 @@ async function deletePDF(req, res) {
   let connection;
   try {
     connection = await getConnection();
+
+    const [ownerCheck] = await connection.execute(
+      "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
+      [studentId, teacherId]
+    );
+
+    if (ownerCheck.length === 0) {
+      connection.release();
+      return res.status(404).json({ message: "Student not found or access denied" });
+    }
 
     await connection.execute(
       `DELETE from studentDocument where student_id = ?`,
@@ -493,7 +515,7 @@ async function updateStudentDetails(req, res) {
       const [result] = await connection.execute(
         `UPDATE students 
          SET full_name = ?, father_name = ?, mother_name = ?, email = ?, phone_no = ?, house_no = ?, state = ?, district = ?, zip = ?, gender = ?, srn_no = ?, pen_no = ?, admission_no = ?, class = ?, section = ?, photo = ?
-         WHERE student_id = ?`,
+         WHERE student_id = ? AND teacher_id = ?`,
         [
           sanitize(full_name),
           sanitize(father_name),
@@ -512,13 +534,14 @@ async function updateStudentDetails(req, res) {
           sanitize(section),
           studentPhoto,
           studentId,
+          req.user._id,
         ],
       );
     } else {
       const [result] = await connection.execute(
         `UPDATE students 
          SET full_name = ?, father_name = ?, mother_name = ?, email = ?, phone_no = ?, house_no = ?, state = ?, district = ?, zip = ?, gender = ?, srn_no = ?, pen_no = ?, admission_no = ?, class = ?, section = ?
-         WHERE student_id = ?`,
+         WHERE student_id = ? AND teacher_id = ?`,
         [
           sanitize(full_name),
           sanitize(father_name),
@@ -536,6 +559,7 @@ async function updateStudentDetails(req, res) {
           sanitize(studentClass),
           sanitize(section),
           studentId,
+          req.user._id,
         ],
       );
     }
@@ -558,8 +582,20 @@ async function getPdfWithPDF(req, res) {
   let connection;
 
   const student_id = req.params.student_id;
+  const teacherId = req.user._id;
+
   try {
     connection = await getConnection();
+
+    const [ownerCheck] = await connection.execute(
+      "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
+      [student_id, teacherId]
+    );
+
+    if (ownerCheck.length === 0) {
+      connection.release();
+      return res.status(404).send("Document not found");
+    }
 
     const sql = "SELECT document FROM studentDocument WHERE student_id = ?";
     const [results] = await connection.execute(sql, [student_id]);
@@ -578,6 +614,7 @@ async function getPdfWithPDF(req, res) {
 async function insertPDF(req, res) {
   let connection;
   const student_id = req.body.student_id;
+  const teacherId = req.user._id;
   const pdf_from_body = req.file.buffer;
 
   if (!pdf_from_body || !student_id) {
@@ -589,6 +626,16 @@ async function insertPDF(req, res) {
 
   try {
     connection = await getConnection();
+
+    const [ownerCheck] = await connection.execute(
+      "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
+      [student_id, teacherId]
+    );
+
+    if (ownerCheck.length === 0) {
+      connection.release();
+      return res.status(404).json({ result: "Student not found or unauthorized" });
+    }
 
     // Check if the record already exists
     const checkSql =

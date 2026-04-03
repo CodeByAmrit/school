@@ -14,9 +14,14 @@ async function generateVirtualIdCard(req, res, next) {
     connection = await getConnection();
 
     const [[student]] = await connection.execute(
-      "SELECT name, class, dob, mobile_no, school_id, corresponding_address, mobile_no, session, admission_no FROM students WHERE school_id = ?",
-      [studentId],
+      "SELECT name, class, dob, mobile_no, school_id, corresponding_address, mobile_no, session, admission_no FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, schoolData._id],
     );
+
+    if (!student) {
+      connection.release();
+      return res.status(404).send("Student not found or access denied.");
+    }
 
     const [[photo]] = await connection.execute(
       "SELECT image FROM photo WHERE id = ?",
@@ -539,8 +544,8 @@ async function selectedCeremonyCertificate(req, res) {
     const placeholders = studentIds.map(() => "?").join(",");
     const [students] = await connection.execute(
       `SELECT school_id, name, gender, father_name, mother_name, teacher_id 
-             FROM students WHERE school_id IN (${placeholders})`,
-      [...studentIds],
+             FROM students WHERE school_id IN (${placeholders}) AND teacher_id = ?`,
+      [...studentIds, req.user._id],
     );
 
     if (students.length === 0) {
@@ -652,8 +657,8 @@ async function create_excel_selected(req, res) {
     const placeholders = studentIds.map(() => "?").join(",");
     const [students] = await connection.execute(
       `SELECT school_id, name, father_name, mother_name, session, class
-             FROM students WHERE school_id IN (${placeholders})`,
-      [...studentIds],
+             FROM students WHERE school_id IN (${placeholders}) AND teacher_id = ?`,
+      [...studentIds, req.user._id],
     );
 
     const [subjects_rows] = await connection.execute(

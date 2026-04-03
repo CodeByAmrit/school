@@ -631,8 +631,20 @@ async function insertPDF(req, res) {
     return;
   }
 
+  const teacherId = req.user._id;
+
   try {
     connection = await getConnection();
+
+    const [ownerCheck] = await connection.execute(
+      "SELECT student_id FROM students WHERE student_id = ? AND teacher_id = ?",
+      [student_id, teacherId]
+    );
+
+    if (ownerCheck.length === 0) {
+      connection.release();
+      return res.status(404).json({ result: "Student not found or unauthorized" });
+    }
 
     // Check if the record already exists
     const checkSql =
@@ -673,7 +685,7 @@ async function getStudentMarksBySchoolId(schoolId, teacherId) {
       ON sm.subject = mm.subject 
       AND sm.term = mm.term 
       AND mm.class = (SELECT class FROM students WHERE school_id = ? AND teacher_id = ?)
-    WHERE sm.student_id = ?
+    WHERE sm.student_id = ? AND (SELECT teacher_id FROM students WHERE school_id = sm.student_id) = ?
     ORDER BY sm.term, sm.subject
   `;
   try {
@@ -681,6 +693,7 @@ async function getStudentMarksBySchoolId(schoolId, teacherId) {
       schoolId,
       teacherId,
       schoolId,
+      teacherId,
     ]);
     return results;
   } catch (error) {
@@ -697,7 +710,7 @@ async function getStudentMarks(studentId, term, teacherId) {
     JOIN maximum_marks mm 
       ON sm.subject = mm.subject AND sm.term = mm.term AND mm.class = 
           (SELECT class FROM students WHERE school_id = ? AND teacher_id = ?)
-    WHERE sm.student_id = ? AND sm.term = ?
+    WHERE sm.student_id = ? AND sm.term = ? AND (SELECT teacher_id FROM students WHERE school_id = sm.student_id) = ?
   `;
   let connection;
   try {
@@ -707,6 +720,7 @@ async function getStudentMarks(studentId, term, teacherId) {
       teacherId,
       studentId,
       term,
+      teacherId,
     ]);
     return results;
   } catch (error) {
@@ -773,7 +787,7 @@ async function getStudentMarksWithMaxMarks(studentId) {
       FROM student_marks sm
       LEFT JOIN subject_config sc
         ON sm.subject = sc.subject_name AND sc.class_name = sm.class_name AND sc.teacher_id = ?
-      WHERE sm.student_id = ? AND sm.session = ? AND sm.class_name = ?
+      WHERE sm.student_id = ? AND sm.session = ? AND sm.class_name = ? AND (SELECT teacher_id FROM students WHERE school_id = sm.student_id) = ?
       ORDER BY sm.term, sm.subject;
     `;
 
@@ -782,6 +796,7 @@ async function getStudentMarksWithMaxMarks(studentId) {
       studentId,
       student.session,
       student.class,
+      student.teacher_id,
     ]);
     return results;
   } catch (error) {
