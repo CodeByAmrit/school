@@ -89,6 +89,92 @@ async function getMarksAnalytics(req, res) {
   }
 }
 
+async function getIndividualAnalytics(req, res) {
+  let connection;
+  try {
+    const studentId = req.params.id;
+    const teacherId = req.user._id;
+    connection = await getConnection();
+
+    // 1. Verify Ownership & Get Basic Info
+    const [studentRows] = await connection.execute(
+      "SELECT school_id, name, father_name, class, session, profile_status FROM students WHERE school_id = ? AND teacher_id = ?",
+      [studentId, teacherId]
+    );
+
+    if (studentRows.length === 0) {
+      return res.status(404).send("Student not found or access denied.");
+    }
+    const student = studentRows[0];
+
+    // 2. Student Term Progress (Term over Term percentage)
+    const [personalTrend] = await connection.execute(
+      `SELECT term, percentage
+       FROM StudentPerformance
+       WHERE school_id = ?
+       ORDER BY term ASC`,
+      [studentId]
+    );
+
+    // 3. Class Benchmarks (Avg per term for student's exact class)
+    const [classTrend] = await connection.execute(
+      `SELECT sp.term, AVG(sp.percentage) as avg_percentage
+       FROM StudentPerformance sp
+       JOIN students s ON sp.school_id = s.school_id
+       WHERE s.class = ? AND s.teacher_id = ? AND s.session = ?
+       GROUP BY sp.term
+       ORDER BY sp.term ASC`,
+      [student.class, teacherId, student.session]
+    );
+
+    // 4. Subject Radar (Student's average subjects vs Class Average)
+    const [subjectRadar] = await connection.execute(
+      `SELECT 
+          sm.subject,
+          AVG(
+             (CASE WHEN sm.marks REGEXP '^[0-9]+$' THEN CAST(sm.marks AS DECIMAL(5,2)) ELSE 0 END)
+             / 
+             NULLIF((CASE WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS DECIMAL(5,2)) ELSE 0 END), 0)
+          ) * 100 as student_subject_avg,
+          (
+            SELECT AVG(overall_avg.average_percentage)
+            FROM SubjectPerformance overall_avg 
+            WHERE overall_avg.class = ? AND overall_avg.teacher_id = ? AND overall_avg.subject = sm.subject
+          ) as class_subject_avg
+       FROM student_marks sm
+       JOIN maximum_marks mm ON mm.class = ? AND mm.subject = sm.subject AND mm.term = sm.term
+       WHERE sm.student_id = ?
+       GROUP BY sm.subject`,
+      [student.class, teacherId, student.class, studentId]
+    );
+
+    const school_logo_url = await getSchoolLogo(req, res);
+    let user = req.user;
+    user.school_logo = school_logo_url;
+    
+    // Required by navbar.ejs
+    const studentsCount = await getTotalStudents(req, res);
+
+    res.render("student_analytics", {
+      user,
+      total_students: studentsCount,
+      student,
+      analytics: {
+        personalTrend,
+        classTrend,
+        subjectRadar
+      }
+    });
+
+  } catch (error) {
+    console.error("Error fetching individual analytics:", error);
+    res.status(500).send("Server Error");
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
 module.exports = {
-  getMarksAnalytics
+  getMarksAnalytics,
+  getIndividualAnalytics
 };

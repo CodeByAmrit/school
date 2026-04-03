@@ -22,7 +22,7 @@ const {
   markStudentAsLeft,
   getStudentResult,
 } = require("../controllers/student");
-const { getMarksAnalytics } = require("../controllers/analytics");
+const { getMarksAnalytics, getIndividualAnalytics } = require("../controllers/analytics");
 
 const {
   getTotalStudentsCounts,
@@ -224,6 +224,9 @@ router.get("/search", checkAuth, apiCache(15), async (req, res) => {
 
 // route to analytics platform
 router.get("/analytics", checkAuth, getMarksAnalytics);
+
+// route to individual student analytics
+router.get("/student/analytics/:id", checkAuth, getIndividualAnalytics);
 
 // route to edit for students
 router.get("/student/edit/:id", checkAuth, async (req, res) => {
