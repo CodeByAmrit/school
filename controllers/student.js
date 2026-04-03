@@ -757,7 +757,13 @@ async function getStudentMarksWithMaxMarks(studentId) {
 }
 
 // Save or update marks for a student
-async function saveStudentMarks(studentId, marks, maxMarks) {
+async function saveStudentMarks(
+  studentId,
+  marks,
+  maxMarks,
+  sessionOverride,
+  classOverride,
+) {
   const insertMarksQuery = `
         INSERT INTO student_marks (student_id, session, class_name, term, subject, marks)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -774,38 +780,70 @@ async function saveStudentMarks(studentId, marks, maxMarks) {
   try {
     connection = await getConnection();
 
-    // Fetch student's current session and class to ensure correct mapping
-    const [[student]] = await connection.execute(
-      "SELECT session, class FROM students WHERE school_id = ?",
-      [studentId],
+    let targetSession = sessionOverride;
+    let targetClass = classOverride;
+
+    // Fetch student's current session and class only if not provided by the context
+    if (!targetSession || !targetClass) {
+      const [[student]] = await connection.execute(
+        "SELECT session, class FROM students WHERE school_id = ?",
+        [studentId],
+      );
+      if (!student) throw new Error("Student not found");
+      targetSession = targetSession || student.session;
+      targetClass = targetClass || student.class;
+    }
+
+    console.log(
+      `💾 Saving marks for Student ${studentId} into Session: ${targetSession}, Class: ${targetClass}`,
     );
 
-    if (!student) throw new Error("Student not found");
+    // Safety check
+    if (!targetSession || !targetClass)
+      throw new Error("Internal Error: Target session/class not identified.");
+
+    const isArrayMapping = Array.isArray(marks);
 
     // Loop through the marks and maxMarks for each term
-    for (let term = 0; term < marks.length; term++) {
-      // Process the marks and maxMarks for each subject
-      for (const subject in marks[term]) {
-        const mark = marks[term][subject];
-        const maxMark = maxMarks[term][subject];
+    for (const termKey in marks) {
+      // Map 0-indexed array to 1-based terms if necessary
+      let termNum = parseInt(termKey);
+      if (isArrayMapping) {
+        termNum += 1;
+      }
+
+      // Safety check: ensure term is valid (1, 2, or 3)
+      if (isNaN(termNum) || termNum < 1 || termNum > 3) {
+        continue;
+      }
+
+      const termMarks = marks[termKey];
+      const termMaxMarks = maxMarks[termKey] || {};
+
+      // Process the marks and maxMarks for each subject in this term
+      for (const subject in termMarks) {
+        const mark = termMarks[subject];
+        const maxMark = termMaxMarks[subject];
 
         // Insert or update marks with session and class context
         await connection.execute(insertMarksQuery, [
           studentId,
-          student.session,
-          student.class,
-          term + 1,
+          targetSession,
+          targetClass,
+          termNum,
           subject,
           mark,
         ]);
 
-        // Insert or update maximum marks
-        await connection.execute(insertMaxMarksQuery, [
-          student.class,
-          term + 1,
-          subject,
-          maxMark,
-        ]);
+        // Insert or update maximum marks if provided
+        if (maxMark !== undefined && maxMark !== null && maxMark !== "") {
+          await connection.execute(insertMaxMarksQuery, [
+            targetClass,
+            termNum,
+            subject,
+            maxMark,
+          ]);
+        }
       }
     }
   } catch (error) {
