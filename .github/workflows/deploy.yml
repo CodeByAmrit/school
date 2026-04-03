@@ -36,7 +36,7 @@ jobs:
 
             echo "🚀 Deploying version $NEW_VERSION"
 
-            cd /home/ubuntu/github/school
+            cd /home/ubuntu/github/StudentTracker-Pro
 
             echo "📦 Pulling new image..."
             sudo docker pull codebyamrit/student-tracker:$NEW_VERSION
