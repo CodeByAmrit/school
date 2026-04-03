@@ -13,8 +13,9 @@
     </a>
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
       <div class="flex items-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl text-white font-bold shadow-lg">
-          <%= student.name.charAt(0) %>
+        <div class="relative w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl text-white font-bold shadow-lg overflow-hidden shrink-0 border-2 border-white dark:border-gray-800">
+          <span class="absolute z-0 flex items-center justify-center w-full h-full pb-0.5"><%= student.name.charAt(0) %></span>
+          <img src="/api/student/photo/<%= student.school_id %>" class="absolute z-10 w-full h-full object-cover" onerror="this.style.display='none'" alt="<%= student.name %>">
         </div>
         <div>
           <h1 class="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-3">
@@ -29,10 +30,28 @@
           </p>
         </div>
       </div>
-      <div>
-        <span class="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl text-sm border border-indigo-100 dark:border-indigo-800">
-          Individual Tracker Active
-        </span>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Rank Badge -->
+        <div class="px-4 py-2 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/40 dark:to-amber-800/40 border border-amber-200 dark:border-amber-700/50 rounded-xl shadow-sm flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-sm shadow-md">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-none">Class Rank</p>
+            <p class="text-lg font-black text-amber-700 dark:text-amber-300 leading-tight">#<%= analytics.rank %> <span class="text-xs font-semibold text-amber-600/70 dark:text-amber-400/70">/ <%= analytics.totalInClass %></span></p>
+          </div>
+        </div>
+
+        <!-- Ceiling Badge -->
+        <div class="px-4 py-2 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/40 dark:to-indigo-800/40 border border-indigo-200 dark:border-indigo-700/50 rounded-xl shadow-sm flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center text-sm shadow-md">
+            <i class="fas fa-arrow-up-right-dots"></i>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">Class Highest</p>
+            <p class="text-lg font-black text-indigo-700 dark:text-indigo-300 leading-tight"><%= analytics.highestScore %>%</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

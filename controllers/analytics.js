@@ -46,7 +46,7 @@ async function getMarksAnalytics(req, res) {
     let weakestSubjQuery = `
       SELECT subject, AVG(average_percentage) as overall_avg
       FROM SubjectPerformance
-      WHERE teacher_id = ?
+      WHERE teacher_id = ? AND subject NOT LIKE '%DRAWING%'
     `;
     const weakParams = [teacher_id];
     if (targetClass) {
@@ -127,26 +127,56 @@ async function getIndividualAnalytics(req, res) {
       [student.class, teacherId, student.session]
     );
 
-    // 4. Subject Radar (Student's average subjects vs Class Average)
-    const [subjectRadar] = await connection.execute(
+    // 4. Subject Radar (True Top-Down Curriculum Mapping via Config)
+    const [subjectRadarRaw] = await connection.execute(
       `SELECT 
-          sm.subject,
-          AVG(
-             (CASE WHEN sm.marks REGEXP '^[0-9]+$' THEN CAST(sm.marks AS DECIMAL(5,2)) ELSE 0 END)
-             / 
-             NULLIF((CASE WHEN mm.max_marks REGEXP '^[0-9]+$' THEN CAST(mm.max_marks AS DECIMAL(5,2)) ELSE 0 END), 0)
-          ) * 100 as student_subject_avg,
+          sc.subject_name as subject,
+          (
+             SELECT AVG(
+                (CASE WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS DECIMAL(5,2)) ELSE 0 END)
+                / 
+                NULLIF((CASE WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS DECIMAL(5,2)) ELSE 0 END), 0)
+             ) * 100
+             FROM student_marks sm_inner
+             JOIN maximum_marks mm_inner ON mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term AND mm_inner.class = ?
+             WHERE sm_inner.student_id = ? AND sm_inner.subject = sc.subject_name AND sm_inner.marks IS NOT NULL AND sm_inner.marks != '' AND sm_inner.marks != 'NA' AND sm_inner.marks != 'AB'
+          ) as student_subject_avg,
           (
             SELECT AVG(overall_avg.average_percentage)
             FROM SubjectPerformance overall_avg 
-            WHERE overall_avg.class = ? AND overall_avg.teacher_id = ? AND overall_avg.subject = sm.subject
+            WHERE overall_avg.class = ? AND overall_avg.teacher_id = ? AND overall_avg.subject = sc.subject_name
           ) as class_subject_avg
-       FROM student_marks sm
-       JOIN maximum_marks mm ON mm.class = ? AND mm.subject = sm.subject AND mm.term = sm.term
-       WHERE sm.student_id = ?
-       GROUP BY sm.subject`,
-      [student.class, teacherId, student.class, studentId]
+       FROM subject_config sc
+       WHERE sc.class_name = ? AND sc.teacher_id = ? AND sc.subject_name NOT LIKE '%DRAWING%'`,
+      [student.class, studentId, student.class, teacherId, student.class, teacherId]
     );
+
+    const subjectRadar = subjectRadarRaw.map(s => ({
+      subject: s.subject,
+      student_subject_avg: s.student_subject_avg || 0,
+      class_subject_avg: s.class_subject_avg || 0
+    }));
+
+    // 5. Calculate Absolute Class Rank & Highest Score
+    const [classRanks] = await connection.execute(
+      `SELECT sp.school_id, AVG(sp.percentage) as avg_pct
+       FROM StudentPerformance sp
+       JOIN students s ON sp.school_id = s.school_id
+       WHERE s.class = ? AND s.teacher_id = ? AND s.session = ?
+       GROUP BY sp.school_id
+       ORDER BY avg_pct DESC`,
+      [student.class, teacherId, student.session]
+    );
+
+    let rank = "N/A";
+    let highestScore = 0;
+    if (classRanks.length > 0) {
+      highestScore = parseFloat(classRanks[0].avg_pct).toFixed(2);
+      const studentRankIndex = classRanks.findIndex(r => r.school_id.toString() === studentId.toString());
+      if (studentRankIndex !== -1) {
+        rank = studentRankIndex + 1; // 1-indexed
+      }
+    }
 
     const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
@@ -162,7 +192,10 @@ async function getIndividualAnalytics(req, res) {
       analytics: {
         personalTrend,
         classTrend,
-        subjectRadar
+        subjectRadar,
+        rank,
+        highestScore,
+        totalInClass: classRanks.length
       }
     });
 
