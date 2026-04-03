@@ -55,7 +55,7 @@ async function generate(req, res) {
     maxMarksRows.forEach((row) => {
       // In subject_config, max_marks is set once per subject.
       // We apply it to all terms (1, 2, 3) for the certificate logic.
-      [1, 2, 3].forEach(term => {
+      [1, 2, 3].forEach((term) => {
         if (!maxMarks[term]) maxMarks[term] = {};
         maxMarks[term][row.subject] = row.max_marks;
       });
@@ -268,7 +268,8 @@ async function generate(req, res) {
           let maxDisplayValue = maxMarksForSubject.toString();
           if (maxInt === 0) {
             // Check original subject names for specific labels if needed, or default to Grading
-            maxDisplayValue = (subject === 'GENERAL KNOWLEDGE') ? 'NA' : 'Grading';
+            maxDisplayValue =
+              subject === "GENERAL KNOWLEDGE" ? "NA" : "Grading";
           }
 
           firstPage.drawText(maxDisplayValue, {
@@ -288,8 +289,12 @@ async function generate(req, res) {
       const totalYPosition = startYPosition - subjectOrder.length * rowHeight;
       const performance = performanceByTerm[term] || {};
 
-      // Total Marks
-      firstPage.drawText(performance.grandTotal?.toString() || "N/A", {
+      // Total Marks (Obtained / Max)
+      const obtained = performance.grandTotal?.toString() || "N/A";
+      const max = performance.totalMaxMarks?.toString() || "N/A";
+      const totalLabel = `${obtained} / ${max}`;
+
+      firstPage.drawText(totalLabel, {
         x: startX,
         y: totalYPosition,
         size: 34,
@@ -313,13 +318,6 @@ async function generate(req, res) {
       });
     });
 
-    firstPage.drawText(termGrandTotal.toString(), {
-      x: 862,
-      y: 1544,
-      size: 34,
-      font: boldFont,
-      color: rgb(0, 0, 0),
-    });
     let xvalue = 1293;
     let yvalue = 1161;
 
@@ -340,13 +338,6 @@ async function generate(req, res) {
       });
       xvalue += 400;
       yvalue -= 244;
-    });
-    firstPage.drawText(termGrandTotal.toString(), {
-      x: 862,
-      y: 1544,
-      size: 34,
-      font: boldFont,
-      color: rgb(0, 0, 0),
     });
 
     // Save the PDF and send it to the client
