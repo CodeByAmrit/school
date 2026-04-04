@@ -1146,7 +1146,9 @@ async function markStudentAsLeft(req, res) {
     await connection.commit();
 
     // Redirect after success
-    res.redirect("/students"); // Adjust path if needed
+    res.redirect(
+      `/search?q=&class=${student.class}&session=${student.session}`,
+    ); // Adjust path if needed
   } catch (err) {
     if (connection) await connection.rollback();
     throw err;
