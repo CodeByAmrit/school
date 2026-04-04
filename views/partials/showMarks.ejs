@@ -1,4 +1,6 @@
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 <link rel="stylesheet" href="/css/inputCustom.css" type="text/css">
+
 
 <div class="p-3 sm:ml-64 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 min-h-screen font-sans">
     <div class="w-full h-full dark:bg-gray-900 dark:text-white">
@@ -121,6 +123,8 @@
                                     <tbody class="divide-y divide-gray-50 dark:divide-gray-700/50">
                                         <% performance.forEach(p=> { %>
                                             <form action="/action-rank/<%= p.term %>/<%= student.school_id %>" method="post">
+                                                <input type="hidden" name="session" value="<%= viewSession %>">
+                                                <input type="hidden" name="class_name" value="<%= viewClassName %>">
                                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                     <td class="py-2.5 px-1 font-semibold text-gray-900 dark:text-white">T<%= p.term %></td>
                                                     <td class="py-2.5 px-1 text-gray-700 dark:text-gray-300"><%= p.grand_total %></td>
@@ -231,7 +235,7 @@
                         </div>
 
                         <div class="flex justify-center mt-6">
-                            <button type="submit" class="group relative flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-white rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] transform">
+                            <button id="saveMarksBtn" type="submit" class="group relative flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-white rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:from-[#3182ce] hover:to-[#63b3ed] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] transform">
                                 <i class="fas fa-save text-xs"></i> Save All Marks
                             </button>
                         </div>
@@ -247,7 +251,7 @@
                     </h2>
                 </div>
                 <div class="p-4">
-                    <form action="/student/attendance-status/<%= student.school_id %>" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+                    <form id="attendanceForm" action="/student/attendance-status/<%= student.school_id %>" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
                         <input type="hidden" name="studentId" value="<%= student.school_id %>">
                         <div class="flex-1 w-full">
                             <label class="block text-[10px] font-semibold text-gray-500 uppercase mb-1">Attendance</label>
@@ -268,7 +272,7 @@
                                 <option value="fail" <%=student_attendance_status && student_attendance_status.status==='fail' ? 'selected' : '' %>>Fail</option>
                             </select>
                         </div>
-                        <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8 py-2 rounded-xl shadow-md transition-all text-sm whitespace-nowrap">
+                        <button id="attendanceBtn" type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8 py-2 rounded-xl shadow-md transition-all text-sm whitespace-nowrap">
                             <i class="fas fa-check-circle mr-1"></i> Update
                         </button>
                     </form>
@@ -280,6 +284,7 @@
 
 <script nonce="<%= nonce %>">
     (function() {
+        /* ---------- History Selector ---------- */
         const historySelector = document.getElementById('historySelector');
         if (historySelector) {
             historySelector.addEventListener('change', function() {
@@ -289,5 +294,284 @@
                 }
             });
         }
+
+        /* ---------- Toast System ---------- */
+        function showToast(message, type = 'success') {
+            // Remove existing toasts
+            document.querySelectorAll('.rank-toast').forEach(t => t.remove());
+
+            const isSuccess = type === 'success';
+            const toast = document.createElement('div');
+            toast.className = 'rank-toast';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 20px;
+                border-radius: 14px;
+                min-width: 280px;
+                max-width: 380px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.12);
+                backdrop-filter: blur(12px);
+                background: ${isSuccess
+                    ? 'linear-gradient(135deg, rgba(16,185,129,0.95) 0%, rgba(5,150,105,0.95) 100%)'
+                    : 'linear-gradient(135deg, rgba(239,68,68,0.95) 0%, rgba(185,28,28,0.95) 100%)'};
+                border: 1px solid ${isSuccess ? 'rgba(52,211,153,0.4)' : 'rgba(252,165,165,0.4)'};
+                transform: translateY(20px);
+                opacity: 0;
+                transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+            `;
+
+            const iconWrap = document.createElement('div');
+            iconWrap.style.cssText = `
+                width: 32px; height: 32px; border-radius: 50%;
+                background: rgba(255,255,255,0.2);
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
+            `;
+            iconWrap.innerHTML = isSuccess
+                ? `<svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
+                : `<svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
+
+            const textWrap = document.createElement('div');
+            textWrap.style.cssText = 'flex: 1;';
+
+            const label = document.createElement('p');
+            label.style.cssText = 'margin:0; font-size:11px; font-weight:600; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em;';
+            label.textContent = isSuccess ? 'Saved' : 'Error';
+
+            const msg = document.createElement('p');
+            msg.style.cssText = 'margin:2px 0 0; font-size:13px; font-weight:500; color:#fff;';
+            msg.textContent = message;
+
+            const closeBtn = document.createElement('button');
+            closeBtn.style.cssText = `
+                background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+                width: 24px; height: 24px; border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0; transition: background 0.2s;
+            `;
+            closeBtn.innerHTML = `<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
+            closeBtn.onmouseenter = () => closeBtn.style.background = 'rgba(255,255,255,0.28)';
+            closeBtn.onmouseleave = () => closeBtn.style.background = 'rgba(255,255,255,0.15)';
+
+            // Progress bar
+            const progress = document.createElement('div');
+            progress.style.cssText = `
+                position: absolute; bottom: 0; left: 0;
+                height: 3px; border-radius: 0 0 14px 14px;
+                background: rgba(255,255,255,0.5);
+                width: 100%;
+                transform-origin: left;
+                transition: transform 3s linear;
+            `;
+            toast.style.position = 'fixed'; // ensure relative works
+            toast.style.overflow = 'hidden';
+
+            textWrap.appendChild(label);
+            textWrap.appendChild(msg);
+            toast.appendChild(iconWrap);
+            toast.appendChild(textWrap);
+            toast.appendChild(closeBtn);
+            toast.appendChild(progress);
+            document.body.appendChild(toast);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    toast.style.transform = 'translateY(0)';
+                    toast.style.opacity = '1';
+                    progress.style.transform = 'scaleX(0)';
+                });
+            });
+
+            const dismiss = () => {
+                toast.style.transform = 'translateY(20px)';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 350);
+            };
+
+            closeBtn.addEventListener('click', dismiss);
+            const timer = setTimeout(dismiss, 3000);
+            toast.addEventListener('mouseenter', () => clearTimeout(timer));
+
+            return toast;
+        }
+
+        /* ---------- Intercept Action-Rank Forms ---------- */
+        document.querySelectorAll('form[action^="/action-rank/"]').forEach(form => {
+            const btn = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Loading state
+                const originalHTML = btn ? btn.innerHTML : '';
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = `<svg class="animate-spin" width="14" height="14" fill="none" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4" stroke-dashoffset="10" stroke-linecap="round"/>
+                    </svg>`;
+                    btn.style.opacity = '0.7';
+                }
+
+                try {
+                    const formData = new FormData(form);
+                    const params = new URLSearchParams(formData);
+
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params.toString(),
+                        credentials: 'same-origin'
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        showToast(data.message || 'Remark saved successfully!', 'success');
+                        // Brief green flash on the save button
+                        if (btn) {
+                            btn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+                            btn.style.color = '#10b981';
+                            btn.style.opacity = '1';
+                            setTimeout(() => {
+                                btn.innerHTML = originalHTML;
+                                btn.style.color = '';
+                                btn.disabled = false;
+                            }, 1800);
+                        }
+                    } else {
+                        showToast(data.error || 'Something went wrong.', 'error');
+                        if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; btn.style.opacity = '1'; }
+                    }
+                } catch (err) {
+                    showToast('Network error. Please try again.', 'error');
+                    if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; btn.style.opacity = '1'; }
+                }
+            });
+        });
+        /* ---------- Save All Marks (AJAX) ---------- */
+        const mainMarksForm = document.getElementById('mainMarksForm');
+        const saveMarksBtn = document.getElementById('saveMarksBtn');
+
+        if (mainMarksForm && saveMarksBtn) {
+            mainMarksForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Loading state
+                const originalHTML = saveMarksBtn.innerHTML;
+                saveMarksBtn.disabled = true;
+                saveMarksBtn.innerHTML = `
+                    <svg class="animate-spin" width="16" height="16" fill="none" viewBox="0 0 24 24" style="animation:spin 0.8s linear infinite">
+                        <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.4)" stroke-width="3"/>
+                        <path stroke="white" stroke-width="3" stroke-linecap="round" d="M12 2a10 10 0 0 1 10 10"/>
+                    </svg>
+                    Saving…`;
+                saveMarksBtn.style.opacity = '0.85';
+
+                try {
+                    const formData = new FormData(mainMarksForm);
+                    const params = new URLSearchParams(formData);
+
+                    const res = await fetch(mainMarksForm.action, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params.toString(),
+                        credentials: 'same-origin'
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        showToast(data.message || 'Marks saved successfully!', 'success');
+                        saveMarksBtn.innerHTML = `<svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Saved!`;
+                        saveMarksBtn.style.opacity = '1';
+                        saveMarksBtn.className = saveMarksBtn.className
+                            .replace('from-[#63b3ed]', 'from-emerald-500')
+                            .replace('to-[#3182ce]', 'to-emerald-600')
+                            .replace('hover:from-[#3182ce]', 'hover:from-emerald-600')
+                            .replace('hover:to-[#63b3ed]', 'hover:to-emerald-500');
+                        setTimeout(() => {
+                            saveMarksBtn.innerHTML = originalHTML;
+                            saveMarksBtn.disabled = false;
+                            saveMarksBtn.className = saveMarksBtn.className
+                                .replace('from-emerald-500', 'from-[#63b3ed]')
+                                .replace('to-emerald-600', 'to-[#3182ce]')
+                                .replace('hover:from-emerald-600', 'hover:from-[#3182ce]')
+                                .replace('hover:to-emerald-500', 'hover:to-[#63b3ed]');
+                        }, 2500);
+                    } else {
+                        showToast(data.error || 'Failed to save marks.', 'error');
+                        saveMarksBtn.innerHTML = originalHTML;
+                        saveMarksBtn.disabled = false;
+                        saveMarksBtn.style.opacity = '1';
+                    }
+                } catch (err) {
+                    showToast('Network error. Please try again.', 'error');
+                    saveMarksBtn.innerHTML = originalHTML;
+                    saveMarksBtn.disabled = false;
+                    saveMarksBtn.style.opacity = '1';
+                }
+            });
+        }
+        /* ---------- Attendance & Status (AJAX) ---------- */
+        const attendanceForm = document.getElementById('attendanceForm');
+        const attendanceBtn  = document.getElementById('attendanceBtn');
+
+        if (attendanceForm && attendanceBtn) {
+            attendanceForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const originalHTML = attendanceBtn.innerHTML;
+                attendanceBtn.disabled = true;
+                attendanceBtn.innerHTML = `
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" style="animation:spin 0.8s linear infinite;display:inline-block">
+                        <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.4)" stroke-width="3"/>
+                        <path stroke="white" stroke-width="3" stroke-linecap="round" d="M12 2a10 10 0 0 1 10 10"/>
+                    </svg> Updating…`;
+                attendanceBtn.style.opacity = '0.8';
+
+                try {
+                    const params = new URLSearchParams(new FormData(attendanceForm));
+                    const res = await fetch(attendanceForm.action, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params.toString(),
+                        credentials: 'same-origin'
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        showToast(data.message || 'Updated successfully!', 'success');
+                        // Flash amber → green tick
+                        attendanceBtn.innerHTML = `<svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Done`;
+                        attendanceBtn.style.background = '#059669';
+                        attendanceBtn.style.opacity = '1';
+                        setTimeout(() => {
+                            attendanceBtn.innerHTML = originalHTML;
+                            attendanceBtn.style.background = '';
+                            attendanceBtn.disabled = false;
+                        }, 2000);
+                    } else {
+                        showToast(data.error || 'Failed to update.', 'error');
+                        attendanceBtn.innerHTML = originalHTML;
+                        attendanceBtn.disabled = false;
+                        attendanceBtn.style.opacity = '1';
+                    }
+                } catch (err) {
+                    showToast('Network error. Please try again.', 'error');
+                    attendanceBtn.innerHTML = originalHTML;
+                    attendanceBtn.disabled = false;
+                    attendanceBtn.style.opacity = '1';
+                }
+            });
+        }
     })();
 </script>
+

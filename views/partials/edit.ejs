@@ -1,584 +1,488 @@
-<div class="p-3 sm:ml-64 dark:bg-gray-900 dark:text-white">
+<div class="p-3 sm:ml-64 dark:bg-gray-900 dark:text-white min-h-screen">
   <div class="w-full h-full mt-14 dark:bg-gray-900 dark:text-white">
 
     <form action="/search" method="get">
       <%- include('./search.ejs') %>
 
-      <!-- <p class=" my-3 text-xl">Edit Profiles</p> -->
-
-      <div class="py-4 flex justify-start gap-4">
-        <button
-          id="dropdownActionButton"
-          data-dropdown-toggle="dropdownAction"
+      <div class="py-3 flex justify-start gap-4">
+        <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
           class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          type="button"
-        >
+          type="button">
           <span class="sr-only">Action button</span>
           Download
-          <svg
-            class="w-2.5 h-2.5 ms-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
+          <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
         </button>
-        <!-- Dropdown menu -->
-        <div
-          id="dropdownAction"
-          class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
-        >
+        <div id="dropdownAction" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
           <div class="py-1">
-            <a
-              id="selected_excel_file_button"
-              class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
+            <a id="selected_excel_file_button" class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
               <img src="/image/excel.svg" alt="excel" width="26px" />
               Get Excel File
             </a>
           </div>
           <div class="py-1">
-            <a
-              id="generate_credentials_button"
-              class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
+            <a id="generate_credentials_button" class="flex gap-4 justify-center items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
               <i class="fas fa-key text-yellow-500"></i>
               Generate Credentials
             </a>
           </div>
         </div>
 
-        <button
-          id="dropdownActionButton2"
-          data-dropdown-toggle="dropdownAction2"
+        <button id="dropdownActionButton2" data-dropdown-toggle="dropdownAction2"
           class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          type="button"
-        >
+          type="button">
           <span class="sr-only">Action button</span>
           Action
-          <svg
-            class="w-2.5 h-2.5 ms-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
+          <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
         </button>
-        <!-- Dropdown menu -->
-        <div
-          id="dropdownAction2"
-          class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <ul
-            class="py-1 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownActionButton2"
-          >
-            <li>
-              <a
-                href="#"
-                id="promote-button"
-                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Promote</a
-              >
-            </li>
-
-            <li>
-              <a
-                href="#"
-                id="demote-button"
-                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Demote</a
-              >
-            </li>
+        <div id="dropdownAction2" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
+          <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton2">
+            <li><a href="#" id="promote-button" class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a></li>
+            <li><a href="#" id="demote-button" class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Demote</a></li>
           </ul>
           <div class="py-1">
-            <a
-              id="selected_id_card_button"
-              class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >ID Card</a
-            >
+            <a id="selected_id_card_button" class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">ID Card</a>
           </div>
           <div class="py-1">
-            <a
-              id="selected_Certificate_button"
-              class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Felicitation Ceremony Certificate</a
-            >
+            <a id="selected_Certificate_button" class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Felicitation Ceremony Certificate</a>
           </div>
         </div>
       </div>
 
-      <!-- Student Table -->
-      <div class="overflow-x-auto m-2 rounded-xl min-h-[calc(100vh-25rem)]">
-        <table
-          class="w-full text-sm text-left text-gray-700 border-separate border-spacing-y-2"
-          id="student-table"
-        >
-          <thead class="text-xs text-gray-700 uppercase bg-blue-50">
-            <tr>
-              <!-- Select All Checkbox -->
-              <th scope="col" class="px-4 py-2">
-                <div class="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="checkbox-all-search"
-                    class="w-4 h-4 text-blue-600 bg-white border-blue-300 rounded focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label for="checkbox-all-search" class="sr-only"
-                    >Select all</label
-                  >
-                </div>
-              </th>
+      <!-- ═══════════════════════════════════════════
+           TWO-COLUMN LAYOUT (lg+): Table | Detail Panel
+           On small screens: just the table, panel is hidden
+      ═══════════════════════════════════════════ -->
+      <div class="flex gap-4 items-start">
 
-              <!-- Student Name -->
-              <th scope="col" class="px-4 py-2">
-                <div class="flex items-center">
-                  <span>Student</span>
-                  <button class="ml-1 text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-sort"></i>
-                  </button>
-                </div>
-              </th>
+        <!-- ── LEFT: Student Table (max-width capped) ── -->
+        <div class="flex-1 px-1 min-w-0 overflow-x-auto rounded-xl min-h-[calc(100vh-18rem)]" id="table-column">
+          <table class="w-full text-sm text-left text-gray-700 border-separate border-spacing-y-1.5" id="student-table">
+            <thead class="text-xs text-gray-700 uppercase bg-blue-50 dark:bg-gray-800 dark:text-gray-400 sticky top-0 z-10">
+              <tr>
+                <th scope="col" class="px-3 py-2.5">
+                  <input type="checkbox" id="checkbox-all-search" class="w-4 h-4 text-blue-600 bg-white border-blue-300 rounded focus:ring-blue-500 focus:ring-2"/>
+                  <label for="checkbox-all-search" class="sr-only">Select all</label>
+                </th>
+                <th scope="col" class="px-3 py-2.5">
+                  <div class="flex items-center gap-1">Student <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-sort text-[10px]"></i></button></div>
+                </th>
+                <th scope="col" class="px-3 py-2.5">Class</th>
+                <th scope="col" class="px-2 py-2.5 hidden md:table-cell">Session</th>
+                <th scope="col" class="px-2 py-2.5 hidden xl:table-cell">Status</th>
+                <th scope="col" class="px-3 py-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (studentlist.length > 0) { %>
+              <% studentlist.forEach((student, index) => { %>
+              <tr class="student-row bg-white rounded-xl hover:bg-blue-50/40 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer"
+                  data-student-id="<%= student.school_id %>">
 
-              <!-- Class -->
-              <th scope="col" class="px-4 py-2">
-                <div class="flex items-center">
-                  <span>Class</span>
-                  <button class="ml-1 text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-sort"></i>
-                  </button>
-                </div>
-              </th>
+                <!-- Checkbox -->
+                <td class="px-3 py-2" data-no-select>
+                  <input type="checkbox" class="student-checkbox w-4 h-4 text-blue-600 bg-white border-blue-300 rounded focus:ring-blue-500 focus:ring-2 focus:outline-none outline-none" data-id="<%= student.school_id %>"/>
+                </td>
 
-              <!-- Session -->
-              <th scope="col" class="px-2 py-2 hidden md:table-cell">
-                <div class="flex items-center">
-                  <span>Session</span>
-                </div>
-              </th>
-
-              <!-- Status -->
-              <th scope="col" class="px-2 py-2 hidden lg:table-cell">
-                <div class="flex items-center">
-                  <span>Status</span>
-                </div>
-              </th>
-
-              <!-- Actions -->
-              <th scope="col" class="px-6 py-4 text-right">
-                <span>Actions</span>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% if (studentlist.length > 0) { %>
-            <% studentlist.forEach((student, index) => { %>
-            <tr
-              class="bg-white rounded-xl overflow-hidden hover:bg-blue-50/30 transition-all shadow-sm border border-gray-100"
-              data-student-id="<%= student.school_id %>"
-            >
-              <!-- Checkbox -->
-              <td class="px-3 py-0">
-                <input
-                  type="checkbox"
-                  class="student-checkbox w-4 h-4 text-blue-600 bg-white border-blue-300 rounded focus:ring-blue-500 focus:ring-2"
-                  data-id="<%= student.school_id %>"
-                />
-              </td>
-
-              <!-- Student Info with Avatar -->
-              <td class="px-2 py-0">
-                <div class="flex items-center space-x-3">
-                  <div class="relative flex-shrink-0">
-                    <div
-                      class="w-10 h-10 rounded-lg overflow-hidden shadow-sm"
-                    >
-                      <img
-                        class="object-cover w-full h-full"
-                        src="/api/student/photo/<%= student.school_id %>"
-                        loading="lazy"
-                        alt="<%= student.name %>"
-                      />
+                <!-- Student Info -->
+                <td class="px-2 py-2">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-lg overflow-hidden shadow-sm flex-shrink-0">
+                      <img class="object-cover w-full h-full" src="/api/student/photo/<%= student.school_id %>" loading="lazy" alt="<%= student.name %>"
+                           onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(student.name) %>&background=DBEAFE&color=1E40AF&bold=true&size=36'"/>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-bold text-gray-900 dark:text-white truncate text-xs"><%= student.name %></div>
+                      <div class="text-[10px] text-gray-400 font-mono">ID: <%= student.school_id %></div>
                     </div>
                   </div>
-                  <div class="min-w-0">
-                    <div class="font-bold text-gray-900 truncate text-sm">
-                      <%= student.name %>
-                    </div>
-                    <div class="text-xs text-gray-500 truncate">
-                      S/O <%= student.father_name %>
-                    </div>
-                    <div class="text-[10px] text-gray-400 font-mono">
-                      ID: <%= student.school_id %>
-                    </div>
-                  </div>
-                </div>
-              </td>
+                </td>
 
-              <!-- Class -->
-              <td class="px-4 py-0">
-                <div class="flex items-center">
-                  <div
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center mr-2"
-                  >
-                    <i class="fas fa-chalkboard text-blue-600 text-[10px]"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-gray-800 text-xs">
-                      <%= student.class %>
-                    </div>
-                    <div class="text-[10px] text-gray-500">
-                      Sec: <%= student.section %>
-                    </div>
-                  </div>
-                </div>
-              </td>
+                <!-- Class -->
+                <td class="px-3 py-2">
+                  <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md"><%= student.class %></span>
+                </td>
 
-              <!-- Session -->
-              <td class="px-2 py-0 hidden md:table-cell">
-                <div class="text-xs font-medium text-gray-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
-                  <%= student.session %>
-                </div>
-              </td>
+                <!-- Session -->
+                <td class="px-2 py-2 hidden md:table-cell">
+                  <span class="text-[10px] font-medium text-gray-500 dark:text-gray-400"><%= student.session %></span>
+                </td>
 
-              <!-- Status -->
-              <td class="px-2 py-0 hidden lg:table-cell">
-                <% 
-                  let statusText; 
-                  let bgClass; 
-                  let textClass; 
-                  let borderClass; 
-                  
-                  if (student.profile_status && student.profile_status.toLowerCase() === 'pending') { 
-                    statusText = 'Pending'; 
-                    bgClass = 'bg-orange-50'; 
-                    textClass = 'text-orange-700'; 
-                    borderClass = 'border-orange-200'; 
-                  } else if (student.profile_status && student.profile_status.toLowerCase() === 'inactive') { 
-                    statusText = 'Inactive'; 
-                    bgClass = 'bg-gray-50'; 
-                    textClass = 'text-gray-700'; 
-                    borderClass = 'border-gray-200'; 
-                  } else { 
-                    statusText = 'Active'; 
-                    bgClass = 'bg-emerald-50'; 
-                    textClass = 'text-emerald-700'; 
-                    borderClass = 'border-emerald-200'; 
-                  } 
-                %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium <%= bgClass %> <%= textClass %> border <%= borderClass %>">
-                  <span class="w-1 h-1 rounded-full bg-current mr-1"></span>
-                  <%= statusText %>
-                </span>
-              </td>
+                <!-- Status -->
+                <td class="px-2 py-2 hidden xl:table-cell">
+                  <%
+                    const s = student.profile_status ? student.profile_status.toLowerCase() : '';
+                    const statusBg = s === 'pending' ? 'bg-orange-50 text-orange-700 border-orange-200' : s === 'inactive' ? 'bg-gray-50 text-gray-600 border-gray-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                    const statusText = s === 'pending' ? 'Pending' : s === 'inactive' ? 'Inactive' : 'Active';
+                  %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border <%= statusBg %>">
+                    <span class="w-1 h-1 rounded-full bg-current mr-1"></span><%= statusText %>
+                  </span>
+                </td>
 
-              <!-- Actions -->
-              <td class="px-4 py-0 text-right">
-                <div class="flex items-center justify-end space-x-1 relative">
-                  <!-- Quick View Button -->
-                  <button
-                    type="button"
-                    class="quick-view-btn text-blue-600 hover:text-blue-800 p-1.5 rounded-md hover:bg-blue-50 transition-colors"
-                    data-student-id="<%= student.school_id %>"
-                    title="Quick View"
-                  >
-                    <i class="fas fa-eye text-sm"></i>
-                  </button>
-
-                  <!-- Edit Button -->
-                  <a
-                    href="/student/edit/<%= student.school_id %>"
-                    class="text-green-600 hover:text-green-800 p-2 rounded-lg hover:bg-green-50 transition-colors"
-                    title="Edit Profile"
-                  >
-                    <i class="fas fa-edit"></i>
-                  </a>
-
-                  <!-- More Actions Dropdown -->
-                  <div class="relative">
-                    <button
-                      id="student-actions-<%= student.school_id %>"
-                      data-dropdown-toggle="dropdown-<%= student.school_id %>"
-                      class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors z-40"
-                      type="button"
-                    >
-                      <i class="fas fa-ellipsis-v"></i>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div id="dropdown-<%= student.school_id %>" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
-                      <!-- Dropdown Header -->
-                      <div class="px-4 py-3 bg-gradient-to-r from-blue-50/80 to-blue-100/30 border-b border-gray-100">
-                        <div class="font-semibold text-gray-800 text-sm truncate"><%= student.name %></div>
-                        <div class="text-xs text-gray-500 font-medium">ID: <%= student.school_id %></div>
-                      </div>
-
-                      <!-- Dropdown Items -->
-                      <div class="py-1">
-                        <!-- Academic Section -->
-                        <div class="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Academic</div>
-                        <a href="/student/get_marks/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                          <i class="fas fa-pencil-alt w-5 text-purple-500 text-center mr-2"></i>
-                          <span class="font-medium">Edit Marks</span>
-                        </a>
-                        <a href="/student/analytics/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">
-                          <i class="fas fa-chart-line w-5 text-indigo-500 text-center mr-2"></i>
-                          <span class="font-medium">Analytics Tracker</span>
-                        </a>
-
-                        <!-- Documents Section -->
-                        <div class="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Documents</div>
-                        <a href="/generate-report/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                          <i class="fas fa-file-invoice w-5 text-orange-500 text-center mr-2"></i>
-                          <span class="font-medium">Report Card</span>
-                        </a>
-                        <a href="/generate-certificate/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                          <i class="fas fa-award w-5 text-green-500 text-center mr-2"></i>
-                          <span class="font-medium">Certificate</span>
-                        </a>
-                        <a href="/api/students/get/virual-card/<%= student.school_id %>" target="_blank" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                          <i class="fas fa-id-badge w-5 text-blue-500 text-center mr-2"></i>
-                          <span class="font-medium">Virtual ID Card</span>
-                        </a>
-
-                        <!-- Files Section -->
-                        <div class="w-full h-px bg-gray-100 my-1"></div>
-                        <a href="/files/one/<%= student.school_id %>" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                          <i class="fas fa-folder-open w-5 text-indigo-500 text-center mr-2"></i>
-                          <span class="font-medium">Manage Files</span>
-                        </a>
-
-                        <!-- Danger Zone -->
-                        <div class="w-full h-px bg-red-50 my-1"></div>
-                        <div class="bg-red-50/20">
+                <!-- Actions -->
+                <td class="px-3 py-2 text-right" data-no-select>
+                  <div class="flex items-center justify-end space-x-1">
+                    <a href="/student/edit/<%= student.school_id %>"
+                       class="text-green-600 hover:text-green-800 p-1.5 rounded-md hover:bg-green-50 transition-colors" title="Edit Profile">
+                      <i class="fas fa-edit text-xs"></i>
+                    </a>
+                    <div class="relative">
+                      <button id="student-actions-<%= student.school_id %>"
+                              data-dropdown-toggle="dropdown-<%= student.school_id %>"
+                              class="text-gray-500 hover:text-gray-800 p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+                              type="button">
+                        <i class="fas fa-ellipsis-v text-xs"></i>
+                      </button>
+                      <div id="dropdown-<%= student.school_id %>" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                        <div class="px-4 py-2.5 bg-gradient-to-r from-blue-50/80 to-blue-100/30 dark:from-blue-900/20 border-b border-gray-100 dark:border-gray-700">
+                          <div class="font-semibold text-gray-800 dark:text-white text-xs truncate"><%= student.name %></div>
+                          <div class="text-[10px] text-gray-500">ID: <%= student.school_id %></div>
+                        </div>
+                        <div class="py-1">
+                          <div class="px-4 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Academic</div>
+                          <a href="/student/get_marks/<%= student.school_id %>" class="flex items-center px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 transition-colors">
+                            <i class="fas fa-pencil-alt w-5 text-purple-500 text-center mr-2"></i><span class="font-medium">Edit Marks</span>
+                          </a>
+                          <a href="/student/analytics/<%= student.school_id %>" class="flex items-center px-4 py-2 text-xs text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 dark:hover:bg-indigo-900/20 transition-colors">
+                            <i class="fas fa-chart-line w-5 text-indigo-500 text-center mr-2"></i><span class="font-medium">Analytics</span>
+                          </a>
+                          <div class="px-4 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Documents</div>
+                          <a href="/generate-report/<%= student.school_id %>" class="flex items-center px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 transition-colors">
+                            <i class="fas fa-file-invoice w-5 text-orange-500 text-center mr-2"></i><span class="font-medium">Report Card</span>
+                          </a>
+                          <a href="/generate-certificate/<%= student.school_id %>" class="flex items-center px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 transition-colors">
+                            <i class="fas fa-award w-5 text-green-500 text-center mr-2"></i><span class="font-medium">Certificate</span>
+                          </a>
+                          <a href="/api/students/get/virual-card/<%= student.school_id %>" target="_blank" class="flex items-center px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 transition-colors">
+                            <i class="fas fa-id-badge w-5 text-blue-500 text-center mr-2"></i><span class="font-medium">Virtual ID Card</span>
+                          </a>
+                          <div class="w-full h-px bg-gray-100 dark:bg-gray-700 my-1"></div>
                           <form id="move-to-leaved-form-<%= student.school_id %>" action="/student/mark-left/<%= student.school_id %>" method="POST" class="m-0">
                             <input type="hidden" name="reason" value="Graduated"/>
-                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors">
-                              <i class="fas fa-user-graduate w-5 text-center mr-2"></i>
-                              <span class="font-medium">Mark as Left</span>
+                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-xs text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors">
+                              <i class="fas fa-user-graduate w-5 text-center mr-2"></i><span class="font-medium">Mark as Left</span>
                             </button>
                           </form>
-
                           <form action="/delete/<%= student.school_id %>" method="POST" class="delete-student-form m-0">
-                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors">
-                              <i class="fas fa-trash w-5 text-center mr-2"></i>
-                              <span class="font-medium">Delete Student</span>
+                            <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                              <i class="fas fa-trash w-5 text-center mr-2"></i><span class="font-medium">Delete Student</span>
                             </button>
                           </form>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-            <% }); %>
-            <% } else { %>
-            <tr>
-              <td colspan="6" class="px-6 py-12 text-center">
-                <div class="flex flex-col items-center justify-center">
-                  <div class="w-24 h-24 mb-4 text-blue-300">
-                    <i class="fas fa-users text-6xl"></i>
+                </td>
+              </tr>
+              <% }); %>
+              <% } else { %>
+              <tr>
+                <td colspan="6" class="px-6 py-16 text-center">
+                  <div class="flex flex-col items-center justify-center">
+                    <i class="fas fa-users text-6xl text-blue-200 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Students Found</h3>
+                    <p class="text-gray-500 text-sm mb-6">There are no student records matching your search.</p>
+                    <a href="/student/new" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl px-6 py-2.5 inline-flex items-center gap-2 text-sm">
+                      <i class="fas fa-plus"></i> Add First Student
+                    </a>
                   </div>
-                  <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                    No Students Found
-                  </h3>
-                  <p class="text-gray-600 mb-6">
-                    There are no student records in the database.
-                  </p>
-                  <a
-                    href="/student/add"
-                    class="btn-gradient text-white font-medium rounded-xl px-6 py-3 inline-flex items-center"
-                  >
-                    <i class="fas fa-plus mr-2"></i>
-                    Add First Student
-                  </a>
-                </div>
-              </td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ── RIGHT: Student Detail Panel (hidden on < lg) ── -->
+        <div id="student-detail-panel"
+             class="hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 sticky top-20 self-start"
+             style="max-height: calc(100vh - 6rem); overflow-y: auto;">
+
+          <!-- Empty / Hint state -->
+          <div id="panel-empty" class="flex flex-col items-center justify-center h-full min-h-72 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 text-center px-6 py-10">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center mb-4">
+              <i class="fas fa-mouse-pointer text-2xl text-blue-400"></i>
+            </div>
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400">Select a student</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Click any row to see details here</p>
+          </div>
+
+          <!-- Loading skeleton -->
+          <div id="panel-loading" class="hidden bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
+            <div class="h-28 bg-gradient-to-r from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40"></div>
+            <div class="p-4 space-y-3">
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+              <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+              <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+              <div class="grid grid-cols-2 gap-2 pt-2">
+                <div class="h-12 bg-gray-100 dark:bg-gray-700/50 rounded-lg"></div>
+                <div class="h-12 bg-gray-100 dark:bg-gray-700/50 rounded-lg"></div>
+                <div class="h-12 bg-gray-100 dark:bg-gray-700/50 rounded-lg"></div>
+                <div class="h-12 bg-gray-100 dark:bg-gray-700/50 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loaded content -->
+          <div id="panel-content" class="hidden bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm">
+            <!-- Header banner -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 pt-4 pb-3 relative">
+              <div class="flex items-center justify-between mb-1">
+                <span id="pc-session" class="text-[10px] font-semibold text-blue-200 uppercase tracking-wider"></span>
+                <span id="pc-status" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white"></span>
+              </div>
+              <h3 id="pc-name" class="text-white font-black text-base leading-tight"></h3>
+              <p id="pc-father" class="text-blue-200 text-xs mt-0.5"></p>
+            </div>
+
+            <!-- Avatar overlapping banner -->
+            <div class="px-4 -mt-6 flex items-end gap-3 mb-3 pt-8">
+              <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-white dark:border-gray-800 shadow-md flex-shrink-0 bg-gray-100">
+                <img id="pc-photo" src="" alt="" class="w-full h-full object-cover"/>
+              </div>
+              <div class="pb-1">
+                <span id="pc-class" class="text-xs font-bold text-gray-700 dark:text-white bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md"></span>
+                <div id="pc-id" class="text-[10px] text-gray-400 font-mono mt-0.5"></div>
+              </div>
+            </div>
+
+            <!-- Info grid -->
+            <div class="px-4 pb-3 grid grid-cols-2 gap-2 border-b border-gray-100 dark:border-gray-700">
+              <div class="bg-gray-50 dark:bg-gray-700/40 rounded-lg p-2.5">
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Roll No</div>
+                <div id="pc-roll" class="text-xs font-semibold text-gray-800 dark:text-white mt-0.5"></div>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-700/40 rounded-lg p-2.5">
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Admission No</div>
+                <div id="pc-admission" class="text-xs font-semibold text-gray-800 dark:text-white mt-0.5"></div>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-700/40 rounded-lg p-2.5">
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wide">SRN No</div>
+                <div id="pc-srn" class="text-xs font-semibold text-gray-800 dark:text-white mt-0.5"></div>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-700/40 rounded-lg p-2.5">
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Date of Birth</div>
+                <div id="pc-dob" class="text-xs font-semibold text-gray-800 dark:text-white mt-0.5"></div>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-700/40 rounded-lg p-2.5 col-span-2">
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Mobile</div>
+                <div id="pc-mobile" class="text-xs font-semibold text-gray-800 dark:text-white mt-0.5"></div>
+              </div>
+            </div>
+
+            <!-- Performance mini-bars -->
+            <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700" id="pc-perf-section">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Term Performance</span>
+                <span class="text-[10px] text-gray-400" id="pc-perf-note"></span>
+              </div>
+              <div id="pc-perf-bars" class="space-y-2"></div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="px-4 py-3 grid grid-cols-2 gap-2">
+              <a id="pc-edit-link" href="#"
+                 class="flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-all text-xs">
+                <i class="fas fa-edit"></i> Edit Profile
+              </a>
+              <a id="pc-marks-link" href="#"
+                 class="flex items-center justify-center gap-1.5 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-semibold py-2 rounded-lg transition-all text-xs border border-purple-100 dark:border-purple-800">
+                <i class="fas fa-pencil-alt"></i> Edit Marks
+              </a>
+              <a id="pc-report-link" href="#"
+                 class="flex items-center justify-center gap-1.5 bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 font-semibold py-2 rounded-lg transition-all text-xs border border-orange-100 dark:border-orange-800">
+                <i class="fas fa-file-invoice"></i> Report Card
+              </a>
+              <a id="pc-analytics-link" href="#"
+                 class="flex items-center justify-center gap-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-semibold py-2 rounded-lg transition-all text-xs border border-indigo-100 dark:border-indigo-800">
+                <i class="fas fa-chart-line"></i> Analytics
+              </a>
+            </div>
+          </div>
+        </div><!-- /right panel -->
+
+      </div><!-- /two-column -->
     </form>
   </div>
 </div>
 
-<div
-  id="spinner"
-  role="status"
-  class="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50 z-50 hidden"
->
-  <svg
-    aria-hidden="true"
-    class="w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-    viewBox="0 0 100 101"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-      fill="currentColor"
-    />
-    <path
-      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-      fill="currentFill"
-    />
+<!-- Invisible Tailwind safelist helper -->
+<div class="hidden bg-orange-50 text-orange-700 border-orange-200 bg-gray-50 text-gray-600 border-gray-200 bg-emerald-50 text-emerald-700 border-emerald-200"></div>
+
+<div id="spinner" role="status" class="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50 z-50 hidden">
+  <svg aria-hidden="true" class="w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
   </svg>
   <span class="sr-only">Loading...</span>
 </div>
 
-<!-- Student Quick View Modal -->
-<div id="quick-view-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-2xl shadow-2xl dark:bg-gray-800 border-t-4 border-blue-600 animate-in fade-in zoom-in duration-200">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-user-graduate text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Student Quick View
-                    </h3>
-                </div>
-                <button type="button" class="close-quick-view text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-6" id="quick-view-content">
-                <div class="animate-pulse space-y-4">
-                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-
-<div class="hidden bg-blue-50 bg-blue-50
-outline
-outline-1
-outline-blue-500
--outline-offset-1 border-l-4 border-blue-400 ring-1 ring-blue-400 ring-inset hover:bg-blue-50/50 transition-colors duration-200 ring-1 ring-blue-400 ring-inset bg-blue-50 border-blue-400">
-
-</div>
+<!-- just to load tailwincss -->
+<div class="hidden bg-orange-50 text-orange-700 border-orange-200 bg-gray-50 text-gray-600 border-gray-200 bg-emerald-50 text-emerald-700 border-emerald-200"></div>
 
 <script src="/js/confirmDelete.js?v=3"></script>
 <script src="/js/generateCredentials.js"></script>
 
 <script nonce="<%= nonce %>">
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('quick-view-modal');
-    const content = document.getElementById('quick-view-content');
-    const closeBtns = document.querySelectorAll('.close-quick-view');
-    
-    function toggleModal() {
-        modal.classList.toggle('hidden');
-        modal.classList.toggle('flex');
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── Panel elements ── */
+  const panel       = document.getElementById('student-detail-panel');
+  const panelEmpty  = document.getElementById('panel-empty');
+  const panelLoad   = document.getElementById('panel-loading');
+  const panelContent= document.getElementById('panel-content');
+  let   activeRow   = null;
+
+  /* ── Show loading state (only on lg+) ── */
+  function showLoading() {
+    if (window.innerWidth < 1024) return; // panel is desktop-only
+    panelEmpty.classList.add('hidden');
+    panelContent.classList.add('hidden');
+    panelLoad.classList.remove('hidden');
+  }
+
+  /* ── Populate panel with student data ── */
+  function populatePanel(s) {
+    // Links
+    document.getElementById('pc-edit-link').href     = `/student/edit/${s.school_id}`;
+    document.getElementById('pc-marks-link').href    = `/student/get_marks/${s.school_id}`;
+    document.getElementById('pc-report-link').href   = `/generate-report/${s.school_id}`;
+    document.getElementById('pc-analytics-link').href= `/student/analytics/${s.school_id}`;
+
+    // Photo
+    const photo = document.getElementById('pc-photo');
+    photo.src = `/api/student/photo/${s.school_id}`;
+    photo.onerror = () => photo.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=DBEAFE&color=1E40AF&bold=true&size=56`;
+    photo.alt = s.name;
+
+    // Text fields
+    document.getElementById('pc-name').textContent    = s.name;
+    document.getElementById('pc-father').textContent  = `S/O ${s.father_name || '—'}`;
+    document.getElementById('pc-session').textContent = s.session || '';
+    document.getElementById('pc-class').textContent   = s.class || '';
+    document.getElementById('pc-id').textContent      = `ID: ${s.school_id}`;
+    document.getElementById('pc-roll').textContent    = s.roll || 'N/A';
+    document.getElementById('pc-admission').textContent = s.admission_no || 'N/A';
+    document.getElementById('pc-srn').textContent     = s.srn_no || 'N/A';
+    document.getElementById('pc-dob').textContent     = s.dob ? new Date(s.dob).toLocaleDateString('en-IN') : 'N/A';
+    document.getElementById('pc-mobile').textContent  = s.mobile_no || 'N/A';
+
+    // Status badge
+    const statusEl = document.getElementById('pc-status');
+    const st = (s.profile_status || 'active').toLowerCase();
+    statusEl.textContent = st === 'pending' ? 'Pending' : st === 'inactive' ? 'Inactive' : 'Active';
+
+    // Show content
+    panelLoad.classList.add('hidden');
+    panelContent.classList.remove('hidden');
+  }
+
+  /* ── Fetch marks and render mini performance bars ── */
+  async function loadMarks(studentId) {
+    const barsEl = document.getElementById('pc-perf-bars');
+    const noteEl = document.getElementById('pc-perf-note');
+    barsEl.innerHTML = '';
+    noteEl.textContent = '';
+
+    try {
+      const res = await fetch(`/marks/school/${studentId}`, { credentials: 'same-origin' });
+      if (!res.ok) throw new Error('no marks');
+      const marks = await res.json();
+
+      if (!marks || marks.length === 0) {
+        barsEl.innerHTML = '<p class="text-[10px] text-gray-400 italic">No marks recorded yet.</p>';
+        return;
+      }
+
+      // Group totals per term
+      const termTotals = {};
+      const termMax    = {};
+      marks.forEach(m => {
+        const t = m.term;
+        if (!termTotals[t]) { termTotals[t] = 0; termMax[t] = 0; }
+        const val = parseFloat(m.marks);
+        const mx  = parseFloat(m.max_marks);
+        if (!isNaN(val)) termTotals[t] += val;
+        if (!isNaN(mx))  termMax[t]    += mx;
+      });
+
+      const termColors = { 1: '#6366f1', 2: '#0891b2', 3: '#059669' };
+      const termNames  = { 1: 'Term 1', 2: 'Term 2', 3: 'Term 3' };
+
+      Object.keys(termTotals).sort().forEach(term => {
+        const total = termTotals[term];
+        const max   = termMax[term] || 1;
+        const pct   = Math.min(100, Math.round((total / max) * 100));
+        const color = termColors[term] || '#6366f1';
+
+        const row = document.createElement('div');
+        row.innerHTML = `
+          <div class="flex items-center justify-between mb-0.5">
+            <span class="text-[10px] font-semibold text-gray-600 dark:text-gray-300">${termNames[term] || 'Term ' + term}</span>
+            <span class="text-[10px] font-bold" style="color:${color}">${pct}% <span class="text-gray-400 font-normal">(${total}/${max})</span></span>
+          </div>
+          <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+            <div class="h-1.5 rounded-full transition-all duration-700" style="width:${pct}%;background:${color}"></div>
+          </div>`;
+        barsEl.appendChild(row);
+      });
+    } catch (e) {
+      barsEl.innerHTML = '<p class="text-[10px] text-gray-400 italic">Could not load marks.</p>';
     }
+  }
 
-    closeBtns.forEach(btn => btn.addEventListener('click', toggleModal));
-
-    document.querySelectorAll('.quick-view-btn').forEach(btn => {
-        btn.addEventListener('click', async function() {
-            const studentId = this.getAttribute('data-student-id');
-            toggleModal();
-            content.innerHTML = `<div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-4xl text-blue-600"></i></div>`;
-            
-            try {
-                const response = await fetch(`/api/student/details/${studentId}`);
-                const student = await response.json();
-                
-                content.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="flex flex-col items-center">
-                            <div class="w-32 h-40 rounded-xl overflow-hidden border-4 border-white shadow-xl mb-4">
-                                <img src="/api/student/photo/${student.school_id}" class="w-full h-full object-cover">
-                            </div>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wider">
-                                ${student.class}
-                            </span>
-                        </div>
-                        <div class="md:col-span-2 space-y-4">
-                            <div>
-                                <h4 class="text-2xl font-black text-gray-900 dark:text-white flex items-center">
-                                    ${student.name}
-                                    ${student.profile_status === 'Active' ? '<i class="fas fa-check-circle text-green-500 text-sm ml-2"></i>' : ''}
-                                </h4>
-                                <p class="text-gray-500 font-medium">S/O ${student.father_name}</p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-y-3 text-sm">
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">SRN Number</span><span class="font-semibold text-gray-700">${student.srn_no || 'N/A'}</span></div>
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Roll Number</span><span class="font-semibold text-gray-700">${student.roll || 'N/A'}</span></div>
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Admission No</span><span class="font-semibold text-gray-700">${student.admission_no || 'N/A'}</span></div>
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Session</span><span class="font-semibold text-gray-700">${student.session}</span></div>
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Mobile</span><span class="font-semibold text-gray-700">${student.mobile_no || 'N/A'}</span></div>
-                                <div><span class="text-gray-400 block uppercase text-[10px] font-bold">Date of Birth</span><span class="font-semibold text-gray-700">${student.dob ? new Date(student.dob).toLocaleDateString() : 'N/A'}</span></div>
-                            </div>
-                            <div class="pt-4 border-t border-gray-100 flex gap-2 flex-wrap">
-                                <a href="/student/edit/${student.school_id}" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-all text-sm">
-                                    <i class="fas fa-edit mr-1"></i> Edit
-                                </a>
-                                <a href="/student/get_marks/${student.school_id}" class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-lg transition-all text-sm">
-                                    <i class="fas fa-pencil-alt mr-1 text-blue-500"></i> Marks
-                                </a>
-                                <a href="/student/analytics/${student.school_id}" class="flex-1 text-center bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-lg transition-all text-sm border border-indigo-100">
-                                    <i class="fas fa-chart-line mr-1 text-indigo-500"></i> Track
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } catch (err) {
-                content.innerHTML = `<p class="text-red-500 text-center py-4">Error loading data. Please try again.</p>`;
-            }
-        });
-    });
-
-    // Handle student deletion confirmation
-    document.querySelectorAll('.delete-student-form').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            // confirmDelete is expected to be defined in /js/confirmDelete.js
-            if (typeof confirmDelete === 'function') {
-                if (!confirmDelete(event)) {
-                    event.preventDefault();
-                }
-            } else {
-                if (!confirm('Are you sure you want to delete this student?')) {
-                    event.preventDefault();
-                }
-            }
-        });
-    });
-
-    // Close on click outside
-    window.onclick = function(event) {
-        if (event.target == modal) toggleModal();
+  /* ── Handle row click ── */
+  async function selectStudent(studentId, row) {
+    // Restore previous row
+    if (activeRow) {
+      activeRow.classList.remove('ring-1', 'ring-blue-300', 'bg-blue-50');
     }
+    // Highlight new row — soft outer ring, no inset, no dark shadow
+    activeRow = row;
+    row.classList.add('ring-1', 'ring-blue-300', 'bg-blue-50');
+
+    showLoading();
+    if (window.innerWidth < 1024) return; // no panel on mobile
+
+    try {
+      const res = await fetch(`/api/student/details/${studentId}`, { credentials: 'same-origin' });
+      if (!res.ok) throw new Error('fetch failed');
+      const student = await res.json();
+      populatePanel(student);
+      loadMarks(studentId); // non-blocking
+    } catch (err) {
+      panelLoad.classList.add('hidden');
+      panelContent.classList.add('hidden');
+      panelEmpty.classList.remove('hidden');
+      panelEmpty.querySelector('p').textContent = 'Error loading student.';
+    }
+  }
+
+  /* ── Attach click to every student row ── */
+  document.querySelectorAll('.student-row').forEach(row => {
+    row.addEventListener('click', function (event) {
+      // Skip if click came from checkbox cell, action cell, links, buttons, or dropdowns
+      if (event.target.closest('[data-no-select]')) return;
+      const id = this.getAttribute('data-student-id');
+      selectStudent(id, this);
+    });
+  });
+
+  /* ── Delete confirmation ── */
+  document.querySelectorAll('.delete-student-form').forEach(form => {
+    form.addEventListener('submit', function (event) {
+      if (typeof confirmDelete === 'function') {
+        if (!confirmDelete(event)) event.preventDefault();
+      } else {
+        if (!confirm('Are you sure you want to delete this student?')) event.preventDefault();
+      }
+    });
+  });
+
 });
 </script>

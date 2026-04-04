@@ -22,7 +22,10 @@ const {
   markStudentAsLeft,
   getStudentResult,
 } = require("../controllers/student");
-const { getMarksAnalytics, getIndividualAnalytics } = require("../controllers/analytics");
+const {
+  getMarksAnalytics,
+  getIndividualAnalytics,
+} = require("../controllers/analytics");
 
 const {
   getTotalStudentsCounts,
@@ -55,11 +58,13 @@ router.get("/total-students", getTotalStudentsCounts);
 // Route to fetch the number of male and female students in each class for a given session
 router.get("/students/count/:session", checkAuth, getStudentsCountBySession);
 
-// Create Certificate (Generate PDF)
 router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   const studentId = req.params.id;
   const term = req.params.term;
   const remarks = req.body.remarks;
+  const grade = req.body.grade;
+  const session = req.body.session;
+  const class_name = req.body.class_name;
 
   try {
     const isOwner = await checkStudentOwnership(studentId, req.user._id);
@@ -71,12 +76,19 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
 
     const connection = await getConnection();
     const query = `
-            INSERT INTO student_remarks (student_id, term, remarks) 
-            VALUES (?, ?, ?) 
-            ON DUPLICATE KEY UPDATE remarks = VALUES(remarks)
+            INSERT INTO student_grade_remarks (student_id, term, session, class_name, grade, remarks) 
+            VALUES (?, ?, ?, ?, ?, ?) 
+            ON DUPLICATE KEY UPDATE grade = VALUES(grade), remarks = VALUES(remarks)
         `;
 
-    await connection.execute(query, [studentId, term, remarks]);
+    await connection.execute(query, [
+      studentId,
+      term,
+      session,
+      class_name,
+      grade,
+      remarks,
+    ]);
     connection.release();
 
     res.json({ message: "Remark saved successfully!" });
@@ -835,11 +847,11 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 
 router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
   const { studentId } = req.params;
-  const { marks, maxMarks, session, class_name } = req.body; // Explicitly pass context
+  const { marks, maxMarks, session, class_name } = req.body;
 
   try {
     if (!marks || !maxMarks) {
-      throw new Error("marks or maxMarks are undefined or missing");
+      return res.status(400).json({ error: "marks or maxMarks are missing" });
     }
 
     await saveStudentMarks(
@@ -850,10 +862,10 @@ router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
       class_name,
       req.user._id,
     );
-    res.redirect(`/student/get_marks/${studentId}`);
+    res.json({ message: "Marks saved successfully!" });
   } catch (error) {
     console.error("Error saving marks:", error);
-    res.status(500).send("Error saving student marks");
+    res.status(500).json({ error: "Error saving student marks" });
   }
 });
 
@@ -868,7 +880,7 @@ router.post(
     try {
       // Validate input
       if (!attendance || !status) {
-        return res.status(400).send("Invalid input data");
+        return res.status(400).json({ error: "Attendance and status are required." });
       }
 
       // Get a database connection
@@ -881,7 +893,7 @@ router.post(
       );
 
       if (!student) {
-        return res.status(404).send("Student not found or access denied.");
+        return res.status(404).json({ error: "Student not found or access denied." });
       }
 
       // Create or update data in `student_attendance_status` table
@@ -900,10 +912,10 @@ router.post(
         status,
       ]);
 
-      res.redirect(`/student/get_marks/${school_id}`);
+      res.json({ message: "Attendance & status updated successfully!" });
     } catch (error) {
       console.error("Error submitting/updating attendance status:", error);
-      res.status(500).send("Internal Server Error");
+      res.status(500).json({ error: "Internal Server Error" });
     } finally {
       if (connection) connection.release();
     }
@@ -969,7 +981,7 @@ router.get("/files/one/:school_id", checkAuth, async (req, res) => {
     connection = await getConnection();
     let [files] = await connection.execute(
       "SELECT id, school_id, file_name, type, upload_date, LENGTH(file_data) AS size FROM student_files where school_id = ?",
-      [school_id]
+      [school_id],
     );
 
     const school_logo_url = await getSchoolLogo(req, res);
@@ -977,7 +989,12 @@ router.get("/files/one/:school_id", checkAuth, async (req, res) => {
     user.school_logo = school_logo_url;
     const studentsCount = await getTotalStudents(req, res);
 
-    res.render("files", { files, user, total_students: studentsCount, school_id });
+    res.render("files", {
+      files,
+      user,
+      total_students: studentsCount,
+      school_id,
+    });
   } catch (error) {
     console.error("Error fetching files:", error);
     res.status(500).send("Server Error");
