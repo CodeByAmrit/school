@@ -678,6 +678,7 @@ async function insertPDF(req, res) {
 async function getStudentMarksBySchoolId(schoolId, teacherId) {
   const query_prepared = `
     SELECT 
+      sm.session,
       sm.subject, 
       sm.marks, 
       sm.term, 
@@ -688,7 +689,7 @@ async function getStudentMarksBySchoolId(schoolId, teacherId) {
       AND sm.term = mm.term 
       AND mm.class = (SELECT class FROM students WHERE school_id = ? AND teacher_id = ?)
     WHERE sm.student_id = ? AND (SELECT teacher_id FROM students WHERE school_id = sm.student_id) = ?
-    ORDER BY sm.term, sm.subject
+    ORDER BY sm.session DESC, sm.term ASC, sm.subject ASC
   `;
   try {
     const [results] = await query(query_prepared, [

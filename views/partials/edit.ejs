@@ -346,6 +346,22 @@ document.addEventListener('DOMContentLoaded', function () {
     panelLoad.classList.remove('hidden');
   }
 
+
+  /* ── Safe DOB formatter ── */
+  function formatDob(raw) {
+    if (!raw) return 'N/A';
+    // DD-MM-YYYY or DD/MM/YYYY (common Indian school format)
+    const dmy = raw.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if (dmy) {
+      const dt = new Date(`${dmy[3]}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}`);
+      if (!isNaN(dt)) return dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+    }
+    // YYYY-MM-DD or ISO
+    const dt = new Date(raw);
+    if (!isNaN(dt)) return dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+    return raw; // show as-is if nothing parsed
+  }
+
   /* ── Populate panel with student data ── */
   function populatePanel(s) {
     // Links
@@ -369,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('pc-roll').textContent    = s.roll || 'N/A';
     document.getElementById('pc-admission').textContent = s.admission_no || 'N/A';
     document.getElementById('pc-srn').textContent     = s.srn_no || 'N/A';
-    document.getElementById('pc-dob').textContent     = s.dob ? new Date(s.dob).toLocaleDateString('en-IN') : 'N/A';
+    document.getElementById('pc-dob').textContent     = formatDob(s.dob);
     document.getElementById('pc-mobile').textContent  = s.mobile_no || 'N/A';
 
     // Status badge
@@ -382,8 +398,8 @@ document.addEventListener('DOMContentLoaded', function () {
     panelContent.classList.remove('hidden');
   }
 
-  /* ── Fetch marks and render mini performance bars ── */
-  async function loadMarks(studentId) {
+  /* ── Fetch marks and render per-session performance bars ── */
+  async function loadMarks(studentId, currentSession) {
     const barsEl = document.getElementById('pc-perf-bars');
     const noteEl = document.getElementById('pc-perf-note');
     barsEl.innerHTML = '';
@@ -399,37 +415,58 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Group totals per term
-      const termTotals = {};
-      const termMax    = {};
+      // Group by session → term
+      const sessionMap = {};
       marks.forEach(m => {
-        const t = m.term;
-        if (!termTotals[t]) { termTotals[t] = 0; termMax[t] = 0; }
+        const sess = m.session || 'Unknown';
+        const t    = m.term;
+        if (!sessionMap[sess]) sessionMap[sess] = {};
+        if (!sessionMap[sess][t]) sessionMap[sess][t] = { total: 0, max: 0 };
         const val = parseFloat(m.marks);
         const mx  = parseFloat(m.max_marks);
-        if (!isNaN(val)) termTotals[t] += val;
-        if (!isNaN(mx))  termMax[t]    += mx;
+        if (!isNaN(val)) sessionMap[sess][t].total += val;
+        if (!isNaN(mx))  sessionMap[sess][t].max   += mx;
       });
 
       const termColors = { 1: '#6366f1', 2: '#0891b2', 3: '#059669' };
-      const termNames  = { 1: 'Term 1', 2: 'Term 2', 3: 'Term 3' };
 
-      Object.keys(termTotals).sort().forEach(term => {
-        const total = termTotals[term];
-        const max   = termMax[term] || 1;
-        const pct   = Math.min(100, Math.round((total / max) * 100));
-        const color = termColors[term] || '#6366f1';
+      // Sort sessions: current first, then descending
+      const sessions = Object.keys(sessionMap).sort((a, b) => {
+        if (a === currentSession) return -1;
+        if (b === currentSession) return 1;
+        return b.localeCompare(a);
+      });
 
-        const row = document.createElement('div');
-        row.innerHTML = `
-          <div class="flex items-center justify-between mb-0.5">
-            <span class="text-[10px] font-semibold text-gray-600 dark:text-gray-300">${termNames[term] || 'Term ' + term}</span>
-            <span class="text-[10px] font-bold" style="color:${color}">${pct}% <span class="text-gray-400 font-normal">(${total}/${max})</span></span>
-          </div>
-          <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-            <div class="h-1.5 rounded-full transition-all duration-700" style="width:${pct}%;background:${color}"></div>
-          </div>`;
-        barsEl.appendChild(row);
+      sessions.forEach(sess => {
+        const isCurrent = sess === currentSession;
+
+        // Session header
+        const header = document.createElement('div');
+        header.className = 'flex items-center gap-1.5 mt-2 mb-1 first:mt-0';
+        header.innerHTML = `
+          <span class="text-[10px] font-bold uppercase tracking-wider ${isCurrent ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}">${sess}</span>
+          ${isCurrent ? '<span class="text-[8px] font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Current</span>' : '<span class="text-[8px] text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">Archive</span>'}
+        `;
+        barsEl.appendChild(header);
+
+        // Per-term bars within this session
+        Object.keys(sessionMap[sess]).sort().forEach(term => {
+          const { total, max } = sessionMap[sess][term];
+          const pct   = Math.min(100, Math.round((total / (max || 1)) * 100));
+          const color = isCurrent ? (termColors[term] || '#6366f1') : '#94a3b8';
+
+          const row = document.createElement('div');
+          row.className = 'mb-1.5';
+          row.innerHTML = `
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-[10px] font-medium ${isCurrent ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400'}">Term ${term}</span>
+              <span class="text-[10px] font-bold" style="color:${color}">${pct}% <span class="text-gray-400 font-normal">(${total}/${max})</span></span>
+            </div>
+            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+              <div class="h-1.5 rounded-full transition-all duration-700" style="width:${pct}%;background:${color}"></div>
+            </div>`;
+          barsEl.appendChild(row);
+        });
       });
     } catch (e) {
       barsEl.innerHTML = '<p class="text-[10px] text-gray-400 italic">Could not load marks.</p>';
@@ -454,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res.ok) throw new Error('fetch failed');
       const student = await res.json();
       populatePanel(student);
-      loadMarks(studentId); // non-blocking
+      loadMarks(studentId, student.session);
     } catch (err) {
       panelLoad.classList.add('hidden');
       panelContent.classList.add('hidden');
