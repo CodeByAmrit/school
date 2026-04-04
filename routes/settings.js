@@ -49,15 +49,16 @@ router.get("/", checkAuth, async (req, res) => {
 
     // Process school logo if exists
     let schoolLogo = null;
-    if (schoolConfig[0] && schoolConfig[0].school_logo) {
-      schoolLogo = `data:image/png;base64,${schoolConfig[0].school_logo.toString("base64")}`;
+    const configRow = schoolConfig[0][0]; // Extract the row
+    if (configRow && configRow.school_logo) {
+      schoolLogo = `data:image/png;base64,${configRow.school_logo.toString("base64")}`;
     }
 
     res.render("settings", {
       teacher: teacher[0][0],
       teacherSettings: teacherSettings[0][0] || {},
       schoolConfig: {
-        ...(schoolConfig[0][0] || {}),
+        ...(configRow || {}),
         logo: schoolLogo,
       },
       classes: classes[0],
@@ -201,74 +202,67 @@ router.post(
       }
 
       // Check if school config exists
-      const [existing] = await db.query(
+      const [existingRows] = await db.query(
         "SELECT id FROM school_config WHERE teacher_id = ?",
         [teacherId],
       );
 
-      if (existing.length > 0) {
+      if (existingRows.length > 0) {
         // Update existing config
+        const updateParams = [
+          school_name,
+          school_code,
+          school_address,
+          school_phone,
+          school_email,
+          principal_name,
+          affiliation_number,
+          teacherId,
+        ];
+
+        let logoUpdate = "";
         if (logoData) {
-          await db.query(
-            `
-                    UPDATE school_config SET 
-                        school_name = ?, school_code = ?, school_address = ?, 
-                        school_phone = ?, school_email = ?, principal_name = ?,
-                        affiliation_number = ?, school_logo = ?, updated_at = NOW()
-                    WHERE teacher_id = ?
-                `,
-            [
-              school_name,
-              school_code,
-              school_address,
-              school_phone,
-              school_email,
-              principal_name,
-              affiliation_number,
-              logoData,
-              teacherId,
-            ],
-          );
-          // Sync to teacher table
-          await db.query(
-            "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ?, school_logo = ? WHERE id = ?",
-            [school_name, school_address, school_phone, logoData, teacherId],
-          );
-        } else {
-          await db.query(
-            `
-                    UPDATE school_config SET 
-                        school_name = ?, school_code = ?, school_address = ?, 
-                        school_phone = ?, school_email = ?, principal_name = ?,
-                        affiliation_number = ?, updated_at = NOW()
-                    WHERE teacher_id = ?
-                `,
-            [
-              school_name,
-              school_code,
-              school_address,
-              school_phone,
-              school_email,
-              principal_name,
-              affiliation_number,
-              teacherId,
-            ],
-          );
-          // Sync to teacher table (no logo)
-          await db.query(
-            "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ? WHERE id = ?",
-            [school_name, school_address, school_phone, teacherId],
-          );
+          logoUpdate = ", school_logo = ?";
+          updateParams.splice(7, 0, logoData); // Insert logo before teacherId
         }
+
+        await db.query(
+          `
+          UPDATE school_config SET 
+            school_name = ?, school_code = ?, school_address = ?, 
+            school_phone = ?, school_email = ?, principal_name = ?,
+            affiliation_number = ? ${logoUpdate}, updated_at = NOW()
+          WHERE teacher_id = ?
+        `,
+          updateParams,
+        );
+
+        // Sync to teacher table
+        const teacherUpdateParams = [
+          school_name,
+          school_address,
+          school_phone,
+          teacherId,
+        ];
+        let teacherLogoUpdate = "";
+        if (logoData) {
+          teacherLogoUpdate = ", school_logo = ?";
+          teacherUpdateParams.splice(3, 0, logoData);
+        }
+
+        await db.query(
+          `UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ? ${teacherLogoUpdate} WHERE id = ?`,
+          teacherUpdateParams,
+        );
       } else {
         // Insert new config
         await db.query(
           `
-                INSERT INTO school_config 
-                (teacher_id, school_name, school_code, school_address, school_phone, 
-                 school_email, principal_name, affiliation_number, school_logo)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `,
+          INSERT INTO school_config 
+          (teacher_id, school_name, school_code, school_address, school_phone, 
+           school_email, principal_name, affiliation_number, school_logo)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
           [
             teacherId,
             school_name,
@@ -286,6 +280,13 @@ router.post(
           "UPDATE teacher SET school_name = ?, school_address = ?, school_phone = ?, school_logo = ? WHERE id = ?",
           [school_name, school_address, school_phone, logoData, teacherId],
         );
+      }
+
+      // Update session if school info changed
+      if (req.session && req.session.teacher) {
+        req.session.teacher.school_name = school_name;
+        req.session.teacher.school_address = school_address;
+        req.session.teacher.school_phone = school_phone;
       }
 
       res.json({
@@ -328,7 +329,7 @@ router.post("/update-settings", checkAuth, async (req, res) => {
       [teacherId],
     );
 
-    if (existing) {
+    if (existing[0] && existing[0].length > 0) {
       // Update existing settings
       await db.query(
         `
