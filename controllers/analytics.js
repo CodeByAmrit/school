@@ -138,7 +138,7 @@ async function getIndividualAnalytics(req, res) {
                 NULLIF((CASE WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS DECIMAL(5,2)) ELSE 0 END), 0)
              ) * 100
              FROM student_marks sm_inner
-             JOIN maximum_marks mm_inner ON mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term AND mm_inner.class = ?
+             JOIN maximum_marks mm_inner ON mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term AND mm_inner.class = ? AND mm_inner.teacher_id = ?
              WHERE sm_inner.student_id = ? AND sm_inner.subject = sc.subject_name AND sm_inner.marks IS NOT NULL AND sm_inner.marks != '' AND sm_inner.marks != 'NA' AND sm_inner.marks != 'AB'
           ) as student_subject_avg,
           (
@@ -148,7 +148,7 @@ async function getIndividualAnalytics(req, res) {
           ) as class_subject_avg
        FROM subject_config sc
        WHERE sc.class_name = ? AND sc.teacher_id = ? AND sc.subject_name NOT LIKE '%DRAWING%'`,
-      [student.class, studentId, student.class, teacherId, student.class, teacherId]
+      [student.class, teacherId, studentId, student.class, teacherId, student.class, teacherId]
     );
 
     const subjectRadar = subjectRadarRaw.map(s => ({
@@ -190,7 +190,7 @@ async function getIndividualAnalytics(req, res) {
               / NULLIF((CASE WHEN mm2.max_marks REGEXP '^[0-9]+$' THEN CAST(mm2.max_marks AS DECIMAL(5,2)) ELSE NULL END), 0)
             ) * 100
             FROM student_marks sm2
-            JOIN maximum_marks mm2 ON mm2.subject = sm2.subject AND mm2.term = sm2.term AND mm2.class = ?
+            JOIN maximum_marks mm2 ON mm2.subject = sm2.subject AND mm2.term = sm2.term AND mm2.class = ? AND mm2.teacher_id = ?
             WHERE sm2.student_id = ? AND sm2.subject = sc.subject_name AND sm2.term = MAX(sm.term)
             AND sm2.marks IS NOT NULL AND sm2.marks REGEXP '^[0-9]+$'
           ) as latest_pct,
@@ -200,7 +200,7 @@ async function getIndividualAnalytics(req, res) {
               / NULLIF((CASE WHEN mm3.max_marks REGEXP '^[0-9]+$' THEN CAST(mm3.max_marks AS DECIMAL(5,2)) ELSE NULL END), 0)
             ) * 100
             FROM student_marks sm3
-            JOIN maximum_marks mm3 ON mm3.subject = sm3.subject AND mm3.term = sm3.term AND mm3.class = ?
+            JOIN maximum_marks mm3 ON mm3.subject = sm3.subject AND mm3.term = sm3.term AND mm3.class = ? AND mm3.teacher_id = ?
             WHERE sm3.student_id = ? AND sm3.subject = sc.subject_name AND sm3.term = MIN(sm.term)
             AND sm3.marks IS NOT NULL AND sm3.marks REGEXP '^[0-9]+$'
           ) as first_pct
@@ -209,7 +209,7 @@ async function getIndividualAnalytics(req, res) {
        WHERE sc.class_name = ? AND sc.teacher_id = ? AND sc.subject_name NOT LIKE '%DRAWING%'
        GROUP BY sc.subject_name
        HAVING first_term != last_term`,
-      [student.class, studentId, student.class, studentId, studentId, student.class, teacherId]
+      [student.class, teacherId, studentId, student.class, teacherId, studentId, studentId, student.class, teacherId]
     );
 
     const school_logo_url = await getSchoolLogo(req, res);

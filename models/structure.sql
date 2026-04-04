@@ -139,9 +139,10 @@ CREATE TABLE IF NOT EXISTS student_grade_remarks (
 -- Create an index on the `class` column
 CREATE INDEX idx_class ON students (class);
 
--- Create a view for the count of students in each class for a given session
+-- Create a view for the count of students in each class for a given session (tenant-aware)
 CREATE OR REPLACE VIEW students_per_class AS
 SELECT 
+    teacher_id,
     class,
     session,
     COUNT(CASE WHEN gender = 'MALE' THEN 1 END) AS male_count,
@@ -149,7 +150,7 @@ SELECT
 FROM 
     students
 GROUP BY 
-    class, session;
+    teacher_id, class, session;
 
 -- Table for storing maximum marks by term and subject
 CREATE TABLE IF NOT EXISTS maximum_marks (
@@ -206,13 +207,16 @@ SELECT
     WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
       AND EXISTS (
         SELECT 1 FROM maximum_marks mm_inner
-        WHERE mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term
-        AND mm_inner.class =
-            CASE
-                WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
-                THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
-                ELSE s.class
-            END
+        WHERE mm_inner.subject  = sm_inner.subject
+          AND mm_inner.term     = sm_inner.term
+          AND mm_inner.class    = s.class
+          AND mm_inner.teacher_id = s.teacher_id
+      )
+      AND EXISTS (
+        SELECT 1 FROM subject_config sc
+        WHERE sc.subject_name = sm_inner.subject
+          AND sc.class_name  = s.class
+          AND sc.teacher_id  = s.teacher_id
       )
   ) AS grand_total,
   (
@@ -223,14 +227,18 @@ SELECT
       END
     )
     FROM student_marks AS sm_inner
-    JOIN maximum_marks AS mm_inner ON sm_inner.subject = mm_inner.subject AND sm_inner.term = mm_inner.term
+    JOIN maximum_marks AS mm_inner
+      ON sm_inner.subject    = mm_inner.subject
+      AND sm_inner.term      = mm_inner.term
+      AND mm_inner.class     = s.class
+      AND mm_inner.teacher_id = s.teacher_id
     WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
-    AND mm_inner.class =
-        CASE
-            WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
-            THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
-            ELSE s.class
-        END
+      AND EXISTS (
+        SELECT 1 FROM subject_config sc
+        WHERE sc.subject_name = sm_inner.subject
+          AND sc.class_name  = s.class
+          AND sc.teacher_id  = s.teacher_id
+      )
   ) AS total_max_marks,
   (
     (
@@ -244,13 +252,16 @@ SELECT
       WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
         AND EXISTS (
           SELECT 1 FROM maximum_marks mm_inner
-          WHERE mm_inner.subject = sm_inner.subject AND mm_inner.term = sm_inner.term
-          AND mm_inner.class =
-              CASE
-                  WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
-                  THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
-                  ELSE s.class
-              END
+          WHERE mm_inner.subject  = sm_inner.subject
+            AND mm_inner.term     = sm_inner.term
+            AND mm_inner.class    = s.class
+            AND mm_inner.teacher_id = s.teacher_id
+        )
+        AND EXISTS (
+          SELECT 1 FROM subject_config sc
+          WHERE sc.subject_name = sm_inner.subject
+            AND sc.class_name  = s.class
+            AND sc.teacher_id  = s.teacher_id
         )
     ) * 100
     /
@@ -263,14 +274,18 @@ SELECT
           END
         )
         FROM student_marks AS sm_inner
-        JOIN maximum_marks AS mm_inner ON sm_inner.subject = mm_inner.subject AND sm_inner.term = sm_inner.term
+        JOIN maximum_marks AS mm_inner
+          ON sm_inner.subject    = mm_inner.subject
+          AND sm_inner.term      = mm_inner.term
+          AND mm_inner.class     = s.class
+          AND mm_inner.teacher_id = s.teacher_id
         WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
-        AND mm_inner.class =
-            CASE
-                WHEN sm_inner.subject IN ('ENGLISH (WR.)', 'ENGLISH ORAL', 'HINDI (WR.)', 'HINDI ORAL', 'MATHS (WR.)', 'MATHS ORAL', 'DRAWING', 'GENERAL KNOWLEDGE')
-                THEN IF(s.class IN ('NURSERY', 'KG'), s.class, 'KG')
-                ELSE s.class
-            END
+          AND EXISTS (
+            SELECT 1 FROM subject_config sc
+            WHERE sc.subject_name = sm_inner.subject
+              AND sc.class_name  = s.class
+              AND sc.teacher_id  = s.teacher_id
+          )
       ),
       0
     )
@@ -307,7 +322,16 @@ FROM
 JOIN
     student_marks sm ON s.school_id = sm.student_id
 JOIN
-    maximum_marks mm ON s.class = mm.class AND sm.term = mm.term AND sm.subject = mm.subject
+    maximum_marks mm
+      ON s.class        = mm.class
+      AND sm.term       = mm.term
+      AND sm.subject    = mm.subject
+      AND mm.teacher_id = s.teacher_id
+JOIN
+    subject_config sc
+      ON sc.subject_name = sm.subject
+      AND sc.class_name  = s.class
+      AND sc.teacher_id  = s.teacher_id
 GROUP BY
     s.teacher_id, s.class, sm.term, sm.subject;
 

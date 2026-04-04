@@ -770,11 +770,10 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
       marks[row.term][row.subject] = row.marks;
     });
 
-    // Fetch maximum marks for the selected class and session (if applicable)
-    // Fallback: If no max marks found for this specific class/session, use class-only query
+    // Fetch maximum marks for the selected class (teacher-scoped)
     const [maxMarksRows] = await connection.execute(
-      "SELECT term, subject, max_marks FROM maximum_marks WHERE class = ?",
-      [viewClassName],
+      "SELECT term, subject, max_marks FROM maximum_marks WHERE class = ? AND (teacher_id = ? OR teacher_id IS NULL)",
+      [viewClassName, req.user._id],
     );
 
     // Organize max marks by term
