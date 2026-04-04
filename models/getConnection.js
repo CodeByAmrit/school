@@ -26,7 +26,7 @@ const pool = mysql.createPool({
   ssl: sslConfig,
 
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 50,
   queueLimit: 0,
 
   enableKeepAlive: true,

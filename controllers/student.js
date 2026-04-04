@@ -937,13 +937,7 @@ async function getFileCount(req, res) {
 }
 
 async function getSchoolLogo(req, res) {
-  let school_logo_url = "/image/graduated.png";
-  const school_logo = await get_school_logo(req, res);
-  if (school_logo !== null) {
-    const school_logo_ = school_logo.school_logo.toString("base64");
-    school_logo_url = `data:image/png;base64,${school_logo_}`;
-  }
-  return school_logo_url;
+  return "/api/school/logo";
 }
 
 async function changePassword(req, res) {

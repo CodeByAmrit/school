@@ -179,14 +179,7 @@ router.get("/generate-certificate/:school_id", checkAuth, async (req, res) => {
 router.get("/students", checkAuth, apiCache(30), async (req, res) => {
   let connection;
   try {
-    let school_logo_url = "/image/graduated.png";
-    connection = await getConnection();
-    const school_logo = await get_school_logo(req, res);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString("base64");
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
-
+    const school_logo_url = await getSchoolLogo(req, res);
     let user = req.user;
     user.school_logo = school_logo_url;
 
@@ -245,36 +238,26 @@ router.get("/student/edit/:id", checkAuth, async (req, res) => {
   try {
     // Fetch total students assigned to the teacher
     const studentsCount = await getTotalStudents(req, res);
-
+    const id = req.params.id;
     const [student] = await getOneStudent(req, res);
     if (!student) {
       return res.status(404).send("Student not found or access denied.");
     }
-    const photo = await getPhoto(req, res);
-    const sign = await getSign(req, res);
 
-    let photoDataUrl = "/image/graduated.png"; // Default photo if none exists
-    let signDataUrl = "/image/sign.png"; // Default sign photo if none exists
-
-    if (photo) {
-      const photoBase64 = photo.toString("base64");
-      photoDataUrl = `data:image/png;base64,${photoBase64}`; // Convert to base64 and prepare data URL
-    }
-    if (sign) {
-      const sign64 = sign.toString("base64");
-      signDataUrl = `data:image/png;base64,${sign64}`; // Convert to base64 and prepare data URL
-    }
+    // Base64 reduction: Send binary API URLs instead of massive strings
+    const photoDataUrl = `/api/student/photo/${id}`;
+    const signDataUrl = `/api/student/sign/${id}`;
 
     let school_logo_url = "/image/graduated.png";
     const school_logo = await get_school_logo(req, res);
     if (school_logo !== null) {
       const school_logo_ = school_logo.school_logo.toString("base64");
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
+      school_logo_url = `data:image/png;base64,${school_logo_}`;
     }
 
     let user = req.user;
     user.school_logo = school_logo_url;
-    // Render the profile page with the data
+    // Render the profile page with the binary URLs
     res.render("profile", {
       student,
       user,
@@ -292,14 +275,7 @@ router.get("/student/edit/:id", checkAuth, async (req, res) => {
 router.get("/student/new", checkAuth, async (req, res) => {
   try {
     const student = null;
-    let school_logo_url = "/image/user.png";
-    const school_logo = await get_school_logo(req, res);
-    // Fetch total students assigned to the teacher
-    const studentsCount = await getTotalStudents(req, res);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString("base64");
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
+    const school_logo_url = await getSchoolLogo(req, res);
 
     let user = req.user;
     user.school_logo = school_logo_url;
@@ -321,12 +297,7 @@ router.get("/student/new", checkAuth, async (req, res) => {
 // route to search for students_ certificate
 router.get("/search_certificate", checkAuth, async (req, res) => {
   try {
-    let school_logo_url = "/image/graduated.png";
-    const school_logo = await get_school_logo(req, res);
-    if (school_logo !== null) {
-      const school_logo_ = school_logo.school_logo.toString("base64");
-      school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-    }
+    const school_logo_url = await getSchoolLogo(req, res);
 
     let user = req.user;
     user.school_logo = school_logo_url;
@@ -370,12 +341,7 @@ router.post(
 );
 
 router.get("/change-password", checkAuth, async (req, res) => {
-  let school_logo_url = "/image/graduated.png";
-  const school_logo = await get_school_logo(req, res);
-  if (school_logo !== null) {
-    const school_logo_ = school_logo.school_logo.toString("base64");
-    school_logo_url = `data:image/png;base64,${school_logo_}`; // Convert to base64 and prepare data URL
-  }
+  const school_logo_url = await getSchoolLogo(req, res);
 
   const studentsCount = await getTotalStudents(req, res);
 
@@ -461,9 +427,7 @@ router.get("/teacher/profile/", checkAuth, async (req, res) => {
     }
 
     const teacher = rows[0];
-    let base64Image = teacher.school_logo
-      ? `data:image/png;base64,${teacher.school_logo.toString("base64")}`
-      : null;
+    const base64Image = await getSchoolLogo(req, res);
 
     res.render("teacher_profile", {
       teacher,
@@ -1300,13 +1264,30 @@ router.get("/api/student/details/:id", checkAuth, async (req, res) => {
   }
 });
 
+// API route to serve school logo
+router.get("/api/school/logo", checkAuth, async (req, res) => {
+  try {
+    const result = await get_school_logo(req, res);
+    if (result && result.school_logo) {
+      res.set("Content-Type", "image/png");
+      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year
+      res.send(result.school_logo);
+    } else {
+      res.redirect("/image/graduated.png");
+    }
+  } catch (error) {
+    console.error("Error serving logo:", error);
+    res.redirect("/image/graduated.png");
+  }
+});
+
 // API route to serve student photo
 router.get("/api/student/photo/:id", checkAuth, async (req, res) => {
   try {
     const photoBuffer = await getPhoto(req, res);
     if (photoBuffer) {
       res.set("Content-Type", "image/png");
-      res.set("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
+      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year (using school_id as cache key)
       res.send(photoBuffer);
     } else {
       res.redirect("/image/graduated.png");
@@ -1314,6 +1295,23 @@ router.get("/api/student/photo/:id", checkAuth, async (req, res) => {
   } catch (error) {
     console.error("Error serving photo:", error);
     res.redirect("/image/graduated.png");
+  }
+});
+
+// API route to serve student signature
+router.get("/api/student/sign/:id", checkAuth, async (req, res) => {
+  try {
+    const signBuffer = await getSign(req, res);
+    if (signBuffer) {
+      res.set("Content-Type", "image/png");
+      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year
+      res.send(signBuffer);
+    } else {
+      res.redirect("/image/sign.png");
+    }
+  } catch (error) {
+    console.error("Error serving sign:", error);
+    res.redirect("/image/sign.png");
   }
 });
 
