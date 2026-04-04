@@ -164,7 +164,7 @@ class App {
 
     // Static files with proper caching
     const staticOptions = {
-      maxAge: process.env.NODE_ENV === "production" ? "1d" : "0",
+      maxAge: process.env.NODE_ENV === "production" ? "7d" : "0",
       setHeaders: (res, path) => {
         res.setHeader("X-Content-Type-Options", "nosniff");
         if (path.endsWith(".css")) {
