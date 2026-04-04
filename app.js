@@ -48,6 +48,13 @@ class App {
       }),
     );
 
+    // Global SEO Defaults Middleware
+    this.app.use((req, res, next) => {
+      res.locals.appVersion = process.env.APP_VERSION || "3.0.4";
+      res.locals.req = req; // Useful for req.path in partials
+      next();
+    });
+
     // Security headers - disable default CSP, we'll add our own
     this.app.use(
       helmet({
@@ -81,16 +88,15 @@ class App {
       }),
     );
 
-    // Rate limiting - FIXED: Remove custom keyGenerator to let library handle it
+    // Rate limiting
     const limiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      limit: 500, // Note: changed from 'max' to 'limit' in newer versions
+      limit: parseInt(process.env.RATE_LIMIT) || 2000,
       message: "Too many requests, please try again later.",
       standardHeaders: true,
       legacyHeaders: false,
-      // Don't define keyGenerator - let the library handle IP detection
       validate: {
-        trustProxy: true, // Trust proxy headers
+        trustProxy: true,
         xForwardedForHeader: true,
       },
       skip: (req, res) => {

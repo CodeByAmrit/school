@@ -1,4 +1,36 @@
-<%- include('partials/header.ejs', {title: "Pricing - StudentTracker"}) %>
+<%- include('partials/header.ejs', { title: "Pricing Plans - Flexible Subscriptions", noindex: false }) %>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "StudentTracker Subscription",
+  "description": "Flexible plans for schools of all sizes, from free starter tiers to institutional pro plans.",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Starter",
+      "price": "0",
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock"
+    },
+    {
+      "@type": "Offer",
+      "name": "Professional",
+      "price": "1499",
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock"
+    },
+    {
+      "@type": "Offer",
+      "name": "Institution",
+      "price": "4999",
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock"
+    }
+  ]
+}
+</script>
 <%- include('partials/guestNavbar.ejs') %>
 
 <!-- Pricing Section -->

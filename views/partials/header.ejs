@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.8" />
-    <title><%= title || "Default Title" %></title>
+    <%- include('meta-tags', { 
+      noindex: (typeof noindex !== 'undefined' ? noindex : true) 
+    }) %>
     <link rel="stylesheet" href="/css/styles.css?v=<%= appVersion %>" nonce="<%= nonce %>"/>
 
     <script src="/js/theme.js?v=<%= appVersion %>" nonce="<%= nonce %>"></script>

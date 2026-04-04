@@ -1,0 +1,39 @@
+<% 
+  const defaultTitle = "StudentTracker - Real-time School Analytics & Management";
+  const defaultDesc = "Empower your teaching with real-time student tracking, automated reports, and performance analytics. The ultimate dashboard for modern educators.";
+  const defaultKeywords = "school management, student tracking, teacher tools, report card generator, education analytics";
+  const defaultUrl = "https://edu.amritsharma.dev";
+  const pageUrl = (typeof canonicalUrl !== 'undefined' ? canonicalUrl : defaultUrl + req.path);
+  const fullTitle = (typeof title !== 'undefined' ? title + " | StudentTracker" : defaultTitle);
+  const metaDescription = (typeof description !== 'undefined' ? description : defaultDesc);
+  const metaKeywords = (typeof keywords !== 'undefined' ? keywords : defaultKeywords);
+  const ogImg = (typeof ogImage !== 'undefined' ? ogImage : "/image/teacher.svg");
+%>
+
+<!-- Standard Meta Tags -->
+<title><%= fullTitle %></title>
+<meta name="description" content="<%= metaDescription %>">
+<meta name="keywords" content="<%= metaKeywords %>">
+<% if (typeof noindex !== 'undefined' && noindex) { %>
+<meta name="robots" content="noindex, nofollow">
+<% } else { %>
+<meta name="robots" content="index, follow">
+<% } %>
+<link rel="canonical" href="<%= pageUrl %>">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="<%= pageUrl %>">
+<meta property="og:title" content="<%= fullTitle %>">
+<meta property="og:description" content="<%= metaDescription %>">
+<meta property="og:image" content="<%= defaultUrl + ogImg %>">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="<%= pageUrl %>">
+<meta property="twitter:title" content="<%= fullTitle %>">
+<meta property="twitter:description" content="<%= metaDescription %>">
+<meta property="twitter:image" content="<%= defaultUrl + ogImg %>">
+
+<!-- Theme Color for Browsers -->
+<meta name="theme-color" content="#3182ce">

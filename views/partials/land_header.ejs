@@ -3,49 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Tracker - School Management System</title>
+    <%- include('meta-tags', { 
+      title: typeof title !== 'undefined' ? title : undefined,
+      description: typeof description !== 'undefined' ? description : undefined,
+      keywords: typeof keywords !== 'undefined' ? keywords : undefined,
+      noindex: typeof noindex !== 'undefined' ? noindex : false
+    }) %>
 
-    <meta
-      name="description"
-      content="Student Tracker is an advanced school management system that helps schools manage student records, attendance, and academic performance efficiently. Try Student Tracker today!"
-    />
-
-    <meta
-      name="keywords"
-      content="student tracker, school management system, student management, attendance system, student records, academic performance, school software"
-    />
-
-    <meta name="author" content="Amrit" />
-
-    <meta
-      property="og:title"
-      content="Student Tracker - School Management System"
-    />
-    <meta
-      property="og:description"
-      content="A powerful school management solution to track student data, attendance, and academic performance with ease."
-    />
-    <meta
-      property="og:image"
-      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
-    />
-    <meta property="og:url" content="https://edu.codebyamrit.co.in" />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Student Tracker - School Management System"
-    />
-    <meta
-      name="twitter:description"
-      content="Manage student records, attendance, and academic performance with ease."
-    />
-    <meta
-      name="twitter:image"
-      content="https://edu.codebyamrit.co.in/image/student-tracker-banner.png"
-    />
-    <meta name="twitter:site" content="@codebyamrit" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "StudentTracker",
+      "url": "https://edu.amritsharma.dev",
+      "logo": "https://edu.amritsharma.dev/favicon.png",
+      "description": "Advanced school management system for real-time student tracking and analytics.",
+      "sameAs": [
+        "https://twitter.com/codebyamrit"
+      ]
+    }
+    </script>
 
     <script src="/js/theme.js" nonce="<%= nonce %>"></script>
     <link rel="stylesheet" href="/css/styles.css?v=<%= appVersion %>" nonce="<%= nonce %>" />

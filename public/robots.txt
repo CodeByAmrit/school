@@ -5,14 +5,18 @@ User-agent: *
 Disallow: /
 
 # Allow public-facing pages
-Allow: /$
-Allow: /term_condition$
-Allow: /privacy$
-Allow: /about$
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /features
+Allow: /pricing
+Allow: /term_condition
+Allow: /privacy
+Allow: /about
+Allow: /security
+Allow: /result
 
 # Disallow private and sensitive pages
-Disallow: /login
-Disallow: /signup
 Disallow: /dashboard
 Disallow: /students
 Disallow: /student/

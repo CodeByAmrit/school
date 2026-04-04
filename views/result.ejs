@@ -1,4 +1,8 @@
-<%- include('partials/land_header') %>
+<%- include('partials/land_header', { 
+  title: 'Check Your Result', 
+  description: 'Lookup your academic report and term-wise results using your Student SRN and Date of Birth.',
+  noindex: (typeof student !== 'undefined' && student !== null) || (typeof error !== 'undefined' && error !== null) 
+}) %>
 
 <main class="bg-gray-50/50">
   <div class="relative py-12 text-white bg-white no-print">

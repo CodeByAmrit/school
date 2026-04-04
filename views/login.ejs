@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - StudentTracker</title>
+    <%- include('partials/meta-tags', { 
+      title: 'Login', 
+      description: 'Sign in to your StudentTracker account to manage student records, track attendance, and analyze academic performance.' 
+    }) %>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "StudentTracker",
+      "operatingSystem": "Web",
+      "applicationCategory": "EducationalApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <link rel="stylesheet" href="/css/styles.css?v=<%= appVersion %>" nonce="<%= nonce %>" />
 
