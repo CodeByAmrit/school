@@ -195,6 +195,8 @@ CREATE OR REPLACE VIEW StudentPerformance AS
 SELECT
   s.school_id,
   s.name AS student_name,
+  s.session AS session,
+  s.class AS class_name,
   sm.term,
   (
     SELECT SUM(
@@ -293,12 +295,13 @@ SELECT
 FROM students s
 JOIN student_marks sm
   ON s.school_id = sm.student_id
-GROUP BY s.school_id, s.name, sm.term;
+GROUP BY s.school_id, s.name, s.session, s.class, sm.term;
 
 CREATE OR REPLACE VIEW SubjectPerformance AS
 SELECT
     s.teacher_id,
     s.class,
+    s.session,
     sm.term,
     sm.subject,
     AVG(
@@ -333,7 +336,7 @@ JOIN
       AND sc.class_name  = s.class
       AND sc.teacher_id  = s.teacher_id
 GROUP BY
-    s.teacher_id, s.class, sm.term, sm.subject;
+    s.teacher_id, s.class, s.session, sm.term, sm.subject;
 
 DELIMITER $$
 
