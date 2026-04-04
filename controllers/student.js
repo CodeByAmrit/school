@@ -430,10 +430,10 @@ async function teacherLogin(req) {
 
     const teacher = rows[0];
 
-    // const isMatch = await bcrypt.compare(password, teacher.password);
-    // if (!isMatch) {
-    //   throw new Error("INVALID_CREDENTIALS");
-    // }
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
 
     const payload = {
       id: teacher.id,
@@ -888,7 +888,13 @@ async function saveStudentMarks(
     // --- Bulk upsert max marks (single round-trip, tenant-aware) ---
     if (maxMarksRows.length > 0) {
       // maxMarksRows format: [class, term, subject, maxMark] — add teacherId
-      const tenantRows = maxMarksRows.map(([cls, trm, subj, mx]) => [teacherId, cls, trm, subj, mx]);
+      const tenantRows = maxMarksRows.map(([cls, trm, subj, mx]) => [
+        teacherId,
+        cls,
+        trm,
+        subj,
+        mx,
+      ]);
       const placeholders = tenantRows.map(() => "(?, ?, ?, ?, ?)").join(", ");
       const flatValues = tenantRows.flat();
       await connection.execute(
