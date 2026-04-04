@@ -430,10 +430,10 @@ async function teacherLogin(req) {
 
     const teacher = rows[0];
 
-    // const isMatch = await bcrypt.compare(password, teacher.password);
-    // if (!isMatch) {
-    //   throw new Error("INVALID_CREDENTIALS");
-    // }
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
 
     const payload = {
       id: teacher.id,
@@ -840,8 +840,8 @@ async function saveStudentMarks(
     const isArrayMapping = Array.isArray(marks);
 
     // Collect all rows to insert in one pass
-    const marksRows = [];     // [studentId, session, class, term, subject, mark]
-    const maxMarksRows = [];  // [class, term, subject, maxMark]
+    const marksRows = []; // [studentId, session, class, term, subject, mark]
+    const maxMarksRows = []; // [class, term, subject, maxMark]
 
     for (const termKey in marks) {
       let termNum = parseInt(termKey);
@@ -852,7 +852,14 @@ async function saveStudentMarks(
       const termMaxMarks = maxMarks[termKey] || {};
 
       for (const subject in termMarks) {
-        marksRows.push([studentId, targetSession, targetClass, termNum, subject, termMarks[subject]]);
+        marksRows.push([
+          studentId,
+          targetSession,
+          targetClass,
+          termNum,
+          subject,
+          termMarks[subject],
+        ]);
 
         const maxMark = termMaxMarks[subject];
         if (maxMark !== undefined && maxMark !== null && maxMark !== "") {
