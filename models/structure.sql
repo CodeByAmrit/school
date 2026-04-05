@@ -167,8 +167,10 @@ CREATE TABLE IF NOT EXISTS maximum_marks (
     class VARCHAR(40) NOT NULL,
     term INT NOT NULL,
     subject VARCHAR(50) NOT NULL,
-    max_marks VARCHAR(20) NOT NULL, -- Changed to INT for max_marks
-    UNIQUE KEY (class, term, subject) -- Ensure each combination of class, term, and subject is unique
+    max_marks VARCHAR(20) NOT NULL,
+    teacher_id INT NULL,
+    UNIQUE KEY unique_max_marks (teacher_id, class, term, subject),
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
 
 CREATE TABLE IF NOT EXISTS school_leaved_students (
@@ -215,6 +217,12 @@ SELECT
       AND sm_inner.term = sm.term
       AND sm_inner.session = sm.session
       AND sm_inner.class_name = sm.class_name
+      AND EXISTS (
+        SELECT 1 FROM subject_config sc 
+        WHERE sc.subject_name = sm_inner.subject 
+          AND sc.class_name = sm_inner.class_name 
+          AND sc.teacher_id = s.teacher_id
+      )
   ) AS grand_total,
   (
     SELECT SUM(CAST(mm_inner.max_marks AS UNSIGNED))
@@ -227,6 +235,12 @@ SELECT
       AND sm_inner.term = sm.term
       AND sm_inner.session = sm.session
       AND sm_inner.class_name = sm.class_name
+      AND EXISTS (
+        SELECT 1 FROM subject_config sc 
+        WHERE sc.subject_name = sm_inner.subject 
+          AND sc.class_name = sm_inner.class_name 
+          AND sc.teacher_id = s.teacher_id
+      )
   ) AS total_max_marks,
   (
     (SELECT SUM(CASE WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED) ELSE 0 END)
@@ -234,7 +248,14 @@ SELECT
      WHERE sm_inner.student_id = s.school_id 
        AND sm_inner.term = sm.term
        AND sm_inner.session = sm.session
-       AND sm_inner.class_name = sm.class_name) * 100
+       AND sm_inner.class_name = sm.class_name
+       AND EXISTS (
+         SELECT 1 FROM subject_config sc 
+         WHERE sc.subject_name = sm_inner.subject 
+           AND sc.class_name = sm_inner.class_name 
+           AND sc.teacher_id = s.teacher_id
+       )
+    ) * 100
     /
     NULLIF((SELECT SUM(CAST(mm_inner.max_marks AS UNSIGNED))
             FROM maximum_marks AS mm_inner
@@ -245,18 +266,24 @@ SELECT
             WHERE sm_inner.student_id = s.school_id 
               AND sm_inner.term = sm.term
               AND sm_inner.session = sm.session
-              AND sm_inner.class_name = sm.class_name), 0)
+              AND sm_inner.class_name = sm.class_name
+              AND EXISTS (
+                SELECT 1 FROM subject_config sc 
+                WHERE sc.subject_name = sm_inner.subject 
+                  AND sc.class_name = sm_inner.class_name 
+                  AND sc.teacher_id = s.teacher_id
+              )
+           ), 0)
   ) AS percentage
 FROM students s
-JOIN student_marks sm 
-  ON s.school_id = sm.student_id
+JOIN student_marks sm ON s.school_id = sm.student_id
 GROUP BY s.school_id, s.teacher_id, s.name, sm.session, sm.class_name, sm.term;
 
 CREATE OR REPLACE VIEW SubjectPerformance AS
 SELECT
     s.teacher_id,
-    s.class,
-    s.session,
+    sm.class_name,
+    sm.session,
     sm.term,
     sm.subject,
     AVG(
@@ -280,18 +307,18 @@ FROM
 JOIN
     student_marks sm ON s.school_id = sm.student_id
 JOIN
-    maximum_marks mm
-      ON s.class        = mm.class
-      AND sm.term       = mm.term
-      AND sm.subject    = mm.subject
-      AND mm.teacher_id = s.teacher_id
-JOIN
-    subject_config sc
-      ON sc.subject_name = sm.subject
-      AND sc.class_name  = s.class
-      AND sc.teacher_id  = s.teacher_id
+    maximum_marks mm ON sm.subject = mm.subject 
+                  AND sm.term = mm.term 
+                  AND sm.class_name = mm.class 
+                  AND (mm.teacher_id = s.teacher_id OR mm.teacher_id IS NULL)
+WHERE EXISTS (
+  SELECT 1 FROM subject_config sc 
+  WHERE sc.subject_name = sm.subject 
+    AND sc.class_name = sm.class_name 
+    AND sc.teacher_id = s.teacher_id
+)
 GROUP BY
-    s.teacher_id, s.class, s.session, sm.term, sm.subject;
+    s.teacher_id, sm.class_name, sm.session, sm.term, sm.subject;
 
 DELIMITER $$
 
