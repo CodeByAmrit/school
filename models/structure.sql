@@ -110,12 +110,15 @@ CREATE TABLE IF NOT EXISTS student_marks (
     marks VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE (student_id, term, subject),
+    session VARCHAR(20),
+    class_name VARCHAR(40),
+    UNIQUE KEY unique_student_mark (student_id, session, class_name, term, subject),
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
 CREATE TABLE IF NOT EXISTS student_attendance_status (
-    student_id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
     attendance VARCHAR(100),
     status ENUM(
         'passed',
@@ -123,6 +126,10 @@ CREATE TABLE IF NOT EXISTS student_attendance_status (
         'fail',
         'pending'
     ) DEFAULT 'pending',
+    session VARCHAR(20),
+    class_name VARCHAR(40),
+    term INT DEFAULT 1,
+    UNIQUE KEY unique_attendance (student_id, session, class_name, term),
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
@@ -132,7 +139,9 @@ CREATE TABLE IF NOT EXISTS student_grade_remarks (
     grade VARCHAR(100),
     remarks VARCHAR(100),
     term INT NOT NULL,
-    UNIQUE (student_id, term),
+    session VARCHAR(20),
+    class_name VARCHAR(40),
+    UNIQUE KEY unique_grade (student_id, session, class_name, term),
     FOREIGN KEY (student_id) REFERENCES students (school_id)
 );
 
@@ -206,7 +215,10 @@ SELECT
       END
     )
     FROM student_marks AS sm_inner
-    WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+    WHERE sm_inner.student_id = s.school_id 
+      AND sm_inner.term = sm.term
+      AND sm_inner.session = s.session
+      AND sm_inner.class_name = s.class
       AND EXISTS (
         SELECT 1 FROM maximum_marks mm_inner
         WHERE mm_inner.subject  = sm_inner.subject
@@ -234,7 +246,10 @@ SELECT
       AND sm_inner.term      = mm_inner.term
       AND mm_inner.class     = s.class
       AND mm_inner.teacher_id = s.teacher_id
-    WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+    WHERE sm_inner.student_id = s.school_id 
+      AND sm_inner.term = sm.term
+      AND sm_inner.session = s.session
+      AND sm_inner.class_name = s.class
       AND EXISTS (
         SELECT 1 FROM subject_config sc
         WHERE sc.subject_name = sm_inner.subject
@@ -251,7 +266,10 @@ SELECT
         END
       )
       FROM student_marks AS sm_inner
-      WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+      WHERE sm_inner.student_id = s.school_id 
+        AND sm_inner.term = sm.term
+        AND sm_inner.session = s.session
+        AND sm_inner.class_name = s.class
         AND EXISTS (
           SELECT 1 FROM maximum_marks mm_inner
           WHERE mm_inner.subject  = sm_inner.subject
@@ -281,7 +299,10 @@ SELECT
           AND sm_inner.term      = mm_inner.term
           AND mm_inner.class     = s.class
           AND mm_inner.teacher_id = s.teacher_id
-        WHERE sm_inner.student_id = s.school_id AND sm_inner.term = sm.term
+        WHERE sm_inner.student_id = s.school_id 
+          AND sm_inner.term = sm.term
+          AND sm_inner.session = s.session
+          AND sm_inner.class_name = s.class
           AND EXISTS (
             SELECT 1 FROM subject_config sc
             WHERE sc.subject_name = sm_inner.subject
