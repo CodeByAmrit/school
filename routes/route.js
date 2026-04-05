@@ -276,6 +276,7 @@ router.get("/student/new", checkAuth, async (req, res) => {
   try {
     const student = null;
     const school_logo_url = await getSchoolLogo(req, res);
+    const studentsCount = await getTotalStudents(req, res);
 
     let user = req.user;
     user.school_logo = school_logo_url;
@@ -843,7 +844,9 @@ router.post(
     try {
       // Validate input
       if (!attendance || !status) {
-        return res.status(400).json({ error: "Attendance and status are required." });
+        return res
+          .status(400)
+          .json({ error: "Attendance and status are required." });
       }
 
       // Get a database connection
@@ -856,7 +859,9 @@ router.post(
       );
 
       if (!student) {
-        return res.status(404).json({ error: "Student not found or access denied." });
+        return res
+          .status(404)
+          .json({ error: "Student not found or access denied." });
       }
 
       // Create or update data in `student_attendance_status` table
