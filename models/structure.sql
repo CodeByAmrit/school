@@ -203,120 +203,54 @@ CREATE TABLE IF NOT EXISTS school_leaved_students (
 CREATE OR REPLACE VIEW StudentPerformance AS
 SELECT
   s.school_id,
+  s.teacher_id,
   s.name AS student_name,
-  s.session AS session,
-  s.class AS class_name,
+  sm.session AS session,
+  sm.class_name AS class_name,
   sm.term,
   (
-    SELECT SUM(
-      CASE
-        WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED)
-        ELSE 0
-      END
-    )
+    SELECT SUM(CASE WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED) ELSE 0 END)
     FROM student_marks AS sm_inner
     WHERE sm_inner.student_id = s.school_id 
       AND sm_inner.term = sm.term
-      AND sm_inner.session = s.session
-      AND sm_inner.class_name = s.class
-      AND EXISTS (
-        SELECT 1 FROM maximum_marks mm_inner
-        WHERE mm_inner.subject  = sm_inner.subject
-          AND mm_inner.term     = sm_inner.term
-          AND mm_inner.class    = s.class
-          AND mm_inner.teacher_id = s.teacher_id
-      )
-      AND EXISTS (
-        SELECT 1 FROM subject_config sc
-        WHERE sc.subject_name = sm_inner.subject
-          AND sc.class_name  = s.class
-          AND sc.teacher_id  = s.teacher_id
-      )
+      AND sm_inner.session = sm.session
+      AND sm_inner.class_name = sm.class_name
   ) AS grand_total,
   (
-    SELECT SUM(
-      CASE
-        WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS UNSIGNED)
-        ELSE 0
-      END
-    )
-    FROM student_marks AS sm_inner
-    JOIN maximum_marks AS mm_inner
-      ON sm_inner.subject    = mm_inner.subject
-      AND sm_inner.term      = mm_inner.term
-      AND mm_inner.class     = s.class
-      AND mm_inner.teacher_id = s.teacher_id
+    SELECT SUM(CAST(mm_inner.max_marks AS UNSIGNED))
+    FROM maximum_marks AS mm_inner
+    JOIN student_marks AS sm_inner ON mm_inner.subject = sm_inner.subject 
+      AND mm_inner.term = sm_inner.term
+      AND mm_inner.class = sm_inner.class_name
+      AND (mm_inner.teacher_id = s.teacher_id OR mm_inner.teacher_id IS NULL)
     WHERE sm_inner.student_id = s.school_id 
       AND sm_inner.term = sm.term
-      AND sm_inner.session = s.session
-      AND sm_inner.class_name = s.class
-      AND EXISTS (
-        SELECT 1 FROM subject_config sc
-        WHERE sc.subject_name = sm_inner.subject
-          AND sc.class_name  = s.class
-          AND sc.teacher_id  = s.teacher_id
-      )
+      AND sm_inner.session = sm.session
+      AND sm_inner.class_name = sm.class_name
   ) AS total_max_marks,
   (
-    (
-      SELECT SUM(
-        CASE
-          WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED)
-          ELSE 0
-        END
-      )
-      FROM student_marks AS sm_inner
-      WHERE sm_inner.student_id = s.school_id 
-        AND sm_inner.term = sm.term
-        AND sm_inner.session = s.session
-        AND sm_inner.class_name = s.class
-        AND EXISTS (
-          SELECT 1 FROM maximum_marks mm_inner
-          WHERE mm_inner.subject  = sm_inner.subject
-            AND mm_inner.term     = sm_inner.term
-            AND mm_inner.class    = s.class
-            AND mm_inner.teacher_id = s.teacher_id
-        )
-        AND EXISTS (
-          SELECT 1 FROM subject_config sc
-          WHERE sc.subject_name = sm_inner.subject
-            AND sc.class_name  = s.class
-            AND sc.teacher_id  = s.teacher_id
-        )
-    ) * 100
+    (SELECT SUM(CASE WHEN sm_inner.marks REGEXP '^[0-9]+$' THEN CAST(sm_inner.marks AS UNSIGNED) ELSE 0 END)
+     FROM student_marks AS sm_inner
+     WHERE sm_inner.student_id = s.school_id 
+       AND sm_inner.term = sm.term
+       AND sm_inner.session = sm.session
+       AND sm_inner.class_name = sm.class_name) * 100
     /
-    NULLIF(
-      (
-        SELECT SUM(
-          CASE
-            WHEN mm_inner.max_marks REGEXP '^[0-9]+$' THEN CAST(mm_inner.max_marks AS UNSIGNED)
-            ELSE 0
-          END
-        )
-        FROM student_marks AS sm_inner
-        JOIN maximum_marks AS mm_inner
-          ON sm_inner.subject    = mm_inner.subject
-          AND sm_inner.term      = mm_inner.term
-          AND mm_inner.class     = s.class
-          AND mm_inner.teacher_id = s.teacher_id
-        WHERE sm_inner.student_id = s.school_id 
-          AND sm_inner.term = sm.term
-          AND sm_inner.session = s.session
-          AND sm_inner.class_name = s.class
-          AND EXISTS (
-            SELECT 1 FROM subject_config sc
-            WHERE sc.subject_name = sm_inner.subject
-              AND sc.class_name  = s.class
-              AND sc.teacher_id  = s.teacher_id
-          )
-      ),
-      0
-    )
+    NULLIF((SELECT SUM(CAST(mm_inner.max_marks AS UNSIGNED))
+            FROM maximum_marks AS mm_inner
+            JOIN student_marks AS sm_inner ON mm_inner.subject = sm_inner.subject 
+              AND mm_inner.term = sm_inner.term
+              AND mm_inner.class = sm_inner.class_name
+              AND (mm_inner.teacher_id = s.teacher_id OR mm_inner.teacher_id IS NULL)
+            WHERE sm_inner.student_id = s.school_id 
+              AND sm_inner.term = sm.term
+              AND sm_inner.session = sm.session
+              AND sm_inner.class_name = sm.class_name), 0)
   ) AS percentage
 FROM students s
-JOIN student_marks sm
+JOIN student_marks sm 
   ON s.school_id = sm.student_id
-GROUP BY s.school_id, s.name, s.session, s.class, sm.term;
+GROUP BY s.school_id, s.teacher_id, s.name, sm.session, sm.class_name, sm.term;
 
 CREATE OR REPLACE VIEW SubjectPerformance AS
 SELECT
