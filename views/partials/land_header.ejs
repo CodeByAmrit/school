@@ -73,6 +73,23 @@
       .quicksand {
         font-family: "Quicksand", sans-serif;
       }
+      /* GSAP Initial States */
+      .gsap-reveal {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      .gsap-reveal-item {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      @keyframes floating {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(2deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+      }
+      .floating-element {
+        animation: floating 4s ease-in-out infinite;
+      }
     </style>
   </head>
 
