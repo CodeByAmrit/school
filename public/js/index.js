@@ -41,7 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- GSAP Animations ---
   if (typeof gsap !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+    // Robust registration pattern
+    gsap.registerPlugin(ScrollTrigger);
+    if (typeof MotionPathPlugin !== 'undefined') {
+      gsap.registerPlugin(MotionPathPlugin);
+    }
 
     // Initial Hero Animation
     const heroTl = gsap.timeline();

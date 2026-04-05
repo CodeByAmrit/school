@@ -654,10 +654,10 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-0">
       <!-- Premium Motion Path SVG (Hidden on mobile) -->
-      <svg class="hidden md:block absolute top-[25%] left-0 w-full h-64 -z-10 pointer-events-none" viewBox="0 0 1200 200" fill="none" preserveAspectRatio="none">
-        <path id="motion-path" d="M100,100 C300,50 500,150 600,100 C700,50 900,150 1100,100" stroke="url(#path-gradient)" stroke-width="3" stroke-dasharray="8 8" class="opacity-30" />
+      <svg class="hidden md:block absolute top-[25%] left-0 w-full h-64 z-0 pointer-events-none" viewBox="0 0 1200 200" fill="none" preserveAspectRatio="none">
+        <path id="motion-path" d="M100,100 C300,50 500,150 600,100 C700,50 900,150 1100,100" stroke="url(#path-gradient)" stroke-width="3" stroke-dasharray="8 8" class="opacity-50" />
         <defs>
           <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#3182ce" />
@@ -672,10 +672,10 @@
       </div>
 
       <!-- Step 1 -->
-      <div class="flex flex-col items-center text-center gsap-reveal-item">
+      <div class="flex flex-col items-center text-center gsap-reveal-item relative z-10">
         <div class="w-24 h-24 mb-8 flex items-center justify-center relative group">
           <div class="absolute inset-0 bg-blue-100 dark:bg-blue-900/40 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-60"></div>
-          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-2xl border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50">
+          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-[0_22px_70px_4px_rgba(49,130,206,0.15)] border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50 group-hover:scale-105">
             <i data-lucide="zap" stroke-width="1.5" class="w-12 h-12"></i>
           </div>
         </div>
@@ -686,10 +686,10 @@
       </div>
 
       <!-- Step 2 -->
-      <div class="flex flex-col items-center text-center gsap-reveal-item">
+      <div class="flex flex-col items-center text-center gsap-reveal-item relative z-10">
         <div class="w-24 h-24 mb-8 flex items-center justify-center relative group">
           <div class="absolute inset-0 bg-blue-100 dark:bg-blue-900/40 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-60"></div>
-          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-2xl border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50">
+          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-[0_22px_70px_4px_rgba(49,130,206,0.15)] border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50 group-hover:scale-105">
             <i data-lucide="send" stroke-width="1.5" class="w-12 h-12" style="transform: rotate(-15deg);"></i>
           </div>
         </div>
@@ -700,10 +700,10 @@
       </div>
 
       <!-- Step 3 -->
-      <div class="flex flex-col items-center text-center gsap-reveal-item">
+      <div class="flex flex-col items-center text-center gsap-reveal-item relative z-10">
         <div class="w-24 h-24 mb-8 flex items-center justify-center relative group">
           <div class="absolute inset-0 bg-blue-100 dark:bg-blue-900/40 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-60"></div>
-          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-2xl border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50">
+          <div class="relative z-10 floating-element text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-[0_22px_70px_4px_rgba(49,130,206,0.15)] border border-blue-50 dark:border-gray-700 transition-all duration-300 group-hover:shadow-blue-200/50 group-hover:scale-105">
             <i data-lucide="graduation-cap" stroke-width="1.5" class="w-12 h-12"></i>
           </div>
         </div>
@@ -794,7 +794,7 @@
 
       <!-- Professional Plan Card (Featured) -->
       <div
-        class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-2 border-blue-600 shadow-2xl shadow-blue-500/20 flex flex-col h-full relative z-10 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 gsap-reveal-item"
+        class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-2 border-blue-600 shadow-[0_20px_60px_-15px_rgba(49,130,206,0.3)] flex flex-col h-full relative z-10 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(49,130,206,0.4)] gsap-reveal-item"
       >
         <div
           class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider"
