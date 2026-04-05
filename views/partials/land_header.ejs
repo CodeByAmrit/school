@@ -76,7 +76,7 @@
     </style>
   </head>
 
-  <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+  <body class="bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
     <nav
       class="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm z-50 transition-colors duration-300"
     >
@@ -132,7 +132,7 @@
           <button
             id="theme-toggle"
             type="button"
-            class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 transition-colors duration-300"
+            class="p-2 text-slate-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 transition-colors duration-300"
           >
             <svg
               id="theme-toggle-dark-icon"
@@ -165,7 +165,7 @@
           <button
             data-collapse-toggle="navbar-default"
             type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-slate-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="navbar-default"
             aria-expanded="false"
           >
@@ -188,16 +188,42 @@
           </button>
         </div>
       </div>
-      <div class="hidden w-full md:hidden" id="navbar-default">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <div class="hidden w-full" id="navbar-default">
+        <div class="px-4 pt-2 pb-6 space-y-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-b-2xl shadow-xl">
+          <a
+            href="/about"
+            class="block text-slate-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >About Us</a
+          >
+          <a
+            href="/security"
+            class="block text-slate-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Security</a
+          >
+          <a
+            href="/privacy"
+            class="block text-slate-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Privacy</a
+          >
+          <a
+            href="/features"
+            class="block text-slate-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Features</a
+          >
+          <a
+            href="/pricing"
+            class="block text-slate-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            >Pricing</a
+          >
+          <hr class="border-slate-100 dark:border-gray-800 my-2" />
           <a
             href="/login"
-            class="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+            class="block text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
             >Login</a
           >
           <a
             href="/signup"
-            class="block bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:bg-blue-700 text-white px-3 py-2 rounded-md text-base font-medium"
+            class="block bg-gradient-to-br from-[#63b3ed] to-[#3182ce] hover:brightness-105 text-white px-3 py-2 rounded-md text-base font-medium text-center"
             >Sign Up</a
           >
         </div>

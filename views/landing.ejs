@@ -4,164 +4,93 @@
 }) %>
 
 <section
-  class="relative pt-24 pb-20 text-white z-20 bg-white dark:bg-gray-900 transition-colors duration-300"
+  class="relative md:pt-0 lg:pt-24 pt-0 pb-0 text-white z-20 bg-white dark:bg-gray-900 transition-colors duration-300"
 >
   <img
     src="/image/school-bg.svg"
     alt="Schools"
-    class="absolute w-full h-[490px] hidden sm:hidden md:inline z-10 -rotate-6"
+    class="absolute w-full h-[490px] hidden sm:hidden md:inline -z-10 -rotate-6"
   />
   <div
-    class="absolute inset-0 z-0 transform -skew-y-6 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] py-20 h-[620px] -top-10"
+    class="absolute inset-0 -z-20 transform -skew-y-6 bg-gradient-to-br from-[#63b3ed] to-[#3182ce] py-20 h-[720px] -top-10"
   ></div>
 
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-8">
-      <div class="text-center lg:text-left">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          Track and Manage Student Data Easily
-        </h1>
-        <ul
-          class="space-y-3 mb-8 text-center mx-auto lg:text-left lg:block lg:mx-0"
-        >
-          <li class="flex items-center justify-center lg:justify-start">
-            <svg
-              class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span>Aligned with Educational Standards</span>
-          </li>
-          <li class="flex items-center justify-center lg:justify-start">
-            <svg
-              class="w-5 h-5 mr-3 text-blue-300 hidden sm:inline"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span>Empowers Teachers with Comprehensive Insights</span>
-          </li>
-        </ul>
-
-        <div class="flex space-x-4 justify-center lg:justify-start">
-          <a
-            href="/privacy"
-            class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="/term_condition"
-            class="border border-white hover:bg-white hover:text-[#3182ce] text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300"
-          >
-            Terms
-          </a>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-12 sm:gap-y-0">
-        <div class="relative pt-20">
-          <img
-            src="/image/student.svg"
-            alt="student"
-            class="absolute -top-16 left-1/2 w-60 -translate-x-1/2 z-0"
-          />
-
-          <div
-            class="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg shadow-xl p-6 -mb-24 text-gray-800 dark:text-gray-200 flex flex-col items-center text-center transition-colors duration-300"
-          >
-            <h3 class="font-bold text-lg mb-2">Track Your Progress</h3>
-            <p class="text-sm text-gray-600 mb-4">
-              Manage your learning journey with personalized tools.
-            </p>
-            <a
-              href="/login"
-              class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
-            >
-              Login as Student
-            </a>
-          </div>
-        </div>
-
-        <div class="relative pt-20">
-          <img
-            src="/image/teacher.svg"
-            alt="teacher"
-            class="absolute -top-16 left-1/2 w-60 -translate-x-1/2 z-0"
-          />
-
-          <div
-            class="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg shadow-xl p-6 -mb-24 text-gray-800 dark:text-gray-200 flex flex-col items-center text-center transition-colors duration-300"
-          >
-            <h3 class="font-bold text-lg mb-2">Instructor & Admin Tools</h3>
-            <p class="text-sm text-gray-600 mb-4">
-              Manage classes and students with automated reports.
-            </p>
-            <a
-              href="/login"
-              class="block w-full text-center text-sm font-semibold py-2 px-4 rounded-md transition duration-300 bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] shadow-[0px_2px_8px_rgba(0,0,0,0.08),_0px_1px_0px_#d0a74d] hover:brightness-105 hover:shadow-md"
-            >
-              Login as Teacher
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- New Modern Experience Section (Optimized - No Internal Scroll) -->
-<section class="py-16 lg:py-24 bg-white dark:bg-gray-950 relative overflow-hidden border-y border-gray-100 dark:border-gray-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-    <div class="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[600px] h-[600px] bg-blue-100/30 dark:bg-blue-900/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
-    
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-bold mb-8">
+  <div class="px-6 relative z-10 max-w-screen-xl mx-auto md:min-h-[23rem] flex items-center pt-32 md:pt-28 pb-14 lg:pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-12 md:gap-3 xl:gap-12 items-center justify-items-center">
+      <div class="md:col-span-12 lg:col-span-5 text-center lg:text-left text-white">
+        <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-3 py-1.5 rounded-full text-xs font-bold mb-6">
           <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
-          <span>Version 2.0 Now Live!</span>
+          <span>Version 3.0 Now Live!</span>
         </div>
         
-        <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight mb-8 quicksand tracking-tight">
-          Next-Gen <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#3182ce] to-[#63b3ed]">Intelligent</span> Tracking.
-        </h2>
+        <h1 class="text-3xl lg:text-5xl font-extrabold text-white leading-tight mb-6 quicksand tracking-tight">
+          Next-Gen Intelligent  Tracking.
+        </h1>
         
-        <p class="text-xl text-gray-600 dark:text-gray-400 font-medium leading-relaxed mb-12">
+        <p class="leading-relaxed text-lg text-blue-50 font-medium mb-10 max-w-lg mx-auto lg:mx-0">
           The most intuitive student management system redesigned for modern educators. Track performance, automate reports, and manage IDs in seconds.
         </p>
 
-        <div class="flex flex-wrap gap-4">
-          <a href="/signup" class="px-8 py-4 bg-gradient-to-r from-[#3182ce] to-[#63b3ed] text-white font-bold rounded-2xl shadow-lg shadow-blue-200 dark:shadow-none hover:scale-105 transition-all text-center">
+        <div class="hidden md:flex flex-wrap gap-4 justify-center lg:justify-start">
+          <a href="/signup" class="px-6 py-3 bg-white text-[#3182ce] font-bold rounded-2xl shadow-xl hover:scale-105 transition-all text-center text-sm">
             Upgrade Your School
           </a>
-          <a href="#features" class="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold rounded-2xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-center shadow-sm">
+          <a href="#features" class="px-6 py-3 bg-transparent text-white border-2 border-white/30 backdrop-blur-sm font-bold rounded-2xl hover:bg-white/10 transition-all text-center text-sm">
             Explore Features
           </a>
         </div>
       </div>
 
-      <!-- Content Visual -->
-      <div class="relative lg:block hidden">
-        <div class="relative bg-white dark:bg-gray-800 p-8 rounded-[40px] shadow-2xl border border-gray-100 dark:border-gray-700 transform rotate-2 hover:rotate-0 transition-transform duration-700">
-           <div class="space-y-6 text-center">
-              <img src="/image/student.svg" alt="Student" class="w-56 mx-auto mb-4" />
-              <div class="h-2 w-full bg-blue-50 dark:bg-blue-900/30 rounded-full"></div>
-              <div class="h-2 w-4/5 bg-gray-50 dark:bg-gray-700 rounded-full mx-auto"></div>
-           </div>
+      <div class="md:col-span-12 lg:col-span-7">
+        <div class="w-full grid md:grid-cols-2 gap-6 md:gap-3 lg:gap-4 md:mt-8 lg:mt-0">
+          <div class="relative pt-0 md:pt-20 lg:pt-20">
+            <img
+              src="/image/student.svg"
+              alt="student"
+              class="absolute -top-16 left-1/2 w-60 -translate-x-1/2 z-0 hidden md:block"
+            />
+
+            <div
+              class="h-full md:max-h-[13.5rem] lg:max-h-[none] flex flex-col gap-3 p-6 bg-white shadow-xl rounded-xl text-sm"
+            >
+              <h3 class="text-2xl font-bold text-slate-800 xl:whitespace-nowrap">For Students</h3>
+              <p class="text-sm text-slate-600 mb-2">
+                Manage your learning journey with personalized tools.
+              </p>
+              <a
+                href="/login"
+                class="w-full text-center text-sm px-3 py-2 shadow-xl bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] rounded-md font-semibold transition duration-300 hover:brightness-105 hover:shadow-md"
+              >
+                Login as Student »
+              </a>
+            </div>
+          </div>
+
+          <div class="relative pt-0 md:pt-20 lg:pt-20">
+            <img
+              src="/image/teacher.svg"
+              alt="teacher"
+              class="absolute -top-16 left-1/2 w-60 -translate-x-1/2 z-0 hidden md:block"
+            />
+
+            <div
+              class="h-full md:max-h-[13.5rem] lg:max-h-[none] flex flex-col gap-3 p-6 bg-white shadow-xl rounded-xl text-sm"
+            >
+              <h3 class="text-2xl font-bold text-slate-800 xl:whitespace-nowrap">For Educators</h3>
+              <p class="text-sm text-slate-600 mb-2">
+                Manage classes and students with automated reports.
+              </p>
+              <a
+                href="/login"
+                class="w-full text-center text-sm px-3 py-2 shadow-xl bg-gradient-to-b from-[#f7d78c] to-[#f4c965] text-[rgb(96,75,25)] border border-[rgba(241,188,63,1)] rounded-md font-semibold transition duration-300 hover:brightness-105 hover:shadow-md"
+              >
+                Login as Teacher »
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -174,10 +103,10 @@
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      <h2 class="text-3xl font-bold bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent">
         A Complete Solution for Modern Schools
       </h2>
-      <p class="max-w-3xl mx-auto text-gray-600">
+      <p class="max-w-3xl mx-auto text-slate-600">
         From data management and academic tracking to parent communication,
         we've got you covered.
       </p>
@@ -197,7 +126,7 @@
             ></div>
           </div>
           <p
-            class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-sm font-medium text-slate-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Data Management
           </p>
@@ -221,7 +150,7 @@
             ></div>
           </div>
           <p
-            class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-sm font-medium text-slate-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Academic Insights
           </p>
@@ -245,7 +174,7 @@
             ></div>
           </div>
           <p
-            class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-sm font-medium text-slate-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Secure & Private
           </p>
@@ -262,7 +191,7 @@
             ></div>
           </div>
           <p
-            class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-sm font-medium text-slate-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Attendance & Grades
           </p>
@@ -279,7 +208,7 @@
             ></div>
           </div>
           <p
-            class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-sm font-medium text-slate-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Parent Engagement
           </p>
@@ -299,10 +228,10 @@
       class="bg-gradient-to-r from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg border border-blue-100 dark:border-gray-700 p-8 md:p-12"
     >
       <div class="text-center">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
           Check Your Result
         </h2>
-        <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-400 mb-8">
+        <p class="max-w-2xl mx-auto text-slate-600 dark:text-gray-400 mb-8">
           Enter your roll number and date of birth to view your academic report.
         </p>
       </div>
@@ -311,7 +240,7 @@
           <div>
             <label
               for="roll"
-              class="block text-sm font-medium text-gray-700 mb-2"
+              class="block text-sm font-medium text-slate-700 mb-2"
               >Roll Number</label
             >
             <input
@@ -325,7 +254,7 @@
           <div>
             <label
               for="dob"
-              class="block text-sm font-medium text-gray-700 mb-2"
+              class="block text-sm font-medium text-slate-700 mb-2"
               >Date of Birth</label
             >
             <input
@@ -396,14 +325,14 @@
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
         Why You'll Love
         <span
           class="bg-gradient-to-r from-[#3182ce] to-[#63b3ed] bg-clip-text text-transparent"
           >Student Tracker</span
         >
       </h2>
-      <p class="max-w-2xl mx-auto text-gray-600">
+      <p class="max-w-2xl mx-auto text-slate-600">
         Discover how our platform transforms education management for schools,
         teachers, and students alike.
       </p>
@@ -427,11 +356,11 @@
             />
           </div>
           <h3
-            class="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Comprehensive Curriculum
           </h3>
-          <p class="text-gray-600 text-sm">
+          <p class="text-slate-600 text-sm">
             Equip students with essential skills crafted by experts for every
             learning level.
           </p>
@@ -447,11 +376,11 @@
             <img src="/animate/graduate.webp" alt="graduate" class="w-16 h-16" loading="lazy" width="64" height="64" />
           </div>
           <h3
-            class="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Interactive Learning
           </h3>
-          <p class="text-gray-600 text-sm">
+          <p class="text-slate-600 text-sm">
             Motivate students with engaging activities and progress tracking.
           </p>
         </div>
@@ -473,11 +402,11 @@
             />
           </div>
           <h3
-            class="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Customizable Platform
           </h3>
-          <p class="text-gray-600 text-sm">
+          <p class="text-slate-600 text-sm">
             Tailor the system with your own modules for cross-disciplinary
             learning.
           </p>
@@ -493,11 +422,11 @@
             <img src="/animate/score.webp" alt="score" class="w-16 h-16" loading="lazy" width="64" height="64" />
           </div>
           <h3
-            class="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            class="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
           >
             Test Readiness
           </h3>
-          <p class="text-gray-600 text-sm">
+          <p class="text-slate-600 text-sm">
             Help students excel on standardized tests with tailored preparation
             tools.
           </p>
@@ -513,7 +442,7 @@
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2
-      class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12"
+      class="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12"
     >
       Discover Our
       <span
@@ -536,10 +465,10 @@
             ></div>
             <span class="text-sm font-semibold text-blue-600">AI-POWERED</span>
           </div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
             AI Teacher Assistant
           </h3>
-          <p class="text-gray-600 mb-6">
+          <p class="text-slate-600 mb-6">
             Leverage our built-in AI assistant to streamline your workflow. Get
             help with lesson plans, generate quiz questions, or find creative
             ideas for your classroom. It's like having a personal teaching
@@ -610,10 +539,10 @@
             ></div>
             <span class="text-sm font-semibold text-blue-600">AUTOMATION</span>
           </div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
             Automated Report Cards & Certificates
           </h3>
-          <p class="text-gray-600 mb-6">
+          <p class="text-slate-600 mb-6">
             Say goodbye to tedious paperwork. Generate beautiful,
             professional-looking report cards, academic certificates, and other
             documents in just a few clicks. Our system automatically pulls
@@ -658,10 +587,10 @@
               >COMPREHENSIVE</span
             >
           </div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
             Student Profiles
           </h3>
-          <p class="text-gray-600 mb-6">
+          <p class="text-slate-600 mb-6">
             Keep all student information in one organized place. Track academic
             performance, attendance, and manage important files and documents
             for each student. Get a holistic view of every student's progress at
@@ -711,10 +640,10 @@
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
         Choose Your Plan
       </h2>
-      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+      <p class="text-slate-600 dark:text-gray-400 max-w-2xl mx-auto">
         Flexible pricing options designed to grow with your institution.
       </p>
     </div>
@@ -725,7 +654,7 @@
         class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300"
       >
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
             Starter
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -733,12 +662,12 @@
           </p>
         </div>
         <div class="mb-8 font-bold">
-          <span class="text-3xl text-gray-900 dark:text-white">₹0</span>
+          <span class="text-3xl text-slate-900 dark:text-white">₹0</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -756,7 +685,7 @@
             Up to 100 Students
           </li>
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -791,7 +720,7 @@
           RECOMMENDED
         </div>
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
             Professional
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -799,12 +728,12 @@
           </p>
         </div>
         <div class="mb-8 font-bold">
-          <span class="text-3xl text-gray-900 dark:text-white">₹1,499</span>
+          <span class="text-3xl text-slate-900 dark:text-white">₹1,499</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300 font-medium"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -822,7 +751,7 @@
             Unlimited Students
           </li>
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300 font-medium"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -840,7 +769,7 @@
             AI Assistant Features
           </li>
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300 font-medium"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -870,7 +799,7 @@
         class="bg-gray-50 dark:bg-gray-800 p-8 rounded-3xl border border-blue-50 dark:border-gray-700 flex flex-col h-full hover:shadow-lg transition-all duration-300"
       >
         <div class="mb-8">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
             Institution
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -878,12 +807,12 @@
           </p>
         </div>
         <div class="mb-8 font-bold">
-          <span class="text-3xl text-gray-900 dark:text-white">₹4,999</span>
+          <span class="text-3xl text-slate-900 dark:text-white">₹4,999</span>
           <span class="text-gray-500 dark:text-gray-400 ml-1">/mo</span>
         </div>
         <ul class="space-y-4 mb-8 flex-grow">
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -901,7 +830,7 @@
             Multi-Teacher Support
           </li>
           <li
-            class="flex items-center text-sm text-gray-600 dark:text-gray-300"
+            class="flex items-center text-sm text-slate-600 dark:text-gray-300"
           >
             <svg
               class="w-4 h-4 text-green-500 mr-2"
@@ -921,7 +850,7 @@
         </ul>
         <a
           href="/pricing"
-          class="w-full text-center py-2 border-2 border-gray-900 dark:border-gray-200 text-gray-900 dark:text-white rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+          class="w-full text-center py-2 border-2 border-gray-900 dark:border-gray-200 text-slate-900 dark:text-white rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
           >Learn More</a
         >
       </div>

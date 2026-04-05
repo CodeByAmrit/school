@@ -23,4 +23,14 @@ async function updateStudentCount() {
 
 document.addEventListener("DOMContentLoaded", () => {
   updateStudentCount();
+  
+  // Mobile menu toggle logic
+  const toggleBtn = document.querySelector('[data-collapse-toggle="navbar-default"]');
+  const menu = document.getElementById('navbar-default');
+  
+  if (toggleBtn && menu) {
+    toggleBtn.addEventListener('click', function() {
+      menu.classList.toggle('hidden');
+    });
+  }
 });
