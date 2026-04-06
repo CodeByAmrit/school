@@ -533,24 +533,47 @@
               </div>
 
               <!-- Family ID -->
-              <div class="relative">
-                <input
-                  type="text"
-                  id="family_id"
-                  name="family_id"
-                  class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
-                  placeholder=" "
-                  value="<%= student && student.family_id ? student.family_id : '' %>"
-                />
-                <label
-                  for="family_id"
-                  class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
-                >
-                  <span class="flex items-center">
-                    <i class="fas fa-id-badge mr-1 text-xs"></i>
-                    Family ID
-                  </span>
-                </label>
+              <div class="relative group">
+                <div class="flex items-center gap-2">
+                  <div class="relative flex-grow">
+                    <input
+                      type="text"
+                      id="family_id"
+                      name="family_id"
+                      class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none transition-all uppercase placeholder-transparent peer"
+                      placeholder=" "
+                      value="<%= student && student.family_id ? student.family_id : '' %>"
+                    />
+                    <label
+                      for="family_id"
+                      class="absolute -top-2 left-3 px-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 dark:peer-focus:text-blue-400"
+                    >
+                      <span class="flex items-center">
+                        <i class="fas fa-id-badge mr-1 text-xs"></i>
+                        Family ID
+                      </span>
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    id="verify-family-btn"
+                    class="px-4 py-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm flex-shrink-0"
+                  >
+                    <i class="fas fa-shield-alt mr-2"></i>Verify
+                  </button>
+                </div>
+                <input type="hidden" id="family_id_verified" name="family_id_verified" value="<%= student && student.family_id_verified ? 'true' : 'false' %>">
+                <div id="verification-status" class="mt-1 text-[10px] font-bold uppercase tracking-wider">
+                  <% if (student && student.family_id_verified) { %>
+                    <span class="text-green-600 dark:text-green-400 flex items-center">
+                      <i class="fas fa-check-circle mr-1 text-xs"></i> Verified Securely
+                    </span>
+                  <% } else { %>
+                    <span class="text-amber-600 dark:text-amber-400 flex items-center">
+                      <i class="fas fa-exclamation-triangle mr-1 text-xs"></i> Unverified Profile
+                    </span>
+                  <% } %>
+                </div>
               </div>
 
               <!-- Mobile Number -->
@@ -899,6 +922,7 @@
 </style>
 
 <script src="/js/formProgress.js" nonce="<%= nonce %>"></script>
+<script src="/js/familyVerification.js" defer nonce="<%= nonce %>"></script>
 
 <% if (student==null){ %>
 <script src="/js/newStudent.js" defer nonce="<%= nonce %>"></script>

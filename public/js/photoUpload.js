@@ -122,6 +122,10 @@ document.addEventListener("DOMContentLoaded", () => {
       "gender",
       document.getElementById("gender").value.toUpperCase(),
     );
+    formData.append(
+      "family_id_verified",
+      document.getElementById("family_id_verified").value,
+    );
 
     formData.append(
       "blood_group",

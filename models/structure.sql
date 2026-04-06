@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS students (
     mobile_no VARCHAR(40),
     paste_file_no VARCHAR(40),
     family_id VARCHAR(40),
+    family_id_verified BOOLEAN DEFAULT FALSE,
     dob VARCHAR(10),
     profile_status VARCHAR(255),
     apaar_id VARCHAR(40),

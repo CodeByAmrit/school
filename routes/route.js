@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const checkAuth = require("../services/checkauth");
 const {
   getAllStudent,
@@ -21,6 +22,7 @@ const {
   getSchoolLogo,
   markStudentAsLeft,
   getStudentResult,
+  verifyFamilyId,
 } = require("../controllers/student");
 const {
   getMarksAnalytics,
@@ -1319,5 +1321,35 @@ router.get("/api/student/sign/:id", checkAuth, async (req, res) => {
     res.redirect("/image/sign.png");
   }
 });
+
+// Route to fetch family members from external API
+router.get("/get-family-members/:fid", async (req, res) => {
+  try {
+    const fid = req.params.fid;
+    console.log("🚀 Fetching members for:", fid);
+
+    const response = await axios.get(
+      `https://hrylabour.gov.in/welfare/worker/getMembers/${fid.toLowerCase()}`,
+      {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+        },
+        timeout: 10000,
+      },
+    );
+
+    console.log("✅ API Response:", response.data);
+    res.json(response.data);
+  } catch (err) {
+    console.error("❌ ERROR:", err.message);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch members",
+    });
+  }
+});
+
+// Route to update family ID verification status
+router.post("/api/student/verify/:id", checkAuth, verifyFamilyId);
 
 module.exports = router;
