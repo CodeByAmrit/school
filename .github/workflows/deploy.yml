@@ -26,7 +26,7 @@ jobs:
             echo "🚀 Pulling latest code and images..."
             sudo chown -R ubuntu:ubuntu /home/ubuntu/github/StudentTracker-Pro
             git config --global --add safe.directory /home/ubuntu/github/StudentTracker-Pro
-            git pull origin main
+            git pull origin master
             sudo docker compose pull
             
             echo "🆕 Updating services..."
