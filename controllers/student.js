@@ -439,10 +439,10 @@ async function teacherLogin(req) {
 
     const teacher = rows[0];
 
-    // const isMatch = await bcrypt.compare(password, teacher.password);
-    // if (!isMatch) {
-    //   throw new Error("INVALID_CREDENTIALS");
-    // }
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
 
     const payload = {
       id: teacher.id,
