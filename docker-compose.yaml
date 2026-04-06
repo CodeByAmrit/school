@@ -14,6 +14,12 @@ services:
       - proxy
     depends_on:
       - redis
+    deploy:
+      replicas: 3
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`) || Host(`school.cctvcameralive.in`)"
