@@ -137,7 +137,7 @@ router.post("/create-certificate", checkAuth, async (req, res) => {
 
 router.get("/chart-data", checkAuth, getChartData);
 
-router.get("/dashboard", checkAuth, apiCache(30), getDashboardView);
+router.get("/dashboard", checkAuth, apiCache(60), getDashboardView);
 
 router.get("/ai/chat", checkAuth, getAiChatView);
 

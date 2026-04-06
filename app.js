@@ -89,12 +89,18 @@ class App {
     );
 
     // Rate limiting
+    const RedisStore = require("rate-limit-redis").default;
+    const redis = require("./config/redis");
+
     const limiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
       limit: parseInt(process.env.RATE_LIMIT) || 2000,
       message: "Too many requests, please try again later.",
       standardHeaders: true,
       legacyHeaders: false,
+      store: new RedisStore({
+        sendCommand: (...args) => redis.call(...args),
+      }),
       validate: {
         trustProxy: true,
         xForwardedForHeader: true,
@@ -123,6 +129,28 @@ class App {
 
     // Apply rate limiting
     this.app.use(limiter);
+
+    // Global Distributed Cache Invalidator for state-changing requests
+    const { clearCache } = require("./middleware/cache");
+    this.app.use((req, res, next) => {
+      res.on("finish", () => {
+        if (
+          ["POST", "PUT", "DELETE", "PATCH"].includes(req.method) &&
+          res.statusCode >= 200 &&
+          res.statusCode < 400
+        ) {
+          // Identify the tenant/teacher ID
+          const tenantId =
+            req.user && req.user._id
+              ? req.user._id
+              : req.CurrentTeacher
+                ? req.CurrentTeacher.id
+                : "global";
+          clearCache(tenantId);
+        }
+      });
+      next();
+    });
 
     // Logging
     if (process.env.NODE_ENV !== "production") {
@@ -251,28 +279,6 @@ class App {
         next();
       });
     }
-
-    // Global Cache Invalidator for state-changing requests
-    this.app.use((req, res, next) => {
-      res.on("finish", () => {
-        if (
-          ["POST", "PUT", "DELETE", "PATCH"].includes(req.method) &&
-          res.statusCode >= 200 &&
-          res.statusCode < 400
-        ) {
-          // Identify the tenant/teacher ID
-          const tenantId =
-            req.user && req.user._id
-              ? req.user._id
-              : req.CurrentTeacher
-                ? req.CurrentTeacher.id
-                : "global";
-          const { clearCache } = require("./middleware/cache");
-          clearCache(tenantId);
-        }
-      });
-      next();
-    });
 
     // Routes
     this.app.use("/", router);

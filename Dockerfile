@@ -3,11 +3,17 @@ FROM node:24-alpine AS builder
 
 WORKDIR /school
 
+# Fix for Sharp compatibility
+RUN apk add --no-cache libc6-compat
+
 # Install all dependencies and build CSS
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+
+# Prune dev dependencies so we only copy production dependencies to Stage 2
+RUN npm prune --omit=dev
 
 # Stage 2: Production image
 FROM node:24-alpine
@@ -16,6 +22,10 @@ WORKDIR /school
 
 ENV NODE_ENV=production
 
+# Install libc6-compat in runtime as well if required by sharp
+RUN apk add --no-cache libc6-compat
+
+# Copy production dependencies and built files
 COPY --from=builder /school/package*.json ./
 COPY --from=builder /school/node_modules ./node_modules
 COPY --from=builder /school/bin ./bin

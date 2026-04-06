@@ -1,21 +1,40 @@
 services:
   student-tracker:
     image: codebyamrit/student-tracker:latest
-    container_name: student-tracker
     environment:
       - NODE_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     env_file:
       - .env
     expose:
       - "5000"
+    restart: always
     networks:
       - proxy
+    depends_on:
+      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`) || Host(`school.cctvcameralive.in`)"
       - "traefik.http.routers.edu.entrypoints=websecure"
       - "traefik.http.routers.edu.tls.certresolver=letsencrypt"
       - "traefik.http.services.edu.loadbalancer.server.port=5000"
+      - "traefik.http.services.edu.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.edu.loadbalancer.sticky.cookie.name=student_session"
+      - "traefik.http.services.edu.loadbalancer.healthcheck.path=/health"
+      - "traefik.http.services.edu.loadbalancer.healthcheck.interval=30s"
+
+  redis:
+    image: redis:7-alpine
+    container_name: student-tracker-cache
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --save ""
+    networks:
+      - proxy
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: always
+
 
   # student-portal:
   #   build:

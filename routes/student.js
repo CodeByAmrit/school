@@ -1,7 +1,7 @@
 const express = require("express");
 const checkAuth = require("../services/checkauth");
 const { getConnection } = require("../models/getConnection");
-const { apiCache, clearCache } = require("../middleware/cache");
+const { apiCache } = require("../middleware/cache");
 const student = express.Router();
 const {
   getSchoolLogo,
@@ -19,7 +19,7 @@ const { create_excel_selected } = require("../controllers/create_excel_file");
 const { generateCredentials } = require("../controllers/student");
 
 // ✅ **1. Get all students for the authenticated teacher**
-student.get("/", checkAuth, apiCache(10), async (req, res) => {
+student.get("/", checkAuth, apiCache(60), async (req, res) => {
   try {
     const teacher_id = req.user._id;
     const studentClass =
@@ -44,7 +44,7 @@ student.get("/", checkAuth, apiCache(10), async (req, res) => {
 });
 
 // ✅ **2. Get a specific student by ID**
-student.get("/:id", checkAuth, apiCache(10), async (req, res) => {
+student.get("/:id", checkAuth, apiCache(30), async (req, res) => {
   try {
     const teacher_id = req.user._id;
     const studentId = req.params.id;
@@ -107,7 +107,7 @@ student.post("/", checkAuth, async (req, res) => {
     ]);
 
     connection.release();
-    clearCache(teacher_id);
+
 
     res.status(201).json({
       message: "Student added successfully",
@@ -155,7 +155,6 @@ student.put("/:id", checkAuth, async (req, res) => {
         .json({ error: "Student not found or unauthorized" });
     }
 
-    clearCache(teacher_id);
     res.json({ message: "Student updated successfully" });
   } catch (error) {
     console.error("Error updating student:", error);
@@ -180,7 +179,6 @@ student.delete("/:id", checkAuth, async (req, res) => {
         .json({ error: "Student not found or unauthorized" });
     }
 
-    clearCache(teacher_id);
     res.json({ message: "Student deleted successfully" });
   } catch (error) {
     console.error("Error deleting student:", error);
