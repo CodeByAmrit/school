@@ -5,6 +5,20 @@
 <script src="/flowbite/flowbite.min.js" nonce="<%= nonce %>"></script>
 <script src="/js/theme.js" nonce="<%= nonce %>"></script>
 <script src="/js/script.js" nonce="<%= nonce %>"></script>
+<script nonce="<%= nonce %>">
+  document.addEventListener('error', function(e) {
+    if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'img') {
+      if (e.target.classList.contains('fallback-hide')) {
+        e.target.style.display = 'none';
+      } else if (e.target.hasAttribute('data-fallback')) {
+        // Prevent infinite loops if fallback is also broken
+        if (e.target.src !== e.target.getAttribute('data-fallback')) {
+          e.target.src = e.target.getAttribute('data-fallback');
+        }
+      }
+    }
+  }, true); // use capture phase because error events don't bubble
+</script>
 
 </body>
 

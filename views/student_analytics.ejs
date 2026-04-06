@@ -16,7 +16,7 @@
       <div class="flex items-center gap-4">
         <div class="relative w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl text-white font-bold shadow-lg overflow-hidden shrink-0 border-2 border-white dark:border-gray-800">
           <span class="absolute z-0 flex items-center justify-center w-full h-full pb-0.5"><%= student.name.charAt(0) %></span>
-          <img src="/api/student/photo/<%= student.school_id %>" class="absolute z-10 w-full h-full object-cover" onerror="this.style.display='none'" alt="<%= student.name %>">
+          <img src="/api/student/photo/<%= student.school_id %>" class="absolute z-10 w-full h-full object-cover fallback-hide" alt="<%= student.name %>">
         </div>
         <div>
           <h1 class="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-3">

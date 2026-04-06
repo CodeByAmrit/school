@@ -92,7 +92,7 @@
                   <div class="flex items-center space-x-2.5">
                     <div class="w-9 h-9 rounded-lg overflow-hidden shadow-sm flex-shrink-0">
                       <img class="object-cover w-full h-full" src="/api/student/photo/<%= student.school_id %>" loading="lazy" alt="<%= student.name %>"
-                           onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(student.name) %>&background=DBEAFE&color=1E40AF&bold=true&size=36'"/>
+                           data-fallback="https://ui-avatars.com/api/?name=<%= encodeURIComponent(student.name) %>&background=DBEAFE&color=1E40AF&bold=true&size=36"/>
                     </div>
                     <div class="min-w-0">
                       <div class="font-bold text-gray-900 dark:text-white truncate text-xs"><%= student.name %></div>
