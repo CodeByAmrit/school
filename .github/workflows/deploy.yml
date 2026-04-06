@@ -24,6 +24,7 @@ jobs:
             cd /home/ubuntu/github/StudentTracker-Pro
             
             echo "🚀 Pulling latest code and images..."
+            git config --global --add safe.directory /home/ubuntu/github/StudentTracker-Pro
             git pull origin main
             sudo docker compose pull
             
