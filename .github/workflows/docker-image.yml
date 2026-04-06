@@ -28,9 +28,14 @@ jobs:
       - name: Extract version
         id: version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "MAJOR_MINOR=${VERSION%.*}" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "MAJOR_MINOR=${VERSION%.*}" >> $GITHUB_OUTPUT
+            echo "IS_TAG=true" >> $GITHUB_OUTPUT
+          else
+            echo "IS_TAG=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v6
@@ -40,8 +45,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:${{ steps.version.outputs.VERSION }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:${{ steps.version.outputs.MAJOR_MINOR }}
             ${{ secrets.DOCKERHUB_USERNAME }}/student-tracker:latest
+            ${{ steps.version.outputs.IS_TAG == 'true' && format('{0}/student-tracker:{1}', secrets.DOCKERHUB_USERNAME, steps.version.outputs.VERSION) || '' }}
+            ${{ steps.version.outputs.IS_TAG == 'true' && format('{0}/student-tracker:{1}', secrets.DOCKERHUB_USERNAME, steps.version.outputs.MAJOR_MINOR) || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -12,14 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Extract version from tag
-        id: version
-        run: |
-          TAG=${{ github.event.workflow_run.head_branch }}
-          VERSION=${TAG#v}
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Deploy via SSH (Blue-Green)
+      - name: Deploy via SSH (Docker Compose)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -28,51 +21,16 @@ jobs:
 
           script: |
             set -e
-
-            APP_NAME="student-tracker"
-            NEW_VERSION="${{ steps.version.outputs.VERSION }}"
-            NEW_CONTAINER="${APP_NAME}-${NEW_VERSION}"
-            OLD_CONTAINER=$(sudo docker ps --filter "name=${APP_NAME}" --format "{{.Names}}" | head -n 1)
-
-            echo "🚀 Deploying version $NEW_VERSION"
-
             cd /home/ubuntu/github/StudentTracker-Pro
-
-            echo "📦 Pulling new image..."
-            sudo docker pull codebyamrit/student-tracker:$NEW_VERSION
-
-            echo "🆕 Starting new container..."
-            sudo docker run -d \
-              --name $NEW_CONTAINER \
-              --network proxy \
-              --env-file .env \
-              -e APP_VERSION=$NEW_VERSION \
-              -l "traefik.enable=true" \
-              -l "traefik.http.routers.student-tracker.rule=Host(\`edu.amritsharma.dev\`)" \
-              -l "traefik.http.routers.student-tracker.entrypoints=websecure" \
-              -l "traefik.http.routers.student-tracker.tls.certresolver=letsencrypt" \
-              -l "traefik.http.services.student-tracker.loadbalancer.server.port=5000" \
-              codebyamrit/student-tracker:$NEW_VERSION
-
-            echo "⏳ Waiting for container to be ready..."
-            for i in {1..10}; do
-              if curl -f http://localhost:5000/health; then
-                echo "✅ Healthy"
-                break
-              fi
-              echo "⏳ Waiting..."
-              sleep 2
-            done
-
-            echo "🔄 Switching traffic handled automatically by Traefik"
-
-            if [ ! -z "$OLD_CONTAINER" ]; then
-              echo "🗑 Removing old container: $OLD_CONTAINER"
-              sudo docker stop $OLD_CONTAINER
-              sudo docker rm $OLD_CONTAINER
-            fi
-
-            echo "🧹 Cleanup old images..."
-            sudo docker image prune -af
-
-            echo "✅ Zero downtime deployment complete!"
+            
+            echo "🚀 Pulling latest code and images..."
+            git pull origin main
+            sudo docker compose pull
+            
+            echo "🆕 Updating services..."
+            sudo docker compose up -d
+            
+            echo "🧹 Cleaning up old images..."
+            sudo docker image prune -f
+            
+            echo "✅ Deployment complete!"

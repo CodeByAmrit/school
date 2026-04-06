@@ -1,6 +1,6 @@
 services:
   student-tracker:
-    image: codebyamrit/student-tracker:${APP_VERSION}
+    image: codebyamrit/student-tracker:latest
     container_name: student-tracker
     environment:
       - NODE_ENV=production
