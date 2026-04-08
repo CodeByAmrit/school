@@ -46,7 +46,7 @@ const multer = require("multer");
 const { getConnection } = require("../models/getConnection");
 const { loginLimiter } = require("../middleware/security");
 const { body, validationResult } = require("express-validator");
-const { apiCache } = require("../middleware/cache");
+const { apiCache, clearCache } = require("../middleware/cache");
 require("dotenv").config();
 
 // Configure multer
@@ -1130,7 +1130,18 @@ router.get("/students/leaved", checkAuth, async (req, res) => {
 });
 
 // Logout route - Clears token and redirects to login
-router.get("/logout", (req, res) => {
+router.get("/logout", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const { getUser } = require("../services/aouth");
+    const user = getUser(token);
+    if (user && user._id) {
+      await clearCache(user._id);
+    }
+  } catch (error) {
+    console.error("Error during cache clear on logout:", error);
+  }
+
   res.clearCookie("token").clearCookie("introShown").send(`
     <script nonce='${res.locals.nonce}'>
       localStorage.clear();
@@ -1277,7 +1288,7 @@ router.get("/api/school/logo", checkAuth, async (req, res) => {
     const result = await get_school_logo(req, res);
     if (result && result.school_logo) {
       res.set("Content-Type", "image/png");
-      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year
+      res.set("Cache-Control", "private, max-age=0, must-revalidate"); // Session-specific cache
       res.send(result.school_logo);
     } else {
       res.redirect("/image/graduated.png");
@@ -1294,7 +1305,7 @@ router.get("/api/student/photo/:id", checkAuth, async (req, res) => {
     const photoBuffer = await getPhoto(req, res);
     if (photoBuffer) {
       res.set("Content-Type", "image/png");
-      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year (using school_id as cache key)
+      res.set("Cache-Control", "private, max-age=3600"); // Cache for 1h, private to user
       res.send(photoBuffer);
     } else {
       res.redirect("/image/graduated.png");
@@ -1311,7 +1322,7 @@ router.get("/api/student/sign/:id", checkAuth, async (req, res) => {
     const signBuffer = await getSign(req, res);
     if (signBuffer) {
       res.set("Content-Type", "image/png");
-      res.set("Cache-Control", "public, max-age=31536000"); // Cache for 1 year
+      res.set("Cache-Control", "private, max-age=3600"); // Cache for 1h, private to user
       res.send(signBuffer);
     } else {
       res.redirect("/image/sign.png");
