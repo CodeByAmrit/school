@@ -30,6 +30,7 @@ services:
       - "traefik.http.services.edu.loadbalancer.sticky.cookie.name=student_session"
       - "traefik.http.services.edu.loadbalancer.healthcheck.path=/health"
       - "traefik.http.services.edu.loadbalancer.healthcheck.interval=30s"
+      - "logging.service=student-tracker"
 
   redis:
     image: redis:7-alpine
