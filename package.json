@@ -1,6 +1,6 @@
 {
   "name": "student_tracker",
-  "version": "3.0.0",
+  "version": "3.1.11",
   "description": "Generate Certificate for students",
   "main": "app.js",
   "scripts": {
@@ -13,11 +13,15 @@
     "start:pm2": "pm2 start ./bin/www --name studenttracker --env production",
     "lint": "npx eslint .",
     "test": "jest --coverage",
-    "docker:build": "docker build -t codebyamrit/student-tracker:1.4.0 .",
+    "docker:build": "docker build -t codebyamrit/student-tracker:latest .",
     "docker:run": "docker compose up -d",
     "security:check": "npm audit --audit-level=moderate",
     "clean": "rm -rf node_modules package-lock.json",
-    "db:backup": "node scripts/backup.js"
+    "db:backup": "node scripts/backup.js",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
+    "postversion": "git push origin master --follow-tags"
   },
   "keywords": [
     "student",
