@@ -15,13 +15,19 @@ const apiCache = (duration) => {
     const urlKey = req.originalUrl || req.url;
     const tenantId = req.user && req.user._id ? req.user._id : (req.CurrentTeacher ? req.CurrentTeacher.id : "global");
     const key = `__express__${tenantId}__${urlKey}`;
+    // Separate key to store the original Content-Type alongside the body
+    const contentTypeKey = `${key}__ct`;
 
     try {
       // Check if we have a cached response in Redis
       const cachedData = await redis.get(key);
 
       if (cachedData) {
-        res.setHeader("Content-Type", "application/json");
+        // Restore the original Content-Type that was sent when the response was first cached
+        const cachedContentType = await redis.get(contentTypeKey);
+        if (cachedContentType) {
+          res.setHeader("Content-Type", cachedContentType);
+        }
         res.setHeader("X-Cache", "HIT");
         return res.send(cachedData);
       }
@@ -31,9 +37,14 @@ const apiCache = (duration) => {
       res.send = function (body) {
         if (typeof body === "string" || Buffer.isBuffer(body)) {
           const cacheValue = Buffer.isBuffer(body) ? body.toString() : body;
-          // Store in Redis with expiration (SETEX equivalent)
+          // Capture the actual Content-Type set by the route/view engine
+          const contentType = res.getHeader("Content-Type") || "text/html; charset=utf-8";
+          // Store body and Content-Type in Redis with the same TTL
           redis.setex(key, duration, cacheValue).catch((err) => {
             logger.error("❌ Redis Cache SET Error:", err);
+          });
+          redis.setex(contentTypeKey, duration, contentType).catch((err) => {
+            logger.error("❌ Redis Cache SET (Content-Type) Error:", err);
           });
         }
         res.setHeader("X-Cache", "MISS");
