@@ -11,7 +11,7 @@ services:
       - "5000"
     restart: always
     networks:
-      - proxy
+      - dokploy-network
     depends_on:
       - redis
     deploy:
@@ -22,6 +22,7 @@ services:
         delay: 10s
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=dokploy-network"
       - "traefik.http.routers.edu.rule=Host(`edu.amritsharma.dev`) || Host(`school.cctvcameralive.in`)"
       - "traefik.http.routers.edu.entrypoints=websecure"
       - "traefik.http.routers.edu.tls.certresolver=letsencrypt"
@@ -37,7 +38,7 @@ services:
     container_name: student-tracker-cache
     command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --save ""
     networks:
-      - proxy
+      - dokploy-network
     ports:
       - "127.0.0.1:6379:6379"
     restart: always
@@ -51,7 +52,7 @@ services:
   #   restart: always
 
   #   networks:
-  #     - proxy
+  #     - dokploy-network
 
   #   expose:
   #     - "80"
@@ -61,11 +62,13 @@ services:
 
   #   labels:
   #     - "traefik.enable=true"
+  #     - "traefik.docker.network=dokploy-network"
   #     - "traefik.http.routers.student-portal.rule=Host(`students.amritsharma.dev`)"
   #     - "traefik.http.routers.student-portal.entrypoints=websecure"
   #     - "traefik.http.routers.student-portal.tls.certresolver=letsencrypt"
   #     - "traefik.http.services.student-portal.loadbalancer.server.port=80"
 
 networks:
-  proxy:
+  # dokploy-network is created and managed by Dokploy on your VPS
+  dokploy-network:
     external: true
