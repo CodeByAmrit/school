@@ -122,39 +122,35 @@
                                     </thead>
                                     <tbody class="divide-y divide-gray-50 dark:divide-gray-700/50">
                                         <% performance.forEach(p=> { %>
-                                            <form action="/action-rank/<%= p.term %>/<%= student.school_id %>" method="post">
-                                                <input type="hidden" name="session" value="<%= viewSession %>">
-                                                <input type="hidden" name="class_name" value="<%= viewClassName %>">
-                                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                                    <td class="py-2.5 px-1 font-semibold text-gray-900 dark:text-white">T<%= p.term %></td>
-                                                    <td class="py-2.5 px-1 text-gray-700 dark:text-gray-300"><%= p.grand_total %></td>
-                                                    <td class="py-2.5 px-1 text-gray-700 dark:text-gray-300 font-mono">
-                                                        <%= (typeof parseFloat(p.percentage)==='number' && !isNaN(parseFloat(p.percentage))) ? parseFloat(p.percentage).toFixed(1) : '0' %>%
-                                                    </td>
-                                                    <td class="py-2 px-1">
-                                                        <input type="text" name="grade" value="<%= rank_remarks.find(r => r.term === p.term)?.grade || '' %>"
-                                                               class="w-16 px-1.5 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50/50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-1 focus:ring-blue-500 outline-none"
-                                                               placeholder="G">
-                                                    </td>
-                                                    <td class="py-2 px-1">
-                                                        <select name="remarks"
-                                                                class="w-24 px-1 py-1 text-[10px] border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50/50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-1 focus:ring-blue-500 outline-none">
-                                                            <% const currentRemark = rank_remarks.find(r => r.term === p.term)?.remarks || ''; %>
-                                                            <option value="<%= currentRemark %>" selected><%= currentRemark || 'Remarks' %></option>
-                                                            <% if (currentRemark !== 'Excellent') { %><option value="Excellent">Excellent</option><% } %>
-                                                            <% if (currentRemark !== 'Very Good') { %><option value="Very Good">Very Good</option><% } %>
-                                                            <% if (currentRemark !== 'Good') { %><option value="Good">Good</option><% } %>
-                                                            <% if (currentRemark !== 'Satisfactory') { %><option value="Satisfactory">Satisfactory</option><% } %>
-                                                            <% if (currentRemark !== 'Needs Improvement') { %><option value="Needs Improvement">Improvement</option><% } %>
-                                                        </select>
-                                                    </td>
-                                                    <td class="py-2 px-1 text-right">
-                                                        <button type="submit" class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1.5 rounded-lg transition-colors">
-                                                            <i class="fas fa-save"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </form>
+                                            <tr class="rank-row hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors" data-term="<%= p.term %>" data-student-id="<%= student.school_id %>">
+                                                <td class="py-2.5 px-1 font-semibold text-gray-900 dark:text-white">T<%= p.term %></td>
+                                                <td class="py-2.5 px-1 text-gray-700 dark:text-gray-300"><%= p.grand_total %></td>
+                                                <td class="py-2.5 px-1 text-gray-700 dark:text-gray-300 font-mono">
+                                                    <%= (typeof parseFloat(p.percentage)==='number' && !isNaN(parseFloat(p.percentage))) ? parseFloat(p.percentage).toFixed(1) : '0' %>%
+                                                </td>
+                                                <td class="py-2 px-1">
+                                                    <input type="text" name="grade" value="<%= rank_remarks.find(r => r.term === p.term)?.grade || '' %>"
+                                                           class="rank-grade w-16 px-1.5 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50/50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-1 focus:ring-blue-500 outline-none"
+                                                           placeholder="G">
+                                                </td>
+                                                <td class="py-2 px-1">
+                                                    <select name="remarks"
+                                                            class="rank-remarks w-24 px-1 py-1 text-[10px] border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50/50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-1 focus:ring-blue-500 outline-none">
+                                                        <% const currentRemark = rank_remarks.find(r => r.term === p.term)?.remarks || ''; %>
+                                                        <option value="<%= currentRemark %>" selected><%= currentRemark || 'Remarks' %></option>
+                                                        <% if (currentRemark !== 'Excellent') { %><option value="Excellent">Excellent</option><% } %>
+                                                        <% if (currentRemark !== 'Very Good') { %><option value="Very Good">Very Good</option><% } %>
+                                                        <% if (currentRemark !== 'Good') { %><option value="Good">Good</option><% } %>
+                                                        <% if (currentRemark !== 'Satisfactory') { %><option value="Satisfactory">Satisfactory</option><% } %>
+                                                        <% if (currentRemark !== 'Needs Improvement') { %><option value="Needs Improvement">Improvement</option><% } %>
+                                                    </select>
+                                                </td>
+                                                <td class="py-2 px-1 text-right">
+                                                    <button type="button" class="save-rank-btn text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1.5 rounded-lg transition-colors" title="Save Remark & Grade">
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         <% }); %>
                                     </tbody>
                                 </table>
@@ -253,6 +249,8 @@
                 <div class="p-4">
                     <form id="attendanceForm" action="/student/attendance-status/<%= student.school_id %>" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
                         <input type="hidden" name="studentId" value="<%= student.school_id %>">
+                        <input type="hidden" name="session" value="<%= viewSession %>">
+                        <input type="hidden" name="class_name" value="<%= viewClassName %>">
                         <div class="flex-1 w-full">
                             <label class="block text-[10px] font-semibold text-gray-500 uppercase mb-1">Attendance</label>
                             <div class="relative">
@@ -282,19 +280,8 @@
     </div>
 </div>
 
-<script nonce="<%= nonce %>">
+<script nonce="<%= typeof nonce !== 'undefined' ? nonce : '' %>">
     (function() {
-        /* ---------- History Selector ---------- */
-        const historySelector = document.getElementById('historySelector');
-        if (historySelector) {
-            historySelector.addEventListener('change', function() {
-                const val = this.value.split('|');
-                if (val.length === 2) {
-                    window.location.href = `/student/get_marks/<%= student.school_id %>?session=${encodeURIComponent(val[0])}&class_name=${encodeURIComponent(val[1])}`;
-                }
-            });
-        }
-
         /* ---------- Toast System ---------- */
         function showToast(message, type = 'success') {
             // Remove existing toasts
@@ -324,6 +311,7 @@
                 transform: translateY(20px);
                 opacity: 0;
                 transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+                overflow: hidden;
             `;
 
             const iconWrap = document.createElement('div');
@@ -342,13 +330,14 @@
 
             const label = document.createElement('p');
             label.style.cssText = 'margin:0; font-size:11px; font-weight:600; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em;';
-            label.textContent = isSuccess ? 'Saved' : 'Error';
+            label.textContent = isSuccess ? 'Success' : 'Error';
 
             const msg = document.createElement('p');
             msg.style.cssText = 'margin:2px 0 0; font-size:13px; font-weight:500; color:#fff;';
             msg.textContent = message;
 
             const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
             closeBtn.style.cssText = `
                 background: rgba(255,255,255,0.15); border: none; cursor: pointer;
                 width: 24px; height: 24px; border-radius: 50%;
@@ -369,8 +358,6 @@
                 transform-origin: left;
                 transition: transform 3s linear;
             `;
-            toast.style.position = 'fixed'; // ensure relative works
-            toast.style.overflow = 'hidden';
 
             textWrap.appendChild(label);
             textWrap.appendChild(msg);
@@ -402,30 +389,71 @@
             return toast;
         }
 
-        /* ---------- Intercept Action-Rank Forms ---------- */
-        document.querySelectorAll('form[action^="/action-rank/"]').forEach(form => {
-            const btn = form.querySelector('button[type="submit"]');
+        /* ---------- URL Feedback System ---------- */
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            showToast(urlParams.get('success'), 'success');
+            urlParams.delete('success');
+            const cleanQuery = urlParams.toString();
+            const cleanUrl = window.location.pathname + (cleanQuery ? '?' + cleanQuery : '');
+            window.history.replaceState({}, document.title, cleanUrl);
+        } else if (urlParams.has('error')) {
+            showToast(urlParams.get('error'), 'error');
+            urlParams.delete('error');
+            const cleanQuery = urlParams.toString();
+            const cleanUrl = window.location.pathname + (cleanQuery ? '?' + cleanQuery : '');
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
 
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
+        /* ---------- History Selector ---------- */
+        const historySelector = document.getElementById('historySelector');
+        if (historySelector) {
+            historySelector.addEventListener('change', function() {
+                const val = this.value.split('|');
+                if (val.length === 2) {
+                    window.location.href = `/student/get_marks/<%= student.school_id %>?session=${encodeURIComponent(val[0])}&class_name=${encodeURIComponent(val[1])}`;
+                }
+            });
+        }
 
-                // Loading state
-                const originalHTML = btn ? btn.innerHTML : '';
-                if (btn) {
-                    btn.disabled = true;
-                    btn.innerHTML = `<svg class="animate-spin" width="14" height="14" fill="none" viewBox="0 0 24 24">
+        /* ---------- Save Rank & Remarks (AJAX) ---------- */
+        document.querySelectorAll('.save-rank-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const row = btn.closest('.rank-row');
+                if (!row) return;
+
+                const term = row.dataset.term;
+                const studentId = row.dataset.studentId;
+                const gradeInput = row.querySelector('.rank-grade');
+                const remarksSelect = row.querySelector('.rank-remarks');
+
+                const grade = gradeInput ? gradeInput.value : '';
+                const remarks = remarksSelect ? remarksSelect.value : '';
+                const session = "<%= viewSession %>";
+                const class_name = "<%= viewClassName %>";
+
+                const originalHTML = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = `
+                    <svg class="animate-spin" width="14" height="14" fill="none" viewBox="0 0 24 24" style="animation:spin 0.8s linear infinite;display:inline-block">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4" stroke-dashoffset="10" stroke-linecap="round"/>
                     </svg>`;
-                    btn.style.opacity = '0.7';
-                }
+                btn.style.opacity = '0.7';
 
                 try {
-                    const formData = new FormData(form);
-                    const params = new URLSearchParams(formData);
+                    const params = new URLSearchParams({
+                        grade,
+                        remarks,
+                        session,
+                        class_name
+                    });
 
-                    const res = await fetch(form.action, {
+                    const res = await fetch(`/action-rank/${term}/${studentId}`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
                         body: params.toString(),
                         credentials: 'same-origin'
                     });
@@ -434,27 +462,29 @@
 
                     if (res.ok) {
                         showToast(data.message || 'Remark saved successfully!', 'success');
-                        // Brief green flash on the save button
-                        if (btn) {
-                            btn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
-                            btn.style.color = '#10b981';
-                            btn.style.opacity = '1';
-                            setTimeout(() => {
-                                btn.innerHTML = originalHTML;
-                                btn.style.color = '';
-                                btn.disabled = false;
-                            }, 1800);
-                        }
+                        btn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+                        btn.style.color = '#10b981';
+                        btn.style.opacity = '1';
+                        setTimeout(() => {
+                            btn.innerHTML = originalHTML;
+                            btn.style.color = '';
+                            btn.disabled = false;
+                        }, 1800);
                     } else {
                         showToast(data.error || 'Something went wrong.', 'error');
-                        if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; btn.style.opacity = '1'; }
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
                     }
                 } catch (err) {
                     showToast('Network error. Please try again.', 'error');
-                    if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; btn.style.opacity = '1'; }
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
                 }
             });
         });
+
         /* ---------- Save All Marks (AJAX) ---------- */
         const mainMarksForm = document.getElementById('mainMarksForm');
         const saveMarksBtn = document.getElementById('saveMarksBtn');
@@ -480,7 +510,10 @@
 
                     const res = await fetch(mainMarksForm.action, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
                         body: params.toString(),
                         credentials: 'same-origin'
                     });
@@ -519,6 +552,7 @@
                 }
             });
         }
+
         /* ---------- Attendance & Status (AJAX) ---------- */
         const attendanceForm = document.getElementById('attendanceForm');
         const attendanceBtn  = document.getElementById('attendanceBtn');
@@ -540,7 +574,10 @@
                     const params = new URLSearchParams(new FormData(attendanceForm));
                     const res = await fetch(attendanceForm.action, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
                         body: params.toString(),
                         credentials: 'same-origin'
                     });
@@ -549,7 +586,6 @@
 
                     if (res.ok) {
                         showToast(data.message || 'Updated successfully!', 'success');
-                        // Flash amber → green tick
                         attendanceBtn.innerHTML = `<svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Done`;
                         attendanceBtn.style.background = '#059669';
                         attendanceBtn.style.opacity = '1';

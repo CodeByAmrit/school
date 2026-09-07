@@ -54,6 +54,17 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
+// Helper to detect AJAX/Fetch requests vs standard browser form navigation
+function isAjaxRequest(req) {
+  return Boolean(
+    req.xhr ||
+    req.headers["x-requested-with"] === "XMLHttpRequest" ||
+    req.headers.accept?.includes("application/json") ||
+    req.headers["sec-fetch-dest"] === "empty" ||
+    (typeof req.is === "function" && req.is("json"))
+  );
+}
+
 // Route to get total students count
 router.get("/total-students", getTotalStudentsCounts);
 
@@ -67,13 +78,19 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
   const grade = req.body.grade;
   const session = req.body.session;
   const class_name = req.body.class_name;
+  const isAjax = isAjaxRequest(req);
 
   try {
     const isOwner = await checkStudentOwnership(studentId, req.user._id);
     if (!isOwner) {
-      return res
-        .status(404)
-        .json({ error: "Student not found or unauthorized." });
+      if (isAjax) {
+        return res
+          .status(404)
+          .json({ error: "Student not found or unauthorized." });
+      }
+      return res.redirect(
+        `/student/get_marks/${studentId}?error=${encodeURIComponent("Student not found or unauthorized.")}`
+      );
     }
 
     const connection = await getConnection();
@@ -93,10 +110,21 @@ router.post("/action-rank/:term/:id", checkAuth, async (req, res) => {
     ]);
     connection.release();
 
-    res.json({ message: "Remark saved successfully!" });
+    if (isAjax) {
+      return res.json({ message: "Remark saved successfully!" });
+    }
+    const queryParams = new URLSearchParams({ success: "Remark saved successfully!" });
+    if (session) queryParams.set("session", session);
+    if (class_name) queryParams.set("class_name", class_name);
+    return res.redirect(`/student/get_marks/${studentId}?${queryParams.toString()}`);
   } catch (error) {
     console.error("Error saving remark:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    if (isAjax) {
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    return res.redirect(
+      `/student/get_marks/${studentId}?error=${encodeURIComponent("Error saving remark")}`
+    );
   }
 });
 
@@ -814,10 +842,16 @@ router.get("/student/get_marks/:studentId", checkAuth, async (req, res) => {
 router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
   const { studentId } = req.params;
   const { marks, maxMarks, session, class_name } = req.body;
+  const isAjax = isAjaxRequest(req);
 
   try {
     if (!marks || !maxMarks) {
-      return res.status(400).json({ error: "marks or maxMarks are missing" });
+      if (isAjax) {
+        return res.status(400).json({ error: "marks or maxMarks are missing" });
+      }
+      return res.redirect(
+        `/student/get_marks/${studentId}?error=${encodeURIComponent("Marks or maxMarks are missing")}`,
+      );
     }
 
     await saveStudentMarks(
@@ -828,10 +862,22 @@ router.post("/student/input-marks/:studentId", checkAuth, async (req, res) => {
       class_name,
       req.user._id,
     );
-    res.json({ message: "Marks saved successfully!" });
+
+    if (isAjax) {
+      return res.json({ message: "Marks saved successfully!" });
+    }
+    const queryParams = new URLSearchParams({ success: "Marks saved successfully!" });
+    if (session) queryParams.set("session", session);
+    if (class_name) queryParams.set("class_name", class_name);
+    return res.redirect(`/student/get_marks/${studentId}?${queryParams.toString()}`);
   } catch (error) {
     console.error("Error saving marks:", error);
-    res.status(500).json({ error: "Error saving student marks" });
+    if (isAjax) {
+      return res.status(500).json({ error: "Error saving student marks" });
+    }
+    return res.redirect(
+      `/student/get_marks/${studentId}?error=${encodeURIComponent("Error saving student marks")}`,
+    );
   }
 });
 
@@ -841,14 +887,20 @@ router.post(
   checkAuth,
   async (req, res) => {
     const { school_id } = req.params;
-    const { attendance, status } = req.body;
+    const { attendance, status, session, class_name } = req.body;
+    const isAjax = isAjaxRequest(req);
     let connection;
     try {
       // Validate input
       if (!attendance || !status) {
-        return res
-          .status(400)
-          .json({ error: "Attendance and status are required." });
+        if (isAjax) {
+          return res
+            .status(400)
+            .json({ error: "Attendance and status are required." });
+        }
+        return res.redirect(
+          `/student/get_marks/${school_id}?error=${encodeURIComponent("Attendance and status are required.")}`,
+        );
       }
 
       // Get a database connection
@@ -861,9 +913,14 @@ router.post(
       );
 
       if (!student) {
-        return res
-          .status(404)
-          .json({ error: "Student not found or access denied." });
+        if (isAjax) {
+          return res
+            .status(404)
+            .json({ error: "Student not found or access denied." });
+        }
+        return res.redirect(
+          `/student/get_marks/${school_id}?error=${encodeURIComponent("Student not found or access denied.")}`,
+        );
       }
 
       // Create or update data in `student_attendance_status` table
@@ -876,16 +933,27 @@ router.post(
     `;
       await connection.execute(query, [
         school_id,
-        student.session,
-        student.class,
+        session || student.session,
+        class_name || student.class,
         attendance,
         status,
       ]);
 
-      res.json({ message: "Attendance & status updated successfully!" });
+      if (isAjax) {
+        return res.json({ message: "Attendance & status updated successfully!" });
+      }
+      const queryParams = new URLSearchParams({ success: "Attendance & status updated successfully!" });
+      if (session || student.session) queryParams.set("session", session || student.session);
+      if (class_name || student.class) queryParams.set("class_name", class_name || student.class);
+      return res.redirect(`/student/get_marks/${school_id}?${queryParams.toString()}`);
     } catch (error) {
       console.error("Error submitting/updating attendance status:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      if (isAjax) {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      return res.redirect(
+        `/student/get_marks/${school_id}?error=${encodeURIComponent("Error updating attendance status")}`
+      );
     } finally {
       if (connection) connection.release();
     }
